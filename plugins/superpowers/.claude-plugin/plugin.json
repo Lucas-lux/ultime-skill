@@ -1,0 +1,9 @@
+{
+  "name": "superpowers",
+  "description": "Methode de travail d'obra : brainstorming, redaction de plans, TDD, debug systematique, sous-agents, verification avant de conclure. Charge sa methode au demarrage de session.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  },
+  "hooks": "./hooks/hooks.json"
+}

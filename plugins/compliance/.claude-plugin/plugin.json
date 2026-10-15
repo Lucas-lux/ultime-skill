@@ -1,0 +1,8 @@
+{
+  "name": "compliance",
+  "description": "Reglementaire et conformite : audit RGAA (accessibilite, en francais), regles RGPD a l'ingenierie, conseil WCAG et cartographie legale (EAA), verification de conformite d'une feature, securite du developpement (ANSSI), corrections d'accessibilite au niveau du code.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "sec-audit",
+  "description": "Audit de code et recherche de vulnerabilites (trilwu secskills-core) : analyse de source par taint, reverse de binaires et d'apps, crypto, supply chain, securite des systemes IA et des serveurs MCP. Pour usage autorise uniquement.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

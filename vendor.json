@@ -1,0 +1,929 @@
+{
+  "sources": {
+    "ponytail": {
+      "repo": "DietrichGebert/ponytail",
+      "commit": "2961b52fc1fe6a5a87c7a959a79512e5c2f3ffe5",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "rea": {
+      "repo": "morluto/rea",
+      "commit": "0f55f247cdd2ae9bd7903d5e45962b19dfc233dc",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "graphify": {
+      "repo": "safishamsi/graphify",
+      "commit": "fe085cedddde3a18554f8749b230bfe47f3dcce7",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE",
+        "NOTICE"
+      ]
+    },
+    "agent-skills": {
+      "repo": "addyosmani/agent-skills",
+      "commit": "aeac41d4d005999432bb7312f7ff06383a91d59d",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "superpowers": {
+      "repo": "obra/superpowers",
+      "commit": "bb92a77741419a4ab5f06e711a283343f1ada0c3",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "anthropic-skills": {
+      "repo": "anthropics/skills",
+      "commit": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+      "license": "Apache-2.0",
+      "license_files": []
+    },
+    "agamm-owasp": {
+      "repo": "agamm/claude-code-owasp",
+      "commit": "8ac7965caa212b4a850aff8d3df0081ab3fa9eed",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "getsentry": {
+      "repo": "getsentry/skills",
+      "commit": "d18b7aa8ba878354e5c348310230e652f7690f9c",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "openai": {
+      "repo": "openai/skills",
+      "commit": "49f948faa9258a0c61caceaf225e179651397431",
+      "license": "Apache-2.0",
+      "license_files": []
+    },
+    "trailofbits": {
+      "repo": "trailofbits/skills",
+      "commit": "0f44fe01dcb00bd6929b4ba82a257d305de04554",
+      "license": "CC-BY-SA-4.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "trilwu": {
+      "repo": "trilwu/secskills",
+      "commit": "ca53957bcd8e3b83b5d4d190bb3ad008a4f15c84",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "terraform-skill": {
+      "repo": "antonbabenko/terraform-skill",
+      "commit": "0a3a4a66e99001347d36a41e10260a825be3ab62",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "hashicorp": {
+      "repo": "hashicorp/agent-skills",
+      "commit": "f706481af9b8fedb66de909f6243ad29601afa0c",
+      "license": "MPL-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "docker": {
+      "repo": "docker/skills",
+      "commit": "f79172733725e2fd236343ee7b963c446ed85d09",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "jeffallan": {
+      "repo": "jeffallan/claude-skills",
+      "commit": "1be15d8064f88fc25216442406d40add8fd23b53",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "akin-ozer": {
+      "repo": "akin-ozer/cc-devops-skills",
+      "commit": "276af751e659315aaf56d3ad13d7c26f4e72e28a",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "grafana": {
+      "repo": "grafana/skills",
+      "commit": "1ccacf29049fde66637fe01ab93a83a772da323b",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "tartinerlabs": {
+      "repo": "tartinerlabs/skills",
+      "commit": "a7812b928cd37d688879fed1e94b6e424bf21da7",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "wshobson": {
+      "repo": "wshobson/agents",
+      "commit": "46891e7e60da0e52baf1050b7b6391b64e84c6d9",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "aws": {
+      "repo": "aws/agent-toolkit-for-aws",
+      "commit": "fea6667159ecf09a75310e5f70c1d76908d8abab",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "google": {
+      "repo": "google/skills",
+      "commit": "e569129c25c9f660db4902431b59d2aeefafe55e",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "azure": {
+      "repo": "microsoft/azure-skills",
+      "commit": "5aa6e04819634ca4945ef57d6aa059eb4f5944e7",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "infracost": {
+      "repo": "infracost/agent-skills",
+      "commit": "b4104c3a605e0999fc11fd566ab5452dc528b8a5",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "kwp": {
+      "repo": "anthropics/knowledge-work-plugins",
+      "commit": "02ffa99ff00ce4d3046ccebabb8357cb39f3ab06",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "dbt": {
+      "repo": "dbt-labs/dbt-agent-skills",
+      "commit": "7c7b5fa39e61694f1ae2b8ea1b8065e195c814ce",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "astronomer": {
+      "repo": "astronomer/agents",
+      "commit": "486ee63d01f8126c52fbc92c36cd36ec31708dcd",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "supabase": {
+      "repo": "supabase/agent-skills",
+      "commit": "c9be0e931b7930f7d02126d04774d904c381e7d7",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "huggingface": {
+      "repo": "huggingface/skills",
+      "commit": "c3ff942be3e07116b475253f0a8fc4f54682c1a8",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "kdense": {
+      "repo": "K-Dense-AI/claude-scientific-skills",
+      "commit": "a1043ef544e3a100c28e70a736b6cf32554d0677",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "orchestra": {
+      "repo": "Orchestra-Research/AI-Research-SKILLs",
+      "commit": "773a52944ba4747a18bd4ae9ade53fff041adcbc",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "mlflow": {
+      "repo": "mlflow/skills",
+      "commit": "51a42ea2b07fadb45fb34c7cecf0c87edbe05686",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "vercel-labs": {
+      "repo": "vercel-labs/agent-skills",
+      "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "license": "MIT (declared in frontmatter, no LICENSE file)",
+      "license_files": []
+    },
+    "wig": {
+      "repo": "vercel-labs/web-interface-guidelines",
+      "commit": "434b7f91364665f2f733b310ec54809bf8f37937",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "ibelick": {
+      "repo": "ibelick/ui-skills",
+      "commit": "c628a5917754ec2396d9cbb47988f280ba1d5cb0",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "emilkowalski": {
+      "repo": "emilkowalski/skills",
+      "commit": "2d228630ba1446365f614a108cb8252f1feda202",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "taste": {
+      "repo": "Leonxlnx/taste-skill",
+      "commit": "a60a36dc2bb3bb77ccf17f2f62041f5ca8a458b9",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "impeccable": {
+      "repo": "pbakaus/impeccable",
+      "commit": "2f98774f86bc05563876643db37e6c37c322850f",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "etalab": {
+      "repo": "etalab-ia/skills",
+      "commit": "c791677af5f9f50cda131bd60220b717220d5c02",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "awesome-copilot": {
+      "repo": "github/awesome-copilot",
+      "commit": "f25421d3f1b8b3bb217f78a7c0567cf7ec117cd8",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "sushegaad": {
+      "repo": "Sushegaad/Claude-Skills-Governance-Risk-and-Compliance",
+      "commit": "aab13e1eb1dbf3b537b66f98d9b5eb52db0a7c25",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "gsap": {
+      "repo": "greensock/gsap-skills",
+      "commit": "aed9cfd3277740755f6bfc1155c7aa645403b760",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "lottiefiles": {
+      "repo": "LottieFiles/motion-design-skill",
+      "commit": "f9a8a041b85185ee4881b3471d3415e939aac772",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "manim": {
+      "repo": "adithya-s-k/manim_skill",
+      "commit": "cef045011722d285692e3381d12d4d637da56e18",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "video-use": {
+      "repo": "browser-use/video-use",
+      "commit": "43cfc566833548093455c9d4a46bd69913b7e552",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "ffmpeg": {
+      "repo": "bryanwhl/ffmpeg-video-editor",
+      "commit": "d5c3ee6e9896fdabccd4e8b5d68149252bbb682c",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "faster-whisper": {
+      "repo": "ThePlasmak/faster-whisper",
+      "commit": "1c8d6a682c56813a540640babe49d9b270ea708c",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    }
+  },
+  "imports": [
+    {
+      "source": "ponytail",
+      "from": "skills",
+      "to": "plugins/ponytail/skills",
+      "license_to": "plugins/ponytail",
+      "exclude": [
+        "plugin.json"
+      ]
+    },
+    {
+      "source": "ponytail",
+      "from": "hooks",
+      "to": "plugins/ponytail/hooks",
+      "license": false,
+      "exclude": [
+        "copilot-hooks.json",
+        "cursor-hooks.json",
+        "qoder-hooks.json"
+      ]
+    },
+    {
+      "source": "rea",
+      "from": ".agents/skills/reverse-engineer-anything",
+      "to": "plugins/rea/skills/reverse-engineer-anything"
+    },
+    {
+      "source": "graphify",
+      "from": "graphify/skill.md",
+      "to": "plugins/graphify/skills/graphify/SKILL.md"
+    },
+    {
+      "source": "graphify",
+      "from": "graphify/skills/claude/references",
+      "to": "plugins/graphify/skills/graphify/references",
+      "license": false
+    },
+    {
+      "source": "agent-skills",
+      "from": "skills",
+      "to": "plugins/agent-skills/skills",
+      "license_to": "plugins/agent-skills"
+    },
+    {
+      "source": "agent-skills",
+      "from": "agents",
+      "to": "plugins/agent-skills/agents",
+      "license": false
+    },
+    {
+      "source": "agent-skills",
+      "from": "references",
+      "to": "plugins/agent-skills/references",
+      "license": false
+    },
+    {
+      "source": "agent-skills",
+      "from": ".claude/commands",
+      "to": "plugins/agent-skills/commands",
+      "license": false
+    },
+    {
+      "source": "superpowers",
+      "from": "skills",
+      "to": "plugins/superpowers/skills",
+      "license_to": "plugins/superpowers"
+    },
+    {
+      "source": "superpowers",
+      "from": "hooks",
+      "to": "plugins/superpowers/hooks",
+      "license": false,
+      "exclude": [
+        "hooks-cursor.json"
+      ]
+    },
+    {
+      "source": "anthropic-skills",
+      "from": "skills/skill-creator",
+      "to": "plugins/skill-factory/skills/skill-creator"
+    },
+    {
+      "source": "anthropic-skills",
+      "from": "skills/mcp-builder",
+      "to": "plugins/skill-factory/skills/mcp-builder"
+    },
+    {
+      "source": "agamm-owasp",
+      "from": ".claude/skills/owasp-security",
+      "to": "plugins/security/skills/owasp-security"
+    },
+    {
+      "source": "getsentry",
+      "from": "skills/security-review",
+      "to": "plugins/security/skills/security-review"
+    },
+    {
+      "source": "getsentry",
+      "from": "skills/gha-security-review",
+      "to": "plugins/security/skills/gha-security-review"
+    },
+    {
+      "source": "getsentry",
+      "from": "skills/skill-scanner",
+      "to": "plugins/security/skills/skill-scanner"
+    },
+    {
+      "source": "openai",
+      "from": "skills/.curated/security-threat-model",
+      "to": "plugins/security/skills/security-threat-model"
+    },
+    {
+      "source": "trailofbits",
+      "from": "plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor",
+      "to": "plugins/security/skills/supply-chain-risk-auditor"
+    },
+    {
+      "source": "trailofbits",
+      "from": "plugins/static-analysis/skills/semgrep",
+      "to": "plugins/security/skills/semgrep"
+    },
+    {
+      "source": "trailofbits",
+      "from": "plugins/static-analysis/skills/codeql",
+      "to": "plugins/security/skills/codeql"
+    },
+    {
+      "source": "trailofbits",
+      "from": "plugins/differential-review/skills/differential-review",
+      "to": "plugins/security/skills/differential-review"
+    },
+    {
+      "source": "trailofbits",
+      "from": "plugins/variant-analysis/skills/variant-analysis",
+      "to": "plugins/security/skills/variant-analysis"
+    },
+    {
+      "source": "trailofbits",
+      "from": "plugins/sharp-edges/skills/sharp-edges",
+      "to": "plugins/security/skills/sharp-edges"
+    },
+    {
+      "source": "trailofbits",
+      "from": "plugins/fp-check/skills/fp-check",
+      "to": "plugins/security/skills/fp-check",
+      "exclude": [
+        "hooks"
+      ]
+    },
+    {
+      "source": "trilwu",
+      "from": "secskills-core/skills",
+      "to": "plugins/sec-audit/skills",
+      "license_to": "plugins/sec-audit"
+    },
+    {
+      "source": "trilwu",
+      "from": "secskills-defense/skills",
+      "to": "plugins/sec-defense/skills",
+      "license_to": "plugins/sec-defense"
+    },
+    {
+      "source": "trilwu",
+      "from": "secskills-offense/skills",
+      "to": "plugins/sec-offense/skills",
+      "license_to": "plugins/sec-offense"
+    },
+    {
+      "source": "terraform-skill",
+      "from": "skills/terraform-skill",
+      "to": "plugins/devops/skills/terraform-skill"
+    },
+    {
+      "source": "hashicorp",
+      "from": "plugins/terraform/skills/terraform-test",
+      "to": "plugins/devops/skills/terraform-test"
+    },
+    {
+      "source": "hashicorp",
+      "from": "plugins/terraform/skills/terraform-style-guide",
+      "to": "plugins/devops/skills/terraform-style-guide"
+    },
+    {
+      "source": "docker",
+      "from": "skills/docker-build-strategies",
+      "to": "plugins/devops/skills/docker-build-strategies"
+    },
+    {
+      "source": "docker",
+      "from": "skills/docker-destructive-guardrails",
+      "to": "plugins/devops/skills/docker-destructive-guardrails"
+    },
+    {
+      "source": "jeffallan",
+      "from": "skills/kubernetes-specialist",
+      "to": "plugins/devops/skills/kubernetes-specialist"
+    },
+    {
+      "source": "akin-ozer",
+      "from": "devops-skills-plugin/skills/k8s-debug",
+      "to": "plugins/devops/skills/k8s-debug"
+    },
+    {
+      "source": "wshobson",
+      "from": "plugins/kubernetes-operations/skills/gitops-workflow",
+      "to": "plugins/devops/skills/gitops-workflow"
+    },
+    {
+      "source": "wshobson",
+      "from": "plugins/observability-monitoring/skills/slo-implementation",
+      "to": "plugins/devops/skills/slo-implementation"
+    },
+    {
+      "source": "wshobson",
+      "from": "plugins/incident-response/skills/postmortem-writing",
+      "to": "plugins/devops/skills/postmortem-writing"
+    },
+    {
+      "source": "wshobson",
+      "from": "plugins/cicd-automation/skills/deployment-pipeline-design",
+      "to": "plugins/devops/skills/deployment-pipeline-design"
+    },
+    {
+      "source": "grafana",
+      "from": "skills/grafana-core/promql",
+      "to": "plugins/devops/skills/promql"
+    },
+    {
+      "source": "grafana",
+      "from": "skills/grafana-cloud/prometheus-cardinality-troubleshooter",
+      "to": "plugins/devops/skills/prometheus-cardinality-troubleshooter"
+    },
+    {
+      "source": "grafana",
+      "from": "skills/grafana-k6/k6",
+      "to": "plugins/devops/skills/k6"
+    },
+    {
+      "source": "grafana",
+      "from": "skills/grafana-cloud/synthetic-monitoring-checks",
+      "to": "plugins/devops/skills/synthetic-monitoring-checks"
+    },
+    {
+      "source": "tartinerlabs",
+      "from": "plugins/workflow/skills/github-actions",
+      "to": "plugins/devops/skills/github-actions"
+    },
+    {
+      "source": "kwp",
+      "from": "engineering/skills/incident-response",
+      "to": "plugins/devops/skills/incident-response"
+    },
+    {
+      "source": "aws",
+      "from": "skills/core-skills/aws-billing-and-cost-management",
+      "to": "plugins/finops/skills/aws-billing-and-cost-management"
+    },
+    {
+      "source": "google",
+      "from": "skills/cloud/gke-cost-optimization",
+      "to": "plugins/finops/skills/gke-cost-optimization"
+    },
+    {
+      "source": "google",
+      "from": "skills/cloud/gke-cost-analysis",
+      "to": "plugins/finops/skills/gke-cost-analysis"
+    },
+    {
+      "source": "azure",
+      "from": ".github/plugins/azure-cost/skills/cost-optimization",
+      "to": "plugins/finops/skills/azure-cost-optimization"
+    },
+    {
+      "source": "infracost",
+      "from": "plugins/infracost/skills/scan",
+      "to": "plugins/finops/skills/infracost-scan"
+    },
+    {
+      "source": "dbt",
+      "from": "skills/dbt/skills/using-dbt-for-analytics-engineering",
+      "to": "plugins/data-engineering/skills/using-dbt-for-analytics-engineering"
+    },
+    {
+      "source": "dbt",
+      "from": "skills/dbt/skills/adding-dbt-unit-test",
+      "to": "plugins/data-engineering/skills/adding-dbt-unit-test"
+    },
+    {
+      "source": "dbt",
+      "from": "skills/dbt/skills/running-dbt-commands",
+      "to": "plugins/data-engineering/skills/running-dbt-commands"
+    },
+    {
+      "source": "astronomer",
+      "from": "skills/authoring-dags",
+      "to": "plugins/data-engineering/skills/authoring-dags"
+    },
+    {
+      "source": "astronomer",
+      "from": "skills/testing-dags",
+      "to": "plugins/data-engineering/skills/testing-dags"
+    },
+    {
+      "source": "astronomer",
+      "from": "skills/debugging-dags",
+      "to": "plugins/data-engineering/skills/debugging-dags"
+    },
+    {
+      "source": "astronomer",
+      "from": "skills/migrating-airflow-2-to-3",
+      "to": "plugins/data-engineering/skills/migrating-airflow-2-to-3"
+    },
+    {
+      "source": "kwp",
+      "from": "data/skills/sql-queries",
+      "to": "plugins/data-engineering/skills/sql-queries"
+    },
+    {
+      "source": "kwp",
+      "from": "data/skills/explore-data",
+      "to": "plugins/data-engineering/skills/explore-data"
+    },
+    {
+      "source": "jeffallan",
+      "from": "skills/spark-engineer",
+      "to": "plugins/data-engineering/skills/spark-engineer"
+    },
+    {
+      "source": "supabase",
+      "from": "skills/supabase-postgres-best-practices",
+      "to": "plugins/data-engineering/skills/supabase-postgres-best-practices"
+    },
+    {
+      "source": "wshobson",
+      "from": "plugins/data-engineering/skills/data-quality-frameworks",
+      "to": "plugins/data-engineering/skills/data-quality-frameworks"
+    },
+    {
+      "source": "kwp",
+      "from": "data/skills/data-visualization",
+      "to": "plugins/dataviz/skills/data-visualization"
+    },
+    {
+      "source": "kwp",
+      "from": "data/skills/build-dashboard",
+      "to": "plugins/dataviz/skills/build-dashboard"
+    },
+    {
+      "source": "kwp",
+      "from": "data/skills/create-viz",
+      "to": "plugins/dataviz/skills/create-viz"
+    },
+    {
+      "source": "kdense",
+      "from": "skills/scientific-visualization",
+      "to": "plugins/dataviz/skills/scientific-visualization",
+      "strip_tail": "## Citing Scientific Agent Skills"
+    },
+    {
+      "source": "grafana",
+      "from": "skills/grafana-core/dashboarding",
+      "to": "plugins/dataviz/skills/dashboarding"
+    },
+    {
+      "source": "wshobson",
+      "from": "plugins/llm-finetuning/skills/finetuning-method-selection",
+      "to": "plugins/ml-engineering/skills/finetuning-method-selection"
+    },
+    {
+      "source": "wshobson",
+      "from": "plugins/llm-finetuning/skills/eval-harness-first",
+      "to": "plugins/ml-engineering/skills/eval-harness-first"
+    },
+    {
+      "source": "wshobson",
+      "from": "plugins/llm-finetuning/skills/lora-qlora-recipes",
+      "to": "plugins/ml-engineering/skills/lora-qlora-recipes"
+    },
+    {
+      "source": "wshobson",
+      "from": "plugins/llm-application-dev/skills/rag-implementation",
+      "to": "plugins/ml-engineering/skills/rag-implementation"
+    },
+    {
+      "source": "huggingface",
+      "from": "skills/trl-training",
+      "to": "plugins/ml-engineering/skills/trl-training"
+    },
+    {
+      "source": "huggingface",
+      "from": "skills/hf-cli",
+      "to": "plugins/ml-engineering/skills/hf-cli"
+    },
+    {
+      "source": "orchestra",
+      "from": "12-inference-serving/vllm",
+      "to": "plugins/ml-engineering/skills/serving-llms-vllm"
+    },
+    {
+      "source": "orchestra",
+      "from": "11-evaluation/lm-evaluation-harness",
+      "to": "plugins/ml-engineering/skills/evaluating-llms-harness"
+    },
+    {
+      "source": "kdense",
+      "from": "skills/scikit-learn",
+      "to": "plugins/ml-engineering/skills/scikit-learn",
+      "strip_tail": "## Citing Scientific Agent Skills"
+    },
+    {
+      "source": "mlflow",
+      "from": "instrumenting-with-mlflow-tracing",
+      "to": "plugins/ml-engineering/skills/instrumenting-with-mlflow-tracing"
+    },
+    {
+      "source": "vercel-labs",
+      "from": "skills/react-best-practices",
+      "to": "plugins/fullstack/skills/vercel-react-best-practices"
+    },
+    {
+      "source": "vercel-labs",
+      "from": "skills/composition-patterns",
+      "to": "plugins/fullstack/skills/vercel-composition-patterns"
+    },
+    {
+      "source": "impeccable",
+      "from": ".claude/skills/impeccable",
+      "to": "plugins/design/skills/impeccable",
+      "exclude": [
+        "scripts"
+      ]
+    },
+    {
+      "source": "anthropic-skills",
+      "from": "skills/frontend-design",
+      "to": "plugins/design/skills/frontend-design"
+    },
+    {
+      "source": "vercel-labs",
+      "from": "skills/web-design-guidelines",
+      "to": "plugins/design/skills/vercel-web-design-guidelines"
+    },
+    {
+      "source": "wig",
+      "from": "command.md",
+      "to": "plugins/design/skills/vercel-web-design-guidelines/references/web-interface-guidelines.md",
+      "license": false
+    },
+    {
+      "source": "ibelick",
+      "from": "skills/baseline-ui",
+      "to": "plugins/design/skills/baseline-ui"
+    },
+    {
+      "source": "emilkowalski",
+      "from": "skills/break-ui",
+      "to": "plugins/design/skills/break-ui"
+    },
+    {
+      "source": "emilkowalski",
+      "from": "skills/emil-design-eng",
+      "to": "plugins/design/skills/emil-design-eng"
+    },
+    {
+      "source": "taste",
+      "from": "skills/redesign-skill",
+      "to": "plugins/design/skills/redesign-existing-projects"
+    },
+    {
+      "source": "etalab",
+      "from": "skills/rgaa",
+      "to": "plugins/compliance/skills/rgaa"
+    },
+    {
+      "source": "etalab",
+      "from": "skills/securite-developpement",
+      "to": "plugins/compliance/skills/securite-developpement"
+    },
+    {
+      "source": "awesome-copilot",
+      "from": "skills/gdpr-compliant",
+      "to": "plugins/compliance/skills/gdpr-compliant"
+    },
+    {
+      "source": "sushegaad",
+      "from": "plugins/gdpr-compliance/skills/gdpr-compliance",
+      "to": "plugins/compliance/skills/gdpr-compliance"
+    },
+    {
+      "source": "sushegaad",
+      "from": "plugins/wcag/skills/wcag",
+      "to": "plugins/compliance/skills/wcag"
+    },
+    {
+      "source": "kwp",
+      "from": "legal/skills/compliance-check",
+      "to": "plugins/compliance/skills/compliance-check"
+    },
+    {
+      "source": "ibelick",
+      "from": "skills/fixing-accessibility",
+      "to": "plugins/compliance/skills/fixing-accessibility"
+    },
+    {
+      "source": "gsap",
+      "from": "skills",
+      "to": "plugins/motion-design/skills",
+      "license_to": "plugins/motion-design"
+    },
+    {
+      "source": "lottiefiles",
+      "from": "skills/motion-design",
+      "to": "plugins/motion-design/skills/lottie-motion-design"
+    },
+    {
+      "source": "manim",
+      "from": "skills/manimce-best-practices",
+      "to": "plugins/motion-design/skills/manimce-best-practices"
+    },
+    {
+      "source": "manim",
+      "from": "skills/manim-composer",
+      "to": "plugins/motion-design/skills/manim-composer"
+    },
+    {
+      "source": "video-use",
+      "from": "SKILL.md",
+      "to": "plugins/video-editing/skills/video-use/SKILL.md"
+    },
+    {
+      "source": "video-use",
+      "from": "helpers",
+      "to": "plugins/video-editing/skills/video-use/helpers",
+      "license": false
+    },
+    {
+      "source": "video-use",
+      "from": "skills/manim-video",
+      "to": "plugins/video-editing/skills/manim-video"
+    },
+    {
+      "source": "ffmpeg",
+      "from": ".",
+      "to": "plugins/video-editing/skills/ffmpeg-video-editor",
+      "exclude": [
+        "README.md",
+        ".github"
+      ]
+    },
+    {
+      "source": "faster-whisper",
+      "from": ".",
+      "to": "plugins/video-editing/skills/faster-whisper",
+      "exclude": [
+        "setup.ps1",
+        "setup.sh",
+        "README.md",
+        "CHANGELOG.md",
+        ".github"
+      ]
+    }
+  ]
+}

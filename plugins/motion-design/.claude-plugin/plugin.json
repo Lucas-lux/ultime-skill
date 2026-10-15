@@ -1,0 +1,8 @@
+{
+  "name": "motion-design",
+  "description": "Motion design : GSAP (core, timeline, ScrollTrigger, plugins, performance, frameworks), principes de motion agnostiques (LottieFiles), animations mathematiques Manim (ManimCE et planification de scenes).",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

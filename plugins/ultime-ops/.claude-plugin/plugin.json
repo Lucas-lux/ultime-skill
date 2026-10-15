@@ -1,0 +1,14 @@
+{
+  "name": "ultime-ops",
+  "description": "Pack operations : devops/SRE, finops, monitoring complet et tests en production.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  },
+  "dependencies": [
+    "devops",
+    "finops",
+    "monitoring",
+    "prod-testing"
+  ]
+}

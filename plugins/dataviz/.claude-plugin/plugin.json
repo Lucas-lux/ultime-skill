@@ -1,0 +1,8 @@
+{
+  "name": "dataviz",
+  "description": "Data visualisation : choix du type de graphique, matplotlib/seaborn/plotly, dashboards HTML autoportants, figures scientifiques accessibles, dashboards Grafana.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

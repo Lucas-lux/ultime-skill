@@ -1,0 +1,8 @@
+{
+  "name": "rea",
+  "description": "Reverse Engineer Anything : binaires, apps Electron/JS, Android, firmware, navigateur. Pilote le serveur MCP rea-agents (a installer a part).",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "ultime-all",
+  "description": "Tout ultime-skill en une commande : installe l'ensemble des packs, sauf le pentest offensif.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  },
+  "dependencies": [
+    "ponytail",
+    "superpowers",
+    "agent-skills",
+    "skill-factory",
+    "rea",
+    "graphify",
+    "security",
+    "sec-audit",
+    "sec-defense",
+    "sc-conventions",
+    "monitoring",
+    "prod-testing",
+    "devops",
+    "finops",
+    "data-engineering",
+    "dataviz",
+    "ml-engineering",
+    "fullstack",
+    "design",
+    "compliance",
+    "motion-design",
+    "video-editing"
+  ]
+}

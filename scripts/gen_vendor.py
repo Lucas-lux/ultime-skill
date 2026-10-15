@@ -1,0 +1,218 @@
+"""Generate vendor.json: the single source of truth for scripts/vendor.py.
+
+Run once (python scripts/gen_vendor.py) to rewrite vendor.json. Editing this file and rerunning it
+is the supported way to change which upstream skills the library imports.
+"""
+
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+
+SOURCES = {
+    # name: (repo, commit, license, [license_files])
+    "ponytail": ("DietrichGebert/ponytail", "2961b52fc1fe6a5a87c7a959a79512e5c2f3ffe5", "MIT", ["LICENSE"]),
+    "rea": ("morluto/rea", "0f55f247cdd2ae9bd7903d5e45962b19dfc233dc", "MIT", ["LICENSE"]),
+    "graphify": ("safishamsi/graphify", "fe085cedddde3a18554f8749b230bfe47f3dcce7", "Apache-2.0", ["LICENSE", "NOTICE"]),
+    "agent-skills": ("addyosmani/agent-skills", "aeac41d4d005999432bb7312f7ff06383a91d59d", "MIT", ["LICENSE"]),
+    "superpowers": ("obra/superpowers", "bb92a77741419a4ab5f06e711a283343f1ada0c3", "MIT", ["LICENSE"]),
+    "anthropic-skills": ("anthropics/skills", "dbd4588f9e1033efb41dad4bef2f7947c8993d44", "Apache-2.0", []),
+    "agamm-owasp": ("agamm/claude-code-owasp", "8ac7965caa212b4a850aff8d3df0081ab3fa9eed", "MIT", ["LICENSE"]),
+    "getsentry": ("getsentry/skills", "d18b7aa8ba878354e5c348310230e652f7690f9c", "Apache-2.0", ["LICENSE"]),
+    "openai": ("openai/skills", "49f948faa9258a0c61caceaf225e179651397431", "Apache-2.0", []),
+    "trailofbits": ("trailofbits/skills", "0f44fe01dcb00bd6929b4ba82a257d305de04554", "CC-BY-SA-4.0", ["LICENSE"]),
+    "trilwu": ("trilwu/secskills", "ca53957bcd8e3b83b5d4d190bb3ad008a4f15c84", "MIT", ["LICENSE"]),
+    "terraform-skill": ("antonbabenko/terraform-skill", "0a3a4a66e99001347d36a41e10260a825be3ab62", "Apache-2.0", ["LICENSE"]),
+    "hashicorp": ("hashicorp/agent-skills", "f706481af9b8fedb66de909f6243ad29601afa0c", "MPL-2.0", ["LICENSE"]),
+    "docker": ("docker/skills", "f79172733725e2fd236343ee7b963c446ed85d09", "Apache-2.0", ["LICENSE"]),
+    "jeffallan": ("jeffallan/claude-skills", "1be15d8064f88fc25216442406d40add8fd23b53", "MIT", ["LICENSE"]),
+    "akin-ozer": ("akin-ozer/cc-devops-skills", "276af751e659315aaf56d3ad13d7c26f4e72e28a", "Apache-2.0", ["LICENSE"]),
+    "grafana": ("grafana/skills", "1ccacf29049fde66637fe01ab93a83a772da323b", "Apache-2.0", ["LICENSE"]),
+    "tartinerlabs": ("tartinerlabs/skills", "a7812b928cd37d688879fed1e94b6e424bf21da7", "MIT", ["LICENSE"]),
+    "wshobson": ("wshobson/agents", "46891e7e60da0e52baf1050b7b6391b64e84c6d9", "MIT", ["LICENSE"]),
+    "aws": ("aws/agent-toolkit-for-aws", "fea6667159ecf09a75310e5f70c1d76908d8abab", "Apache-2.0", ["LICENSE"]),
+    "google": ("google/skills", "e569129c25c9f660db4902431b59d2aeefafe55e", "Apache-2.0", ["LICENSE"]),
+    "azure": ("microsoft/azure-skills", "5aa6e04819634ca4945ef57d6aa059eb4f5944e7", "MIT", ["LICENSE"]),
+    "infracost": ("infracost/agent-skills", "b4104c3a605e0999fc11fd566ab5452dc528b8a5", "Apache-2.0", ["LICENSE"]),
+    "kwp": ("anthropics/knowledge-work-plugins", "02ffa99ff00ce4d3046ccebabb8357cb39f3ab06", "Apache-2.0", ["LICENSE"]),
+    "dbt": ("dbt-labs/dbt-agent-skills", "7c7b5fa39e61694f1ae2b8ea1b8065e195c814ce", "Apache-2.0", ["LICENSE"]),
+    "astronomer": ("astronomer/agents", "486ee63d01f8126c52fbc92c36cd36ec31708dcd", "Apache-2.0", ["LICENSE"]),
+    "supabase": ("supabase/agent-skills", "c9be0e931b7930f7d02126d04774d904c381e7d7", "MIT", ["LICENSE"]),
+    "huggingface": ("huggingface/skills", "c3ff942be3e07116b475253f0a8fc4f54682c1a8", "Apache-2.0", ["LICENSE"]),
+    "kdense": ("K-Dense-AI/claude-scientific-skills", "a1043ef544e3a100c28e70a736b6cf32554d0677", "MIT", ["LICENSE"]),
+    "orchestra": ("Orchestra-Research/AI-Research-SKILLs", "773a52944ba4747a18bd4ae9ade53fff041adcbc", "MIT", ["LICENSE"]),
+    "mlflow": ("mlflow/skills", "51a42ea2b07fadb45fb34c7cecf0c87edbe05686", "Apache-2.0", ["LICENSE"]),
+    "vercel-labs": ("vercel-labs/agent-skills", "063bee94c3f4df8453406c830b0a7df0f2860278", "MIT (declared in frontmatter, no LICENSE file)", []),
+    "wig": ("vercel-labs/web-interface-guidelines", "434b7f91364665f2f733b310ec54809bf8f37937", "MIT", ["LICENSE"]),
+    "ibelick": ("ibelick/ui-skills", "c628a5917754ec2396d9cbb47988f280ba1d5cb0", "MIT", ["LICENSE"]),
+    "emilkowalski": ("emilkowalski/skills", "2d228630ba1446365f614a108cb8252f1feda202", "MIT", ["LICENSE"]),
+    "taste": ("Leonxlnx/taste-skill", "a60a36dc2bb3bb77ccf17f2f62041f5ca8a458b9", "MIT", ["LICENSE"]),
+    "impeccable": ("pbakaus/impeccable", "2f98774f86bc05563876643db37e6c37c322850f", "Apache-2.0", ["LICENSE"]),
+    "etalab": ("etalab-ia/skills", "c791677af5f9f50cda131bd60220b717220d5c02", "MIT", ["LICENSE"]),
+    "awesome-copilot": ("github/awesome-copilot", "f25421d3f1b8b3bb217f78a7c0567cf7ec117cd8", "MIT", ["LICENSE"]),
+    "sushegaad": ("Sushegaad/Claude-Skills-Governance-Risk-and-Compliance", "aab13e1eb1dbf3b537b66f98d9b5eb52db0a7c25", "MIT", ["LICENSE"]),
+    "gsap": ("greensock/gsap-skills", "aed9cfd3277740755f6bfc1155c7aa645403b760", "MIT", ["LICENSE"]),
+    "lottiefiles": ("LottieFiles/motion-design-skill", "f9a8a041b85185ee4881b3471d3415e939aac772", "MIT", ["LICENSE"]),
+    "manim": ("adithya-s-k/manim_skill", "cef045011722d285692e3381d12d4d637da56e18", "MIT", ["LICENSE"]),
+    "video-use": ("browser-use/video-use", "43cfc566833548093455c9d4a46bd69913b7e552", "MIT", ["LICENSE"]),
+    "ffmpeg": ("bryanwhl/ffmpeg-video-editor", "d5c3ee6e9896fdabccd4e8b5d68149252bbb682c", "MIT", ["LICENSE"]),
+    "faster-whisper": ("ThePlasmak/faster-whisper", "1c8d6a682c56813a540640babe49d9b270ea708c", "MIT", ["LICENSE"]),
+}
+
+imports: list[dict] = []
+
+
+def add(source, frm, to, **kw):
+    imports.append({"source": source, "from": frm, "to": to, **kw})
+
+
+def pack_skill(source, frm, pack, folder=None, **kw):
+    """Import one upstream skill folder as plugins/<pack>/skills/<folder>."""
+    name = folder or frm.rstrip("/").split("/")[-1]
+    add(source, frm, f"plugins/{pack}/skills/{name}", **kw)
+
+
+# ---- Core and named packs (imported as whole collections) ----
+add("ponytail", "skills", "plugins/ponytail/skills", license_to="plugins/ponytail", exclude=["plugin.json"])
+add("ponytail", "hooks", "plugins/ponytail/hooks", license=False,
+    exclude=["copilot-hooks.json", "cursor-hooks.json", "qoder-hooks.json"])
+add("rea", ".agents/skills/reverse-engineer-anything", "plugins/rea/skills/reverse-engineer-anything")
+add("graphify", "graphify/skill.md", "plugins/graphify/skills/graphify/SKILL.md")
+add("graphify", "graphify/skills/claude/references", "plugins/graphify/skills/graphify/references", license=False)
+add("agent-skills", "skills", "plugins/agent-skills/skills", license_to="plugins/agent-skills")
+add("agent-skills", "agents", "plugins/agent-skills/agents", license=False)
+add("agent-skills", "references", "plugins/agent-skills/references", license=False)
+add("agent-skills", ".claude/commands", "plugins/agent-skills/commands", license=False)
+add("superpowers", "skills", "plugins/superpowers/skills", license_to="plugins/superpowers")
+add("superpowers", "hooks", "plugins/superpowers/hooks", license=False, exclude=["hooks-cursor.json"])
+add("anthropic-skills", "skills/skill-creator", "plugins/skill-factory/skills/skill-creator")
+add("anthropic-skills", "skills/mcp-builder", "plugins/skill-factory/skills/mcp-builder")
+
+# ---- Security (curated) ----
+pack_skill("agamm-owasp", ".claude/skills/owasp-security", "security")
+pack_skill("getsentry", "skills/security-review", "security")
+pack_skill("getsentry", "skills/gha-security-review", "security")
+pack_skill("getsentry", "skills/skill-scanner", "security")
+pack_skill("openai", "skills/.curated/security-threat-model", "security")
+for s in ["supply-chain-risk-auditor", "static-analysis/skills/semgrep", "static-analysis/skills/codeql",
+          "differential-review", "variant-analysis", "sharp-edges"]:
+    name = s.split("/")[-1]
+    frm = f"plugins/{s}" if "/" in s else f"plugins/{s}/skills/{s}"
+    pack_skill("trailofbits", frm, "security", folder=name)
+pack_skill("trailofbits", "plugins/fp-check/skills/fp-check", "security", exclude=["hooks"])
+
+# ---- Security audit, defense and offense (trilwu, whole collections) ----
+# sec-offense is for authorized security testing only (pentest engagements, CTF, research).
+add("trilwu", "secskills-core/skills", "plugins/sec-audit/skills", license_to="plugins/sec-audit")
+add("trilwu", "secskills-defense/skills", "plugins/sec-defense/skills", license_to="plugins/sec-defense")
+add("trilwu", "secskills-offense/skills", "plugins/sec-offense/skills", license_to="plugins/sec-offense")
+
+# ---- DevOps / SRE / CI-CD / observability / prod testing ----
+pack_skill("terraform-skill", "skills/terraform-skill", "devops")
+pack_skill("hashicorp", "plugins/terraform/skills/terraform-test", "devops")
+pack_skill("hashicorp", "plugins/terraform/skills/terraform-style-guide", "devops")
+pack_skill("docker", "skills/docker-build-strategies", "devops")
+pack_skill("docker", "skills/docker-destructive-guardrails", "devops")
+pack_skill("jeffallan", "skills/kubernetes-specialist", "devops")
+pack_skill("akin-ozer", "devops-skills-plugin/skills/k8s-debug", "devops")
+pack_skill("wshobson", "plugins/kubernetes-operations/skills/gitops-workflow", "devops")
+pack_skill("wshobson", "plugins/observability-monitoring/skills/slo-implementation", "devops")
+pack_skill("wshobson", "plugins/incident-response/skills/postmortem-writing", "devops")
+pack_skill("wshobson", "plugins/cicd-automation/skills/deployment-pipeline-design", "devops")
+pack_skill("grafana", "skills/grafana-core/promql", "devops")
+pack_skill("grafana", "skills/grafana-cloud/prometheus-cardinality-troubleshooter", "devops")
+pack_skill("grafana", "skills/grafana-k6/k6", "devops")
+pack_skill("grafana", "skills/grafana-cloud/synthetic-monitoring-checks", "devops")
+pack_skill("tartinerlabs", "plugins/workflow/skills/github-actions", "devops")
+pack_skill("kwp", "engineering/skills/incident-response", "devops")
+
+# ---- FinOps ----
+pack_skill("aws", "skills/core-skills/aws-billing-and-cost-management", "finops")
+pack_skill("google", "skills/cloud/gke-cost-optimization", "finops")
+pack_skill("google", "skills/cloud/gke-cost-analysis", "finops")
+pack_skill("azure", ".github/plugins/azure-cost/skills/cost-optimization", "finops", folder="azure-cost-optimization")
+pack_skill("infracost", "plugins/infracost/skills/scan", "finops", folder="infracost-scan")
+
+# ---- Data engineering ----
+pack_skill("dbt", "skills/dbt/skills/using-dbt-for-analytics-engineering", "data-engineering")
+pack_skill("dbt", "skills/dbt/skills/adding-dbt-unit-test", "data-engineering")
+pack_skill("dbt", "skills/dbt/skills/running-dbt-commands", "data-engineering")
+pack_skill("astronomer", "skills/authoring-dags", "data-engineering")
+pack_skill("astronomer", "skills/testing-dags", "data-engineering")
+pack_skill("astronomer", "skills/debugging-dags", "data-engineering")
+pack_skill("astronomer", "skills/migrating-airflow-2-to-3", "data-engineering")
+pack_skill("kwp", "data/skills/sql-queries", "data-engineering")
+pack_skill("kwp", "data/skills/explore-data", "data-engineering")
+pack_skill("jeffallan", "skills/spark-engineer", "data-engineering")
+pack_skill("supabase", "skills/supabase-postgres-best-practices", "data-engineering")
+pack_skill("wshobson", "plugins/data-engineering/skills/data-quality-frameworks", "data-engineering")
+
+# ---- Data visualization ----
+pack_skill("kwp", "data/skills/data-visualization", "dataviz")
+pack_skill("kwp", "data/skills/build-dashboard", "dataviz")
+pack_skill("kwp", "data/skills/create-viz", "dataviz")
+pack_skill("kdense", "skills/scientific-visualization", "dataviz", strip_tail="## Citing Scientific Agent Skills")
+pack_skill("grafana", "skills/grafana-core/dashboarding", "dataviz")
+
+# ---- ML engineering ----
+pack_skill("wshobson", "plugins/llm-finetuning/skills/finetuning-method-selection", "ml-engineering")
+pack_skill("wshobson", "plugins/llm-finetuning/skills/eval-harness-first", "ml-engineering")
+pack_skill("wshobson", "plugins/llm-finetuning/skills/lora-qlora-recipes", "ml-engineering")
+pack_skill("wshobson", "plugins/llm-application-dev/skills/rag-implementation", "ml-engineering")
+pack_skill("huggingface", "skills/trl-training", "ml-engineering")
+pack_skill("huggingface", "skills/hf-cli", "ml-engineering")
+pack_skill("orchestra", "12-inference-serving/vllm", "ml-engineering", folder="serving-llms-vllm")
+pack_skill("orchestra", "11-evaluation/lm-evaluation-harness", "ml-engineering", folder="evaluating-llms-harness")
+pack_skill("kdense", "skills/scikit-learn", "ml-engineering", strip_tail="## Citing Scientific Agent Skills")
+pack_skill("mlflow", "instrumenting-with-mlflow-tracing", "ml-engineering")
+
+# ---- Full stack ----
+pack_skill("vercel-labs", "skills/react-best-practices", "fullstack", folder="vercel-react-best-practices")
+pack_skill("vercel-labs", "skills/composition-patterns", "fullstack", folder="vercel-composition-patterns")
+
+# ---- Design (anti AI-slop) ----
+pack_skill("impeccable", ".claude/skills/impeccable", "design", exclude=["scripts"])
+pack_skill("anthropic-skills", "skills/frontend-design", "design")
+pack_skill("vercel-labs", "skills/web-design-guidelines", "design", folder="vercel-web-design-guidelines")
+add("wig", "command.md", "plugins/design/skills/vercel-web-design-guidelines/references/web-interface-guidelines.md", license=False)
+pack_skill("ibelick", "skills/baseline-ui", "design")
+pack_skill("emilkowalski", "skills/break-ui", "design")
+pack_skill("emilkowalski", "skills/emil-design-eng", "design")
+pack_skill("taste", "skills/redesign-skill", "design", folder="redesign-existing-projects")
+
+# ---- Regulatory / compliance (GDPR, accessibility, legal) ----
+pack_skill("etalab", "skills/rgaa", "compliance")
+pack_skill("etalab", "skills/securite-developpement", "compliance")
+pack_skill("awesome-copilot", "skills/gdpr-compliant", "compliance")
+pack_skill("sushegaad", "plugins/gdpr-compliance/skills/gdpr-compliance", "compliance")
+pack_skill("sushegaad", "plugins/wcag/skills/wcag", "compliance")
+pack_skill("kwp", "legal/skills/compliance-check", "compliance")
+pack_skill("ibelick", "skills/fixing-accessibility", "compliance")
+
+# ---- Motion design ----
+add("gsap", "skills", "plugins/motion-design/skills", license_to="plugins/motion-design")
+pack_skill("lottiefiles", "skills/motion-design", "motion-design", folder="lottie-motion-design")
+pack_skill("manim", "skills/manimce-best-practices", "motion-design")
+pack_skill("manim", "skills/manim-composer", "motion-design")
+
+# ---- Video editing ----
+add("video-use", "SKILL.md", "plugins/video-editing/skills/video-use/SKILL.md")
+add("video-use", "helpers", "plugins/video-editing/skills/video-use/helpers", license=False)
+pack_skill("video-use", "skills/manim-video", "video-editing")
+add("ffmpeg", ".", "plugins/video-editing/skills/ffmpeg-video-editor", exclude=["README.md", ".github"])
+add("faster-whisper", ".", "plugins/video-editing/skills/faster-whisper",
+    exclude=["setup.ps1", "setup.sh", "README.md", "CHANGELOG.md", ".github"])
+
+
+def main() -> None:
+    manifest = {
+        "sources": {name: {"repo": repo, "commit": commit, "license": lic, "license_files": files}
+                    for name, (repo, commit, lic, files) in SOURCES.items()},
+        "imports": imports,
+    }
+    (ROOT / "vendor.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"{len(SOURCES)} sources, {len(imports)} imports written to vendor.json")
+
+
+if __name__ == "__main__":
+    main()

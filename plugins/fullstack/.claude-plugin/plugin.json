@@ -1,0 +1,8 @@
+{
+  "name": "fullstack",
+  "description": "Full stack web en production : 70 regles de performance React et Next.js, patterns de composition React 19. Se combine avec le pack agent-skills (APIs, securite, perf, livraison).",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

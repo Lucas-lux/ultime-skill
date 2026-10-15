@@ -1,0 +1,8 @@
+{
+  "name": "skill-factory",
+  "description": "Creer, tester et ameliorer des skills et des serveurs MCP (skill-creator et mcp-builder d'Anthropic).",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

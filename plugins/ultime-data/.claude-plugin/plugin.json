@@ -1,0 +1,14 @@
+{
+  "name": "ultime-data",
+  "description": "Pack data : data engineering, data visualisation, ML engineering, graphe de connaissances.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  },
+  "dependencies": [
+    "data-engineering",
+    "dataviz",
+    "ml-engineering",
+    "graphify"
+  ]
+}

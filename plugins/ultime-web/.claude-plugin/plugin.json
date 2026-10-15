@@ -1,0 +1,13 @@
+{
+  "name": "ultime-web",
+  "description": "Pack web : full stack, design, conformite (RGPD, accessibilite, legal).",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  },
+  "dependencies": [
+    "fullstack",
+    "design",
+    "compliance"
+  ]
+}

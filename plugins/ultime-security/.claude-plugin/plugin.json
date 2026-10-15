@@ -1,0 +1,14 @@
+{
+  "name": "ultime-security",
+  "description": "Pack securite defensive : audit et revue de securite, audit de code, defense et reponse a incident, reverse engineering.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  },
+  "dependencies": [
+    "security",
+    "sec-audit",
+    "sec-defense",
+    "rea"
+  ]
+}

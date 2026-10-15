@@ -1,0 +1,8 @@
+{
+  "name": "sc-conventions",
+  "description": "Conventions d'equipe SensCritique transverses : verifier plutot que croire, demander avant un gros lot, questions a choix multiples, langues, pas d'em dash, marquage IA, termes techniques en entier, main/replica, secrets hors du code. Regles generiques, rien de confidentiel.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

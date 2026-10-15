@@ -1,0 +1,8 @@
+{
+  "name": "sec-defense",
+  "description": "Defense et reponse a incident (trilwu secskills-defense) : DFIR disque/memoire/reseau, analyse de malware et de phishing, detections Sigma et Yara, durcissement et investigation cloud (AWS, Azure, GCP, M365), threat hunting.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

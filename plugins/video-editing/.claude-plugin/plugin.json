@@ -1,0 +1,8 @@
+{
+  "name": "video-editing",
+  "description": "Montage video complet : edition par conversation avec EDL et sous-titres (video-use), construction de commandes FFmpeg (coupe, concat, transitions, loudness, presets reseaux sociaux), transcription locale faster-whisper, rendu Manim.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

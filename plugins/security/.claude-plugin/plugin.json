@@ -1,0 +1,8 @@
+{
+  "name": "security",
+  "description": "Audit d'application et revue de securite : OWASP Top 10 et ASVS, revue de diff orientee risque, Semgrep et CodeQL, analyse de variantes, chaine d'approvisionnement, modele de menace, APIs a risque, scan de skills.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

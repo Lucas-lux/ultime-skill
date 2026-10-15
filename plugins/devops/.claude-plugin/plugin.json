@@ -1,0 +1,8 @@
+{
+  "name": "devops",
+  "description": "DevOps et SRE : Terraform/OpenTofu, Docker, Kubernetes, GitOps, pipelines CI/CD et GitHub Actions, SLO et budgets d'erreur, PromQL, k6, monitoring synthetique, reponse a incident et postmortem.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

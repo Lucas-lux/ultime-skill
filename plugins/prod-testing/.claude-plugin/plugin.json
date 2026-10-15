@@ -1,0 +1,8 @@
+{
+  "name": "prod-testing",
+  "description": "Strategie de test de bout en bout et validation en production, vendor-neutral : pyramide et etapes CI/CD (unitaire, contrat, integration, end to end, smoke, canary), smoke tests post-deploy, deploiement progressif avec rollback automatique, feature flags (OpenFeature), monitoring synthetique, gestion des tests instables.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

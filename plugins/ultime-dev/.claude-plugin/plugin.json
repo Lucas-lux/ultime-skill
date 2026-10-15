@@ -1,0 +1,19 @@
+{
+  "name": "ultime-dev",
+  "description": "Pack developpeur : ponytail, superpowers, cycle de vie logiciel, usine a skills, devops, full stack, securite, conventions d'equipe, tests en production.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  },
+  "dependencies": [
+    "ponytail",
+    "superpowers",
+    "agent-skills",
+    "skill-factory",
+    "devops",
+    "fullstack",
+    "security",
+    "sc-conventions",
+    "prod-testing"
+  ]
+}

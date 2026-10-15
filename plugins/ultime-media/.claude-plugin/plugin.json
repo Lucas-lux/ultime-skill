@@ -1,0 +1,13 @@
+{
+  "name": "ultime-media",
+  "description": "Pack creatif : design anti AI-slop, motion design, montage video.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  },
+  "dependencies": [
+    "design",
+    "motion-design",
+    "video-editing"
+  ]
+}

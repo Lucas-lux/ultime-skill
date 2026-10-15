@@ -1,0 +1,8 @@
+{
+  "name": "data-engineering",
+  "description": "Data engineering : modeles et tests dbt, DAGs Airflow (ecriture, test, debug, migration 2 vers 3), SQL multi-dialecte, exploration de donnees, PySpark, Postgres, qualite des donnees.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}
