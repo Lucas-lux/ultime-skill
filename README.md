@@ -26,12 +26,16 @@ claude plugin marketplace add .            # depuis le clone (chemin absolu acce
 claude plugin install ultime-all@ultime-skill
 ```
 
-Une fois le dépôt poussé sur GitHub, l'installation se fait sans clone :
+L'installation se fait aussi sans clone, depuis GitHub :
 
 ```bash
-claude plugin marketplace add <org>/ultime-skill
+claude plugin marketplace add Lucas-lux/ultime-skill
 claude plugin install ultime-all@ultime-skill
 ```
+
+Le dépôt est privé : il faut un accès git au dépôt. Sans clé SSH GitHub, poser
+`CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` pour cloner en HTTPS via les identifiants git déjà stockés
+(`gh auth login` puis `gh auth setup-git` les met en place).
 
 Redémarrer Claude Code ou lancer `/reload-plugins` après installation.
 
