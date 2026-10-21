@@ -61,9 +61,9 @@ store, du build au lancement), recharger, et le desactiver apres si l'usage etai
 
 | Projet ou tache | Packs |
 |---|---|
-| Projet mene par app-factory (creation, clone, reprise) | app-factory, product-management, puis les packs de la stack ; greenfield seulement pour reconstruire un code dont on a les droits |
-| App web (React, Next.js) | agent-skills, fullstack, ui-design, compliance, security, monitoring, prod-testing |
-| API ou backend | agent-skills, security, devops, monitoring, prod-testing ; data-engineering si base de donnees |
+| Projet mene par app-factory (creation, clone, reprise) | app-factory, ci-forge, product-management, puis les packs de la stack ; greenfield seulement pour reconstruire un code dont on a les droits |
+| App web (React, Next.js) | agent-skills, ci-forge, fullstack, ui-design, compliance, security, monitoring, prod-testing |
+| API ou backend | agent-skills, ci-forge, security, devops, monitoring, prod-testing ; data-engineering si base de donnees |
 | Mobile Expo ou React Native | mobile, mobile-expo, ui-design, compliance, security |
 | Mobile iOS natif | mobile, mobile-ios, ui-design, compliance, security |
 | Mobile Android natif | mobile, mobile-android, ui-design, compliance, security |
@@ -76,6 +76,12 @@ store, du build au lancement), recharger, et le desactiver apres si l'usage etai
 | Audit de securite | security, sec-audit, sec-defense |
 | Contenu, motion, video | ui-design, motion-design, video-editing |
 
-`ponytail` et `superpowers` ajoutent un hook au demarrage de session (contexte injecte a chaque session) :
-les proposer seulement si leur methode est voulue. `sec-offense` ne s'installe que sur demande explicite,
+`guardrails` (garde-fous par hooks) est installe au niveau utilisateur par les scripts d'installation.
+Pour un projet partage en equipe ou pilote en cloud (autopilot), proposer aussi sa copie dans le projet :
+`node <plugin guardrails>/runtime/setup.cjs install-project`, a committer avec `.claude/`.
+
+`ponytail` est actif partout : installe au niveau utilisateur par les scripts d'installation, il injecte
+sa regle (plus petit changement complet) dans chaque session et chaque sous-agent (environ 2 900
+caracteres) ; ne jamais le desactiver dans un projet sauf demande. `superpowers` ajoute aussi un hook de
+session : le proposer seulement si sa methode est voulue. `sec-offense` ne s'installe que sur demande explicite,
 pour des tests autorises.

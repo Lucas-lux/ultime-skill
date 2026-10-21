@@ -4,7 +4,7 @@ Bibliothèque de skills Claude prête pour la production, installable en une com
 meilleures skills open source du moment (sélectionnées, nettoyées, épinglées à un commit) et servira de
 base aux skills que nous créerons nous-mêmes.
 
-**479 skills, 24 agents, 42 packs, 10 bundles.** Chaque pack est un plugin Claude Code indépendant ; les
+**482 skills, 24 agents, 44 packs, 10 bundles.** Chaque pack est un plugin Claude Code indépendant ; les
 bundles en installent plusieurs d'un coup via les dépendances de plugins.
 
 ## Installation
@@ -16,8 +16,10 @@ claude plugin marketplace add Lucas-lux/ultime-skill
 claude plugin install ultime-profile@ultime-skill
 ```
 
-Ou, depuis un clone : `./install.sh` (Windows : `./install.ps1`), qui fait la même chose. Seul le point
-d'entrée `ultime-profile` est installé : rien d'autre ne pèse sur le contexte des sessions.
+Ou, depuis un clone : `./install.sh` (Windows : `./install.ps1`), qui installe le point d'entrée
+`ultime-profile`, les garde-fous `guardrails` (voir [Garde-fous](#garde-fous)) et `ponytail`, la règle du
+plus petit changement complet appliquée à chaque session et chaque sous-agent (`--no-guardrails`,
+`--no-ponytail`, ou `-NoGuardrails`, `-NoPonytail` sous Windows, pour s'en passer). Rien d'autre ne pèse sur le contexte des sessions.
 
 Le dépôt est privé : il faut un accès git au dépôt. Sans clé SSH GitHub, poser
 `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` pour cloner en HTTPS via les identifiants git déjà stockés
@@ -161,6 +163,7 @@ de leurs alternatives.
 | `agent-skills` | 25 | Cycle de vie logiciel complet (Addy Osmani) : spec, build, test, revue, sécurité, perf, CI/CD, livraison. |
 | `skill-factory` | 2 | Créer et tester des skills et des serveurs MCP (skill-creator, mcp-builder). |
 | `sc-conventions` | 1 | Conventions d'équipe SensCritique transverses (méthode, rédaction, secrets). Écrit maison, rien de confidentiel. |
+| `guardrails` | 1 + hooks | Garde-fous imposés par hooks et configurables (em dash, emoji, push sur main, hooks git, secrets, commits, marqueur IA, identifiants de prod). Installé par défaut. Écrit maison. |
 
 ### Sécurité
 
@@ -179,6 +182,7 @@ de leurs alternatives.
 | `devops` | 17 | Terraform, Docker, Kubernetes, GitOps, CI/CD, SLO, PromQL, k6, monitoring synthétique, incident. |
 | `finops` | 6 | Coûts AWS, GKE/Google Cloud, Azure, et scan shift-left de l'infra as code (Infracost). |
 | `monitoring` | 1 | Observabilité complète adaptée au type de projet (web, API, RAG/LLM, data, cron, ML, mobile) : métriques, logs, traces, SLO, alertes, coût. Écrit maison. |
+| `ci-forge` | 1 | CI/CD générée seule selon la stack et l'architecture cible : lint, typage, tests, end to end, conteneurs, Kubernetes, IaC, sécurité, SBOM, staging et prod ; actions épinglées par SHA, check requis `ci-ok`. Écrit maison. |
 | `prod-testing` | 1 | Stratégie de test de bout en bout et validation en production : pyramide CI/CD, smoke tests, canary et rollback automatique, feature flags, monitoring synthétique, tests instables. Écrit maison. |
 
 ### Data et IA
@@ -231,11 +235,35 @@ Certaines skills pilotent un outil à installer à part (`./install.sh --with-to
   sécurité, App Review) complète `mobile-ios`. Il n'est pas importé : ses skills dépendent de ses propres
   binaires, de son serveur MCP et de ses commandes. L'installer depuis son marketplace si besoin.
 
+## Garde-fous
+
+Le pack `guardrails` fait respecter des règles par des hooks : Claude ne peut ni les oublier ni les
+contourner. Par défaut, il bloque :
+- l'em dash ajouté dans un fichier, un commit, une PR ou une issue ;
+- l'emoji non demandé (le marqueur IA ✨ et la ligne d'attribution restent permis) ;
+- le push sur `main` ou `master` (refspec, branche courante, `HEAD`, suppression) ;
+- tout contournement des hooks git (`--no-verify`, `core.hooksPath`, `HUSKY=0`) ;
+- les secrets dans un fichier, une commande ou un commit, et les fichiers `.env` dans git ;
+- un message de commit hors format Conventional Commits, un titre de PR ou d'issue sans marqueur IA ;
+- la recherche d'identifiants de production hors du projet (secrets Kubernetes, coffres, historique du
+  shell, `.env` d'un autre projet, tunnels vers la prod).
+
+Il avertit seulement quand une configuration de lint est modifiée ou qu'une suppression d'avertissement
+est ajoutée, et demande votre accord avant toute modification de sa propre configuration.
+
+Chaque règle se règle ou se coupe dans `.claude/guardrails.json` (projet) ou `~/.claude/guardrails.json`
+(machine) ; `"enabled": false` coupe tout, `claude plugin disable guardrails@ultime-skill` retire le
+plugin. Pour une équipe sans le plugin, les sessions cloud ou l'autopilot,
+`node <plugin>/runtime/setup.cjs install-project` copie les garde-fous dans le `.claude/` du projet.
+Détail dans la skill `guardrails`. Nécessite `node`.
+
 ## Hooks de session
 
 Deux packs installent un hook `SessionStart` qui s'exécute à chaque démarrage de session :
 
-- `ponytail` active son mode et peut proposer une status line.
+- `ponytail` active son mode (aussi dans chaque sous-agent, environ 2 900 caractères) et peut proposer
+  une status line. Installé par défaut ; les agents d'app-factory s'appuient sur ses skills
+  (`ponytail-review` en revue, `ponytail-audit` et `ponytail-debt` en reprise).
 - `superpowers` injecte sa méthode de travail.
 
 Ces hooks ont un coût en contexte et modifient le comportement par défaut. Les retirer : désinstaller le

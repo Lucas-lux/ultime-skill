@@ -88,6 +88,10 @@ Sequence : l'architecte d'abord (il fixe la stack et les frontieres), puis les a
 
 ## P5 Construction (boucle par jalon)
 
+Jalon M0 : `release-engineer` lance la skill `ci-forge` (pack ci-forge) des le squelette, sans attendre
+l'utilisateur : CI complete selon la stack, check requis `ci-ok`, hooks locaux, Dependabot. Les stories
+suivantes ne passent `done` qu'avec `ci-ok` vert.
+
 Pour chaque story prete, dans l'ordre des dependances :
 1. `implementer` : `test-driven-development`, `incremental-implementation`, commits petits sur une branche
    dediee. UI : `frontend-ui-engineering` et les skills du pack ui-design.
@@ -105,7 +109,7 @@ Pour chaque story prete, dans l'ordre des dependances :
 
 ## P6 Pre-production
 
-- `release-engineer` : pipeline (`ci-cd-and-automation`, `github-actions`,
+- `release-engineer` : CD avec `ci-forge` (reference `cd.md`) puis pipeline (`ci-cd-and-automation`, `github-actions`,
   `deployment-pipeline-design`), parite staging et prod, deploiement progressif et rollback teste
   (`testing-in-production`), domaine et TLS, infrastructure as code (`terraform-skill`) si pertinent.
 - `sre` : `setting-up-monitoring`, SLO (`slo-implementation`), alertes, runbooks, `incident-response`,

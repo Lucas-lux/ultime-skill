@@ -1,11 +1,15 @@
 # Install ultime-skill in Claude Code: registers the marketplace, then installs a bundle or packs.
 #
-#   .\install.ps1                          # ultime-profile only: then ask Claude, in each project, to set up its skills
+#   .\install.ps1                          # ultime-profile and guardrails: then ask Claude, in each project, to set up its skills
+#   .\install.ps1 -NoGuardrails            # without the guardrails hooks (they can be disabled later too)
+#   .\install.ps1 -NoPonytail              # without ponytail, installed by default for every project
 #   .\install.ps1 ultime-dev security      # chosen bundles or packs, for every project
 #   $env:ULTIME_SKILL_SOURCE = "."; .\install.ps1   # from this clone instead of GitHub (per-project setup then needs GitHub)
 #   .\install.ps1 -WithTools ultime-all    # also installs the CLIs some skills drive (graphify, rea, asc, gplay)
 param(
     [switch]$WithTools,
+    [switch]$NoGuardrails,
+    [switch]$NoPonytail,
     [Parameter(ValueFromRemainingArguments = $true)][string[]]$Targets
 )
 $ErrorActionPreference = "Stop"
@@ -33,6 +37,8 @@ function Install-Binary([string]$Name, [string]$Url, [string]$Sha256) {
 }
 $Source = if ($env:ULTIME_SKILL_SOURCE) { $env:ULTIME_SKILL_SOURCE } else { "Lucas-lux/ultime-skill" }
 if (-not $Targets) { $Targets = @("ultime-profile") }
+if (-not $NoGuardrails -and $Targets -notcontains "guardrails") { $Targets += "guardrails" }
+if (-not $NoPonytail -and $Targets -notcontains "ponytail") { $Targets += "ponytail" }
 
 if (-not (Get-Command claude -ErrorAction SilentlyContinue)) {
     throw "Claude Code CLI 'claude' not found on PATH."

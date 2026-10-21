@@ -35,14 +35,16 @@ d'ecrire une ligne. Cette skill couvre la phase P0 du mode reprise ; `app-factor
    tickets, maquettes), puis `intended-vs-implemented` pour lister fonctions inachevees, parcours casses,
    regles documentees mais non appliquees.
 4. **Audit contre la barre de qualite** (agents en parallele : `security-engineer`, `data-architect`,
-   `compliance-officer`, `ux-designer`, `sre`, `finops-analyst`), chacun sur son domaine de
+   `compliance-officer`, `ux-designer`, `sre`, `finops-analyst`, et `code-reviewer` avec `ponytail-audit` puis
+   `ponytail-debt` pour le code : bugs, failles, tenue en charge, code a risque sans test, ce qui est a
+   supprimer ou fusionner), chacun sur son domaine de
    `app-factory/references/quality-bar.md`. Chaque constat : preuve (fichier, ligne, commande), impact,
    gravite (bloquant, majeur, mineur), correction proposee. Livrable : `docs/takeover/audit.md`.
 5. **Decision par module** : garder, corriger, finir ou refaire. Refaire seulement si c'est justifie
    (defauts structurels, absence de tests sur une zone critique, dette qui coute plus que la reecriture)
    et consigne dans un ADR. Pas de reecriture totale par defaut.
 6. **Plan de reprise** : un jalon **M0 stabilisation** passe en premier (tests sur les parcours
-   critiques, CI qui bloque, sauvegardes et restauration testees, monitoring de base, secrets sortis du
+   critiques, CI qui bloque (skill `ci-forge` : audit des ecarts puis CI complete, autonome), sauvegardes et restauration testees, monitoring de base, secrets sortis du
    code, failles bloquantes corrigees), puis les fonctionnalites a finir, puis les ameliorations.
    Livrable : backlog initial dans `docs/product/backlog.md`.
 7. **G0** : l'utilisateur valide l'inventaire, l'audit, les decisions par module et le plan.
