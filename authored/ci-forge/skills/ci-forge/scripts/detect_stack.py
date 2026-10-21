@@ -5,14 +5,18 @@ monorepo), their language, package manager, frameworks, test and lint tools alre
 repository-wide facts: containers, Kubernetes, infrastructure as code, existing CI, task runner.
 
 Usage:
-    python detect_stack.py [repo_root]
+    python detect_stack.py [repo_root]      (Python 3.11 or later: tomllib)
 """
 
 import json
 import re
 import sys
-import tomllib
 from pathlib import Path
+
+try:
+    import tomllib
+except ImportError:  # Python < 3.11
+    sys.exit("error: detect_stack.py needs Python 3.11 or later (tomllib); run it with a newer python, e.g. `uv run --python 3.13`")
 
 SKIP_DIRS = {".git", "node_modules", ".venv", "venv", "dist", "build", ".next", "target", "vendor", ".terraform",
              "__pycache__", ".tox", "coverage", ".turbo", "Pods", ".gradle", ".dart_tool", "out"}
@@ -42,32 +46,35 @@ def walk(root: Path, depth: int = 0):
 
 def read_json(path: Path) -> dict:
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        return json.loads(path.read_text(encoding="utf-8-sig"))
     except (OSError, ValueError):
         return {}
 
 
 def read_toml(path: Path) -> dict:
     try:
-        return tomllib.loads(path.read_text(encoding="utf-8"))
+        return tomllib.loads(path.read_text(encoding="utf-8-sig"))
     except (OSError, ValueError):
         return {}
 
 
 def text(path: Path) -> str:
     try:
-        return path.read_text(encoding="utf-8", errors="ignore")
+        return path.read_text(encoding="utf-8-sig", errors="ignore")
     except OSError:
         return ""
 
 
 def node_component(directory: Path) -> dict:
     manifest = read_json(directory / "package.json")
-    deps = {**manifest.get("dependencies", {}), **manifest.get("devDependencies", {})}
-    scripts = manifest.get("scripts", {})
+    if not isinstance(manifest, dict):
+        manifest = {}
+    # Any key may be null in a hand-written package.json: `or {}` keeps the report going.
+    deps = {**(manifest.get("dependencies") or {}), **(manifest.get("devDependencies") or {})}
+    scripts = manifest.get("scripts") or {}
     managers = [("pnpm", "pnpm-lock.yaml"), ("yarn", "yarn.lock"), ("bun", "bun.lockb"), ("bun", "bun.lock"), ("npm", "package-lock.json")]
     manager = next((name for name, lock in managers if (directory / lock).exists()), None)
-    if not manager and manifest.get("packageManager"):
+    if not manager and isinstance(manifest.get("packageManager"), str):
         manager = manifest["packageManager"].split("@")[0]
     frameworks = [name for name, dep in [
         ("next", "next"), ("react", "react"), ("vue", "vue"), ("nuxt", "nuxt"), ("svelte", "svelte"),
@@ -83,11 +90,22 @@ def node_component(directory: Path) -> dict:
         ("lighthouse-ci", "@lhci/cli"), ("axe", "@axe-core/playwright"), ("stryker", "@stryker-mutator/core"),
         ("turbo", "turbo"), ("nx", "nx"), ("lefthook", "lefthook"), ("husky", "husky"),
     ] if dep in deps]
-    engines = manifest.get("engines", {}).get("node")
+    engines = (manifest.get("engines") or {}).get("node")
     nvmrc = text(directory / ".nvmrc").strip() or text(directory / ".node-version").strip() or None
     return {"language": "typescript" if "typescript" in tools else "javascript", "package_manager": manager or "npm",
             "frameworks": frameworks, "tools": tools, "scripts": sorted(scripts), "node_version": nvmrc or engines,
             "workspaces": bool(manifest.get("workspaces")) or (directory / "pnpm-workspace.yaml").exists()}
+
+
+def is_requirements(path: Path) -> bool:
+    """requirements*.txt, or any .txt inside a requirements/ folder."""
+    return path.suffix == ".txt" and (path.name.startswith("requirements") or path.parent.name == "requirements")
+
+
+def requirements_text(directory: Path) -> str:
+    """Every requirements file of a Python component: requirements*.txt and requirements/*.txt."""
+    files = sorted(directory.glob("requirements*.txt")) + sorted((directory / "requirements").glob("*.txt"))
+    return " ".join(text(f) for f in files)
 
 
 def python_component(directory: Path) -> dict:
@@ -99,7 +117,7 @@ def python_component(directory: Path) -> dict:
         # A dependency group may also hold {"include-group": ...} tables: keep the requirement strings only.
         declared += [item for item in group if isinstance(item, str)]
     deps_text = " ".join(declared)
-    deps_text += " " + text(directory / "requirements.txt") + " " + text(directory / "requirements-dev.txt")
+    deps_text += " " + requirements_text(directory)
     deps_text += " " + json.dumps(tool.get("poetry", {}).get("dependencies", {})) + json.dumps(tool.get("poetry", {}).get("group", {}))
     lowered = deps_text.lower()
     manager = ("uv" if (directory / "uv.lock").exists() else "poetry" if (directory / "poetry.lock").exists() or "poetry" in tool
@@ -118,14 +136,20 @@ def python_component(directory: Path) -> dict:
             "alembic": (directory / "alembic.ini").exists()}
 
 
+def has_manifest(directory: Path) -> bool:
+    """True when an AndroidManifest.xml sits below the Gradle project (outside build folders)."""
+    return any(f.name == "AndroidManifest.xml" for f in walk(directory))
+
+
 SIMPLE_COMPONENTS = {
     "go.mod": ("go", lambda d: {"go_version": next(iter(re.findall(r"^go (\S+)", text(d / "go.mod"), re.M)), None),
                                 "tools": [t for t in ["golangci"] if any(d.glob(".golangci.*"))]}),
     "Cargo.toml": ("rust", lambda d: {"workspace": "[workspace]" in text(d / "Cargo.toml"),
                                       "tools": [t for t, f in [("cargo-deny", "deny.toml"), ("clippy", "clippy.toml")] if (d / f).exists()]}),
     "pom.xml": ("java", lambda d: {"build": "maven"}),
-    "build.gradle": ("jvm", lambda d: {"build": "gradle", "android": "com.android" in text(d / "build.gradle")}),
-    "build.gradle.kts": ("jvm", lambda d: {"build": "gradle", "android": "com.android" in text(d / "build.gradle.kts")}),
+    # Version catalogs move "com.android" out of build.gradle.kts: an AndroidManifest.xml below also marks Android.
+    "build.gradle": ("jvm", lambda d: {"build": "gradle", "android": "com.android" in text(d / "build.gradle") or has_manifest(d)}),
+    "build.gradle.kts": ("jvm", lambda d: {"build": "gradle", "android": "com.android" in text(d / "build.gradle.kts") or has_manifest(d)}),
     "composer.json": ("php", lambda d: {"frameworks": [f for f in ["laravel/framework", "symfony/framework-bundle"]
                                                        if f in json.dumps(read_json(d / "composer.json"))],
                                         "tools": [t for t, f in [("phpstan", "phpstan.neon"), ("phpstan", "phpstan.neon.dist"),
@@ -146,7 +170,11 @@ def detect(root: Path) -> dict:
         key = None
         if file.name == "package.json" and directory not in seen:
             key, info = "node", node_component(directory)
-        elif file.name in {"pyproject.toml", "setup.py", "requirements.txt"} and ("python", directory) not in seen:
+        elif file.name in {"pyproject.toml", "setup.py"} or is_requirements(file):
+            if file.parent.name == "requirements" and not file.name.startswith("requirements"):
+                directory = file.parent.parent
+            if ("python", directory) in seen:
+                continue
             seen.add(("python", directory))
             key, info = "python", python_component(directory)
         elif file.name in SIMPLE_COMPONENTS:
@@ -185,7 +213,8 @@ def detect(root: Path) -> dict:
     return {
         "root": str(root),
         "components": components,
-        "mobile_native": {"ios": bool(any_xcode), "android": any(c.get("android") for c in components)},
+        "mobile_native": {"ios": bool(any_xcode),
+                          "android": any(c.get("android") for c in components) or any(f.name == "AndroidManifest.xml" for f in files)},
         "containers": {"dockerfiles": dockerfiles, "compose": compose},
         "kubernetes": {"manifests": k8s_manifests[:50], "helm_charts": helm, "kustomize": kustomize},
         "iac": {"terraform": terraform, "pulumi": (root / "Pulumi.yaml").exists(), "serverless": (root / "serverless.yml").exists()},

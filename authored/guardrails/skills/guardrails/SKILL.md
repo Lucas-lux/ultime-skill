@@ -25,6 +25,7 @@ formulation, script) : corriger le travail, ou dire a l'utilisateur ce qui bloqu
 | `env-file` | `git add` ou commit d'un fichier `.env` (`patterns`) | block |
 | `conventional-commit` | `type(scope): description`, `types`, `max_subject` (72), minuscule, pas de point final | block |
 | `ai-marker` | Titre de PR ou d'issue (gh ou API REST) termine par `marker` | block |
+| `merge-approval` | Fusion ou approbation au nom de l'utilisateur : `gh pr merge`, `gh pr review --approve`, et par `gh api` la fusion d'une PR, une review `APPROVE`, l'approbation d'un deploiement ; en autopilot, GitHub fusionne seul et la production s'approuve dans l'environnement GitHub | ask |
 | `prod-credentials` | Secrets Kubernetes, coffres (Bitwarden, 1Password, Vault, AWS, GCP, Azure), historique du shell, `.env` d'un autre projet, tunnel vers la prod (`prod_patterns`) ; `allowed_files` | block |
 | `lint-config` | Configuration de lint, format ou typage modifiee, suppression d'avertissement ajoutee | warn |
 | `config-tamper` | Modification de la configuration ou du retrait des garde-fous | ask |

@@ -32,9 +32,10 @@ Catalogue des packs, de leur role et de leur cout : [references/catalog.md](refe
 - Ecouter la demande : un projet a mener de A a Z, a cloner ou a reprendre ajoute `app-factory` et
   `product-management` ; une app mobile ajoute le pack de sa technologie ; un lancement ajoute stores et
   growth.
-- `python <skill>/scripts/suggest_profile.py .` : packs justifies par les signaux du depot (table
-  `references/stack-map.json`), regles par langage, permissions. C'est la base de la proposition ; le
-  tableau des profils ci-dessous la complete selon la demande.
+- `python <skill>/scripts/suggest_profile.py .` : packs justifies par les signaux du
+  depot (table `references/stack-map.json`), packs deja au niveau utilisateur (`user_level`), regles
+  par langage (choisies d'apres le frontmatter `paths:` de chaque regle), permissions. C'est la base de
+  la proposition ; le tableau des profils ci-dessous la complete selon la demande.
 - Proposer la liste par question a choix multiples (plusieurs reponses), avec le cout de chaque pack.
   Projet vide : demander ce qui va etre construit.
 
@@ -70,29 +71,39 @@ store, du build au lancement), recharger, et le desactiver apres si l'usage etai
 
 ## Profils types
 
-| Projet ou tache | Packs |
-|---|---|
-| Projet mene par app-factory (creation, clone, reprise) | app-factory, ci-forge, product-management, puis les packs de la stack ; greenfield seulement pour reconstruire un code dont on a les droits |
-| App web (React, Next.js) | agent-skills, ci-forge, fullstack, ui-design, compliance, security, monitoring, prod-testing |
-| API ou backend | agent-skills, ci-forge, security, devops, monitoring, prod-testing ; data-engineering si base de donnees |
-| Mobile Expo ou React Native | mobile, mobile-expo, ui-design, compliance, security |
-| Mobile iOS natif | mobile, mobile-ios, ui-design, compliance, security |
-| Mobile Android natif | mobile, mobile-android, ui-design, compliance, security |
-| Mobile Flutter | mobile, mobile-flutter, ui-design, compliance, security |
-| Publication et fiche store (au lancement) | app-stores, puis store-apple et/ou store-google selon les stores vises, store-aso |
-| Marketing et acquisition | growth (toujours : contexte produit partage), puis selon la tache growth-seo, growth-ads, growth-social, growth-analytics, growth-cro ; video-editing et motion-design pour produire des videos |
-| Data | data-engineering, dataviz, monitoring |
-| ML ou LLM | ml-engineering, data-engineering, monitoring |
-| Infrastructure et exploitation | devops, finops, monitoring, security, prod-testing |
-| Audit de securite | security, sec-audit, sec-defense |
-| Contenu, motion, video | ui-design, motion-design, video-editing |
+La source de verite des packs tires des signaux du depot est `references/stack-map.json` (lu par
+`suggest_profile.py`) ; les lignes "signal" ci-dessous la resument, les lignes "demande" ajoutent ce que
+le depot ne revele pas. Tout projet de code recoit en plus `agent-skills`, `ci-forge` et `security`
+(`always_for_code`). En cas d'ecart, stack-map.json fait foi : corriger ce tableau.
 
-`guardrails` (garde-fous par hooks) est installe au niveau utilisateur par les scripts d'installation.
-Pour un projet partage en equipe ou pilote en cloud (autopilot), proposer aussi sa copie dans le projet :
-`node <plugin guardrails>/runtime/setup.cjs install-project`, a committer avec `.claude/`.
+| Projet ou tache | Source | Packs |
+|---|---|---|
+| Projet mene par app-factory (creation, clone, reprise) | signal `app-factory` | app-factory, product-management, puis les packs de la stack ; greenfield seulement pour reconstruire un code dont on a les droits |
+| App web (React, Next.js, Vue, Svelte...) | signal `web-front` | fullstack, ui-design, compliance, monitoring, prod-testing |
+| API ou backend | signal `api` | devops, monitoring, prod-testing ; data-engineering si base de donnees (signal `database`) |
+| Mobile Expo ou React Native | signal `expo` | mobile, mobile-expo, ui-design, compliance |
+| Mobile iOS natif | signal `ios` | mobile, mobile-ios, ui-design, compliance |
+| Mobile Android natif | signal `android` | mobile, mobile-android, ui-design, compliance |
+| Mobile Flutter | signal `flutter` | mobile, mobile-flutter, ui-design, compliance |
+| Data | signal `data` | data-engineering, dataviz |
+| ML ou LLM | signal `ml` | ml-engineering, monitoring |
+| Conteneurs, Kubernetes, Terraform | signaux `containers`, `kubernetes`, `terraform` | devops, monitoring, finops |
+| Infrastructure et exploitation (en plus) | demande | prod-testing |
+| Publication et fiche store (au lancement) | demande | app-stores, puis store-apple et/ou store-google selon les stores vises, store-aso |
+| Marketing et acquisition | demande | growth (toujours : contexte produit partage), puis selon la tache growth-seo, growth-ads, growth-social, growth-analytics, growth-cro ; video-editing et motion-design pour produire des videos |
+| Audit de securite | demande | sec-audit, sec-defense |
+| Contenu, motion, video | demande | ui-design, motion-design, video-editing |
 
-`ponytail` est actif partout : installe au niveau utilisateur par les scripts d'installation, il injecte
-sa regle (plus petit changement complet) dans chaque session et chaque sous-agent (environ 2 900
-caracteres) ; ne jamais le desactiver dans un projet sauf demande. `superpowers` ajoute aussi un hook de
+`guardrails` et `ponytail` ne font pas partie de la liste a installer par projet : les scripts
+d'installation les mettent au niveau utilisateur, et `suggest_profile.py` les rapporte a part
+(`user_level` : deja au niveau utilisateur, copie dans le projet optionnelle pour une equipe ou le
+cloud). Ne les proposer au niveau projet que pour un projet partage en equipe ou pilote en cloud
+(autopilot) :
+
+- `guardrails` (garde-fous par hooks) : `node <plugin guardrails>/runtime/setup.cjs install-project`, a
+  committer avec `.claude/`.
+- `ponytail` : `claude plugin install ponytail@ultime-skill --scope project`. Il injecte sa regle (plus
+  petit changement complet) dans chaque session et chaque sous-agent (environ 2 900 caracteres) ; ne
+  jamais le desactiver dans un projet sauf demande. `superpowers` ajoute aussi un hook de
 session : le proposer seulement si sa methode est voulue. `sec-offense` ne s'installe que sur demande explicite,
 pour des tests autorises.

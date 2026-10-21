@@ -28,7 +28,9 @@ decrit la mise en place, faite par l'utilisateur).
 
 ## Demarrage (a chaque invocation)
 
-1. **Reprendre si un projet existe.** Si `.app-factory/state.json` existe, suivre le protocole de reprise
+1. **Reprendre si un projet existe.** Si la branche `claude/autopilot-state` existe sur `origin`, le projet
+   est en autopilot : monter d'abord l'etat (skill `autopilot`, etape 1). Puis, si `.app-factory/state.json`
+   existe, suivre le protocole de reprise
    de `state.md` : relire l'etat, le confronter au depot reel (fichiers, git, tests), signaler les
    ecarts, puis continuer a `next_action`.
 2. **Sinon, choisir le mode** par une question a choix multiples :

@@ -45,7 +45,10 @@
 ## Backend Node (NestJS, Express, Fastify, Hono, tRPC)
 
 - Tests d'integration contre `services:` (Postgres, Redis) ; migrations Prisma
-  (`prisma migrate deploy` puis `prisma migrate diff --exit-code` pour detecter un schema non migre) ou
+  (`prisma migrate deploy`, puis pour detecter un schema non migre, Prisma 7 :
+  `prisma migrate diff --from-migrations prisma/migrations --to-schema prisma/schema.prisma --exit-code`,
+  base fantome declaree dans `prisma.config.ts` ; Prisma 6 : `--to-schema-datamodel prisma/schema.prisma
+  --shadow-database-url $SHADOW_DATABASE_URL` a la place ; code 2 = schema non migre) ou
   Drizzle (`drizzle-kit check`).
 - Contrat d'API : schema OpenAPI genere compare a celui du depot ; `schemathesis` contre l'app demarree.
 

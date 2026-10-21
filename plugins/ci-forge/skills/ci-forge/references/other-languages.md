@@ -37,7 +37,7 @@ php-cs-fixer ou PHP_CodeSniffer en `--dry-run`, PHPUnit ou Pest avec couverture 
 ## Scripts sans manifeste (`file_languages` du detecteur)
 
 - Shell : `shellcheck -S style` sur chaque `*.sh` et les scripts sans extension a shebang, `shfmt -d -i 2`.
-- PowerShell : `Invoke-ScriptAnalyzer -Recurse -Severity Warning` (runner `windows-latest` ou `pwsh` sur
+- PowerShell : `Invoke-ScriptAnalyzer -Path . -Recurse -Severity Warning -EnableExit` (runner `windows-latest` ou `pwsh` sur
   Linux).
 - Python ou JavaScript isoles (outillage, hooks) : ruff, ou `node --check` et les tests `node --test`
   s'ils existent ; un `pyproject.toml` ou `package.json` minimal d'outillage si les regles doivent etre

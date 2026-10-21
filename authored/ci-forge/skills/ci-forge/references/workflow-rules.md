@@ -1,7 +1,9 @@
 # Structure et securite des workflows
 
-Versions verifiees le 2026-10-21 (majeures des actions et outils). Toujours re-epingler a la generation
-avec `pin_actions.py --latest` ; pour un outil, `git ls-remote --tags https://github.com/<owner>/<repo>`.
+Versions verifiees le 2026-10-21 (majeures des actions et outils). Toute action ecrite d'apres ces
+references est epinglee par `pin_actions.py --latest` avant usage, jamais laissee en `@vN` : certaines
+n'ont pas de tag majeur mobile (`astral-sh/setup-uv`, `sigstore/cosign-installer`), d'ou leur version
+exacte ici. Pour un outil, `git ls-remote --tags https://github.com/<owner>/<repo>`.
 
 ## Niveaux
 
@@ -13,7 +15,8 @@ avec `pin_actions.py --latest` ; pour un outil, `git ls-remote --tags https://gi
 | Release | tag `v*` ou `release: published` | artefacts, provenance, signature, production | selon CD |
 
 `paths` ou `dorny/paths-filter@v4` pour ne lancer les jobs lourds (conteneur, kind, mobile) que si leurs
-fichiers changent ; les jobs ignores comptent comme succes pour `ci-ok`.
+fichiers changent. Un job saute (filtre de chemins, `if:`) compte comme un echec pour `alls-green` : le
+lister dans `allowed-skips` de `ci-ok`, et seulement lui (un job toujours attendu n'y figure jamais).
 
 ## Squelette de ci.yml
 
@@ -45,14 +48,14 @@ jobs:
   # typecheck, test, build, e2e, security, container, k8s, iac... selon la stack
   ci-ok:
     if: always()
-    needs: [lint, typecheck, test, build, security]
+    needs: [lint, typecheck, test, build, security, e2e, container, k8s]   # tous les jobs, sautables compris
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: re-actors/alls-green@release/v1
         with:
           jobs: ${{ toJSON(needs) }}
-          allowed-skips: e2e, container, k8s
+          allowed-skips: e2e, container, k8s   # exactement les jobs filtres par paths-filter ou if:
 ```
 
 ## Regles imposees

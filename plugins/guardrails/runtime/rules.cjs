@@ -2,12 +2,12 @@
 // The guardrail rules. Each rule reads the hook context and returns findings (one string each); the
 // configured level of the rule decides whether a finding blocks, asks or only warns.
 
+const os = require('node:os');
 const path = require('node:path');
 
-const os = require('node:os');
-
 const git = require('./lib/git.cjs');
-const { writesFiles } = require('./lib/command-texts.cjs');
+const { writesFiles, optionValues, apiEndpoint, apiFields } = require('./lib/command-texts.cjs');
+const { isProgram, programName, resolvePath } = require('./lib/shell.cjs');
 const { emojis, emDashes, introduced, matchesAny, EM_DASH } = require('./lib/text.cjs');
 
 const SECRET_PATTERNS = [
@@ -19,9 +19,12 @@ const SECRET_PATTERNS = [
   ['cle Google', /\bAIza[0-9A-Za-z_-]{35}\b/],
   ['token Slack', /\bxox[abposr]-[A-Za-z0-9-]{10,}/],
   ['cle privee', /-----BEGIN (?:RSA |EC |DSA |OPENSSH |PGP |ENCRYPTED )?PRIVATE KEY( BLOCK)?-----/],
-  ['mot de passe dans une URL', /\b[a-z][a-z0-9+.-]*:\/\/[^\s:/@'"]+:[^\s@'"$<{]{6,}@[^\s'"]+/i],
+  // The scheme is bounded: an unbounded one backtracks quadratically on long dotted lines.
+  ['mot de passe dans une URL', /\b[a-z][a-z0-9+.-]{0,20}:\/\/[^\s:/@'"]+:[^\s@'"$<{]{6,}@[^\s'"]+/i, localUrl],
   ['secret en clair', /\b(?:password|passwd|secret|api[_-]?key|access[_-]?token|auth[_-]?token|client[_-]?secret)\b["']?\s*[:=]\s*["']([^"'\s]{12,})["']/i],
 ];
+// Hosts of a local or compose development setup: a password in their URL is a dev default, not a secret.
+const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '0.0.0.0', '::1', 'host.docker.internal']);
 const PLACEHOLDER = /example|exemple|test|fake|mock|sample|fixture|changeme|change_me|dummy|placeholder|your[_-]|xxxx|\*\*\*|<[^>]+>|\$\{|\$\(|process\.env|os\.environ|getenv|env\(|secrets\.|vars\./i;
 const ENV_FILE = /(^|\/)\.env(\.[^/]*)?$/;
 const ENV_TEMPLATE = /\.(example|sample|template|dist|defaults)$/;
@@ -38,7 +41,7 @@ const TAMPER_FILES = [
 const SECRET_STORES = [
   [/\bkubectl\b.*\bget\s+secrets?\b.*(?:-o|--output)[=\s]*['"]?(?:yaml|json|jsonpath|go-template|template|custom-columns)/, 'lecture d un secret Kubernetes'],
   [/\bkubectl\b.*\b(?:view-secret|ksd)\b/, 'lecture d un secret Kubernetes'],
-  [/\bkubectl\b.*\bexec\b.*\b(?:env|printenv)\b|\/proc\/\S*\/environ/, 'lecture de l environnement d un pod'],
+  [/\/proc\/\S*\/environ/, 'lecture de l environnement d un pod', { raw: true }],
   [/(?:^|[\s(])bws?\s+(?:get|list|export|unlock|serve|secret|run)\b/, 'coffre Bitwarden'],
   [/(?:^|[\s(])op\s+(?:read|inject|run|item\s+get|document\s+get)\b/, 'coffre 1Password'],
   [/(?:^|[\s(])(?:lpass|pass)\s+show\b/, 'gestionnaire de mots de passe'],
@@ -48,9 +51,11 @@ const SECRET_STORES = [
   [/\bgcloud\s+secrets\s+versions\s+access\b/, 'secrets Google Cloud'],
   [/\baz\s+keyvault\s+secret\s+(?:show|download)\b/, 'Azure Key Vault'],
   [/\b(?:doppler\s+secrets|infisical\s+(?:export|secrets))\b/, 'gestionnaire de secrets'],
-  [/\.(?:bash|zsh|sh)_history\b|\.zsh_sessions\b|\$\{?HISTFILE\b|ConsoleHost_history\.txt/i, 'historique du shell'],
+  [/\.(?:bash|zsh|sh)_history\b|\.zsh_sessions\b|\$\{?HISTFILE\b|ConsoleHost_history\.txt/i, 'historique du shell', { raw: true }],
   [/^\s*history(?:\s|$)|\bGet-History\b/, 'historique du shell'],
 ];
+// Shells whose -c script may print the environment inside a pod.
+const SHELLS = /^(sh|bash|zsh|ash|dash|ksh)$/;
 
 /**
  * @typedef {object} Context
@@ -83,17 +88,31 @@ function shellTexts(ctx) {
     if (text.title) texts.push([`titre (gh ${text.kind})`, text.title]);
     if (text.body) texts.push([`corps (gh ${text.kind})`, text.body]);
   }
-  if (ctx.shell.writes) texts.push(['contenu ecrit par la commande', [ctx.shell.text, ...ctx.shell.heredocs.map((h) => h.body)].join('\n')]);
+  if (ctx.shell.writes) texts.push(['contenu ecrit par la commande', ctx.shell.written]);
   return texts;
+}
+
+/**
+ * Tell whether a URL holding a password points to a local or compose host (no dot in the name,
+ * localhost, loopback, host.docker.internal).
+ *
+ * @param {string} url Matched URL.
+ * @returns {boolean} True for a development URL.
+ */
+function localUrl(url) {
+  const authority = url.slice(url.indexOf('@', url.indexOf('://') + 3) + 1);
+  const bracketed = /^\[([^\]]*)\]/.exec(authority);
+  const host = (bracketed ? bracketed[1] : authority.split(/[:/?#]/)[0]).toLowerCase();
+  return !host.includes('.') || LOCAL_HOSTS.has(host);
 }
 
 /** @param {string} text @returns {string[]} Labels of the secrets found, placeholders excepted. */
 function secretsIn(text) {
   const found = [];
-  for (const [label, pattern] of SECRET_PATTERNS) {
+  for (const [label, pattern, exempt] of SECRET_PATTERNS) {
     const global = new RegExp(pattern.source, pattern.flags.includes('g') ? pattern.flags : `${pattern.flags}g`);
     for (const match of (text || '').matchAll(global)) {
-      if (!PLACEHOLDER.test(match[0])) {
+      if (!PLACEHOLDER.test(match[0]) && !(exempt && exempt(match[0]))) {
         found.push(label);
         break;
       }
@@ -104,6 +123,42 @@ function secretsIn(text) {
 
 function isEnvFile(rel) {
   return ENV_FILE.test(rel) && !ENV_TEMPLATE.test(rel);
+}
+
+/** @param {string} text Segment text. @returns {string} The text with quoted strings emptied. */
+function unquoted(text) {
+  return text.replace(/'[^']*'|"(?:\\.|[^"\\])*"/g, '""');
+}
+
+/**
+ * Tell whether a kubectl exec segment prints the pod environment: env or printenv as the command
+ * after `--`, directly or in a `sh -c` script.
+ *
+ * @param {string[]} list Words of the segment.
+ * @returns {boolean} True when the pod environment is printed.
+ */
+function podEnvironment(list) {
+  if (!isProgram(list[0], 'kubectl') || !list.includes('exec') || !list.includes('--')) return false;
+  const remote = list.slice(list.indexOf('--') + 1);
+  const program = programName(remote[0]);
+  if (program === 'env' || program === 'printenv') return true;
+  const flag = remote.indexOf('-c');
+  return SHELLS.test(program) && flag > 0 && /(?:^|[;&|(]\s*)(?:env|printenv)\b/.test(remote[flag + 1] || '');
+}
+
+/**
+ * Tell whether a git config call sets a key (a read, a listing or an unset does not).
+ *
+ * @param {string[]} args Words after `git config`.
+ * @param {RegExp} key Key to look for.
+ * @returns {boolean} True when the key is given a value.
+ */
+function configSets(args, key) {
+  if (/^(get|list|unset|remove-section|rename-section)$/.test(args[0] || '')) return false;
+  const reads = /^(--get|--get-all|--get-regexp|--get-urlmatch|--list|-l|--unset|--unset-all|--remove-section|--rename-section)$/;
+  if (args.some((arg) => reads.test(arg))) return false;
+  const index = args.findIndex((arg) => key.test(arg));
+  return index >= 0 && index < args.length - 1;
 }
 
 const RULES = {
@@ -157,9 +212,12 @@ const RULES = {
       let switchedTo = null;
       for (const call of ctx.shell.gitCalls) {
         if (call.subcommand === 'checkout' || call.subcommand === 'switch') {
+          if (call.args.includes('--')) continue;
           const created = call.args.findIndex((arg) => /^-[bBcC]$/.test(arg));
-          const branch = created >= 0 ? call.args[created + 1] : call.args.find((arg) => !arg.startsWith('-'));
-          if (branch && !call.args.includes('--')) switchedTo = branch;
+          // Without -b or -c, the operand is a branch only when one exists by that name; else it is a file.
+          const operand = call.args.find((arg) => !arg.startsWith('-'));
+          const branch = created >= 0 ? call.args[created + 1] : git.branchExists(call.cwd, operand) ? operand : null;
+          if (branch) switchedTo = branch;
           continue;
         }
         if (call.subcommand !== 'push') continue;
@@ -211,7 +269,7 @@ const RULES = {
           if (flags.some((flag) => flag.includes('n'))) findings.push('git commit -n (saute les hooks)');
         }
         if (call.config.some((setting) => /^core\.hookspath=/i.test(setting))) findings.push('git -c core.hooksPath');
-        if (call.subcommand === 'config' && call.args.some((arg) => /^core\.hookspath$/i.test(arg))) findings.push('git config core.hooksPath');
+        if (call.subcommand === 'config' && configSets(call.args, /^core\.hookspath$/i)) findings.push('git config core.hooksPath');
         if ((call.assignments || []).some((a) => /^(HUSKY=0|LEFTHOOK=0|SKIP=)/.test(a))) findings.push('variable qui desactive les hooks git');
       }
       return findings;
@@ -300,6 +358,39 @@ const RULES = {
     advice: 'Un titre de PR ou d issue redige par l IA se termine par le marqueur IA, ainsi que son texte.',
   },
 
+  'merge-approval': {
+    check(ctx) {
+      if (!ctx.shell) return [];
+      const findings = [];
+      const reason = "fusion ou approbation au nom de l'utilisateur, a confirmer par lui";
+      for (const segment of ctx.shell.segments) {
+        const list = segment.words;
+        if (!isProgram(list[0], 'gh')) continue;
+        const [, group, action] = list;
+        if (group === 'pr' && action === 'merge') findings.push(`gh pr merge : ${reason}`);
+        if (group === 'pr' && action === 'review' && list.slice(3).some((word) => word === '--approve' || word === '-a')) {
+          findings.push(`gh pr review --approve : ${reason}`);
+        }
+        if (group !== 'api') continue;
+        const args = list.slice(2);
+        const endpoint = apiEndpoint(args);
+        const fields = apiFields(segment);
+        // gh api sends GET, or POST as soon as it has fields or an input body.
+        const sends = Object.keys(fields).length > 0 || args.some((arg) => arg === '--input' || arg.startsWith('--input='));
+        const method = (optionValues(args, ['--method'], ['X'])[0] || (sends ? 'POST' : 'GET')).toUpperCase();
+        if (method === 'PUT' && /\/pulls\/[^/]+\/merge\/?$/.test(endpoint)) findings.push(`fusion par l api (${endpoint}) : ${reason}`);
+        if (method === 'POST' && /\/pulls\/[^/]+\/reviews\/?$/.test(endpoint) && /^approve$/i.test(fields.event || '')) {
+          findings.push(`approbation de PR par l api (${endpoint}) : ${reason}`);
+        }
+        if (method === 'POST' && /\/actions\/runs\/[^/]+\/(?:pending_deployments|deployments|deployment_protection_rule)\/?$/.test(endpoint)) {
+          findings.push(`approbation de deploiement par l api (${endpoint}) : ${reason}`);
+        }
+      }
+      return findings;
+    },
+    advice: "En autopilot, GitHub fusionne seul (auto-merge) et la production s'approuve dans l'environnement GitHub : ne pas fusionner ni approuver a la place de l'utilisateur.",
+  },
+
   'prod-credentials': {
     check(ctx) {
       const rule = settings(ctx, 'prod-credentials');
@@ -318,11 +409,15 @@ const RULES = {
       }
       if (ctx.shell) {
         for (const segment of ctx.shell.segments) {
-          for (const [pattern, label] of SECRET_STORES) if (pattern.test(segment.text)) findings.push(label);
+          // Quoted text is a message or an argument, not a command: `-m "fix: pass show flag"` reads no store.
+          // Path patterns (history files) still read the raw text, a quoted path is still that file.
+          const bare = unquoted(segment.text);
+          for (const [pattern, label, options] of SECRET_STORES) if (pattern.test(options && options.raw ? segment.text : bare)) findings.push(label);
+          if (podEnvironment(segment.words)) findings.push('lecture de l environnement d un pod');
           const program = (segment.words[0] || '').toLowerCase();
-          if (/^(cat|less|more|head|tail|source|\.|grep|rg|sed|awk|type|get-content|gc|cp|scp)$/.test(program)) {
-            for (const word of segment.words.slice(1)) if (!word.startsWith('-') && outsideEnv(word, segment.cwd)) findings.push(`lecture d un .env hors du projet : ${word}`);
-          }
+          const sources = segment.redirections.filter((r) => /^\d*<$/.test(r.op)).map((r) => r.target);
+          if (/^(cat|less|more|head|tail|source|\.|grep|rg|sed|awk|type|get-content|gc|cp|scp)$/.test(program)) sources.push(...segment.words.slice(1));
+          for (const word of sources) if (!word.startsWith('-') && outsideEnv(word, segment.cwd)) findings.push(`lecture d un .env hors du projet : ${word}`);
           const tunnel = /^(ssh|autossh)$/.test(program) && segment.words.some((w) => /^-[A-Za-z]*[LDRW]/.test(w));
           const forward = /\bkubectl\b.*\bport-forward\b/.test(segment.text) || /^sshuttle$/.test(program);
           if ((tunnel || forward) && prod.some((p) => p.test(segment.text))) findings.push('tunnel vers la production');
@@ -349,11 +444,14 @@ const RULES = {
   'config-tamper': {
     check(ctx) {
       const findings = [];
-      const home = os.homedir().replace(/\\/g, '/');
-      const touches = (target) => {
-        const normalized = (target || '').replace(/\\/g, '/');
+      // Windows paths compare without case: c:\Users and C:\Users are the same file.
+      const fold = (text) => (process.platform === 'win32' ? text.toLowerCase() : text);
+      const home = fold(os.homedir().replace(/\\/g, '/'));
+      const touches = (target, base = ctx.cwd) => {
+        const absolute = resolvePath(base, target || '');
+        const normalized = fold(absolute.replace(/\\/g, '/'));
         if (normalized.startsWith(`${home}/.claude/`) && /guardrails|settings(\.local)?\.json$/.test(normalized)) return true;
-        const rel = ctx.root ? path.relative(ctx.root, path.resolve(ctx.cwd, target)).replace(/\\/g, '/') : normalized;
+        const rel = ctx.root ? path.relative(ctx.root, absolute).replace(/\\/g, '/') : normalized;
         return matchesAny(rel, TAMPER_FILES);
       };
       if (ctx.file && touches(ctx.file.path)) findings.push(`modification de ${ctx.file.rel}`);
@@ -364,7 +462,9 @@ const RULES = {
           const mutating = /^(rm|mv|cp|del|remove-item|move-item|copy-item|chmod|truncate|ln)$/.test(program) || writesFiles(segment);
           // A script (node -e, python -c) can rewrite the guardrails configuration without a shell redirection.
           const scripted = !readOnly && /guardrails(\.local)?\.json|hooks[\\/]guardrails/.test(segment.text);
-          if (scripted || (mutating && segment.words.slice(1).some(touches))) findings.push(`modification de la configuration des garde-fous : ${segment.text.slice(0, 80)}`);
+          const outputs = segment.redirections.filter((r) => /^[\d&*]?>/.test(r.op)).map((r) => r.target);
+          const targets = [...segment.words.slice(1), ...outputs];
+          if (scripted || (mutating && targets.some((target) => touches(target, segment.cwd)))) findings.push(`modification de la configuration des garde-fous : ${segment.text.slice(0, 80)}`);
           if (/\bclaude\s+plugin\s+(?:disable|uninstall|remove)\b.*\bguardrails\b/.test(segment.text)) findings.push('desactivation du plugin guardrails');
           if (/\bsetup\.cjs\s+uninstall-project\b/.test(segment.text)) findings.push('retrait des garde-fous du projet');
         }

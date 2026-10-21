@@ -14,6 +14,7 @@ qui lui sert.
 | [Qualité et sécurité](qualite-et-securite.md) | développeurs, responsables techniques | garde-fous, CI générée, revues, règles par langage |
 | [Licences](licences.md) | tout le monde | ce qu'on a le droit de faire, politique d'import, audit |
 | [Maintenance](maintenance.md) | mainteneurs | ajouter une skill ou une source, construire, tester |
+| [Benchmark graphify](../benchmarks/graphify/README.md) | curieux, mainteneurs | coût de construction du graphe et effet mesuré sur 96 exécutions de Claude Code, jugées à l'aveugle |
 
 Les chiffres cités dans ces documents viennent du dépôt lui-même (catalogue généré, tests, essais réels
 décrits dans l'historique des PR) ; aucun n'est une estimation marketing.

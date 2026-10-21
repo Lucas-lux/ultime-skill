@@ -2,7 +2,8 @@
 
 ## Installation (action composite)
 
-- uv (projet avec `uv.lock`, ou nouveau projet) : `astral-sh/setup-uv@v10` avec `enable-cache: true`, puis
+- uv (projet avec `uv.lock`, ou nouveau projet) : `astral-sh/setup-uv@v10.3.0` (pas de tag majeur mobile
+  `v10` : version exacte, puis `pin_actions.py`) avec `enable-cache: true`, puis
   `uv sync --locked --all-extras --dev`. Version de Python : `.python-version`, sinon la plus haute
   supportee par `requires-python`.
 - Poetry : `pipx install poetry` puis `poetry install --sync --no-interaction`. pip :

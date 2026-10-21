@@ -49,6 +49,7 @@ function hook(env, payload) {
 }
 
 const bash = (command) => ({ tool_name: 'Bash', tool_input: { command } });
+const ps = (command) => ({ tool_name: 'PowerShell', tool_input: { command } });
 const write = (file, content) => ({ tool_name: 'Write', tool_input: { file_path: file, content } });
 const edit = (file, oldString, newString) => ({ tool_name: 'Edit', tool_input: { file_path: file, old_string: oldString, new_string: newString } });
 
@@ -221,4 +222,191 @@ test('session start reminder lists the active rules', () => {
   const context = JSON.parse(output).hookSpecificOutput.additionalContext;
   assert.match(context, /em dash/);
   assert.match(context, /main, master/);
+});
+
+test('bypass: redirections are not push refspecs', () => {
+  const env = setup();
+  assert.equal(decision(env, bash('git push origin 2>&1 | tail -5')), 'deny');
+  assert.equal(decision(env, bash('git push -u origin > /dev/null')), 'deny');
+  assert.equal(decision(env, bash('git push origin >/dev/null 2>&1')), 'deny');
+  assert.equal(decision(env, bash('git push origin feat/x 2>&1')), 'allow');
+});
+
+test('bypass: wrappers before git are stripped', () => {
+  const env = setup();
+  for (const prefix of ['timeout 60', 'timeout -s KILL 5m', 'nice -n 10', 'nice -5', 'stdbuf -oL', 'ionice -c 2', 'nohup', 'time', 'command', 'builtin', 'exec', 'env -i', 'sudo -u me', 'HOME=/x env']) {
+    assert.equal(decision(env, bash(`${prefix} git push origin main`)), 'deny', prefix);
+  }
+  assert.equal(decision(env, bash('command -v git')), 'allow');
+});
+
+test('bypass: Git Bash drive paths resolve to the Windows drive', { skip: process.platform !== 'win32' }, () => {
+  const env = setup();
+  const gitBash = env.repo.replace(/\\/g, '/').replace(/^([A-Za-z]):/, (match, drive) => `/${drive.toLowerCase()}`);
+  assert.equal(decision(env, { ...bash(`cd ${gitBash} && git push`), cwd: env.base }), 'deny');
+  assert.equal(decision(env, { ...bash(`git -C ${gitBash} push`), cwd: env.base }), 'deny');
+});
+
+test('bypass: PowerShell keeps backslashes literal', () => {
+  const env = setup();
+  assert.equal(decision(env, { ...ps(`cd ${env.repo}; git push`), cwd: env.base }), 'deny');
+  assert.equal(decision(env, { ...ps(`git -C ${env.repo} push`), cwd: env.base }), 'deny');
+  assert.equal(decision(env, ps('Get-ChildItem "C:\\Temp\\"; git push origin main')), 'deny');
+});
+
+test('bypass: git add and commit -a are checked for what they would stage', () => {
+  const env = setup();
+  fs.writeFileSync(path.join(env.repo, '.env'), 'A=1\n');
+  fs.writeFileSync(path.join(env.repo, 'keys.txt'), `KEY=${AWS_KEY}\n`);
+  const result = hook(env, bash('git add -A && git commit -m "feat: x"'));
+  assert.equal(result.permissionDecision, 'deny');
+  assert.match(result.permissionDecisionReason, /env-file/);
+  assert.match(result.permissionDecisionReason, /secrets/);
+  assert.equal(decision(env, bash('git add keys.txt && git commit -m "feat: x"')), 'deny');
+  // Explicit paths restrict the check to them.
+  fs.writeFileSync(path.join(env.repo, 'src.ts'), 'export const a = 1;\n');
+  assert.equal(decision(env, bash('git add src.ts && git commit -m "feat: x"')), 'allow');
+  fs.rmSync(path.join(env.repo, '.env'));
+  fs.rmSync(path.join(env.repo, 'keys.txt'));
+  fs.writeFileSync(path.join(env.repo, 'README.md'), `x ${EM_DASH} y\n`);
+  assert.equal(decision(env, bash('git commit -a -m "docs: x"')), 'deny');
+  assert.equal(decision(env, bash('git commit -am "docs: x"')), 'deny');
+  assert.equal(decision(env, bash('git add -u && git commit -m "docs: x"')), 'deny');
+  assert.equal(decision(env, bash('git commit -m "docs: x"')), 'allow');
+});
+
+test('bypass: each heredoc belongs to the command that opens it', () => {
+  const env = setup();
+  const command = [
+    "git commit -m \"$(cat <<'EOF'", 'feat: add x', 'EOF', ')" && gh pr create --title "Ajoute x ' + SPARKLES + '" --body "$(cat <<\'EOF\'',
+    `Corps ${EM_DASH} ici`, 'EOF', ')"',
+  ].join('\n');
+  const result = hook(env, bash(command));
+  assert.equal(result.permissionDecision, 'deny');
+  assert.match(result.permissionDecisionReason, /em dash dans le corps \(gh pr\)/);
+  assert.doesNotMatch(result.permissionDecisionReason, /message de commit/);
+  assert.equal(decision(env, bash("cat <<'EOF' > notes.txt\nUpdate stuff\nEOF\ngit commit -F - <<'EOF'\nfeat: ok\nEOF")), 'allow');
+  assert.equal(decision(env, bash("cat <<'EOF' | git commit -F -\nUpdate stuff\nEOF")), 'deny');
+});
+
+test('bypass: config-tamper sees home paths and any drive letter case', () => {
+  const env = setup();
+  assert.equal(decision(env, bash("echo '{}' > ~/.claude/settings.json")), 'ask');
+  assert.equal(decision(env, bash("echo '{}' > $HOME/.claude/settings.json")), 'ask');
+  assert.equal(decision(env, bash("echo '{}' >${HOME}/.claude/guardrails.json")), 'ask');
+  const lowerDrive = path.join(env.home, '.claude', 'settings.json').replace(/^[A-Z]:/, (drive) => drive.toLowerCase());
+  assert.equal(decision(env, write(lowerDrive, '{}')), 'ask');
+  assert.equal(decision(env, bash("echo '{}' > ~/notes.json")), 'allow');
+});
+
+test('bypass: a here-string is not a heredoc', () => {
+  const env = setup();
+  assert.equal(decision(env, bash('read x <<<"EOF"\ngit push origin main')), 'deny');
+  assert.equal(decision(env, bash("read x <<< 'EOF'\ngit push origin main")), 'deny');
+});
+
+test('bypass: checking out a file is not a branch switch', () => {
+  const env = setup();
+  assert.equal(decision(env, bash('git checkout README.md && git push')), 'deny');
+  assert.equal(decision(env, bash('git checkout -- README.md && git push')), 'deny');
+  assert.equal(decision(env, bash('git checkout HEAD -- README.md && git push')), 'deny');
+  sh(env.repo, 'branch', 'feat/q');
+  assert.equal(decision(env, bash('git checkout feat/q && git push')), 'allow');
+  assert.equal(decision(env, bash('git switch feat/q && git push')), 'allow');
+});
+
+test('false positive: PowerShell here-string commit message', () => {
+  const env = setup();
+  assert.equal(decision(env, ps("git commit -m @'\nfeat: add thing\n'@")), 'allow');
+  assert.equal(decision(env, ps('git commit -m @"\nfeat: add thing\n\nBody.\n"@')), 'allow');
+  assert.equal(decision(env, ps("git commit -m @'\nAdd thing\n'@")), 'deny');
+});
+
+test('false positive: local development URLs are not secrets; the URL scan stays linear', () => {
+  const env = setup();
+  const url = (user, password, host) => ['postgres', 'ql://', user, ':', password, '@', host, ':5432/app'].join('');
+  assert.equal(decision(env, write(path.join(env.repo, 'docker-compose.yml'), `DATABASE_URL: ${url('postgres', 'postgres', 'db')}\n`)), 'allow');
+  assert.equal(decision(env, write(path.join(env.repo, '.env.example'), `DATABASE_URL=${url('app', 'app_password', 'localhost')}\n`)), 'allow');
+  assert.equal(decision(env, write(path.join(env.repo, 'a.yml'), `u: ${url('app', 'app_password', '[::1]')}\n`)), 'allow');
+  assert.equal(decision(env, write(path.join(env.repo, 'a.yml'), `u: ${url('app', 'app_password', 'host.docker.internal')}\n`)), 'allow');
+  assert.equal(decision(env, write(path.join(env.repo, 'config.ts'), `const u = "${url('admin', 'Zx81qPw0rdLong', 'db.acme-corp.io')}";`)), 'deny');
+  const { secretsIn } = require(path.join(path.dirname(GUARD), 'rules.cjs'));
+  const long = 'a.'.repeat(100 * 1024);
+  const started = process.hrtime.bigint();
+  assert.deepEqual(secretsIn(long), []);
+  const elapsedMs = Number(process.hrtime.bigint() - started) / 1e6;
+  assert.ok(elapsedMs < 300, `secretsIn took ${elapsedMs} ms on a 200 KB line`);
+});
+
+test('false positive: store commands inside quoted text are not store reads', () => {
+  const env = setup();
+  assert.equal(decision(env, bash('git commit -m "fix: pass show flag to the renderer"')), 'allow');
+  assert.equal(decision(env, bash('git commit -m "docs: explain vault read access"')), 'allow');
+  assert.equal(decision(env, bash('pass show prod/db')), 'deny');
+  assert.equal(decision(env, bash('vault read secret/app')), 'deny');
+  assert.equal(decision(env, bash('cat "$HISTFILE"')), 'deny');
+});
+
+test('false positive: kubectl exec flags env only as the remote command', () => {
+  const env = setup();
+  assert.equal(decision(env, bash('kubectl exec -n app-env deploy/web -- ls /app')), 'allow');
+  assert.equal(decision(env, bash('kubectl exec -n app deploy/web -- env')), 'deny');
+  assert.equal(decision(env, bash('kubectl exec deploy/web -- printenv DB_URL')), 'deny');
+  assert.equal(decision(env, bash('kubectl exec deploy/web -- sh -c "env | grep DB"')), 'deny');
+  assert.equal(decision(env, bash('kubectl exec deploy/web -- cat /proc/1/environ')), 'deny');
+});
+
+test('false positive: reading core.hooksPath is allowed, setting it is not', () => {
+  const env = setup();
+  assert.equal(decision(env, bash('git config --get core.hooksPath')), 'allow');
+  assert.equal(decision(env, bash('git config core.hooksPath')), 'allow');
+  assert.equal(decision(env, bash('git config --unset core.hooksPath')), 'allow');
+  assert.equal(decision(env, bash('git config get core.hooksPath')), 'allow');
+  assert.equal(decision(env, bash('git config core.hooksPath /dev/null')), 'deny');
+  assert.equal(decision(env, bash('git config --global core.hooksPath .hooks')), 'deny');
+});
+
+test('false positive: sed, perl, awk and tr removing a forbidden character', () => {
+  const env = setup();
+  assert.equal(decision(env, bash(`sed -i 's/${EM_DASH}/-/g' README.md`)), 'allow');
+  assert.equal(decision(env, bash(`perl -pi -e 's/${CHECK_EMOJI}//g' README.md`)), 'allow');
+  assert.equal(decision(env, bash(`tr -d '${EM_DASH}' < a.md > b.md`)), 'allow');
+  assert.equal(decision(env, bash(`cat <<'EOF' > a.md\nx ${EM_DASH} y\nEOF`)), 'deny');
+  assert.equal(decision(env, bash(`sed -i 's/a/b/' x.md && echo "${EM_DASH}" > y.md`)), 'deny');
+});
+
+test('configuration: a malformed rule value blocks instead of crashing', () => {
+  const env = setup();
+  fs.mkdirSync(path.join(env.repo, '.claude'));
+  for (const value of [true, null, 3, ['x']]) {
+    fs.writeFileSync(path.join(env.repo, '.claude', 'guardrails.json'), JSON.stringify({ rules: { emoji: value } }));
+    assert.equal(decision(env, write(path.join(env.repo, 'a.ts'), `// done ${CHECK_EMOJI}`)), 'deny', JSON.stringify(value));
+  }
+  fs.writeFileSync(path.join(env.repo, '.claude', 'guardrails.json'), JSON.stringify({ rules: { emoji: true } }));
+  const result = hook(env, write(path.join(env.repo, 'a.md'), 'plain'));
+  assert.match(result.additionalContext, /regle emoji invalide/);
+  for (const content of ['null', '5', '{"rules": 7}']) {
+    fs.writeFileSync(path.join(env.repo, '.claude', 'guardrails.json'), content);
+    assert.equal(decision(env, write(path.join(env.repo, 'a.md'), `a ${EM_DASH} b`)), 'deny', content);
+  }
+});
+
+test('merge and approval need the user', () => {
+  const env = setup();
+  assert.equal(decision(env, bash('gh pr merge 12 --squash')), 'ask');
+  assert.equal(decision(env, bash('gh pr merge --auto --squash')), 'ask');
+  assert.equal(decision(env, bash('gh pr review 12 --approve')), 'ask');
+  assert.equal(decision(env, bash('gh api -X PUT repos/o/r/pulls/3/merge')), 'ask');
+  assert.equal(decision(env, bash('gh api repos/o/r/pulls/3/reviews -f event=APPROVE')), 'ask');
+  assert.equal(decision(env, bash('gh api -X POST repos/o/r/actions/runs/9/pending_deployments -f state=approved')), 'ask');
+  assert.equal(decision(env, bash('gh pr view 12')), 'allow');
+  assert.equal(decision(env, bash('gh api repos/o/r/pulls/3')), 'allow');
+  assert.equal(decision(env, bash('gh pr review 12 --comment -b "ok"')), 'allow');
+  assert.equal(decision(env, bash('gh api repos/o/r/pulls/3/reviews -f event=COMMENT')), 'allow');
+  const output = execFileSync('node', [GUARD], {
+    input: JSON.stringify({ hook_event_name: 'SessionStart', cwd: env.repo }),
+    encoding: 'utf8',
+    env: { ...process.env, HOME: env.home, USERPROFILE: env.home, CLAUDE_PROJECT_DIR: '' },
+  });
+  assert.match(JSON.parse(output).hookSpecificOutput.additionalContext, /fusion et approbation/);
 });

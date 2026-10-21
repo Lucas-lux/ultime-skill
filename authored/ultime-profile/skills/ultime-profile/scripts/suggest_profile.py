@@ -1,8 +1,8 @@
 """Suggest a project's ultime-skill profile, and optionally write its rules and permissions.
 
 Reads the repository (manifests and file names, never runs project code) against references/stack-map.json
-and prints JSON: packs to install (with the signals that justify each), path-scoped rules, permission
-rules. With --write-rules it copies the rules to .claude/rules/ultime/ (that folder is replaced whole);
+and prints JSON: packs to install (with the signals that justify each), packs already installed at user
+level, path-scoped rules (selected by the paths: of their own frontmatter), permission rules. With --write-rules it copies the rules to .claude/rules/ultime/ (that folder is replaced whole);
 with --write-permissions SCOPE it merges the permission rules into .claude/settings.json (project) or
 .claude/settings.local.json (local), keeping every rule already there.
 
@@ -11,11 +11,12 @@ Usage:
 """
 
 import argparse
-import fnmatch
 import json
+import os
 import re
 import shutil
 import sys
+from functools import lru_cache
 from pathlib import Path
 
 SKILL = Path(__file__).resolve().parent.parent
@@ -27,17 +28,32 @@ CODE_SUFFIXES = {".py", ".js", ".mjs", ".cjs", ".ts", ".tsx", ".jsx", ".go", ".r
                  ".php", ".rb", ".cs", ".sh", ".tf", ".sql", ".vue", ".svelte"}
 
 
+def is_link(path: Path) -> bool:
+    """True for a symbolic link or a Windows junction, never followed by the walk."""
+    return os.path.islink(path) or bool(getattr(path, "is_junction", lambda: False)())
+
+
 def files_of(root: Path) -> list[str]:
-    """Repository files as forward-slash paths relative to the root, dependency folders skipped."""
+    """Repository files as forward-slash paths relative to the root, dependency folders and links skipped."""
     found = []
     stack = [root]
+    visited: set[Path] = set()
     while stack:
         directory = stack.pop()
+        try:
+            resolved = directory.resolve()
+        except OSError:
+            continue
+        if resolved in visited:
+            continue
+        visited.add(resolved)
         try:
             entries = list(directory.iterdir())
         except OSError:
             continue
         for entry in entries:
+            if is_link(entry):
+                continue
             if entry.is_dir():
                 if entry.name not in SKIP_DIRS and (not entry.name.startswith(".") or entry.name in {".app-factory", ".github"}):
                     stack.append(entry)
@@ -46,9 +62,34 @@ def files_of(root: Path) -> list[str]:
     return found
 
 
+@lru_cache(maxsize=None)
+def glob_regex(glob: str) -> re.Pattern:
+    """Compile a rules-frontmatter glob: `**/` matches zero or more folders, `*` and `?` stay inside one folder."""
+    pattern, index = "", 0
+    while index < len(glob):
+        if glob.startswith("**/", index):
+            pattern, index = pattern + "(?:.*/)?", index + 3
+        elif glob.startswith("**", index):
+            pattern, index = pattern + ".*", index + 2
+        elif glob[index] == "*":
+            pattern, index = pattern + "[^/]*", index + 1
+        elif glob[index] == "?":
+            pattern, index = pattern + "[^/]", index + 1
+        else:
+            pattern, index = pattern + re.escape(glob[index]), index + 1
+    return re.compile(pattern)
+
+
 def matches(path: str, glob: str) -> bool:
-    """Glob match where `**/` also matches zero folders, as in the rules frontmatter."""
-    return fnmatch.fnmatch(path, glob) or (glob.startswith("**/") and fnmatch.fnmatch(path, glob[3:]))
+    """Glob match with the semantics of the rules frontmatter (`k8s/**/*.yaml` also matches `k8s/a.yaml`)."""
+    return glob_regex(glob).fullmatch(path) is not None
+
+
+def is_requirements(rel: str) -> bool:
+    """requirements*.txt anywhere, or any .txt inside a requirements/ folder."""
+    parts = rel.split("/")
+    name = parts[-1]
+    return name.endswith(".txt") and (name.startswith("requirements") or (len(parts) > 1 and parts[-2] == "requirements"))
 
 
 def dependencies(root: Path, files: list[str]) -> set[str]:
@@ -56,9 +97,11 @@ def dependencies(root: Path, files: list[str]) -> set[str]:
     names: set[str] = set()
     for rel in files:
         name = rel.rsplit("/", 1)[-1]
+        if name not in {"package.json", "pyproject.toml"} and not is_requirements(rel):
+            continue
         path = root / rel
         try:
-            text = path.read_text(encoding="utf-8", errors="ignore")
+            text = path.read_text(encoding="utf-8-sig", errors="ignore")
         except OSError:
             continue
         if name == "package.json":
@@ -68,9 +111,27 @@ def dependencies(root: Path, files: list[str]) -> set[str]:
                 continue
             for key in ("dependencies", "devDependencies", "peerDependencies"):
                 names.update((manifest.get(key) or {}).keys())
-        elif name == "pyproject.toml" or name.startswith("requirements") and name.endswith(".txt"):
+        else:
             names.update(match.lower() for match in re.findall(r"(?:^|[\s\"'\[,])([A-Za-z][\w.-]*)\s*(?:[<>=~!;\[\"',]|$)", text, re.M))
     return names
+
+
+def rule_paths(rule: Path) -> list[str]:
+    """The `paths:` globs of a rule's YAML frontmatter (a simple list, one quoted or bare glob per line)."""
+    lines = rule.read_text(encoding="utf-8-sig").splitlines()
+    if not lines or lines[0].strip() != "---":
+        return []
+    paths, inside = [], False
+    for line in lines[1:]:
+        if line.strip() == "---":
+            break
+        if re.match(r"^paths:\s*$", line):
+            inside = True
+        elif inside and (item := re.match(r"^\s*-\s*[\"']?([^\"']+?)[\"']?\s*$", line)):
+            paths.append(item[1])
+        elif inside and line.strip():
+            inside = False
+    return paths
 
 
 def package_managers(files: list[str]) -> list[str]:
@@ -85,7 +146,7 @@ def package_managers(files: list[str]) -> list[str]:
 
 
 def suggest(root: Path) -> dict:
-    stack_map = json.loads(STACK_MAP.read_text(encoding="utf-8"))
+    stack_map = json.loads(STACK_MAP.read_text(encoding="utf-8-sig"))
     files = files_of(root)
     deps = dependencies(root, files)
     packs: dict[str, list[str]] = {}
@@ -99,12 +160,22 @@ def suggest(root: Path) -> dict:
         if hit:
             for pack in signal["packs"]:
                 packs.setdefault(pack, []).append(f"{signal['id']} ({', '.join(hit[:3])})")
-    rules = [name for name, globs in stack_map["rules"].items() if any(matches(f, g) for f in files for g in globs)]
+    rules = []
+    for rule in sorted(RULES_DIR.glob("*.md")):
+        guard = stack_map.get("rule_guards", {}).get(rule.stem)
+        if not any(matches(f, g) for f in files for g in rule_paths(rule)):
+            continue
+        if guard and not ({d.lower() for d in guard.get("deps", [])} & deps
+                          or any(matches(f, g) for f in files for g in guard.get("files", []))):
+            continue
+        rules.append(rule.stem)
     managers = package_managers(files)
     allow = [rule for manager in managers for rule in stack_map["permissions"]["allow"].get(manager, [])]
     return {
         "root": str(root),
         "packs": [{"pack": pack, "because": reasons} for pack, reasons in packs.items()],
+        "user_level": ([{"pack": pack, "note": stack_map["user_level"]["note"]} for pack in stack_map["user_level"]["packs"]]
+                       if is_code else []),
         "rules": rules,
         "package_managers": managers,
         "permissions": {"allow": allow, "ask": stack_map["permissions"]["ask"] if is_code else []},
@@ -122,7 +193,7 @@ def write_rules(root: Path, rules: list[str]) -> None:
 
 def write_permissions(root: Path, scope: str, permissions: dict) -> None:
     path = root / ".claude" / ("settings.json" if scope == "project" else "settings.local.json")
-    settings = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    settings = json.loads(path.read_text(encoding="utf-8-sig")) if path.exists() else {}
     current = settings.setdefault("permissions", {})
     for kind in ("allow", "ask"):
         existing = current.get(kind, [])

@@ -30,7 +30,8 @@ def overlay_authored() -> None:
         return
     for pack in sorted(authored.iterdir()):
         if pack.is_dir():
-            shutil.copytree(pack, ROOT / "plugins" / pack.name, dirs_exist_ok=True)
+            shutil.copytree(pack, ROOT / "plugins" / pack.name, dirs_exist_ok=True,
+                            ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
             print(f"{'authored':>24}  {pack.name}")
 
 
