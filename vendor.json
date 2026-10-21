@@ -69,14 +69,6 @@
       "license": "Apache-2.0",
       "license_files": []
     },
-    "trailofbits": {
-      "repo": "trailofbits/skills",
-      "commit": "0f44fe01dcb00bd6929b4ba82a257d305de04554",
-      "license": "CC-BY-SA-4.0",
-      "license_files": [
-        "LICENSE"
-      ]
-    },
     "trilwu": {
       "repo": "trilwu/secskills",
       "commit": "ca53957bcd8e3b83b5d4d190bb3ad008a4f15c84",
@@ -89,14 +81,6 @@
       "repo": "antonbabenko/terraform-skill",
       "commit": "0a3a4a66e99001347d36a41e10260a825be3ab62",
       "license": "Apache-2.0",
-      "license_files": [
-        "LICENSE"
-      ]
-    },
-    "hashicorp": {
-      "repo": "hashicorp/agent-skills",
-      "commit": "f706481af9b8fedb66de909f6243ad29601afa0c",
-      "license": "MPL-2.0",
       "license_files": [
         "LICENSE"
       ]
@@ -641,11 +625,6 @@
     },
     {
       "source": "getsentry",
-      "from": "skills/security-review",
-      "to": "plugins/security/skills/security-review"
-    },
-    {
-      "source": "getsentry",
       "from": "skills/gha-security-review",
       "to": "plugins/security/skills/gha-security-review"
     },
@@ -660,48 +639,30 @@
       "to": "plugins/security/skills/security-threat-model"
     },
     {
-      "source": "trailofbits",
-      "from": "plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor",
-      "to": "plugins/security/skills/supply-chain-risk-auditor"
-    },
-    {
-      "source": "trailofbits",
-      "from": "plugins/static-analysis/skills/semgrep",
-      "to": "plugins/security/skills/semgrep"
-    },
-    {
-      "source": "trailofbits",
-      "from": "plugins/static-analysis/skills/codeql",
-      "to": "plugins/security/skills/codeql"
-    },
-    {
-      "source": "trailofbits",
-      "from": "plugins/differential-review/skills/differential-review",
-      "to": "plugins/security/skills/differential-review"
-    },
-    {
-      "source": "trailofbits",
-      "from": "plugins/variant-analysis/skills/variant-analysis",
-      "to": "plugins/security/skills/variant-analysis"
-    },
-    {
-      "source": "trailofbits",
-      "from": "plugins/sharp-edges/skills/sharp-edges",
-      "to": "plugins/security/skills/sharp-edges"
-    },
-    {
-      "source": "trailofbits",
-      "from": "plugins/fp-check/skills/fp-check",
-      "to": "plugins/security/skills/fp-check",
+      "source": "trilwu",
+      "from": "secskills-core/skills",
+      "to": "plugins/sec-audit/skills",
+      "license_to": "plugins/sec-audit",
       "exclude": [
-        "hooks"
+        "auditing-code-for-vulnerabilities",
+        "reviewing-code-changes",
+        "auditing-supply-chain"
       ]
     },
     {
       "source": "trilwu",
-      "from": "secskills-core/skills",
-      "to": "plugins/sec-audit/skills",
-      "license_to": "plugins/sec-audit"
+      "from": "secskills-core/skills/auditing-code-for-vulnerabilities",
+      "to": "plugins/security/skills/auditing-code-for-vulnerabilities"
+    },
+    {
+      "source": "trilwu",
+      "from": "secskills-core/skills/reviewing-code-changes",
+      "to": "plugins/security/skills/reviewing-code-changes"
+    },
+    {
+      "source": "trilwu",
+      "from": "secskills-core/skills/auditing-supply-chain",
+      "to": "plugins/security/skills/auditing-supply-chain"
     },
     {
       "source": "trilwu",
@@ -719,16 +680,6 @@
       "source": "terraform-skill",
       "from": "skills/terraform-skill",
       "to": "plugins/devops/skills/terraform-skill"
-    },
-    {
-      "source": "hashicorp",
-      "from": "plugins/terraform/skills/terraform-test",
-      "to": "plugins/devops/skills/terraform-test"
-    },
-    {
-      "source": "hashicorp",
-      "from": "plugins/terraform/skills/terraform-style-guide",
-      "to": "plugins/devops/skills/terraform-style-guide"
     },
     {
       "source": "docker",
@@ -955,7 +906,8 @@
       "source": "kdense",
       "from": "skills/scikit-learn",
       "to": "plugins/ml-engineering/skills/scikit-learn",
-      "strip_tail": "## Citing Scientific Agent Skills"
+      "strip_tail": "## Citing Scientific Agent Skills",
+      "license_note": "Le depot K-Dense-AI/claude-scientific-skills est sous licence MIT (LICENSE ci-joint). Cette skill declare dans son frontmatter la licence BSD-3-Clause, celle de scikit-learn dont elle decrit la documentation (Copyright (c) The scikit-learn developers). Les deux licences sont permissives ; conserver les deux notices en cas de redistribution. Texte de la licence BSD-3-Clause :\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided\nthat the following conditions are met:\n\n1. Redistributions of source code must retain the above copyright notice, this list of conditions and the\n   following disclaimer.\n2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the\n   following disclaimer in the documentation and/or other materials provided with the distribution.\n3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or\n   promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED\nWARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A\nPARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY\nDIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,\nPROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER\nCAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR\nOTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH\nDAMAGE."
     },
     {
       "source": "mlflow",
@@ -965,12 +917,14 @@
     {
       "source": "vercel-labs",
       "from": "skills/react-best-practices",
-      "to": "plugins/fullstack/skills/vercel-react-best-practices"
+      "to": "plugins/fullstack/skills/vercel-react-best-practices",
+      "license_note": "Licence MIT declaree par l'auteur (Vercel) dans le frontmatter de la skill ; le depot vercel-labs/agent-skills ne contient pas de fichier de licence au commit importe."
     },
     {
       "source": "vercel-labs",
       "from": "skills/composition-patterns",
-      "to": "plugins/fullstack/skills/vercel-composition-patterns"
+      "to": "plugins/fullstack/skills/vercel-composition-patterns",
+      "license_note": "Licence MIT declaree par l'auteur (Vercel) dans le frontmatter de la skill ; le depot vercel-labs/agent-skills ne contient pas de fichier de licence au commit importe."
     },
     {
       "source": "impeccable",
@@ -986,15 +940,9 @@
       "to": "plugins/ui-design/skills/frontend-design"
     },
     {
-      "source": "vercel-labs",
-      "from": "skills/web-design-guidelines",
-      "to": "plugins/ui-design/skills/vercel-web-design-guidelines"
-    },
-    {
       "source": "wig",
       "from": "command.md",
-      "to": "plugins/ui-design/skills/vercel-web-design-guidelines/references/web-interface-guidelines.md",
-      "license": false
+      "to": "plugins/ui-design/skills/ui-review/references/web-interface-guidelines.md"
     },
     {
       "source": "ibelick",

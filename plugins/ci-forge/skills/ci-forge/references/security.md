@@ -17,5 +17,5 @@
   (`security-events: write`), sinon en artefact et en echec du job.
 - Les exceptions (faux positifs) sont dans le fichier de l'outil (`.gitleaks.toml`, `.trivyignore`,
   `.semgrepignore`), une ligne par exception, avec la raison et une date de revue.
-- Le pack `security` (skills `semgrep`, `supply-chain-risk-auditor`, `gha-security-review`) sert a
+- Le pack `security` (skills `security-review`, `sast`, `auditing-supply-chain`, `gha-security-review`) sert a
   analyser les resultats ; ci-forge installe les controles.

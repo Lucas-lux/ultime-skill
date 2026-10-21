@@ -99,7 +99,7 @@ Pour chaque story prete, dans l'ordre des dependances :
    dediee. UI : `frontend-ui-engineering` et les skills du pack ui-design.
 2. `code-reviewer` : `code-review-and-quality` sur le diff.
 3. `qa-engineer` : criteres d'acceptation verifies, tests de bout en bout des parcours touches.
-4. `security-engineer` : `differential-review` ou `security-review` sur le diff si la story touche
+4. `security-engineer` : `security-review` sur le diff si la story touche
    authentification, autorisation, donnees personnelles, paiement, upload ou entree externe.
 5. `ux-designer` : revue des ecrans touches (accessibilite, coherence avec le design system).
 6. Corrections par `implementer`, boucle bornee. La story passe `done` quand la definition of done est
@@ -116,7 +116,7 @@ Pour chaque story prete, dans l'ordre des dependances :
   (`testing-in-production`), domaine et TLS, infrastructure as code (`terraform-skill`) si pertinent.
 - `sre` : `setting-up-monitoring`, SLO (`slo-implementation`), alertes, runbooks, `incident-response`,
   sauvegardes et **restauration testee**.
-- `security-engineer` : audit final (`owasp-security`, `semgrep`, `supply-chain-risk-auditor`, secrets,
+- `security-engineer` : audit final (`security-review`, `sast`, `auditing-supply-chain`, `owasp-security`, secrets,
   en-tetes, limitation de debit).
 - `compliance-officer` : pages legales, politique de confidentialite, consentement, declaration
   d'accessibilite, registre ; en mobile, labels de confidentialite des stores.

@@ -20,7 +20,7 @@ ressemblent ni a un template ni a une interface generee.
 - **Plateformes mobiles** : conventions Human Interface Guidelines (iOS) et Material (Android).
 - **Revues** (P5) : ecart avec le design system, accessibilite, coherence, micro-textes.
 
-Skills : `impeccable`, `frontend-design`, `baseline-ui`, `vercel-web-design-guidelines`,
+Skills : `impeccable`, `frontend-design`, `baseline-ui`, `ui-review`,
 `emil-design-eng`, `break-ui`, `redesign-existing-projects` (reprise), `rgaa`, `wcag`,
 `fixing-accessibility`. Maquettes dans Figma si l'outil est disponible et que l'utilisateur le souhaite.
 

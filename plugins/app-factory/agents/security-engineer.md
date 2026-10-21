@@ -21,9 +21,9 @@ tient dans le code livre.
 - **Audit final** (P6) : OWASP Top 10, analyse statique, dependances et chaine d'approvisionnement,
   secrets dans le code et l'historique, CI.
 
-Skills : `security-threat-model`, `owasp-security`, `security-review`, `differential-review`,
-`semgrep`, `codeql`, `supply-chain-risk-auditor`, `gha-security-review`, `security-and-hardening`,
-`securite-developpement`, `sharp-edges`.
+Skills : `security-review` (d'abord : methode, preuves, gravite, rapport), `security-threat-model`,
+`owasp-security`, `reviewing-code-changes`, `auditing-code-for-vulnerabilities`, `sast`,
+`auditing-supply-chain`, `gha-security-review`, `security-and-hardening`, `securite-developpement`.
 
 ## Exigences
 

@@ -52,15 +52,13 @@ La licence d'origine est copiée dans chaque dossier importé.
 | `plugins/devops/skills/slo-implementation` | [wshobson/agents](https://github.com/wshobson/agents) | `plugins/observability-monitoring/skills/slo-implementation` | `46891e7e60da` | MIT |
 | `plugins/devops/skills/synthetic-monitoring-checks` | [grafana/skills](https://github.com/grafana/skills) | `skills/grafana-cloud/synthetic-monitoring-checks` | `1ccacf29049f` | Apache-2.0 |
 | `plugins/devops/skills/terraform-skill` | [antonbabenko/terraform-skill](https://github.com/antonbabenko/terraform-skill) | `skills/terraform-skill` | `0a3a4a66e990` | Apache-2.0 |
-| `plugins/devops/skills/terraform-style-guide` | [hashicorp/agent-skills](https://github.com/hashicorp/agent-skills) | `plugins/terraform/skills/terraform-style-guide` | `f706481af9b8` | MPL-2.0 |
-| `plugins/devops/skills/terraform-test` | [hashicorp/agent-skills](https://github.com/hashicorp/agent-skills) | `plugins/terraform/skills/terraform-test` | `f706481af9b8` | MPL-2.0 |
 | `plugins/finops/skills/aws-billing-and-cost-management` | [aws/agent-toolkit-for-aws](https://github.com/aws/agent-toolkit-for-aws) | `skills/core-skills/aws-billing-and-cost-management` | `fea6667159ec` | Apache-2.0 |
 | `plugins/finops/skills/azure-cost-optimization` | [microsoft/azure-skills](https://github.com/microsoft/azure-skills) | `.github/plugins/azure-cost/skills/cost-optimization` | `5aa6e0481963` | MIT |
 | `plugins/finops/skills/gke-cost-analysis` | [google/skills](https://github.com/google/skills) | `skills/cloud/gke-cost-analysis` | `e569129c25c9` | Apache-2.0 |
 | `plugins/finops/skills/gke-cost-optimization` | [google/skills](https://github.com/google/skills) | `skills/cloud/gke-cost-optimization` | `e569129c25c9` | Apache-2.0 |
 | `plugins/finops/skills/infracost-scan` | [infracost/agent-skills](https://github.com/infracost/agent-skills) | `plugins/infracost/skills/scan` | `b4104c3a605e` | Apache-2.0 |
-| `plugins/fullstack/skills/vercel-composition-patterns` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/composition-patterns` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) |
-| `plugins/fullstack/skills/vercel-react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/react-best-practices` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) |
+| `plugins/fullstack/skills/vercel-composition-patterns` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/composition-patterns` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) (Licence MIT declaree par l'auteur (Vercel) dans le frontmatter de la skill ; le depot vercel-labs/agent-skills ne contient pas de fichier de licence au commit importe) |
+| `plugins/fullstack/skills/vercel-react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/react-best-practices` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) (Licence MIT declaree par l'auteur (Vercel) dans le frontmatter de la skill ; le depot vercel-labs/agent-skills ne contient pas de fichier de licence au commit importe) |
 | `plugins/graphify/skills/graphify/SKILL.md` | [safishamsi/graphify](https://github.com/safishamsi/graphify) | `graphify/skill.md` | `fe085cedddde` | Apache-2.0 |
 | `plugins/graphify/skills/graphify/references` | [safishamsi/graphify](https://github.com/safishamsi/graphify) | `graphify/skills/claude/references` | `fe085cedddde` | Apache-2.0 |
 | `plugins/greenfield/agents` | [prime-radiant-inc/greenfield](https://github.com/prime-radiant-inc/greenfield) | `agents` | `6e6d4b425fe9` | Apache-2.0 |
@@ -112,7 +110,7 @@ La licence d'origine est copiée dans chaque dossier importé.
 | `plugins/ml-engineering/skills/instrumenting-with-mlflow-tracing` | [mlflow/skills](https://github.com/mlflow/skills) | `instrumenting-with-mlflow-tracing` | `51a42ea2b07f` | Apache-2.0 |
 | `plugins/ml-engineering/skills/lora-qlora-recipes` | [wshobson/agents](https://github.com/wshobson/agents) | `plugins/llm-finetuning/skills/lora-qlora-recipes` | `46891e7e60da` | MIT |
 | `plugins/ml-engineering/skills/rag-implementation` | [wshobson/agents](https://github.com/wshobson/agents) | `plugins/llm-application-dev/skills/rag-implementation` | `46891e7e60da` | MIT |
-| `plugins/ml-engineering/skills/scikit-learn` | [K-Dense-AI/claude-scientific-skills](https://github.com/K-Dense-AI/claude-scientific-skills) | `skills/scikit-learn` | `a1043ef544e3` | MIT |
+| `plugins/ml-engineering/skills/scikit-learn` | [K-Dense-AI/claude-scientific-skills](https://github.com/K-Dense-AI/claude-scientific-skills) | `skills/scikit-learn` | `a1043ef544e3` | MIT (Le depot K-Dense-AI/claude-scientific-skills est sous licence MIT (LICENSE ci-joint)) |
 | `plugins/ml-engineering/skills/serving-llms-vllm` | [Orchestra-Research/AI-Research-SKILLs](https://github.com/Orchestra-Research/AI-Research-SKILLs) | `12-inference-serving/vllm` | `773a52944ba4` | MIT |
 | `plugins/ml-engineering/skills/trl-training` | [huggingface/skills](https://github.com/huggingface/skills) | `skills/trl-training` | `c3ff942be3e0` | Apache-2.0 |
 | `plugins/mobile-android/skills/adaptive` | [android/skills](https://github.com/android/skills) | `jetpack-compose/adaptive` | `95ea931a1ad8` | Apache-2.0 |
@@ -236,18 +234,13 @@ La licence d'origine est copiée dans chaque dossier importé.
 | `plugins/sec-audit/skills` | [trilwu/secskills](https://github.com/trilwu/secskills) | `secskills-core/skills` | `ca53957bcd8e` | MIT |
 | `plugins/sec-defense/skills` | [trilwu/secskills](https://github.com/trilwu/secskills) | `secskills-defense/skills` | `ca53957bcd8e` | MIT |
 | `plugins/sec-offense/skills` | [trilwu/secskills](https://github.com/trilwu/secskills) | `secskills-offense/skills` | `ca53957bcd8e` | MIT |
-| `plugins/security/skills/codeql` | [trailofbits/skills](https://github.com/trailofbits/skills) | `plugins/static-analysis/skills/codeql` | `0f44fe01dcb0` | CC-BY-SA-4.0 |
-| `plugins/security/skills/differential-review` | [trailofbits/skills](https://github.com/trailofbits/skills) | `plugins/differential-review/skills/differential-review` | `0f44fe01dcb0` | CC-BY-SA-4.0 |
-| `plugins/security/skills/fp-check` | [trailofbits/skills](https://github.com/trailofbits/skills) | `plugins/fp-check/skills/fp-check` | `0f44fe01dcb0` | CC-BY-SA-4.0 |
+| `plugins/security/skills/auditing-code-for-vulnerabilities` | [trilwu/secskills](https://github.com/trilwu/secskills) | `secskills-core/skills/auditing-code-for-vulnerabilities` | `ca53957bcd8e` | MIT |
+| `plugins/security/skills/auditing-supply-chain` | [trilwu/secskills](https://github.com/trilwu/secskills) | `secskills-core/skills/auditing-supply-chain` | `ca53957bcd8e` | MIT |
 | `plugins/security/skills/gha-security-review` | [getsentry/skills](https://github.com/getsentry/skills) | `skills/gha-security-review` | `d18b7aa8ba87` | Apache-2.0 |
 | `plugins/security/skills/owasp-security` | [agamm/claude-code-owasp](https://github.com/agamm/claude-code-owasp) | `.claude/skills/owasp-security` | `8ac7965caa21` | MIT |
-| `plugins/security/skills/security-review` | [getsentry/skills](https://github.com/getsentry/skills) | `skills/security-review` | `d18b7aa8ba87` | Apache-2.0 |
+| `plugins/security/skills/reviewing-code-changes` | [trilwu/secskills](https://github.com/trilwu/secskills) | `secskills-core/skills/reviewing-code-changes` | `ca53957bcd8e` | MIT |
 | `plugins/security/skills/security-threat-model` | [openai/skills](https://github.com/openai/skills) | `skills/.curated/security-threat-model` | `49f948faa925` | Apache-2.0 |
-| `plugins/security/skills/semgrep` | [trailofbits/skills](https://github.com/trailofbits/skills) | `plugins/static-analysis/skills/semgrep` | `0f44fe01dcb0` | CC-BY-SA-4.0 |
-| `plugins/security/skills/sharp-edges` | [trailofbits/skills](https://github.com/trailofbits/skills) | `plugins/sharp-edges/skills/sharp-edges` | `0f44fe01dcb0` | CC-BY-SA-4.0 |
 | `plugins/security/skills/skill-scanner` | [getsentry/skills](https://github.com/getsentry/skills) | `skills/skill-scanner` | `d18b7aa8ba87` | Apache-2.0 |
-| `plugins/security/skills/supply-chain-risk-auditor` | [trailofbits/skills](https://github.com/trailofbits/skills) | `plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor` | `0f44fe01dcb0` | CC-BY-SA-4.0 |
-| `plugins/security/skills/variant-analysis` | [trailofbits/skills](https://github.com/trailofbits/skills) | `plugins/variant-analysis/skills/variant-analysis` | `0f44fe01dcb0` | CC-BY-SA-4.0 |
 | `plugins/skill-factory/skills/mcp-builder` | [anthropics/skills](https://github.com/anthropics/skills) | `skills/mcp-builder` | `dbd4588f9e10` | Apache-2.0 |
 | `plugins/skill-factory/skills/skill-creator` | [anthropics/skills](https://github.com/anthropics/skills) | `skills/skill-creator` | `dbd4588f9e10` | Apache-2.0 |
 | `plugins/store-apple/skills/app-store-preflight` | [truongduy2611/app-store-preflight-skills](https://github.com/truongduy2611/app-store-preflight-skills) | `.` | `cfd9c7357730` | MIT |
@@ -307,8 +300,7 @@ La licence d'origine est copiée dans chaque dossier importé.
 | `plugins/ui-design/skills/frontend-design` | [anthropics/skills](https://github.com/anthropics/skills) | `skills/frontend-design` | `dbd4588f9e10` | Apache-2.0 |
 | `plugins/ui-design/skills/impeccable` | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | `.claude/skills/impeccable` | `2f98774f86bc` | Apache-2.0 |
 | `plugins/ui-design/skills/redesign-existing-projects` | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | `skills/redesign-skill` | `a60a36dc2bb3` | MIT |
-| `plugins/ui-design/skills/vercel-web-design-guidelines` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/web-design-guidelines` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) |
-| `plugins/ui-design/skills/vercel-web-design-guidelines/references/web-interface-guidelines.md` | [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) | `command.md` | `434b7f913646` | MIT |
+| `plugins/ui-design/skills/ui-review/references/web-interface-guidelines.md` | [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) | `command.md` | `434b7f913646` | MIT |
 | `plugins/video-editing/skills/faster-whisper` | [ThePlasmak/faster-whisper](https://github.com/ThePlasmak/faster-whisper) | `.` | `1c8d6a682c56` | MIT |
 | `plugins/video-editing/skills/ffmpeg-video-editor` | [bryanwhl/ffmpeg-video-editor](https://github.com/bryanwhl/ffmpeg-video-editor) | `.` | `d5c3ee6e9896` | MIT |
 | `plugins/video-editing/skills/manim-video` | [browser-use/video-use](https://github.com/browser-use/video-use) | `skills/manim-video` | `43cfc5668335` | MIT |
