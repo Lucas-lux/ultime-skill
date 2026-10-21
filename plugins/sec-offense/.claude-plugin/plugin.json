@@ -2,7 +2,7 @@
   "name": "sec-offense",
   "description": "Pentest pour tests autorises uniquement (trilwu secskills-offense) : exploitation web/API/JWT/SSRF/XXE, Active Directory et Entra, cloud et conteneurs, escalade de privileges, reconnaissance. Reserve aux engagements autorises, CTF et recherche.",
   "author": {
-    "name": "SensCritique",
-    "url": "https://github.com/senscritique"
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
   }
 }

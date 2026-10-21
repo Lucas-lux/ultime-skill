@@ -3,8 +3,8 @@
   "name": "ultime-skill",
   "description": "Bibliotheque de skills Claude prete pour la production : orchestration de projet de A a Z, gestion de produit, mobile et stores, growth et marketing, securite, devops, finops, data, ML, full stack, design, conformite, motion et video.",
   "owner": {
-    "name": "SensCritique",
-    "url": "https://github.com/senscritique"
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
   },
   "plugins": [
     {
@@ -58,9 +58,9 @@
       "description": "Pentest pour tests autorises uniquement (trilwu secskills-offense) : exploitation web/API/JWT/SSRF/XXE, Active Directory et Entra, cloud et conteneurs, escalade de privileges, reconnaissance. Reserve aux engagements autorises, CTF et recherche."
     },
     {
-      "name": "sc-conventions",
-      "source": "./plugins/sc-conventions",
-      "description": "Conventions d'equipe SensCritique transverses : verifier plutot que croire, demander avant un gros lot, questions a choix multiples, langues, pas d'em dash, marquage IA, termes techniques en entier, main/replica, secrets hors du code. Regles generiques, rien de confidentiel."
+      "name": "team-conventions",
+      "source": "./plugins/team-conventions",
+      "description": "Conventions de travail d'equipe transverses : verifier plutot que croire, demander avant un gros lot, questions a choix multiples, langues, pas d'em dash, marquage IA, termes techniques en entier, main/replica, secrets hors du code."
     },
     {
       "name": "monitoring",
@@ -226,6 +226,11 @@
       "name": "greenfield",
       "source": "./plugins/greenfield",
       "description": "Retro-ingenierie salle blanche : extrait d'un code existant des specs comportementales, vecteurs de test et criteres d'acceptation sans heritage d'implementation (commande /greenfield:analyze). Pipeline lourd en agents, a reserver au code dont on detient les droits."
+    },
+    {
+      "name": "ultime-starter",
+      "source": "./plugins/ultime-starter",
+      "description": "Demarrage en une commande : le point d'entree ultime-profile (installe ensuite par projet les seuls packs utiles), les garde-fous guardrails et la methode ponytail."
     },
     {
       "name": "ultime-all",

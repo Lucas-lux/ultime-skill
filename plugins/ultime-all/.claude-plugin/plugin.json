@@ -2,8 +2,8 @@
   "name": "ultime-all",
   "description": "Tout ultime-skill en une commande : installe l'ensemble des packs, sauf le pentest offensif.",
   "author": {
-    "name": "SensCritique",
-    "url": "https://github.com/senscritique"
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
   },
   "dependencies": [
     "ponytail",
@@ -15,7 +15,7 @@
     "security",
     "sec-audit",
     "sec-defense",
-    "sc-conventions",
+    "team-conventions",
     "monitoring",
     "prod-testing",
     "devops",

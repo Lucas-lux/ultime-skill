@@ -4,6 +4,7 @@ Run: python -m unittest discover -s tests -p "test_*.py"
 """
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -14,6 +15,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "authored" / "app-factory" / "skills" / "autopilot" / "scripts" / "export_to_repo.py"
 PLUGINS = ROOT / "plugins"
+
+
+def posix_bash() -> str | None:
+    """The bash Claude Code runs hooks with: Git Bash on Windows (a bare "bash" there may be WSL's launcher)."""
+    if os.name != "nt":
+        return shutil.which("bash")
+    git = shutil.which("git")
+    if not git:
+        return None
+    git_root = Path(git).resolve().parents[1]
+    for candidate in (git_root / "bin" / "bash.exe", git_root / "usr" / "bin" / "bash.exe"):
+        if candidate.exists():
+            return str(candidate)
+    return None
 
 
 def export(target: Path, *args: str) -> str:
@@ -51,13 +66,14 @@ class ExportTest(unittest.TestCase):
         export(self.target, "--packs", "mobile")
         self.assertEqual(sorted(self.commands()), first)
 
+    @unittest.skipUnless(posix_bash(), "needs bash (Git Bash on Windows)")
     def test_ported_ponytail_hook_runs_from_the_project(self):
         export(self.target)
         settings = json.loads((self.target / ".claude" / "settings.json").read_text(encoding="utf-8"))
         command = next(h["command"] for g in settings["hooks"]["SessionStart"] for h in g["hooks"] if "ponytail" in h["command"])
-        result = subprocess.run([shutil.which("bash") or "bash", "-c", command], input=json.dumps({"hook_event_name": "SessionStart", "source": "startup"}),
+        result = subprocess.run([posix_bash(), "-c", command], input=json.dumps({"hook_event_name": "SessionStart", "source": "startup"}),
                                 capture_output=True, text=True,
-                                env={**__import__("os").environ, "CLAUDE_PROJECT_DIR": str(self.target),
+                                env={**os.environ, "CLAUDE_PROJECT_DIR": str(self.target),
                                      "CLAUDE_CONFIG_DIR": str(self.target / "config")})
         self.assertIn("PONYTAIL MODE ACTIVE", result.stdout)
 

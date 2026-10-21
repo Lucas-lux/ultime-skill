@@ -18,13 +18,13 @@ Les sessions cloud n'installent pas les plugins : seul le `.claude/` du depot es
 
 ```bash
 python <autopilot>/scripts/export_to_repo.py --dry-run      # packs actives du projet + app-factory
-python <autopilot>/scripts/export_to_repo.py --packs app-factory,mobile,mobile-expo,sc-conventions
+python <autopilot>/scripts/export_to_repo.py --packs app-factory,mobile,mobile-expo,team-conventions
 ```
 
 L'export ajoute toujours `app-factory`, `guardrails` (copie projet des garde-fous) et `ponytail` (ses
 hooks sont portes dans `.claude/hooks/ponytail/` et declares dans `.claude/settings.json`).
 `<autopilot>` est le dossier de cette skill (dans le cache des plugins, ou `plugins/app-factory/skills/
-autopilot` du depot ultime-skill). Ajouter `sc-conventions` si le projet suit les regles d'equipe : en
+autopilot` du depot ultime-skill). Ajouter `team-conventions` si le projet suit les regles d'equipe : en
 cloud, le `~/.claude/CLAUDE.md` personnel n'est pas lu, seules les regles du depot (`CLAUDE.md`,
 `.claude/rules/`, skills exportees) s'appliquent. Relancer l'export apres chaque mise a jour du
 marketplace. Puis desactiver les packs exportes au niveau du projet pour ne pas les charger deux fois.
