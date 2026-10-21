@@ -51,6 +51,7 @@ avant.
 | Mobile Android natif | mobile, mobile-android, design, compliance, security |
 | Mobile Flutter | mobile, mobile-flutter, design, compliance, security |
 | Publication et fiche store (au lancement) | app-stores, puis store-apple et/ou store-google selon les stores vises, store-aso |
+| Marketing et acquisition | growth (toujours : contexte produit partage), puis selon la tache growth-seo, growth-ads, growth-social, growth-analytics, growth-cro ; video-editing et motion-design pour produire des videos |
 | Data | data-engineering, dataviz, monitoring |
 | ML ou LLM | ml-engineering, data-engineering, monitoring |
 | Infrastructure et exploitation | devops, finops, monitoring, security, prod-testing |

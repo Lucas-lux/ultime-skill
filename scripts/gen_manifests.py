@@ -48,6 +48,12 @@ PLUGINS = {
     "store-apple": ("App Store Connect par le CLI asc (signature, build, TestFlight, release, metadonnees, captures, prix, crashs), prevention des rejets App Review (preflight par type d'app), politique de confidentialite et labels de confidentialite Apple.", {}),
     "store-google": ("Google Play par le CLI gplay (build Gradle, release, rollout progressif, testeurs, metadonnees, captures, verifications avant soumission, achats, prix, vitals) et audit des politiques Google Play depuis le code.", {}),
     "store-aso": ("App Store Optimization pour les deux stores : audit, mots-cles, metadonnees, captures (generateur Next.js inclus), video de presentation, icone, pages produit personnalisees, evenements, tests A/B de fiche, localisation, avis et notes, gestion des rejets.", {}),
+    "growth": ("Growth, socle : contexte produit partage par toutes les skills marketing, plan marketing, lancement, relations presse ; ecrit maison : campagnes d'installation d'app, production de creatives et videos, publication sur les reseaux sociaux, conformite marketing France et UE.", {}),
+    "growth-seo": ("SEO du site : audit technique et on-page, recherche IA (GEO), donnees structurees, SEO programmatique, architecture du site, strategie de contenu, netlinking.", {}),
+    "growth-ads": ("Publicite payante : strategie Google, Meta, TikTok, LinkedIn, creatives publicitaires, copywriting et relecture, psychologie, images et videos marketing, Apple Ads, campagnes d'acquisition d'app.", {}),
+    "growth-social": ("Reseaux sociaux : strategie et contenus par plateforme, marketing d'influence et createurs, animation de communaute.", {}),
+    "growth-analytics": ("Mesure marketing : plan de marquage et GA4, UTM, attribution, suivi des conversions (GTM, API de conversion), tests A/B, attribution mobile (MMP, SKAdNetwork).", {}),
+    "growth-cro": ("Conversion et retention : CRO des pages, inscription, onboarding, paywalls, popups, emails et SMS de cycle de vie, churn, parrainage, lead magnets, tunnel web vers app.", {}),
     "ultime-profile": ("N'active pour un projet que les packs ultime-skill utiles (profil par projet ou par tache), pour alleger le contexte charge a chaque session. Catalogue des packs avec leur cout en contexte.", {}),
     "greenfield": ("Retro-ingenierie salle blanche : extrait d'un code existant des specs comportementales, vecteurs de test et criteres d'acceptation sans heritage d'implementation (commande /greenfield:analyze). Pipeline lourd en agents, a reserver au code dont on detient les droits.", {}),
 }
@@ -71,11 +77,15 @@ BUNDLES = {
     "ultime-mobile": ("Pack mobile : multiplateforme, Expo et React Native, iOS, Android, Flutter, stores (fiche, Data safety, App Store Connect, Google Play, ASO), design, conformite et securite.",
                       ["mobile", "mobile-expo", "mobile-ios", "mobile-android", "mobile-flutter", "app-stores",
                        "store-apple", "store-google", "store-aso", "design", "compliance", "security"]),
-    "ultime-factory": ("Usine a produit : l'orchestrateur app-factory et tout ce qu'il pilote (gestion de produit, retro-specification, cycle de vie logiciel, full stack, mobile et stores, design, conformite, securite, devops, donnees, monitoring, tests en production, finops). A combiner avec ultime-profile pour n'activer que l'utile par projet.",
+    "ultime-growth": ("Pack growth : socle marketing, SEO, publicite et creatives, reseaux sociaux, mesure et attribution, conversion et retention, ASO, production video.",
+                      ["growth", "growth-seo", "growth-ads", "growth-social", "growth-analytics", "growth-cro",
+                       "store-aso", "video-editing", "motion-design"]),
+    "ultime-factory": ("Usine a produit : l'orchestrateur app-factory et tout ce qu'il pilote (gestion de produit, retro-specification, cycle de vie logiciel, full stack, mobile et stores, growth, design, conformite, securite, devops, donnees, monitoring, tests en production, finops). A combiner avec ultime-profile pour n'activer que l'utile par projet.",
                        ["app-factory", "product-management", "greenfield", "agent-skills", "fullstack", "design",
                         "compliance", "security", "devops", "data-engineering", "monitoring", "prod-testing", "finops",
                         "mobile", "mobile-expo", "mobile-ios", "mobile-android", "mobile-flutter", "app-stores",
-                        "store-apple", "store-google", "store-aso"]),
+                        "store-apple", "store-google", "store-aso", "growth", "growth-seo", "growth-ads",
+                        "growth-social", "growth-analytics", "growth-cro", "video-editing", "motion-design"]),
 }
 
 
@@ -149,7 +159,7 @@ def main() -> None:
     marketplace = {
         "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
         "name": "ultime-skill",
-        "description": "Bibliotheque de skills Claude prete pour la production : orchestration de projet de A a Z, gestion de produit, mobile et stores, securite, devops, finops, data, ML, full stack, design, conformite, motion et video.",
+        "description": "Bibliotheque de skills Claude prete pour la production : orchestration de projet de A a Z, gestion de produit, mobile et stores, growth et marketing, securite, devops, finops, data, ML, full stack, design, conformite, motion et video.",
         "owner": {"name": "SensCritique", "url": "https://github.com/senscritique"},
         "plugins": plugins_entries,
     }

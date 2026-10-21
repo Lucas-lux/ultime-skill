@@ -1,0 +1,20 @@
+{
+  "name": "ultime-growth",
+  "description": "Pack growth : socle marketing, SEO, publicite et creatives, reseaux sociaux, mesure et attribution, conversion et retention, ASO, production video.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  },
+  "dependencies": [
+    "growth",
+    "growth-seo",
+    "growth-ads",
+    "growth-social",
+    "growth-analytics",
+    "growth-cro",
+    "store-aso",
+    "video-editing",
+    "motion-design",
+    "ultime-profile"
+  ]
+}

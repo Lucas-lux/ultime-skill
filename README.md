@@ -4,7 +4,7 @@ Bibliothèque de skills Claude prête pour la production, installable en une com
 meilleures skills open source du moment (sélectionnées, nettoyées, épinglées à un commit) et servira de
 base aux skills que nous créerons nous-mêmes.
 
-**437 skills, 24 agents, 36 packs, 9 bundles.** Chaque pack est un plugin Claude Code indépendant ; les
+**479 skills, 24 agents, 42 packs, 10 bundles.** Chaque pack est un plugin Claude Code indépendant ; les
 bundles en installent plusieurs d'un coup via les dépendances de plugins.
 
 ## Installation en une commande
@@ -51,7 +51,8 @@ Redémarrer Claude Code ou lancer `/reload-plugins` après installation.
 | `ultime-web` | fullstack, design, compliance |
 | `ultime-ops` | devops, finops, monitoring, prod-testing |
 | `ultime-mobile` | mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, design, compliance, security |
-| `ultime-factory` | app-factory et tout ce qu'il pilote : product-management, greenfield, agent-skills, fullstack, design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, et tous les packs mobile et stores |
+| `ultime-growth` | growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, store-aso, video-editing, motion-design |
+| `ultime-factory` | app-factory et tout ce qu'il pilote : product-management, greenfield, agent-skills, fullstack, design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, et tous les packs mobile, stores, growth et production vidéo |
 
 Chaque bundle installe aussi `ultime-profile` (voir [Économie de contexte](#économie-de-contexte)).
 
@@ -85,7 +86,7 @@ déclenchent plus. Installer `ultime-all` et tout laisser actif est donc contre-
 | Pack | Skills | Rôle |
 |---|---|---|
 | `app-factory` | 3 + 18 agents | Orchestrateur de projet de A à Z, en trois modes : création depuis une idée, clone personnalisé d'une app de référence, reprise d'une app existante ou inachevée. Huit phases avec portes de validation, état sur disque et reprise, sous-agents spécialisés. Écrit maison. |
-| `product-management` | 47 | Découverte, stratégie, marché, PRD, user stories, roadmap, pre-mortem, rétro, notes de version (phuryn), rétro-spécification d'un code existant (code-to-prd, schematic). |
+| `product-management` | 46 | Découverte, stratégie, marché, PRD, user stories, roadmap, pre-mortem, rétro, notes de version (phuryn), rétro-spécification d'un code existant (code-to-prd, schematic). |
 | `greenfield` | 22 + 2 agents | Rétro-ingénierie « salle blanche » : specs comportementales, vecteurs de test et critères d'acceptation extraits d'un code sans hériter de son implémentation (`/greenfield:analyze`). Pipeline lourd, réservé au code dont on détient les droits. |
 
 Démarrer un projet : installer `ultime-factory`, ouvrir le dépôt du projet (vide ou existant) et lancer
@@ -111,6 +112,23 @@ reprend là où la précédente s'est arrêtée.
 Les stores passent d'abord par les CLI et API officielles ; le navigateur (Claude in Chrome, avec vos
 sessions) ne sert qu'à ce qu'elles ne couvrent pas. Connexion, double authentification, paiement,
 acceptation des contrats, envoi en revue et publication restent à l'utilisateur.
+
+### Growth et marketing
+
+| Pack | Skills | Rôle |
+|---|---|---|
+| `growth` | 8 | Socle : contexte produit partagé par toutes les skills marketing, plan marketing, lancement, relations presse. Écrit maison : campagnes d'installation d'app, production de créatives et vidéos, publication sur les réseaux sociaux, conformité marketing France et UE. |
+| `growth-seo` | 7 | Audit SEO, recherche IA (GEO), données structurées, SEO programmatique, architecture du site, stratégie de contenu, netlinking. |
+| `growth-ads` | 9 | Publicité Google, Meta, TikTok, LinkedIn, créatives, copywriting, psychologie, images et vidéos marketing, Apple Ads, campagnes d'acquisition d'app. |
+| `growth-social` | 3 | Réseaux sociaux, influence et créateurs, communauté. |
+| `growth-analytics` | 5 | Plan de marquage, GA4, attribution, suivi des conversions, tests A/B, attribution mobile. |
+| `growth-cro` | 11 | Conversion des pages, inscription, onboarding, paywalls, popups, emails et SMS, churn, parrainage, tunnel web vers app. |
+
+Les skills issues de marketingskills lisent un contexte commun (`.agents/product-marketing.md`, créé par
+la skill `product-marketing`) : activer `growth` avec n'importe quel pack `growth-*`. Aucune campagne,
+dépense ni publication ne part sans validation de l'utilisateur. Quelques outils cités par marketingskills
+sont des partenaires rémunérés de ce dépôt d'origine : ils sont signalés comme tels et présentés à côté
+de leurs alternatives.
 
 ### Fondations
 
@@ -182,6 +200,11 @@ Certaines skills pilotent un outil à installer à part (`./install.sh --with-to
   l'utilisateur.
 - `mobile` et `mobile-expo` : fastlane, EAS CLI, Maestro ou Detox selon le projet, à installer depuis leur
   documentation officielle.
+- SEO technique et audit publicitaire approfondis : les plugins
+  [claude-seo](https://github.com/AgriciDaniel/claude-seo) et [claude-ads](https://github.com/AgriciDaniel/claude-ads)
+  complètent `growth-seo` et `growth-ads`. Ils ne sont pas importés : ce sont des systèmes complets avec
+  leur environnement Python, qui recoupent largement marketingskills. Les installer depuis leur dépôt si
+  besoin.
 - iOS avancé : le plugin [Axiom](https://github.com/CharlesWiltgen/Axiom) (StoreKit, notifications,
   sécurité, App Review) complète `mobile-ios`. Il n'est pas importé : ses skills dépendent de ses propres
   binaires, de son serveur MCP et de ses commandes. L'installer depuis son marketplace si besoin.

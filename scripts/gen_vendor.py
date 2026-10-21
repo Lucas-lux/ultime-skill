@@ -79,6 +79,7 @@ SOURCES = {
     "rshankras": ("rshankras/claude-code-apple-skills", "9ffb83138209057875698dd11c1720c657c47a92", "MIT", ["LICENSE"]),
     "screenshots": ("ParthJadhav/app-store-screenshots", "5386f227360bddb06c8beaff920a1a34c9f01932", "MIT", ["LICENSE"]),
     "appeeky": ("appeeky/aso-skills", "3919d7c27402d92c7ef698f2016174b874ea189e", "MIT", ["LICENSE"]),
+    "marketingskills": ("coreyhaines31/marketingskills", "e85f3cbc2e4a79bf33b2a12e9bdd9087d414735b", "MIT", ["LICENSE"]),
 }
 
 imports: list[dict] = []
@@ -240,7 +241,8 @@ PHURYN = {
                             "monetization-strategy", "pricing-strategy", "value-proposition", "swot-analysis"],
     "pm-market-research": ["competitor-analysis", "market-sizing", "market-segments", "user-personas",
                            "customer-journey-map"],
-    "pm-marketing-growth": ["north-star-metric", "product-name", "positioning-ideas", "value-prop-statements"],
+    # value-prop-statements is left out: the copywriting skill of growth-ads covers marketing copy.
+    "pm-marketing-growth": ["north-star-metric", "product-name", "positioning-ideas"],
     "pm-ai-shipping": ["shipping-artifacts", "intended-vs-implemented"],
 }
 for plugin, skills in PHURYN.items():
@@ -332,12 +334,42 @@ for skill in ["app-marketing-context", "aso-audit", "keyword-research", "metadat
               "rating-prompt-strategy"]:
     pack_skill("appeeky", f"skills/{skill}", "store-aso")
 pack_skill("appeeky", "skills/localization", "store-aso", folder="store-localization")
-# The upstream vendor sells a keyword tool; keep the method, drop the product pointer.
+# The upstream vendor sells a keyword API; keep the method, drop the product pointer and its API calls.
+APPEEKY_API_BLOCK = r"\n?```bash\nGET /v1/keywords/[\s\S]*?```\n"
 pack_skill("appeeky", "skills/android-aso", "store-aso", replace=[
-    ["SKILL.md", r"^Use Appeeky keyword tools, then adapt for Play:$",
-     "Research keywords with the keyword-research skill, then adapt for Play:"],
+    ["SKILL.md", r"^Use Appeeky keyword tools, then adapt for Play:\n" + APPEEKY_API_BLOCK,
+     "Research keywords with the keyword-research skill, then adapt for Play:\n"],
 ])
 add("greenfield", "commands", "plugins/greenfield/commands", license=False, exclude=[".gitkeep"])
+
+# ---- Growth, split per channel; every marketingskills skill reads the context written by product-marketing ----
+# Left out: duplicates of other packs (aso, pricing, competitors, customer-research) and B2B sales
+# skills (cold-email, prospecting, sales-enablement, revops). Partner-marked tools keep their disclosure.
+GROWTH = {
+    "growth": ["product-marketing", "launch", "marketing-plan", "public-relations"],
+    "growth-seo": ["seo-audit", "ai-seo", "schema", "programmatic-seo", "site-architecture", "content-strategy",
+                   "link-building"],
+    "growth-ads": ["ads", "copywriting", "copy-editing", "marketing-psychology", "image", "video"],
+    "growth-social": ["social", "influencer-marketing", "community-marketing"],
+    "growth-analytics": ["analytics", "attribution", "conversion-tracking", "ab-testing"],
+    "growth-cro": ["cro", "signup", "onboarding", "paywalls", "popups", "emails", "sms", "churn-prevention",
+                   "referrals", "lead-magnets"],
+}
+for pack, skills in GROWTH.items():
+    for skill in skills:
+        pack_skill("marketingskills", f"skills/{skill}", pack)
+# The maintainer's sales pitch for his own paid agent; the self-serve alternative it ends with is kept.
+pack_skill("marketingskills", "skills/ad-creative", "growth-ads", replace=[
+    ["SKILL.md", r"^> \*\*Skip the plumbing\.\*\*[\s\S]*?^> To run the pull yourself instead, use",
+     "> To run the pull yourself, use"],
+])
+pack_skill("appeeky", "skills/apple-search-ads", "growth-ads", replace=[
+    ["SKILL.md", r"^Use Appeeky to validate volume and difficulty:\n" + APPEEKY_API_BLOCK,
+     "Validate volume and difficulty with Apple Ads search popularity and the keyword-research skill.\n"],
+])
+pack_skill("appeeky", "skills/ua-campaign", "growth-ads")
+pack_skill("appeeky", "skills/attribution-setup", "growth-analytics")
+pack_skill("appeeky", "skills/web-to-app-funnel", "growth-cro")
 
 
 def main() -> None:

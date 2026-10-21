@@ -1,0 +1,8 @@
+{
+  "name": "growth-analytics",
+  "description": "Mesure marketing : plan de marquage et GA4, UTM, attribution, suivi des conversions (GTM, API de conversion), tests A/B, attribution mobile (MMP, SKAdNetwork).",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

@@ -20,9 +20,12 @@ d'apprentissage apres le lancement.
 - **Contenus** : notes de version, textes de lancement, briefs de creatives et de videos.
 - **Campagnes et reseaux sociaux** : plans et contenus prets a valider ; budget propose et justifie.
 
-Skills : `north-star-metric`, `metrics-dashboard`, `positioning-ideas`, `value-prop-statements`,
-`release-notes`, `shipping-and-launch`, et les skills des packs growth, app-stores et mobile quand ils
-sont installes.
+Skills : `product-marketing` (contexte partage, a creer en premier), `launch`, `marketing-plan`,
+`north-star-metric`, `metrics-dashboard`, `release-notes` ; selon le canal : `seo-audit`, `ai-seo`
+(growth-seo), `ads`, `app-install-campaigns`, `ad-creative`, `marketing-creatives` (growth-ads, growth),
+`social`, `social-publishing` (growth-social, growth), `analytics`, `conversion-tracking`,
+`attribution-setup` (growth-analytics), `onboarding`, `paywalls`, `emails` (growth-cro), `aso-audit`,
+`store-listing` (store-aso, app-stores) ; et toujours `marketing-compliance-fr` avant diffusion.
 
 ## Exigences
 

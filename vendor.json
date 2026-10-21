@@ -538,6 +538,14 @@
       "license_files": [
         "LICENSE"
       ]
+    },
+    "marketingskills": {
+      "repo": "coreyhaines31/marketingskills",
+      "commit": "e85f3cbc2e4a79bf33b2a12e9bdd9087d414735b",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
     }
   },
   "imports": [
@@ -1397,13 +1405,6 @@
     },
     {
       "source": "phuryn",
-      "from": "pm-marketing-growth/skills/value-prop-statements",
-      "to": "plugins/product-management/skills/value-prop-statements",
-      "strip_tail": "### Further Reading",
-      "drop_lines": "productcompass\\.pm"
-    },
-    {
-      "source": "phuryn",
       "from": "pm-ai-shipping/skills/shipping-artifacts",
       "to": "plugins/product-management/skills/shipping-artifacts",
       "strip_tail": "### Further Reading",
@@ -2091,8 +2092,8 @@
       "replace": [
         [
           "SKILL.md",
-          "^Use Appeeky keyword tools, then adapt for Play:$",
-          "Research keywords with the keyword-research skill, then adapt for Play:"
+          "^Use Appeeky keyword tools, then adapt for Play:\\n\\n?```bash\\nGET /v1/keywords/[\\s\\S]*?```\\n",
+          "Research keywords with the keyword-research skill, then adapt for Play:\n"
         ]
       ]
     },
@@ -2104,6 +2105,215 @@
       "exclude": [
         ".gitkeep"
       ]
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/product-marketing",
+      "to": "plugins/growth/skills/product-marketing"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/launch",
+      "to": "plugins/growth/skills/launch"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/marketing-plan",
+      "to": "plugins/growth/skills/marketing-plan"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/public-relations",
+      "to": "plugins/growth/skills/public-relations"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/seo-audit",
+      "to": "plugins/growth-seo/skills/seo-audit"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/ai-seo",
+      "to": "plugins/growth-seo/skills/ai-seo"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/schema",
+      "to": "plugins/growth-seo/skills/schema"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/programmatic-seo",
+      "to": "plugins/growth-seo/skills/programmatic-seo"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/site-architecture",
+      "to": "plugins/growth-seo/skills/site-architecture"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/content-strategy",
+      "to": "plugins/growth-seo/skills/content-strategy"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/link-building",
+      "to": "plugins/growth-seo/skills/link-building"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/ads",
+      "to": "plugins/growth-ads/skills/ads"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/copywriting",
+      "to": "plugins/growth-ads/skills/copywriting"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/copy-editing",
+      "to": "plugins/growth-ads/skills/copy-editing"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/marketing-psychology",
+      "to": "plugins/growth-ads/skills/marketing-psychology"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/image",
+      "to": "plugins/growth-ads/skills/image"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/video",
+      "to": "plugins/growth-ads/skills/video"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/social",
+      "to": "plugins/growth-social/skills/social"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/influencer-marketing",
+      "to": "plugins/growth-social/skills/influencer-marketing"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/community-marketing",
+      "to": "plugins/growth-social/skills/community-marketing"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/analytics",
+      "to": "plugins/growth-analytics/skills/analytics"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/attribution",
+      "to": "plugins/growth-analytics/skills/attribution"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/conversion-tracking",
+      "to": "plugins/growth-analytics/skills/conversion-tracking"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/ab-testing",
+      "to": "plugins/growth-analytics/skills/ab-testing"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/cro",
+      "to": "plugins/growth-cro/skills/cro"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/signup",
+      "to": "plugins/growth-cro/skills/signup"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/onboarding",
+      "to": "plugins/growth-cro/skills/onboarding"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/paywalls",
+      "to": "plugins/growth-cro/skills/paywalls"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/popups",
+      "to": "plugins/growth-cro/skills/popups"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/emails",
+      "to": "plugins/growth-cro/skills/emails"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/sms",
+      "to": "plugins/growth-cro/skills/sms"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/churn-prevention",
+      "to": "plugins/growth-cro/skills/churn-prevention"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/referrals",
+      "to": "plugins/growth-cro/skills/referrals"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/lead-magnets",
+      "to": "plugins/growth-cro/skills/lead-magnets"
+    },
+    {
+      "source": "marketingskills",
+      "from": "skills/ad-creative",
+      "to": "plugins/growth-ads/skills/ad-creative",
+      "replace": [
+        [
+          "SKILL.md",
+          "^> \\*\\*Skip the plumbing\\.\\*\\*[\\s\\S]*?^> To run the pull yourself instead, use",
+          "> To run the pull yourself, use"
+        ]
+      ]
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/apple-search-ads",
+      "to": "plugins/growth-ads/skills/apple-search-ads",
+      "replace": [
+        [
+          "SKILL.md",
+          "^Use Appeeky to validate volume and difficulty:\\n\\n?```bash\\nGET /v1/keywords/[\\s\\S]*?```\\n",
+          "Validate volume and difficulty with Apple Ads search popularity and the keyword-research skill.\n"
+        ]
+      ]
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/ua-campaign",
+      "to": "plugins/growth-ads/skills/ua-campaign"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/attribution-setup",
+      "to": "plugins/growth-analytics/skills/attribution-setup"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/web-to-app-funnel",
+      "to": "plugins/growth-cro/skills/web-to-app-funnel"
     }
   ]
 }

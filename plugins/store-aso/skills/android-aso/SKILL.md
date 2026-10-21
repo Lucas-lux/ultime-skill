@@ -88,11 +88,6 @@ Google Play indexes descriptions per language. Each locale is a fresh keyword op
 
 Research keywords with the keyword-research skill, then adapt for Play:
 
-```bash
-GET /v1/keywords/metrics?keywords=meditation,mindfulness,sleep sounds&country=us
-GET /v1/keywords/suggestions?term=meditation&country=us
-```
-
 **Play-specific considerations:**
 - Long-tail phrases work well (full description is indexed)
 - Semantic similarity matters - Google's algorithm understands synonyms
