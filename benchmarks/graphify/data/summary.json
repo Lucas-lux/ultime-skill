@@ -67,6 +67,23 @@
       "greps": 2,
       "graphify": 1.208,
       "n": 24
+    },
+    "E": {
+      "cost_usd": 0.139,
+      "tokens": 200766.812,
+      "cache_read": 178033.125,
+      "output_tokens": 1983.188,
+      "duration_s": 23.044,
+      "turns": 6.062,
+      "tool_calls": 5.062,
+      "correctness": null,
+      "completeness": null,
+      "correctness2": null,
+      "completeness2": null,
+      "reads": 0.438,
+      "greps": 2,
+      "graphify": 1,
+      "n": 16
     }
   },
   "by_repo_condition": {
@@ -136,6 +153,23 @@
       "reads": 0,
       "greps": 2.875,
       "graphify": 1.25,
+      "n": 8
+    },
+    "cal.com / E": {
+      "cost_usd": 0.137,
+      "tokens": 203198.625,
+      "cache_read": 180965,
+      "output_tokens": 1869.375,
+      "duration_s": 23.363,
+      "turns": 5.375,
+      "tool_calls": 4.375,
+      "correctness": null,
+      "completeness": null,
+      "correctness2": null,
+      "completeness2": null,
+      "reads": 0,
+      "greps": 0.875,
+      "graphify": 1,
       "n": 8
     },
     "commerce / A": {
@@ -273,6 +307,23 @@
       "greps": 1.75,
       "graphify": 0.875,
       "n": 8
+    },
+    "excalidraw / E": {
+      "cost_usd": 0.142,
+      "tokens": 198335,
+      "cache_read": 175101.25,
+      "output_tokens": 2097,
+      "duration_s": 22.725,
+      "turns": 6.75,
+      "tool_calls": 5.75,
+      "correctness": null,
+      "completeness": null,
+      "correctness2": null,
+      "completeness2": null,
+      "reads": 0.875,
+      "greps": 3.125,
+      "graphify": 1,
+      "n": 8
     }
   },
   "by_question_type_condition": {
@@ -344,6 +395,23 @@
       "graphify": 0.833,
       "n": 6
     },
+    "q1-architecture / E": {
+      "cost_usd": 0.114,
+      "tokens": 135032.5,
+      "cache_read": 114689.25,
+      "output_tokens": 1372.25,
+      "duration_s": 15.55,
+      "turns": 4,
+      "tool_calls": 3,
+      "correctness": null,
+      "completeness": null,
+      "correctness2": null,
+      "completeness2": null,
+      "reads": 0,
+      "greps": 0,
+      "graphify": 1,
+      "n": 4
+    },
     "q2-locate / A": {
       "cost_usd": 0.109,
       "tokens": 166127.5,
@@ -411,6 +479,23 @@
       "greps": 2,
       "graphify": 1,
       "n": 6
+    },
+    "q2-locate / E": {
+      "cost_usd": 0.128,
+      "tokens": 180732.75,
+      "cache_read": 159724,
+      "output_tokens": 1768.75,
+      "duration_s": 18.5,
+      "turns": 5.25,
+      "tool_calls": 4.25,
+      "correctness": null,
+      "completeness": null,
+      "correctness2": null,
+      "completeness2": null,
+      "reads": 0,
+      "greps": 2.25,
+      "graphify": 1,
+      "n": 4
     },
     "q3-trace / A": {
       "cost_usd": 0.159,
@@ -480,6 +565,23 @@
       "graphify": 1.333,
       "n": 6
     },
+    "q3-trace / E": {
+      "cost_usd": 0.185,
+      "tokens": 323560.25,
+      "cache_read": 296476.25,
+      "output_tokens": 2763.75,
+      "duration_s": 37.975,
+      "turns": 8,
+      "tool_calls": 7,
+      "correctness": null,
+      "completeness": null,
+      "correctness2": null,
+      "completeness2": null,
+      "reads": 1,
+      "greps": 1.5,
+      "graphify": 1,
+      "n": 4
+    },
     "q4-impact / A": {
       "cost_usd": 0.11,
       "tokens": 138066.667,
@@ -547,8 +649,25 @@
       "greps": 2.333,
       "graphify": 1.667,
       "n": 6
+    },
+    "q4-impact / E": {
+      "cost_usd": 0.131,
+      "tokens": 163741.75,
+      "cache_read": 141243,
+      "output_tokens": 2028,
+      "duration_s": 20.15,
+      "turns": 7,
+      "tool_calls": 6,
+      "correctness": null,
+      "completeness": null,
+      "correctness2": null,
+      "completeness2": null,
+      "reads": 0.75,
+      "greps": 4.25,
+      "graphify": 1,
+      "n": 4
     }
   },
   "judge_cost_usd": 10.95,
-  "runs_cost_usd": 11.4
+  "runs_cost_usd": 13.63
 }

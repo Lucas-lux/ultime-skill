@@ -16,15 +16,6 @@
         "LICENSE"
       ]
     },
-    "graphify": {
-      "repo": "safishamsi/graphify",
-      "commit": "fe085cedddde3a18554f8749b230bfe47f3dcce7",
-      "license": "Apache-2.0",
-      "license_files": [
-        "LICENSE",
-        "NOTICE"
-      ]
-    },
     "agent-skills": {
       "repo": "addyosmani/agent-skills",
       "commit": "aeac41d4d005999432bb7312f7ff06383a91d59d",
@@ -573,17 +564,6 @@
       "source": "rea",
       "from": ".agents/skills/reverse-engineer-anything",
       "to": "plugins/rea/skills/reverse-engineer-anything"
-    },
-    {
-      "source": "graphify",
-      "from": "graphify/skill.md",
-      "to": "plugins/graphify/skills/graphify/SKILL.md"
-    },
-    {
-      "source": "graphify",
-      "from": "graphify/skills/claude/references",
-      "to": "plugins/graphify/skills/graphify/references",
-      "license": false
     },
     {
       "source": "agent-skills",

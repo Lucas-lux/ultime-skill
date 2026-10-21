@@ -10,7 +10,6 @@ d'agents qu'un pack active ajoute au contexte de chaque session (environ 4 carac
 | `agent-skills` | 25 | 4 | 9604 | Cycle de vie logiciel complet (Addy Osmani) : spec, plan, build, test, revue, securite, performance, CI/CD, observabilite, mise en prod. Base transverse full stack et devops. |
 | `skill-factory` | 2 | 0 | 596 | Creer, tester et ameliorer des skills et des serveurs MCP (skill-creator et mcp-builder d'Anthropic). |
 | `rea` | 1 | 0 | 300 | Reverse Engineer Anything : binaires, apps Electron/JS, Android, firmware, navigateur. Pilote le serveur MCP rea-agents (a installer a part). |
-| `graphify` | 1 | 0 | 353 | Transforme un depot ou un dossier en graphe de connaissances interrogeable. Pilote le paquet Python graphifyy (a installer a part). |
 | `security` | 12 | 0 | 5459 | Audit d'application et revue de securite : OWASP Top 10 et ASVS, revue de diff orientee risque, Semgrep et CodeQL, analyse de variantes, chaine d'approvisionnement, modele de menace, APIs a risque, scan de skills. |
 | `sec-audit` | 30 | 0 | 12917 | Audit de code et recherche de vulnerabilites (trilwu secskills-core) : analyse de source par taint, reverse de binaires et d'apps, crypto, supply chain, securite des systemes IA et des serveurs MCP. Pour usage autorise uniquement. |
 | `sec-defense` | 22 | 0 | 11140 | Defense et reponse a incident (trilwu secskills-defense) : DFIR disque/memoire/reseau, analyse de malware et de phishing, detections Sigma et Yara, durcissement et investigation cloud (AWS, Azure, GCP, M365), threat hunting. |
@@ -54,9 +53,9 @@ d'agents qu'un pack active ajoute au contexte de chaque session (environ 4 carac
 
 | Bundle | Cout (caracteres) | Packs |
 |---|---|---|
-| `ultime-all` | 170642 | ponytail, superpowers, agent-skills, skill-factory, rea, graphify, security, sec-audit, sec-defense, sc-conventions, monitoring, prod-testing, devops, finops, data-engineering, dataviz, ml-engineering, fullstack, ui-design, compliance, motion-design, video-editing, app-factory, product-management, mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, ci-forge, guardrails, ultime-profile, greenfield |
+| `ultime-all` | 170289 | ponytail, superpowers, agent-skills, skill-factory, rea, security, sec-audit, sec-defense, sc-conventions, monitoring, prod-testing, devops, finops, data-engineering, dataviz, ml-engineering, fullstack, ui-design, compliance, motion-design, video-editing, app-factory, product-management, mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, ci-forge, guardrails, ultime-profile, greenfield |
 | `ultime-dev` | 29024 | ponytail, superpowers, agent-skills, skill-factory, devops, fullstack, security, sc-conventions, prod-testing, guardrails, ci-forge, ultime-profile |
-| `ultime-data` | 11034 | data-engineering, dataviz, ml-engineering, graphify, ultime-profile |
+| `ultime-data` | 10681 | data-engineering, dataviz, ml-engineering, ultime-profile |
 | `ultime-media` | 8250 | ui-design, motion-design, video-editing, ultime-profile |
 | `ultime-security` | 30197 | security, sec-audit, sec-defense, rea, ultime-profile |
 | `ultime-web` | 8455 | fullstack, ui-design, compliance, ultime-profile |

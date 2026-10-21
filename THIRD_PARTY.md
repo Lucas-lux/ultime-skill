@@ -61,8 +61,6 @@ La licence d'origine est copiée dans chaque dossier importé.
 | `plugins/finops/skills/infracost-scan` | [infracost/agent-skills](https://github.com/infracost/agent-skills) | `plugins/infracost/skills/scan` | `b4104c3a605e` | Apache-2.0 |
 | `plugins/fullstack/skills/vercel-composition-patterns` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/composition-patterns` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) |
 | `plugins/fullstack/skills/vercel-react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/react-best-practices` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) |
-| `plugins/graphify/skills/graphify/SKILL.md` | [safishamsi/graphify](https://github.com/safishamsi/graphify) | `graphify/skill.md` | `fe085cedddde` | Apache-2.0 |
-| `plugins/graphify/skills/graphify/references` | [safishamsi/graphify](https://github.com/safishamsi/graphify) | `graphify/skills/claude/references` | `fe085cedddde` | Apache-2.0 |
 | `plugins/greenfield/agents` | [prime-radiant-inc/greenfield](https://github.com/prime-radiant-inc/greenfield) | `agents` | `6e6d4b425fe9` | Apache-2.0 |
 | `plugins/greenfield/commands` | [prime-radiant-inc/greenfield](https://github.com/prime-radiant-inc/greenfield) | `commands` | `6e6d4b425fe9` | Apache-2.0 |
 | `plugins/greenfield/skills` | [prime-radiant-inc/greenfield](https://github.com/prime-radiant-inc/greenfield) | `skills` | `6e6d4b425fe9` | Apache-2.0 |

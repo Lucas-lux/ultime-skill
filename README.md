@@ -4,7 +4,7 @@ Bibliothèque de skills Claude prête pour la production, installable en une com
 meilleures skills open source du moment (sélectionnées, nettoyées, épinglées à un commit) et servira de
 base aux skills que nous créerons nous-mêmes.
 
-**482 skills, 24 agents, 44 packs, 10 bundles.** Chaque pack est un plugin Claude Code indépendant ; les
+**481 skills, 24 agents, 43 packs, 10 bundles.** Chaque pack est un plugin Claude Code indépendant ; les
 bundles en installent plusieurs d'un coup via les dépendances de plugins.
 
 ## Installation
@@ -44,7 +44,7 @@ l'orchestrateur `app-factory` le faire à ses étapes clés.
 
 ```bash
 ./install.sh ultime-dev                  # un ou plusieurs bundles ou packs, actifs partout
-./install.sh --with-tools ultime-mobile  # installe aussi les CLI externes (graphify, rea, asc, gplay)
+./install.sh --with-tools ultime-mobile  # installe aussi les CLI externes (rea, asc, gplay)
 ```
 
 Un bundle large actif partout dépasse le budget de descriptions de Claude Code (voir
@@ -59,7 +59,7 @@ Redémarrer Claude Code ou lancer `/reload-plugins` après installation.
 |---|---|
 | `ultime-all` | Tous les packs (déconseillé : préférer l'installation par projet) |
 | `ultime-dev` | ponytail, superpowers, agent-skills, skill-factory, devops, fullstack, security, sc-conventions |
-| `ultime-data` | data-engineering, dataviz, ml-engineering, graphify |
+| `ultime-data` | data-engineering, dataviz, ml-engineering |
 | `ultime-media` | ui-design, motion-design, video-editing |
 | `ultime-security` | security, sec-audit, sec-defense, rea |
 | `ultime-web` | fullstack, ui-design, compliance |
@@ -192,7 +192,6 @@ de leurs alternatives.
 | `data-engineering` | 12 | dbt, Airflow, SQL multi-dialecte, exploration, PySpark, Postgres, qualité des données. |
 | `dataviz` | 5 | Choix de graphique, matplotlib/plotly, dashboards HTML, figures scientifiques, Grafana. |
 | `ml-engineering` | 10 | Fine-tuning (LoRA/QLoRA), évaluation LLM, TRL, RAG, serving vLLM, scikit-learn, MLflow, HF Hub. |
-| `graphify` | 1 | Graphe de connaissances d'un dépôt. Nécessite le paquet Python `graphifyy`. |
 
 ### Web
 
@@ -212,10 +211,9 @@ de leurs alternatives.
 ## Outils externes
 
 Certaines skills pilotent un outil à installer à part (`./install.sh --with-tools` installe `rea`,
-`graphify`, `asc` et `gplay`) :
+`asc` et `gplay`) :
 
 - `rea` : serveur MCP `rea-agents` (`npx rea-agents setup --client claude_code`).
-- `graphify` : paquet Python `graphifyy` (`uv tool install graphifyy`).
 - `video-editing` : `ffmpeg` sur le PATH ; `faster-whisper` et `video-use` ont des dépendances Python (voir leurs README). `video-use` utilise l'API payante ElevenLabs pour la transcription : lui préférer `faster-whisper` en local.
 - `ml-engineering`, `data-engineering` : les outils de chaque écosystème (dbt, Airflow, HF, vLLM, MLflow) selon la skill.
 - `store-apple` : CLI `asc` (App Store Connect) et `store-google` : CLI `gplay` (Play Console). L'installeur

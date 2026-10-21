@@ -5,7 +5,7 @@
 #   .\install.ps1 -NoPonytail              # without ponytail, installed by default for every project
 #   .\install.ps1 ultime-dev security      # chosen bundles or packs, for every project
 #   $env:ULTIME_SKILL_SOURCE = "."; .\install.ps1   # from this clone instead of GitHub (per-project setup then needs GitHub)
-#   .\install.ps1 -WithTools ultime-all    # also installs the CLIs some skills drive (graphify, rea, asc, gplay)
+#   .\install.ps1 -WithTools ultime-all    # also installs the CLIs some skills drive (rea, asc, gplay)
 param(
     [switch]$WithTools,
     [switch]$NoGuardrails,
@@ -15,7 +15,6 @@ param(
 $ErrorActionPreference = "Stop"
 
 $Marketplace = "ultime-skill"
-$GraphifyVersion = "0.9.90"
 $ReaVersion = "6.5.0"
 $AscVersion = "5.16.0"
 $GplayVersion = "1.0.0"
@@ -52,11 +51,6 @@ foreach ($target in $Targets) {
 }
 
 if ($WithTools) {
-    if (Get-Command uv -ErrorAction SilentlyContinue) {
-        uv tool install "graphifyy==$GraphifyVersion"
-    } else {
-        Write-Warning "uv not found: skipping graphify (pip install graphifyy==$GraphifyVersion)."
-    }
     if (Get-Command npx -ErrorAction SilentlyContinue) {
         npx -y "rea-agents@$ReaVersion" setup --client claude_code --dry-run --json
         if ($LASTEXITCODE -eq 0) { npx -y "rea-agents@$ReaVersion" setup --client claude_code }
