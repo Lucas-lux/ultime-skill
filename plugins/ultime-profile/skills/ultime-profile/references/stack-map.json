@@ -1,33 +1,28 @@
 {
-  "comment": "Signals found in a repository -> packs, path-scoped rules and permissions. Read by scripts/suggest_profile.py. A signal is a glob (files) or a dependency name found in package.json, pyproject.toml or requirements files.",
-  "always_for_code": ["guardrails", "ponytail", "agent-skills", "ci-forge", "security"],
+  "comment": "Signals found in a repository -> packs, path-scoped rules and permissions. Read by scripts/suggest_profile.py. A signal is a glob (files) or a dependency name found in package.json, pyproject.toml or requirements files. Rules are selected by the paths: of their own frontmatter (rules/*.md), narrowed by rule_guards. Source of truth for the signal-driven packs listed in SKILL.md.",
+  "always_for_code": ["agent-skills", "ci-forge", "security"],
+  "user_level": {
+    "packs": ["guardrails", "ponytail"],
+    "note": "already at user level (install scripts); project copy for team or cloud (autopilot) optional"
+  },
   "signals": [
     {"id": "app-factory", "files": [".app-factory/state.json", "docs/product/brief.md"], "packs": ["app-factory", "product-management"]},
     {"id": "web-front", "deps": ["next", "react", "vue", "nuxt", "svelte", "@sveltejs/kit", "astro", "@remix-run/react", "vite"], "packs": ["fullstack", "ui-design", "compliance", "monitoring", "prod-testing"]},
-    {"id": "api", "deps": ["fastapi", "django", "flask", "starlette", "litestar", "@nestjs/core", "express", "fastify", "hono", "@trpc/server"], "files": ["go.mod", "Cargo.toml", "composer.json", "Gemfile", "pom.xml", "build.gradle", "build.gradle.kts"], "packs": ["devops", "monitoring", "prod-testing"]},
-    {"id": "database", "deps": ["sqlalchemy", "alembic", "django", "prisma", "@prisma/client", "drizzle-orm", "typeorm", "sequelize", "psycopg", "psycopg2-binary", "pg", "mysql2"], "files": ["**/migrations/**", "alembic.ini", "**/schema.prisma"], "packs": ["data-engineering"]},
+    {"id": "api", "deps": ["fastapi", "django", "flask", "starlette", "litestar", "@nestjs/core", "express", "fastify", "hono", "@trpc/server"], "files": ["**/go.mod", "**/Cargo.toml", "**/composer.json", "**/Gemfile", "**/pom.xml", "**/build.gradle", "**/build.gradle.kts"], "packs": ["devops", "monitoring", "prod-testing"]},
+    {"id": "database", "deps": ["sqlalchemy", "alembic", "django", "prisma", "@prisma/client", "drizzle-orm", "typeorm", "sequelize", "psycopg", "psycopg2-binary", "pg", "mysql2"], "files": ["**/migrations/**", "**/alembic.ini", "**/schema.prisma"], "packs": ["data-engineering"]},
     {"id": "expo", "deps": ["expo", "react-native"], "packs": ["mobile", "mobile-expo", "ui-design", "compliance"]},
-    {"id": "ios", "files": ["**/*.xcodeproj/project.pbxproj", "Package.swift"], "packs": ["mobile", "mobile-ios", "ui-design", "compliance"]},
+    {"id": "ios", "files": ["**/*.xcodeproj/project.pbxproj", "**/Package.swift"], "packs": ["mobile", "mobile-ios", "ui-design", "compliance"]},
     {"id": "android", "files": ["**/AndroidManifest.xml"], "packs": ["mobile", "mobile-android", "ui-design", "compliance"]},
-    {"id": "flutter", "files": ["pubspec.yaml"], "packs": ["mobile", "mobile-flutter", "ui-design", "compliance"]},
-    {"id": "containers", "files": ["**/Dockerfile", "**/compose*.y*ml", "**/docker-compose*.y*ml"], "packs": ["devops", "monitoring"]},
+    {"id": "flutter", "files": ["**/pubspec.yaml"], "packs": ["mobile", "mobile-flutter", "ui-design", "compliance"]},
+    {"id": "containers", "files": ["**/Dockerfile", "**/Dockerfile.*", "**/*.dockerfile", "**/compose*.y*ml", "**/docker-compose*.y*ml"], "packs": ["devops", "monitoring"]},
     {"id": "kubernetes", "files": ["**/Chart.yaml", "**/kustomization.y*ml", "**/k8s/**/*.y*ml"], "packs": ["devops", "monitoring", "finops"]},
     {"id": "terraform", "files": ["**/*.tf"], "packs": ["devops", "finops"]},
     {"id": "data", "deps": ["apache-airflow", "dbt-core", "pyspark", "pandas", "polars", "duckdb"], "packs": ["data-engineering", "dataviz"]},
     {"id": "ml", "deps": ["torch", "transformers", "scikit-learn", "langchain", "llama-index", "vllm", "anthropic", "openai"], "packs": ["ml-engineering", "monitoring"]}
   ],
-  "rules": {
-    "python": ["**/*.py"],
-    "typescript": ["**/*.ts", "**/*.tsx"],
-    "react": ["**/*.tsx", "**/*.jsx"],
-    "go": ["**/*.go"],
-    "rust": ["**/*.rs"],
-    "shell": ["**/*.sh", "**/*.bash"],
-    "sql": ["**/*.sql", "**/migrations/**", "**/alembic/**", "**/schema.prisma"],
-    "docker": ["**/Dockerfile", "**/compose*.y*ml", "**/docker-compose*.y*ml"],
-    "terraform": ["**/*.tf"],
-    "kubernetes": ["**/Chart.yaml", "**/kustomization.y*ml", "**/k8s/**/*.y*ml"],
-    "tests": ["**/test_*.py", "**/*.test.*", "**/*.spec.*", "**/*_test.go", "**/tests/**"]
+  "rule_guards": {
+    "comment": "A rule is selected when a file matches the paths: of its frontmatter (rules/*.md). A rule listed here also needs one of these files or dependencies, for frontmatter paths too broad to select on their own (app/, pages/, components/ exist outside React).",
+    "react": {"files": ["**/*.tsx", "**/*.jsx"], "deps": ["react", "next", "react-native", "expo", "@remix-run/react"]}
   },
   "permissions": {
     "allow": {

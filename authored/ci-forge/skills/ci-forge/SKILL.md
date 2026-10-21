@@ -24,8 +24,10 @@ References (lire seulement celles de la stack detectee) :
 
 ## 1. Comprendre le projet
 
-1. `python <skill>/scripts/detect_stack.py .` : composants (langage, gestionnaire de paquets, frameworks,
-   outils deja configures), conteneurs, Kubernetes, IaC, CI existante, task runner, hooks locaux.
+1. `python <skill>/scripts/detect_stack.py .` (Python 3.11 ou plus, pour `tomllib` ; sinon
+   `uv run --python 3.13 <skill>/scripts/detect_stack.py .`) : composants (langage, gestionnaire de
+   paquets, frameworks, outils deja configures), conteneurs, Kubernetes, IaC, CI existante, task runner,
+   hooks locaux.
 2. Architecture cible et hebergement : ADR et `docs/architecture/`, `.app-factory/state.json` (stack, P3),
    README, fichiers de plateforme (`vercel.json`, `fly.toml`, `render.yaml`, `app.json`, `eas.json`,
    `wrangler.toml`, charts Helm). Sans cible connue : CI complete, CD limite au build d'artefact, et le
@@ -65,6 +67,10 @@ References (lire seulement celles de la stack detectee) :
 1. `python <skill>/scripts/pin_actions.py --latest .github/workflows` : chaque action epinglee par SHA,
    version en commentaire. Une action qui change de version majeure : lire son `action.yml` a la
    version epinglee (`gh api repos/<owner>/<repo>/contents/action.yml?ref=<tag>`) et ajuster les inputs.
+   Toute action des references doit passer par ce script avant usage : un `@vN` sans tag majeur mobile
+   (ex. `astral-sh/setup-uv`) ne se resout pas tel quel. Le script echoue sur une reference qu'il ne sait
+   pas resoudre (SHA court, majeur sans version x.y.z) et signale les lignes `uses:` qu'il ne comprend pas
+   (`warning`) : les corriger a la main.
 2. `actionlint` puis `zizmor` (audit de securite des workflows) : `uvx zizmor .github/workflows` ou
    `docker run --rm -v "$PWD:/repo" -w /repo ghcr.io/zizmorcore/zizmor:1.31.1 .github/workflows` ; pour
    actionlint, le binaire s'il est installe, sinon

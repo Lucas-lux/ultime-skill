@@ -98,13 +98,21 @@ function evaluate(payload) {
     cwd,
     root,
     config,
-    shell: SHELL_TOOLS.has(tool) ? analyzeCommand(input.command || '', cwd) : null,
+    shell: SHELL_TOOLS.has(tool) ? analyzeCommand(input.command || '', cwd, { powershell: tool === 'PowerShell' }) : null,
     file: FILE_TOOLS.has(tool) ? fileChange(tool, input, root, cwd) : null,
     staged() {
       if (!stagedCache) {
         const commit = this.shell && this.shell.commits[0];
         const directory = commit ? commit.call.cwd : cwd;
-        stagedCache = { files: git.stagedFiles(directory), added: git.stagedAddedLines(directory) };
+        const files = new Set(git.stagedFiles(directory));
+        const added = git.stagedAddedLines(directory);
+        // `git add -A && git commit` or `git commit -a`: what is about to be staged counts too.
+        for (const pending of (this.shell && this.shell.staging) || []) {
+          const changes = git.pendingChanges(pending.cwd, pending.pathspecs, pending.untracked);
+          for (const file of changes.files) files.add(file);
+          added.push(...changes.added);
+        }
+        stagedCache = { files: [...files], added };
       }
       return stagedCache;
     },
@@ -163,6 +171,7 @@ function reminder(payload) {
   if (on('secrets') || on('env-file')) items.push('aucun secret dans le code ni dans git, ils restent dans le .env');
   if (on('conventional-commit')) items.push('commits au format Conventional Commits, 72 caracteres au plus');
   if (on('ai-marker')) items.push(`titres de PR et d'issues rediges par l'IA termines par ${rules['ai-marker'].marker}`);
+  if (on('merge-approval')) items.push("fusion et approbation : confirmees par l'utilisateur");
   if (on('prod-credentials')) items.push("identifiants de prod : seulement ceux configures pour le projet, jamais d'ailleurs");
   if (!items.length) return null;
   return `Garde-fous actifs (hooks guardrails, ils bloquent) : ${items.join(' ; ')}. Si une regle gene, le dire a l'utilisateur : lui seul la modifie (.claude/guardrails.json).`;

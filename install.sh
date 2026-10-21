@@ -75,8 +75,39 @@ if $with_ponytail && [[ ! " ${targets[*]} " =~ " ponytail " ]]; then targets+=(p
 
 command -v claude >/dev/null || { echo "Claude Code CLI 'claude' not found on PATH." >&2; exit 1; }
 
-claude plugin marketplace add "$SOURCE" ||
-  claude plugin marketplace update "$MARKETPLACE"
+# Comparable form of a marketplace source: GitHub repo or absolute path, lower case, forward slashes.
+normalize_source() {
+  printf '%s' "$1" | sed -e 's#\\\\#/#g' -e 's#\\#/#g' -e 's#^https://github\.com/##' -e 's#\.git$##' -e 's#/$##' \
+    -e 's#^/\([a-zA-Z]\)/#\1:/#' | tr '[:upper:]' '[:lower:]'
+}
+
+# Source (repo, path or url) the marketplace is registered from, empty if it is not registered.
+registered_source() {
+  printf '%s\n' "$1" | awk -v name="$MARKETPLACE" '
+    /"name":/ { inside = index($0, "\"" name "\"") > 0 }
+    inside && /"(repo|path|url)":/ { sub(/^[^:]*:[ ]*"/, ""); sub(/",?[ ]*$/, ""); print; exit }'
+}
+
+requested="$SOURCE"
+if [ -d "$SOURCE" ]; then requested="$(cd "$SOURCE" && { pwd -W 2>/dev/null || pwd -P; })"; fi
+if listing="$(claude plugin marketplace list --json 2>/dev/null)"; then
+  current="$(registered_source "$listing")"
+  if [ -z "$current" ]; then
+    claude plugin marketplace add "$SOURCE" || claude plugin marketplace update "$MARKETPLACE"
+  elif [ "$(normalize_source "$current")" = "$(normalize_source "$requested")" ]; then
+    claude plugin marketplace update "$MARKETPLACE"
+  else
+    # Never refresh another copy silently: the packs would come from a source the user did not ask for.
+    echo "Marketplace '$MARKETPLACE' is already registered from '$current', not from '$requested'." >&2
+    echo "To switch, remove it first, then rerun this script (it reinstalls the requested packs):" >&2
+    echo "  claude plugin marketplace remove $MARKETPLACE" >&2
+    exit 1
+  fi
+else
+  # Older CLI without --json: previous behavior.
+  claude plugin marketplace add "$SOURCE" ||
+    claude plugin marketplace update "$MARKETPLACE"
+fi
 for target in "${targets[@]}"; do
   claude plugin install "$target@$MARKETPLACE"
 done

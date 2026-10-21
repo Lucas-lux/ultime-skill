@@ -4,6 +4,7 @@ paths:
   - "**/migrations/**"
   - "**/alembic/**"
   - "**/prisma/**"
+  - "**/schema.prisma"
 ---
 
 # SQL et migrations

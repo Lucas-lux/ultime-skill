@@ -11,7 +11,7 @@
 | smoke | `docker compose up -d --wait` (healthchecks obligatoires), requete sur `/health` et un parcours minimal, `docker compose logs` si echec | PR |
 | publish | `docker/login-action@v4` sur GHCR avec `GITHUB_TOKEN` (`packages: write`), `docker/metadata-action@v6` (tags SHA et version), push | principale |
 | sbom | `anchore/sbom-action@v0.24.3` (SPDX) attache a l'image ; `actions/attest-build-provenance@v4` (`id-token: write`, `attestations: write`) | principale |
-| sign | `sigstore/cosign-installer@v4` puis `cosign sign --yes` en keyless (OIDC) | release |
+| sign | `sigstore/cosign-installer@v4.1.2` (pas de tag majeur mobile `v4`) puis `cosign sign --yes` en keyless (OIDC) | release |
 
 Exigences verifiees : build multi-etapes, image de base epinglee par digest (Dependabot `docker`),
 utilisateur non root, `HEALTHCHECK` ou probe equivalente, pas de secret en `ARG` ou `ENV`,

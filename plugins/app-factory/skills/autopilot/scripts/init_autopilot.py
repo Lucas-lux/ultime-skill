@@ -1,12 +1,13 @@
 """Prepare a GitHub repository for autopilot. Run by the owner, on their machine, from the project root.
 
 Without --apply it only prints the plan. With --apply it:
-- moves the app-factory state (.app-factory/, from an interactive G0) to the branch claude/autopilot-state,
-  switches it to the autopilot autonomy level and adds the autopilot block;
+- moves the app-factory state (.app-factory/, from an interactive G0) to the root of the branch
+  claude/autopilot-state, switches it to the autopilot autonomy level and adds the autopilot block, then
+  mounts that branch as a worktree at .app-factory/ (the old folder is kept as .app-factory.pre-autopilot/);
 - creates the labels (decision, autopilot, needs-human, autopilot-dashboard) and the pinned dashboard issue;
 - turns on auto-merge and branch deletion after merge in the repository settings;
 - sets the AUTOPILOT_OWNER variable;
-- copies the autopilot workflows into .github/workflows/ (never overwrites) and ignores .app-factory-state/.
+- copies the autopilot workflows into .github/workflows/ (never overwrites) and ignores .app-factory/.
 It creates nothing on Claude or in any cloud: the scheduled task, its environment and the secrets stay
 manual steps (see references/setup.md), printed at the end.
 
@@ -16,6 +17,7 @@ Usage:
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -44,8 +46,7 @@ AUTOPILOT_BLOCK = {
     "budget": {
         "per_run": {"agents": 8, "stories": 3, "upgraded": 1},
         "per_day": {"agents": 30},
-        "idle_stop_after": 6,
-        "usage": {"day": None, "agents": 0, "idle_streak": 0},
+        "usage": {"day": None, "agents": 0},
     },
 }
 DASHBOARD = ("<!-- autopilot -->\n**Autopilot** : initialise, en attente du premier reveil.\n\n"
@@ -60,8 +61,16 @@ def run(*cmd: str, cwd: Path | None = None, check: bool = True) -> str:
     return result.stdout.strip()
 
 
+# Tests replace the GitHub CLI by a Python stub (path in INIT_AUTOPILOT_GH_STUB).
+GH = [sys.executable, os.environ["INIT_AUTOPILOT_GH_STUB"]] if os.environ.get("INIT_AUTOPILOT_GH_STUB") else ["gh"]
+
+
+def gh(*args: str, check: bool = True) -> str:
+    return run(*GH, *args, check=check)
+
+
 def gh_api(*args: str, check: bool = True) -> str:
-    return run("gh", "api", *args, check=check)
+    return gh("api", *args, check=check)
 
 
 def main() -> None:
@@ -73,21 +82,24 @@ def main() -> None:
     args = parser.parse_args()
 
     root = Path(run("git", "rev-parse", "--show-toplevel"))
-    state_file = root / ".app-factory" / "state.json"
-    if not state_file.exists():
-        print("error: no .app-factory/state.json. Run the app-factory framing (G0) in an interactive session first.",
-              file=sys.stderr)
-        sys.exit(1)
-    state = json.loads(state_file.read_text(encoding="utf-8"))
-    if state.get("gates", {}).get("G0", {}).get("status") != "approved":
-        print("error: gate G0 is not approved in state.json: autopilot never does the framing on its own.",
-              file=sys.stderr)
-        sys.exit(1)
+    branch_exists = bool(run("git", "ls-remote", "--heads", "origin", STATE_BRANCH))
+    state = None
+    # A re-run (to refresh workflows or labels) is fine once the state has moved to its branch.
+    if not branch_exists:
+        state_file = root / ".app-factory" / "state.json"
+        if not state_file.exists():
+            print("error: no .app-factory/state.json. Run the app-factory framing (G0) in an interactive session first.",
+                  file=sys.stderr)
+            sys.exit(1)
+        state = json.loads(state_file.read_text(encoding="utf-8-sig"))
+        if state.get("gates", {}).get("G0", {}).get("status") != "approved":
+            print("error: gate G0 is not approved in state.json: autopilot never does the framing on its own.",
+                  file=sys.stderr)
+            sys.exit(1)
 
-    repo = args.repo or run("gh", "repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner")
+    repo = args.repo or gh("repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner")
     owner = args.owner or gh_api("user", "--jq", ".login")
     base = args.base or gh_api(f"repos/{repo}", "--jq", ".default_branch")
-    branch_exists = bool(run("git", "ls-remote", "--heads", "origin", STATE_BRANCH))
     workflows = [t.name for t in sorted(TEMPLATES.glob("*.yml"))
                  if not (root / ".github" / "workflows" / t.name).exists()]
 
@@ -104,18 +116,23 @@ def main() -> None:
         gh_api(f"repos/{repo}/labels", "-f", f"name={name}", "-f", f"color={color}",
                "-f", f"description={description}", check=False)
     gh_api("-X", "PATCH", f"repos/{repo}", "-F", "allow_auto_merge=true", "-F", "delete_branch_on_merge=true")
-    run("gh", "variable", "set", "AUTOPILOT_OWNER", "--body", owner, "--repo", repo)
+    gh("variable", "set", "AUTOPILOT_OWNER", "--body", owner, "--repo", repo)
 
     if not branch_exists:
         block = state.get("autopilot") or json.loads(json.dumps(AUTOPILOT_BLOCK))
         block.update({"repo": repo, "owner": owner, "base_branch": base})
+        if not block.get("dashboard_issue"):
+            # A previous run may have created it before failing: reuse it rather than open a second one.
+            existing = gh_api(f"repos/{repo}/issues?labels=autopilot-dashboard&state=open", "--jq", ".[0].number // empty")
+            if existing:
+                block["dashboard_issue"] = int(existing)
         if not block.get("dashboard_issue"):
             with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-8") as body:
                 body.write(DASHBOARD)
             number = gh_api(f"repos/{repo}/issues", "-f", "title=Autopilot : tableau de bord ✨",
                             "-F", f"body=@{body.name}", "-f", "labels[]=autopilot-dashboard", "--jq", ".number")
             Path(body.name).unlink()
-            run("gh", "issue", "pin", number, "--repo", repo, check=False)
+            gh("issue", "pin", number, "--repo", repo, check=False)
             block["dashboard_issue"] = int(number)
         state["autonomy"] = "autopilot"
         state["autopilot"] = block
@@ -125,29 +142,36 @@ def main() -> None:
             run("git", "worktree", "add", "--detach", str(workdir), cwd=root)
             run("git", "checkout", "--orphan", STATE_BRANCH, cwd=workdir)
             run("git", "rm", "-rf", "--quiet", ".", cwd=workdir)
-            shutil.copytree(root / ".app-factory", workdir / ".app-factory")
-            (workdir / ".app-factory" / "state.json").write_text(json.dumps(state, indent=2, ensure_ascii=False) + "\n",
-                                                                 encoding="utf-8")
-            run("git", "add", ".app-factory", cwd=workdir)
+            # The branch root holds what .app-factory/ held: mounted at .app-factory/, paths stay the same.
+            shutil.copytree(root / ".app-factory", workdir, dirs_exist_ok=True)
+            (workdir / "state.json").write_text(json.dumps(state, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+            run("git", "add", "-A", cwd=workdir)
             run("git", "commit", "--quiet", "-m", "chore(autopilot): initial state", cwd=workdir)
             run("git", "push", "--quiet", "-u", "origin", STATE_BRANCH, cwd=workdir)
         finally:
             run("git", "worktree", "remove", "--force", str(workdir), cwd=root, check=False)
+        # Main stops tracking .app-factory/ (staged for the owner's commit); the old folder is kept aside.
+        run("git", "rm", "-r", "--cached", "--quiet", "--ignore-unmatch", ".app-factory", cwd=root)
+        (root / ".app-factory").rename(root / ".app-factory.pre-autopilot")
+        run("git", "fetch", "--quiet", "origin", f"+refs/heads/{STATE_BRANCH}:refs/remotes/origin/{STATE_BRANCH}", cwd=root)
+        run("git", "worktree", "add", "--quiet", "-B", STATE_BRANCH, ".app-factory", f"origin/{STATE_BRANCH}", cwd=root)
 
     (root / ".github" / "workflows").mkdir(parents=True, exist_ok=True)
     for name in workflows:
         shutil.copy2(TEMPLATES / name, root / ".github" / "workflows" / name)
     gitignore = root / ".gitignore"
     lines = gitignore.read_text(encoding="utf-8").splitlines() if gitignore.exists() else []
-    if ".app-factory-state/" not in lines:
-        gitignore.write_text("\n".join(lines + [".app-factory-state/"]) + "\n", encoding="utf-8")
+    missing = [entry for entry in (".app-factory/", ".app-factory.pre-autopilot/") if entry not in lines]
+    if missing:
+        gitignore.write_text("\n".join(lines + missing) + "\n", encoding="utf-8")
 
     print(f"""
 done. Still to do by hand (references/setup.md):
-  1. git rm -r --cached .app-factory, then commit .gitignore, .github/workflows/ and the export of .claude/
-     on a branch and merge it (the state now lives on {STATE_BRANCH}).
-  2. Protect {base}: pull request required, CI checks required, no direct push.
-  3. Secret AUTOPILOT_MERGE_TOKEN (fine-grained token, this repository only).
+  1. Commit on a branch and merge: .gitignore, .github/workflows/, the export of .claude/ and the removal of
+     .app-factory/ from {base} (already staged). The state lives on {STATE_BRANCH}, mounted at .app-factory/.
+  2. Ruleset on {base}: pull request required, check ci-ok required, no direct or force push, and no bypass
+     for anyone, admins included (the merge token below is yours).
+  3. Secret AUTOPILOT_MERGE_TOKEN (fine-grained token, this repository only, contents and pull requests).
   4. Environments: staging without reviewer, production with you as required reviewer.
   5. Create the scheduled task on claude.ai/code, then the secrets AUTOPILOT_FIRE_URL and AUTOPILOT_FIRE_TOKEN.""")
 

@@ -2,7 +2,7 @@
   "name": "security",
   "description": "Audit d'application et revue de securite : methode maison (preuves, gravite, pieges de conception), OWASP Top 10 et ASVS, audit de code et revue de diff, Semgrep et CodeQL, analyse de variantes, chaine d'approvisionnement, modele de menace, APIs a risque, scan de skills.",
   "author": {
-    "name": "SensCritique",
-    "url": "https://github.com/senscritique"
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
   }
 }

@@ -2,7 +2,7 @@
   "name": "monitoring",
   "description": "Mise en place du monitoring le plus complet selon le type de projet (app web, API, RAG/LLM, pipeline data, cron, training et serving ML, mobile) : metriques, logs, traces, SLO, alertes, dashboards, cout, et signaux specifiques au domaine (LLMOps, MLOps, data). Vendor-neutral (OpenTelemetry, Prometheus, Grafana).",
   "author": {
-    "name": "SensCritique",
-    "url": "https://github.com/senscritique"
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
   }
 }

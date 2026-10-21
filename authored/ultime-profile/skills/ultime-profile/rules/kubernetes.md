@@ -6,6 +6,7 @@ paths:
   - "**/charts/**"
   - "**/helm/**"
   - "**/kustomization.y*ml"
+  - "**/Chart.yaml"
 ---
 
 # Kubernetes et Helm

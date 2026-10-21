@@ -76,7 +76,10 @@ def planned_copies(source: Path, packs: list[str]) -> list[tuple[Path, Path, str
             for file in sorted((root / kind).glob("*.md")):
                 copies.append((file, Path(".claude") / kind / file.name, pack))
         if hooks_file(source, pack) and pack not in SELF_INSTALLED_HOOKS:
+            # Hook scripts read their pack's skills relative to the plugin root (../skills/...).
             copies.append((root / "hooks", Path(".claude/hooks") / pack / "hooks", pack))
+            if (root / "skills").is_dir():
+                copies.append((root / "skills", Path(".claude/hooks") / pack / "skills", pack))
     return copies
 
 
@@ -92,7 +95,15 @@ def ported_hooks(source: Path, pack: str) -> dict[str, list]:
     text = hooks_file(source, pack).read_text(encoding="utf-8")
     text = text.replace("${" + PLUGIN_ROOT_VAR + "}", "${CLAUDE_PROJECT_DIR}/" + root)
     text = text.replace(f"process.env.{PLUGIN_ROOT_VAR}", f"(process.env.CLAUDE_PROJECT_DIR + '/{root}')")
-    return json.loads(text).get("hooks", {})
+    hooks = json.loads(text).get("hooks", {})
+    # Scripts that read the variable themselves (superpowers' session-start) get it set to the copy.
+    prefix = f'{PLUGIN_ROOT_VAR}="${{CLAUDE_PROJECT_DIR}}/{root}" '
+    for groups in hooks.values():
+        for group in groups:
+            for hook in group.get("hooks", []):
+                if hook.get("command"):
+                    hook["command"] = prefix + hook["command"]
+    return hooks
 
 
 def hook_commands(hooks: dict[str, list]) -> set[str]:
@@ -164,12 +175,13 @@ def main() -> None:
         fail(f"{source} not found: run `claude plugin marketplace add Lucas-lux/{MARKETPLACE}` "
              f"then `claude plugin marketplace update {MARKETPLACE}`, or pass --source")
 
-    requested = args.packs.split(",") if args.packs else enabled_packs(target)
+    manifest_path = target / MANIFEST
+    previous = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
+    # Without --packs: the packs exported last time (often disabled at project scope since) plus the enabled ones.
+    requested = args.packs.split(",") if args.packs else previous.get("packs", []) + enabled_packs(target)
     packs = expand(source, [p.strip() for p in ALWAYS + requested if p.strip()])
     copies = planned_copies(source, packs)
 
-    manifest_path = target / MANIFEST
-    previous = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
     owned = {Path(p) for p in previous.get("paths", [])}
 
     seen: dict[Path, str] = {}

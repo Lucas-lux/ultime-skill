@@ -18,13 +18,13 @@ Les sessions cloud n'installent pas les plugins : seul le `.claude/` du depot es
 
 ```bash
 python <autopilot>/scripts/export_to_repo.py --dry-run      # packs actives du projet + app-factory
-python <autopilot>/scripts/export_to_repo.py --packs app-factory,mobile,mobile-expo,sc-conventions
+python <autopilot>/scripts/export_to_repo.py --packs app-factory,mobile,mobile-expo,team-conventions
 ```
 
 L'export ajoute toujours `app-factory`, `guardrails` (copie projet des garde-fous) et `ponytail` (ses
 hooks sont portes dans `.claude/hooks/ponytail/` et declares dans `.claude/settings.json`).
 `<autopilot>` est le dossier de cette skill (dans le cache des plugins, ou `plugins/app-factory/skills/
-autopilot` du depot ultime-skill). Ajouter `sc-conventions` si le projet suit les regles d'equipe : en
+autopilot` du depot ultime-skill). Ajouter `team-conventions` si le projet suit les regles d'equipe : en
 cloud, le `~/.claude/CLAUDE.md` personnel n'est pas lu, seules les regles du depot (`CLAUDE.md`,
 `.claude/rules/`, skills exportees) s'appliquent. Relancer l'export apres chaque mise a jour du
 marketplace. Puis desactiver les packs exportes au niveau du projet pour ne pas les charger deux fois.
@@ -33,13 +33,16 @@ marketplace. Puis desactiver les packs exportes au niveau du projet pour ne pas 
 
 ```bash
 python <autopilot>/scripts/init_autopilot.py            # affiche le plan, ne change rien
-python <autopilot>/scripts/init_autopilot.py --apply    # labels, tableau de bord, branche d'etat, workflows
+python <autopilot>/scripts/init_autopilot.py --apply    # labels, tableau de bord, branche d'etat montee
+                                                        # en .app-factory/, workflows
 ```
 
 Puis dans les reglages du depot (navigateur ou `gh`) :
-1. **Protection de la branche principale** (ruleset ou branch protection) : PR obligatoire, checks de CI
-   **requis**, pas de push direct, pas de force push. Sans check requis, la fusion automatique fusionnerait
-   sans attendre la CI : c'est le garde-fou central.
+1. **Ruleset sur la branche principale** : PR obligatoire, check `ci-ok` **requis**, pas de push direct
+   ni de force push, et **aucun contournement autorise, administrateurs compris**. Sans check requis, la
+   fusion automatique n'attendrait pas la CI ; sans interdiction de contournement, le token de fusion (le
+   tien) pourrait passer outre. C'est le garde-fou central : en cloud, l'agent agit avec tes identifiants
+   GitHub, et le proxy ne limite pas les branches qu'il peut pousser.
 2. **Secret `AUTOPILOT_MERGE_TOKEN`** : token fine-grained limite a ce depot, permissions Contents et Pull
    requests en lecture et ecriture, expiration courte (90 jours, a renouveler). Il sert seulement a activer
    la fusion automatique de GitHub.
@@ -48,7 +51,9 @@ Puis dans les reglages du depot (navigateur ou `gh`) :
    Les secrets de deploiement vont dans ces environnements, jamais dans le depot ni dans l'environnement
    cloud. Les workflows de deploiement sont ecrits par `release-engineer` en P6.
 4. Commiter sur une branche et fusionner : `.gitignore`, `.github/workflows/`, `.claude/`, et le retrait
-   de `.app-factory/` de la branche principale (`git rm -r --cached .app-factory`).
+   de `.app-factory/` de la branche principale (deja indexe par le script). En local, l'etat est desormais
+   le worktree de `claude/autopilot-state` monte en `.app-factory/` ; l'ancien dossier reste dans
+   `.app-factory.pre-autopilot/` (a supprimer quand tout fonctionne).
 
 ## 3. Creer la tache planifiee (claude.ai/code, rubrique des taches planifiees)
 
@@ -72,7 +77,9 @@ Puis dans les reglages du depot (navigateur ou `gh`) :
 
 ## 5. Piloter depuis le telephone
 
-- **App GitHub** : notifications des cartes `decision` (elles te sont assignees), reponse par commentaire,
+- **App GitHub** : notifications des cartes `decision` (en cloud elles sont creees avec ton compte, et
+  GitHub ne notifie pas ses propres actions : le workflow `autopilot-wake` te mentionne alors depuis
+  `github-actions[bot]`, ce qui declenche la notification), reponse par commentaire,
   approbation des deploiements de production, fusion des PR `needs-human`. Le tableau de bord est
   l'issue epinglee de chaque depot.
 - **Portefeuille** : un projet GitHub (Projects) "Portefeuille" au niveau de ton compte, avec ses workflows

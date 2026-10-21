@@ -1,13 +1,13 @@
 ---
-name: sc-conventions
+name: team-conventions
 description: >
-  Conventions de travail de l'equipe SensCritique : methode, redaction (langues, pas d'em dash, marquage
+  Conventions de travail d'equipe : methode, redaction (langues, pas d'em dash, marquage
   IA, termes en entier, versions concretes, main/replica), secrets hors du code. A utiliser des qu'on
   ecrit du code, un commit, une PR, une issue, une doc ou un message pour l'equipe, ou "conventions",
-  "regles d'equipe", "sc-conventions".
+  "regles d'equipe", "team-conventions".
 ---
 
-# Conventions d'equipe SensCritique
+# Conventions d'equipe
 
 Regles generiques, applicables a tout projet. Elles ne remplacent pas les regles d'un depot (son
 `CLAUDE.md`, ses `rules/`), qui priment quand elles existent. Signaler toute contradiction plutot que de
@@ -37,7 +37,7 @@ trancher en silence.
 ## Redaction
 
 - **Langues.** Code, commentaires, messages de commit et noms de branches en anglais ; PR et issues en
-  francais ; README en francais dans les projets SensCritique.
+  francais ; README dans la langue de l'equipe.
 - **Marquage IA.** Sur tout texte redige par l'IA et destine a d'autres personnes (PR, issues,
   commentaires et reponses de review, messages) : une marque visible a la fin du titre et a la fin du
   texte. Jamais dans le code (commentaires compris), les messages de commit, les descriptions de depot ni

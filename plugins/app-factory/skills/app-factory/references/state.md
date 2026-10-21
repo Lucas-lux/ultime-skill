@@ -15,8 +15,11 @@ compaction de contexte. Il est versionne avec le projet (sauf `reports/`, voir p
 ```
 
 Au niveau autopilot, `.app-factory/` ne vit plus sur la branche principale mais sur la branche
-`claude/autopilot-state` (sans code, sans CI), montee en worktree dans `.app-factory-state/` (ignore par
-git) : les reveils ecrivent l'etat sans PR ni conflit avec le code, et le push sert de verrou. Une session
+`claude/autopilot-state` (sans code, sans CI), dont la racine porte le contenu de `.app-factory/` et qui
+se monte en worktree a la place de `.app-factory/` (ignore par git sur la branche principale) : les
+chemins restent les memes, les reveils ecrivent l'etat sans PR ni conflit avec le code, et le push sert
+de verrou. Un agent lance avec `isolation: "worktree"` ne voit pas ce dossier : lui passer des chemins
+absolus vers les fichiers d'etat qu'il doit lire, et ne lui faire ecrire l'etat que par l'orchestrateur. Une session
 interactive sur un projet autopilot monte ce worktree avant de lire l'etat (protocole de la skill
 `autopilot`, etape 1), puis pousse ses changements d'etat sur cette branche.
 
@@ -62,7 +65,7 @@ references `budget.md` et `decision-policy.md`) :
   "lock": {"run_id": "2026-10-21T14:00Z", "started_at": "2026-10-21T14:00:12Z"},
   "last_run": "2026-10-21T14:00:12Z",
   "budget": {"per_run": {"agents": 8, "stories": 3, "upgraded": 1}, "per_day": {"agents": 30},
-             "idle_stop_after": 6, "usage": {"day": "2026-10-21", "agents": 5, "idle_streak": 0}}
+             "usage": {"day": "2026-10-21", "agents": 5}}
 }
 ```
 

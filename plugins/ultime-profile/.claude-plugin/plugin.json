@@ -2,7 +2,7 @@
   "name": "ultime-profile",
   "description": "Point d'entree : installe et gere pour chaque projet les seuls packs ultime-skill utiles (detection du projet, installation au niveau du projet, desactivation du reste, ajustement quand la tache change). Catalogue des packs avec leur cout en contexte.",
   "author": {
-    "name": "SensCritique",
-    "url": "https://github.com/senscritique"
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
   }
 }

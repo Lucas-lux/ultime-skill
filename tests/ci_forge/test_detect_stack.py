@@ -82,6 +82,36 @@ class DetectStackTest(unittest.TestCase):
         self.assertIn("expo", paths["apps/mobile"]["frameworks"])
         self.assertEqual(paths["services/worker"]["go_version"], "1.25")
 
+    def test_null_keys_and_bom_manifests(self):
+        root = build({"web/package.json": "", "api/pyproject.toml": ""})
+        (root / "web" / "package.json").write_text(json.dumps({"dependencies": None, "devDependencies": {"typescript": "5"},
+                                                              "scripts": None, "engines": None}), encoding="utf-8-sig")
+        (root / "api" / "pyproject.toml").write_text('[project]\nrequires-python = ">=3.13"\ndependencies = ["django"]\n', encoding="utf-8-sig")
+        paths = {c["path"]: c for c in detect_stack.detect(root)["components"]}
+        self.assertEqual(paths["web"]["language"], "typescript")
+        self.assertEqual(paths["web"]["scripts"], [])
+        self.assertEqual(paths["api"]["requires_python"], ">=3.13")
+        self.assertIn("django", paths["api"]["frameworks"])
+
+    def test_android_from_manifest_with_version_catalog(self):
+        root = build({
+            "settings.gradle.kts": 'include(":app")\n',
+            "build.gradle.kts": "plugins {\n    alias(libs.plugins.android.application) apply false\n}\n",
+            "gradle/libs.versions.toml": '[plugins]\nandroid-application = { id = "com.android.application", version = "8.13.0" }\n',
+            "app/build.gradle.kts": "plugins {\n    alias(libs.plugins.android.application)\n}\n",
+            "app/src/main/AndroidManifest.xml": "<manifest />\n",
+        })
+        report = detect_stack.detect(root)
+        self.assertTrue(report["mobile_native"]["android"])
+        self.assertTrue(all(c["android"] for c in report["components"]))
+
+    def test_requirements_folder(self):
+        root = build({"requirements/base.txt": "flask==3.1\n", "requirements/dev.txt": "pytest\nruff\n", "app.py": ""})
+        components = detect_stack.detect(root)["components"]
+        self.assertEqual([c["path"] for c in components], ["."])
+        self.assertIn("flask", components[0]["frameworks"])
+        self.assertTrue({"pytest", "ruff"} <= set(components[0]["tools"]))
+
 
 if __name__ == "__main__":
     unittest.main()

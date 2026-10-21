@@ -2,9 +2,12 @@
 # The agent never merges. This workflow only enables (or disables) GitHub native auto-merge, and the
 # branch protection of the base branch decides when the merge happens (required status checks).
 #
+# pull_request_target: the workflow always runs from the base branch, so a PR cannot edit this file to
+# merge itself or read the secrets. It never checks out the PR's code: it only reads metadata via the API.
+#
 # Requires (see the autopilot setup guide):
-# - repository setting "Allow auto-merge" on, branch protection or ruleset on the base branch with the
-#   CI checks required;
+# - repository setting "Allow auto-merge" on, a ruleset on the base branch with the CI checks required
+#   and no bypass allowed (admins included: the token below belongs to the owner);
 # - secret AUTOPILOT_MERGE_TOKEN: fine-grained token limited to this repository (contents and pull
 #   requests: read and write). A personal token is needed so the merge push triggers the staging deploy:
 #   pushes made with the default GITHUB_TOKEN do not start other workflows;
@@ -12,7 +15,7 @@
 name: autopilot-merge
 
 on:
-  pull_request:
+  pull_request_target: # zizmor: ignore[dangerous-triggers] no checkout of PR code, metadata read through the API only
     types: [opened, reopened, synchronize, labeled, unlabeled, ready_for_review]
 
 permissions:
@@ -46,12 +49,15 @@ jobs:
           echo "$LABELS" | grep -q '"needs-human"' && reason="needs-human label"
           [ "$DRAFT" = "true" ] && reason="draft"
           if [ -z "$reason" ]; then
-            files=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/files" --paginate --jq '.[].filename')
+            # A rename counts by its old path too: moving a workflow out of .github/ must not slip through.
+            files=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/files" --paginate --jq '.[] | .filename, (.previous_filename // empty)')
             count=$(printf '%s\n' "$files" | grep -c . || true)
             hits=$(printf '%s\n' "$files" | grep -E "$PROTECTED" || true)
             if [ -n "$hits" ]; then
               reason="protected paths"
-              printf '<!-- autopilot -->\nFusion automatique refusee : la PR touche des chemins proteges.\n\n```\n%s\n```\n\nA relire et fusionner a la main. ✨\n' "$hits" > body.md
+              # The code fence goes through an argument: backticks inside single quotes look like a substitution.
+              fence='```'
+              printf '<!-- autopilot -->\nFusion automatique refusee : la PR touche des chemins proteges.\n\n%s\n%s\n%s\n\nA relire et fusionner a la main. ✨\n' "$fence" "$hits" "$fence" > body.md
             elif [ "$count" -gt "$MAX_FILES" ]; then
               reason="too many files"
               printf '<!-- autopilot -->\nFusion automatique refusee : %s fichiers modifies (plafond %s). A relire et fusionner a la main. ✨\n' "$count" "$MAX_FILES" > body.md

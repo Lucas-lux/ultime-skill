@@ -11,8 +11,7 @@ proprietaire : un reveil refuse pour limite d'usage n'est pas une erreur, le sui
 "budget": {
   "per_run": {"agents": 8, "stories": 3, "upgraded": 1},
   "per_day": {"agents": 30},
-  "idle_stop_after": 6,
-  "usage": {"day": "2026-10-21", "agents": 0, "idle_streak": 0}
+  "usage": {"day": "2026-10-21", "agents": 0}
 }
 ```
 
@@ -21,8 +20,9 @@ proprietaire : un reveil refuse pour limite d'usage n'est pas une erreur, le sui
 - `per_run.upgraded` : appels avec un modele superieur a celui de l'agent (voir plus bas).
 - `per_day.agents` : quand il est atteint, le reveil ne fait plus que lire les decisions et reparer une
   PR rouge, jusqu'au lendemain.
-- `idle_stop_after` : apres ce nombre de reveils a vide consecutifs, le tableau de bord le signale (la
-  frequence de la tache planifiee est trop haute pour l'activite du projet ; le proprietaire l'ajuste).
+- Reveils a vide : ils n'ecrivent rien, donc ne se comptent pas ; le tableau de bord donne la date du
+  dernier reveil qui a travaille. Si elle est souvent ancienne alors que la tache tourne, la frequence
+  est trop haute pour l'activite du projet : le proprietaire l'ajuste.
 - Remettre `usage` a zero quand la date change. Incrementer `usage.agents` au fil du reveil.
 
 ## Le bon moteur pour chaque tache

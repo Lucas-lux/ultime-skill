@@ -9,6 +9,11 @@ const path = require('node:path');
 const DEFAULTS = require('../defaults.json');
 const LEVELS = new Set(['block', 'warn', 'ask', 'off']);
 
+/** @param {unknown} value Anything. @returns {boolean} True for a non-null, non-array object. */
+function isPlainObject(value) {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
 /**
  * Merge plain objects recursively; arrays and scalars of the override replace the base.
  *
@@ -60,9 +65,23 @@ function loadConfig(projectRoot) {
   let config = DEFAULTS;
   for (const source of sources) {
     const raw = readJson(source, problems);
-    if (!raw) continue;
+    if (raw === undefined) continue;
+    if (!isPlainObject(raw)) {
+      problems.push(`${source} n est pas un objet JSON : ignore`);
+      continue;
+    }
+    if (raw.rules !== undefined && !isPlainObject(raw.rules)) {
+      problems.push(`${source} : "rules" n est pas un objet : ignore`);
+      delete raw.rules;
+    }
     for (const [id, value] of Object.entries(raw.rules || {})) {
-      if (typeof value === 'string') raw.rules[id] = { level: value };
+      if (typeof value === 'string') {
+        raw.rules[id] = { level: value };
+      } else if (!isPlainObject(value)) {
+        // A rule must never be switched off by a typo: anything else than an object or a level blocks.
+        problems.push(`${source} : regle ${id} invalide (${JSON.stringify(value)}) : bloque par defaut`);
+        raw.rules[id] = { level: 'block' };
+      }
     }
     config = merge(config, raw);
   }

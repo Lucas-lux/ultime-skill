@@ -1,15 +1,36 @@
 # ultime-skill
 
-Bibliothèque de skills Claude prête pour la production, installable en une commande. Elle réunit les
-meilleures skills open source du moment (sélectionnées, nettoyées, épinglées à un commit) et servira de
-base aux skills que nous créerons nous-mêmes.
+Bibliothèque de skills, d'agents et de hooks pour Claude Code, prête pour la production. Elle donne à
+Claude le savoir-faire d'une équipe complète (produit, code, design, mobile, stores, sécurité, conformité,
+ops, données, growth), un orchestrateur qui mène un projet de l'idée à la production, éventuellement en
+autonomie, des garde-fous qui ne s'oublient pas, et une CI générée pour chaque stack. Chaque projet
+n'active que ce qui lui sert.
 
-**482 skills, 24 agents, 44 packs, 10 bundles.** Chaque pack est un plugin Claude Code indépendant ; les
-bundles en installent plusieurs d'un coup via les dépendances de plugins.
+**474 skills, 24 agents, 44 packs, 11 bundles**, uniquement sous licences permissives.
 
-## Installation
+## Installation en une commande
+
+```bash
+claude plugin marketplace add Lucas-lux/ultime-skill && claude plugin install ultime-starter@ultime-skill
+```
+
+Puis, dans chaque projet : « Installe les skills ultime-factory dont ce projet a besoin. »
+
+## Documentation
+
+- [Pourquoi et ce que ça apporte](docs/pourquoi-et-gains.md) : le problème, le gain concret, les limites.
+- [Démarrer](docs/demarrer.md) : installation, équiper un projet, questions fréquentes.
+- [Architecture](docs/architecture.md) : packs, bundles, profils, économie de contexte, construction.
+- [App factory et autopilot](docs/app-factory-et-autopilot.md) : de l'idée à la production, en autonomie.
+- [Qualité et sécurité](docs/qualite-et-securite.md) : garde-fous, CI générée, revues, règles.
+- [Licences](docs/licences.md) et [Maintenance](docs/maintenance.md).
+
+## Installation détaillée
 
 ### Une fois par machine
+
+`ultime-starter` installe le point d'entrée `ultime-profile`, les garde-fous `guardrails` et `ponytail`.
+Pour n'installer que le point d'entrée :
 
 ```bash
 claude plugin marketplace add Lucas-lux/ultime-skill
@@ -57,16 +78,17 @@ Redémarrer Claude Code ou lancer `/reload-plugins` après installation.
 
 | Bundle | Contenu |
 |---|---|
+| `ultime-starter` | ultime-profile, guardrails, ponytail : l'installation recommandée |
 | `ultime-all` | Tous les packs (déconseillé : préférer l'installation par projet) |
-| `ultime-dev` | ponytail, superpowers, agent-skills, skill-factory, devops, fullstack, security, sc-conventions |
+| `ultime-dev` | ponytail, superpowers, agent-skills, skill-factory, devops, fullstack, security, team-conventions, prod-testing, guardrails, ci-forge |
 | `ultime-data` | data-engineering, dataviz, ml-engineering, graphify |
 | `ultime-media` | ui-design, motion-design, video-editing |
 | `ultime-security` | security, sec-audit, sec-defense, rea |
 | `ultime-web` | fullstack, ui-design, compliance |
-| `ultime-ops` | devops, finops, monitoring, prod-testing |
+| `ultime-ops` | devops, finops, monitoring, prod-testing, ci-forge |
 | `ultime-mobile` | mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, ui-design, compliance, security |
 | `ultime-growth` | growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, store-aso, video-editing, motion-design |
-| `ultime-factory` | app-factory et tout ce qu'il pilote : product-management, greenfield, agent-skills, fullstack, ui-design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, et tous les packs mobile, stores, growth et production vidéo |
+| `ultime-factory` | app-factory et tout ce qu'il pilote : guardrails, ci-forge, product-management, greenfield, agent-skills, fullstack, ui-design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, et tous les packs mobile, stores, growth et production vidéo |
 
 Chaque bundle installe aussi `ultime-profile` (voir [Économie de contexte](#économie-de-contexte)).
 
@@ -162,7 +184,7 @@ de leurs alternatives.
 | `superpowers` | 15 | Méthode de travail d'obra : plans, TDD, debug systématique, sous-agents, vérification. Hook de session. |
 | `agent-skills` | 25 | Cycle de vie logiciel complet (Addy Osmani) : spec, build, test, revue, sécurité, perf, CI/CD, livraison. |
 | `skill-factory` | 2 | Créer et tester des skills et des serveurs MCP (skill-creator, mcp-builder). |
-| `sc-conventions` | 1 | Conventions d'équipe SensCritique transverses (méthode, rédaction, secrets). Écrit maison, rien de confidentiel. |
+| `team-conventions` | 1 | Conventions de travail d'équipe transverses (méthode, rédaction, secrets). Écrit maison. |
 | `guardrails` | 1 + hooks | Garde-fous imposés par hooks et configurables (em dash, emoji, push sur main, hooks git, secrets, commits, marqueur IA, identifiants de prod). Installé par défaut. Écrit maison. |
 
 ### Sécurité

@@ -9,7 +9,7 @@
 name: autopilot-wake
 
 on:
-  issue_comment:
+  issue_comment: # zizmor: ignore[dangerous-triggers] no checkout, comment text never reaches a run step
     types: [created]
   issues:
     types: [opened, labeled]
@@ -21,6 +21,30 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # In cloud sessions the agent acts with the owner's credentials, and GitHub does not notify you of your own
+  # actions: a decision card opened by the autopilot gets an @mention from github-actions[bot] instead.
+  notify:
+    if: >-
+      github.event_name == 'issues' &&
+      github.event.issue.pull_request == null &&
+      contains(github.event.issue.labels.*.name, 'decision') &&
+      contains(github.event.issue.body, '<!-- autopilot -->')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Mention the owner
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+          OWNER: ${{ vars.AUTOPILOT_OWNER || github.repository_owner }}
+        run: |
+          set -euo pipefail
+          already=$(gh api "repos/$GITHUB_REPOSITORY/issues/$ISSUE/comments" --jq '[.[] | select(.user.login == "github-actions[bot]")] | length')
+          [ "$already" = "0" ] || exit 0
+          echo "@$OWNER une decision t attend : reponds par un commentaire (1, 2, 3 ou ta reponse)." > body.md
+          gh api "repos/$GITHUB_REPOSITORY/issues/$ISSUE/comments" -F body=@body.md > /dev/null
+
   wake:
     if: >-
       github.event.issue.pull_request == null &&

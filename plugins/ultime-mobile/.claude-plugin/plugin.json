@@ -2,8 +2,8 @@
   "name": "ultime-mobile",
   "description": "Pack mobile : multiplateforme, Expo et React Native, iOS, Android, Flutter, stores (fiche, Data safety, App Store Connect, Google Play, ASO), design, conformite et securite.",
   "author": {
-    "name": "SensCritique",
-    "url": "https://github.com/senscritique"
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
   },
   "dependencies": [
     "mobile",

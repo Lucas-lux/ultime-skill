@@ -24,7 +24,7 @@ PLUGINS = {
     "sec-audit": ("Audit de code et recherche de vulnerabilites (trilwu secskills-core) : analyse de source par taint, reverse de binaires et d'apps, crypto, supply chain, securite des systemes IA et des serveurs MCP. Pour usage autorise uniquement.", {}),
     "sec-defense": ("Defense et reponse a incident (trilwu secskills-defense) : DFIR disque/memoire/reseau, analyse de malware et de phishing, detections Sigma et Yara, durcissement et investigation cloud (AWS, Azure, GCP, M365), threat hunting.", {}),
     "sec-offense": ("Pentest pour tests autorises uniquement (trilwu secskills-offense) : exploitation web/API/JWT/SSRF/XXE, Active Directory et Entra, cloud et conteneurs, escalade de privileges, reconnaissance. Reserve aux engagements autorises, CTF et recherche.", {}),
-    "sc-conventions": ("Conventions d'equipe SensCritique transverses : verifier plutot que croire, demander avant un gros lot, questions a choix multiples, langues, pas d'em dash, marquage IA, termes techniques en entier, main/replica, secrets hors du code. Regles generiques, rien de confidentiel.", {}),
+    "team-conventions": ("Conventions de travail d'equipe transverses : verifier plutot que croire, demander avant un gros lot, questions a choix multiples, langues, pas d'em dash, marquage IA, termes techniques en entier, main/replica, secrets hors du code.", {}),
     "monitoring": ("Mise en place du monitoring le plus complet selon le type de projet (app web, API, RAG/LLM, pipeline data, cron, training et serving ML, mobile) : metriques, logs, traces, SLO, alertes, dashboards, cout, et signaux specifiques au domaine (LLMOps, MLOps, data). Vendor-neutral (OpenTelemetry, Prometheus, Grafana).", {}),
     "prod-testing": ("Strategie de test de bout en bout et validation en production, vendor-neutral : pyramide et etapes CI/CD (unitaire, contrat, integration, end to end, smoke, canary), smoke tests post-deploy, deploiement progressif avec rollback automatique, feature flags (OpenFeature), monitoring synthetique, gestion des tests instables.", {}),
     "devops": ("DevOps et SRE : Terraform/OpenTofu, Docker, Kubernetes, GitOps, pipelines CI/CD et GitHub Actions, SLO et budgets d'erreur, PromQL, k6, monitoring synthetique, reponse a incident et postmortem.", {}),
@@ -64,10 +64,12 @@ PLUGINS = {
 # sec-offense (authorized pentest) is never pulled in by a bundle: it is installed explicitly only.
 GATED = {"sec-offense"}
 BUNDLES = {
+    "ultime-starter": ("Demarrage en une commande : le point d'entree ultime-profile (installe ensuite par projet les seuls packs utiles), les garde-fous guardrails et la methode ponytail.",
+                       ["guardrails", "ponytail"]),
     "ultime-all": ("Tout ultime-skill en une commande : installe l'ensemble des packs, sauf le pentest offensif.",
                    [name for name in PLUGINS if name not in GATED]),
     "ultime-dev": ("Pack developpeur : ponytail, superpowers, cycle de vie logiciel, usine a skills, devops, full stack, securite, conventions d'equipe, tests en production.",
-                   ["ponytail", "superpowers", "agent-skills", "skill-factory", "devops", "fullstack", "security", "sc-conventions", "prod-testing", "guardrails", "ci-forge"]),
+                   ["ponytail", "superpowers", "agent-skills", "skill-factory", "devops", "fullstack", "security", "team-conventions", "prod-testing", "guardrails", "ci-forge"]),
     "ultime-data": ("Pack data : data engineering, data visualisation, ML engineering, graphe de connaissances.",
                     ["data-engineering", "dataviz", "ml-engineering", "graphify"]),
     "ultime-media": ("Pack creatif : design anti AI-slop, motion design, montage video.",
@@ -97,7 +99,7 @@ for _, members in BUNDLES.values():
     if "ultime-profile" not in members:
         members.append("ultime-profile")
 
-AUTHOR = {"name": "SensCritique", "url": "https://github.com/senscritique"}
+AUTHOR = {"name": "Lucas-lux", "url": "https://github.com/Lucas-lux"}
 CATALOG = ROOT / "plugins" / "ultime-profile" / "skills" / "ultime-profile" / "references" / "catalog.md"
 
 
@@ -163,7 +165,7 @@ def main() -> None:
         "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
         "name": "ultime-skill",
         "description": "Bibliotheque de skills Claude prete pour la production : orchestration de projet de A a Z, gestion de produit, mobile et stores, growth et marketing, securite, devops, finops, data, ML, full stack, design, conformite, motion et video.",
-        "owner": {"name": "SensCritique", "url": "https://github.com/senscritique"},
+        "owner": AUTHOR,
         "plugins": plugins_entries,
     }
     directory = ROOT / ".claude-plugin"

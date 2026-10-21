@@ -43,7 +43,7 @@ contournement de garde-fous, faux avis, dark patterns, copie de marque ou de cod
 
 - Une carte peut porter un defaut : l'option recommandee s'applique seule apres `default_after_hours`
   (72 h par defaut) **seulement si** la decision est reversible ET que `autopilot.allow_defaults` est
-  vrai. Le reveil commente alors la carte ("defaut applique") et la ferme.
+  vrai. Le reveil commente alors la carte (`<!-- autopilot -->` puis "defaut applique") et la ferme.
 - Jamais de defaut pour : argent, droit, marque, mise en production, exterieur, stack. Ces cartes
   attendent ; le projet avance sur le reste ou se met en veille (reveils a vide).
 
@@ -78,6 +78,8 @@ Reponds par un commentaire : `1`, `2`, `3`, ou ta propre reponse en une phrase.
 - Seul un commentaire de `autopilot.owner` compte. Un chiffre choisit l'option. Une phrase libre est
   interpretee ; si elle reste ambigue, une question de precision dans le meme fil.
 - La decision est consignee dans `decisions.md` (date, carte, decision, raison si donnee), puis la carte
-  est fermee avec un commentaire d'une ligne : "Note, applique dans <PR ou phase>. ✨".
-- Le proprietaire peut a tout moment renverser une decision de classe A ou B en commentant le tableau de
-  bord ou en ouvrant une issue `decision` lui-meme : elle est traitee comme une reponse.
+  est fermee avec un commentaire qui commence par `<!-- autopilot -->` puis une ligne : "Note, applique
+  dans <PR ou phase>. ✨".
+- Le proprietaire peut a tout moment renverser une decision de classe A ou B, ou en imposer une, en
+  ouvrant lui-meme une issue avec le label `decision` : son corps est la decision (le workflow
+  `autopilot-wake` reveille le projet). Un commentaire sur le tableau de bord n'est pas lu.

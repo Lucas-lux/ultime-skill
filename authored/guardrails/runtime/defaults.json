@@ -14,6 +14,7 @@
       "max_subject": 72
     },
     "ai-marker": {"level": "block", "marker": "✨"},
+    "merge-approval": {"level": "ask"},
     "prod-credentials": {"level": "block", "prod_patterns": ["prod"], "allowed_files": []},
     "lint-config": {"level": "warn"},
     "config-tamper": {"level": "ask"}

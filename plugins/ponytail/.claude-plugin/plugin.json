@@ -2,8 +2,8 @@
   "name": "ponytail",
   "description": "Mode dev senior paresseux : le plus petit changement complet, reutilisation avant ecriture, YAGNI. Hooks d'activation (/ponytail lite|full|ultra) et commandes de revue et d'audit.",
   "author": {
-    "name": "SensCritique",
-    "url": "https://github.com/senscritique"
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
   },
   "hooks": "./hooks/claude-codex-hooks.json"
 }

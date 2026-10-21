@@ -1,0 +1,2037 @@
+[
+  {
+    "repo": "cal.com",
+    "question": "q1-architecture",
+    "rep": 1,
+    "mapping": {
+      "X": "A",
+      "Y": "C",
+      "Z": "B"
+    },
+    "judge_cost_usd": 0.19229179999999996,
+    "scores": {
+      "A": {
+        "correctness": 6,
+        "completeness": 6,
+        "errors": [
+          "The dependency-flow line has apps/api/v2 depending on features, trpc and app-store. apps/api/v2/package.json only lists @calcom/platform-libraries, platform-constants, platform-enums, platform-types, platform-utils and @calcom/prisma, so the v2 API reaches domain code through platform-libraries, which X never mentions.",
+          "It leaves out what platform/libraries does (the Vite bundle that re-exports bookings, slots, calendars, tasker and other modules for API v2), which is the key link between the v2 API and the core code.",
+          "It says platform/* is shared between the v2 API and the web app. apps/web only uses platform-types and platform-enums, and atoms is not a dependency of the v2 API.",
+          "It describes apps/api/index.js only as a 'thin entry file'. It is actually an http-proxy server on port 3002 that forwards to localhost:3003 and 3004.",
+          "It never states what app-store depends on (features, lib, ui, types, dayjs)."
+        ]
+      },
+      "C": {
+        "correctness": 8,
+        "completeness": 7,
+        "errors": [
+          "It lists salesforce/ as an example of a payment integration. Salesforce is a CRM app.",
+          "The 'rough layering' puts trpc above features, but packages/features/package.json depends on @calcom/trpc. Y does point out the possible cycle, but the diagram still contradicts the edges it lists.",
+          "It never states what app-store depends on (features, lib, ui, types, dayjs).",
+          "It does not say what apps/api/index.js does (a proxy to ports 3003 and 3004)."
+        ]
+      },
+      "B": {
+        "correctness": 7,
+        "completeness": 8,
+        "errors": [
+          "The workspace list is incomplete. The root package.json also has apps/api/*, packages/app-store and packages/app-store/*.",
+          "It says 'features ⇄ app-store' comes from each package.json. packages/features/package.json does not list @calcom/app-store; the reverse edge only exists in source imports, which Z says it did not inspect.",
+          "It calls the cycle 'intentional'. Nothing in the repo supports that.",
+          "It does not say what apps/api/index.js does (a proxy to ports 3003 and 3004)."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q1-architecture",
+    "rep": 2,
+    "mapping": {
+      "X": "A",
+      "Y": "C",
+      "Z": "B"
+    },
+    "judge_cost_usd": 0.2099892,
+    "scores": {
+      "A": {
+        "correctness": 8,
+        "completeness": 7,
+        "errors": [
+          "The layering puts app-store below trpc and features. In fact packages/app-store/package.json depends on @calcom/features, so app-store sits above features, not below it.",
+          "apps/api/index.js is listed but its role is not explained: it is a connect proxy (@calcom/api-proxy) that sends / to port 3003 and /v2 to port 3004.",
+          "It says trpc depends on features without noting that this comes from imports (146 files), not from the manifest: packages/trpc/package.json lists only @calcom/i18n.",
+          "It never says that apps/api/v2 is NestJS or that it reaches the shared logic through platform-libraries, and it does not mention platform/examples."
+        ]
+      },
+      "C": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "The apps/web dependency list leaves out platform-enums, dayjs and types, which are all in apps/web/package.json.",
+          "It does not describe apps/api/index.js, the proxy that routes /v2.",
+          "It does not mention the features <-> trpc and features <-> atoms cycles, and it does not say that app-store depends on features (it only says both use lib and prisma)."
+        ]
+      },
+      "B": {
+        "correctness": 6,
+        "completeness": 7,
+        "errors": [
+          "apps/api/v1 does not exist: apps/api contains only index.js, package.json and v2. The 'legacy REST API' is invented.",
+          "There is no graphify-out/ directory in the working directory, so the claim that a knowledge graph exists there is invented.",
+          "It calls the product Cal.com, but the README calls it Cal.diy.",
+          "It says apps/web depends on 'platform-*', but apps/web/package.json lists only platform-enums and platform-types.",
+          "It does not mention apps/api/index.js (the proxy), debugging, platform/examples or the role of app-store-cli in the dependency graph."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q1-architecture",
+    "rep": 1,
+    "mapping": {
+      "X": "A",
+      "Y": "D",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.1929038,
+    "scores": {
+      "A": {
+        "correctness": 6,
+        "completeness": 6,
+        "errors": [
+          "The dependency flow says `apps/api/v2` goes through `features`, `trpc` and `app-store`. It does not: `apps/api/v2/src` never imports `@calcom/features`, `@calcom/trpc` or `@calcom/app-store`. It imports `@calcom/platform-libraries` (163 imports), `platform-constants`, `platform-types`, `prisma`, `platform-enums`, `kysely` and `platform-utils`.",
+          "It leaves out what `packages/platform/libraries` does: it is a Vite bundle that re-exports bookings, slots, calendars, event-types and other domain code, and it is how the v2 API reaches that code.",
+          "It says `platform/*` is shared between the v2 API and the web app. The web app's manifest only lists `platform-types` and `platform-enums`, not `atoms` or `libraries`.",
+          "It calls `apps/api/index.js` a thin entry file. That file is actually an http-proxy (`@calcom/api-proxy`) on port 3002 that sends `/` to :3003 and `/v2` to :3004.",
+          "It does not mention that `app-store` depends on `features` (this is in its manifest).",
+          "It misses that `trpc` imports `@calcom/features` heavily in source (265 imports), so placing `trpc` near the shared layer is misleading."
+        ]
+      },
+      "D": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "It calls `apps/api/index.js` a small entry. That file is actually an http-proxy (`@calcom/api-proxy`) that routes `/` and `/v2` to the two APIs.",
+          "Its layering puts `trpc` beside `features` and does not mention that `trpc` imports `features` heavily in source (265 imports).",
+          "The list of what `features` depends on leaves out `testing`, which is in `packages/features/package.json`."
+        ]
+      },
+      "C": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "It gives `salesforce/` as an example of a payment integration. Salesforce is a CRM.",
+          "It calls `apps/api/index.js` something that 'sits beside it' without saying it is the proxy that routes traffic to v1 and v2.",
+          "It does not mention that `app-store` depends on `features`, `lib` and `ui` (this is in its manifest).",
+          "It lists `emails`, `sms`, `i18n` and `dayjs` without saying what any of them does."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q1-architecture",
+    "rep": 2,
+    "mapping": {
+      "X": "A",
+      "Y": "D",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.2263374,
+    "scores": {
+      "A": {
+        "correctness": 8,
+        "completeness": 7,
+        "errors": [
+          "The dependency flow puts app-store below features, but app-store declares @calcom/features as a dependency, so the arrow points the other way.",
+          "apps/api is described only as holding v2 and index.js. Its package is @calcom/api-proxy, a small proxy, and the answer doesn't say so.",
+          "It doesn't name the NestJS framework for api v2 or the role of platform-libraries. It does say it didn't open v2."
+        ]
+      },
+      "D": {
+        "correctness": 6,
+        "completeness": 8,
+        "errors": [
+          "Calls the product Cal.com, but AGENTS.md and the README call it Cal.diy (the packages are still named @calcom/*).",
+          "Says trpc's dependencies include features, app-store, lib and atoms. packages/trpc/package.json lists only @calcom/i18n, and trpc never imports @calcom/atoms.",
+          "The diagram has app-store depending on trpc, but no file in packages/app-store imports @calcom/trpc.",
+          "Says apps/web/package.json lists atoms. It doesn't, although web source does import @calcom/atoms.",
+          "Presents the flow as 'inferred from the package.json dependencies I read', but several of its edges are not in the manifests."
+        ]
+      },
+      "C": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "The apps/web dependency list leaves out platform-enums and dayjs.",
+          "apps/docs is described only as 'documentation', and apps/api (api-proxy, index.js) is not mentioned.",
+          "It doesn't mention the circular dependency between features and trpc (features declares trpc, and trpc imports features in 146 files)."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q2-locate",
+    "rep": 1,
+    "mapping": {
+      "X": "A",
+      "Y": "C",
+      "Z": "B"
+    },
+    "judge_cost_usd": 0.2533966,
+    "scores": {
+      "A": {
+        "correctness": 7,
+        "completeness": 6,
+        "errors": [
+          "Presents handleConfirmation.ts and handleBookingRequested.ts as part of the creation flow, but RegularBookingService does not import either one. Confirmation is handled later, in a separate flow.",
+          "Says packages/trpc/server/routers/viewer/slots/util.ts 'references the booking logic'. It only imports limit and conflict helpers for computing slots, not booking creation.",
+          "Says connectAndJoin.handler.ts references the booking logic. It only imports scheduleNoShowTriggers, so this is misleading.",
+          "Leaves out the actual server entry points, apps/web/pages/api/book/event.ts and recurring-event.ts. It also leaves out the API v2 services and the DI container (RegularBookingService.container.ts).",
+          "Does not mention the handler() function (line 486), where the main flow actually lives."
+        ]
+      },
+      "C": {
+        "correctness": 8,
+        "completeness": 6,
+        "errors": [
+          "Leaves out the main web entry point, apps/web/pages/api/book/event.ts (and recurring-event.ts), which calls getRegularBookingService().createBooking.",
+          "Calls booking-to-mutation-input-mapper.tsx the web entry point. It is only a form-to-input mapper. The real client call goes through create-booking.ts, which posts to /api/book/event.",
+          "Never names EventManager.ts, handlePayment.ts, BookingEmailSmsHandler.ts or handleWebhookTrigger.ts as files, even though the core flow depends on them.",
+          "The link from ensureAvailableUsers to getUserAvailability.ts is only indirect: it goes through the DI service getUserAvailabilityService.",
+          "Says the roles are inferred from file names without reading the code. The delegation from RecurringBookingService to the regular service is labeled an assumption, though it turns out to be true."
+        ]
+      },
+      "B": {
+        "correctness": 9,
+        "completeness": 9,
+        "errors": [
+          "Lists lib/reschedule/ as a booking-creation file. It is only loosely related.",
+          "Does not point to the specific core symbols (handler() at line 486, the RegularBookingService.createBooking method) or to the DB-data builder buildNewBookingData.",
+          "Says the roles come from file names and imports without reading the full code. Spot-checked claims (event.ts uses the DI container, the RegularBookingService imports, the round-robin LuckyUserService, Prisma in createBooking.ts) all hold."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q2-locate",
+    "rep": 2,
+    "mapping": {
+      "X": "B",
+      "Y": "C",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.2051902,
+    "scores": {
+      "B": {
+        "correctness": 10,
+        "completeness": 6,
+        "errors": [
+          "Omits the HTTP entry points: it grepped only apps/web/app/api, but apps/web/pages/api/book/event.ts and recurring-event.ts exist and event.ts calls getRegularBookingService(). The API v2 wrappers (apps/api/v2/src/lib/services/regular-booking.service.ts) are also missing.",
+          "No factual errors found: every line number (486/490, 545, 791, 902-1066, 1707, 2588, 2653, 2676, tx.booking.create at 144) and every file it names checks out."
+        ]
+      },
+      "C": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "Says checkIfBookerEmailIsBlocked.ts blocks bookers 'on the watchlist'. The code actually checks the BLACKLISTED_GUEST_EMAILS env list and the user setting requiresBookerEmailVerification, not a watchlist.",
+          "Misses the web entry points apps/web/pages/api/book/event.ts and recurring-event.ts.",
+          "Admits it did not read the code, so the roles are inferred from names. They are still mostly accurate."
+        ]
+      },
+      "A": {
+        "correctness": 10,
+        "completeness": 8,
+        "errors": [
+          "Misses the API v2 entry points (apps/api/v2/src/lib/services/regular-booking.service.ts and the bookings.service.ts / bookings.controller.ts files).",
+          "Never checked the event.ts -> RegularBookingService link, which is real: event.ts imports getRegularBookingService from the DI container. It searched the wrong directory (apps/web/app/api).",
+          "Does not name the actual database write in createBooking.ts (saveBooking / tx.booking.create) or the DI wiring files."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q2-locate",
+    "rep": 1,
+    "mapping": {
+      "X": "A",
+      "Y": "D",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.2070938,
+    "scores": {
+      "A": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "It says `packages/trpc/server/routers/viewer/slots/util.ts` references the booking logic, but the only match there is a TODO comment that mentions handleNewBooking. It does not call the booking service.",
+          "It says `connectAndJoin.handler.ts` references the booking logic, but it only imports `scheduleNoShowTriggers`. Neither tRPC file is an entry point for creating bookings.",
+          "It names the client endpoint `/api/book/event` but not the server handler `apps/web/pages/api/book/event.ts`, which calls RegularBookingService.",
+          "It leaves out the API v2 entry points (`apps/api/v2/src/lib/services/regular-booking.service.ts` and `recurring-booking.service.ts`) and the DI wiring in `packages/features/bookings/di/`."
+        ]
+      },
+      "D": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "It hedges that RecurringBookingService 'presumably' calls the regular service. The code confirms it: `handleNewRecurringBooking` calls `regularBookingService.createBooking` for each occurrence.",
+          "It misses the web server entry point `apps/web/pages/api/book/event.ts`, though it admits this gap.",
+          "It leaves out the side-effect modules: EventManager.ts (calendar and video), handlePayment.ts, handleConfirmation.ts, BookingEmailSmsHandler.ts and handleWebhookTrigger.ts."
+        ]
+      },
+      "C": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "It links `ensureAvailableUsers.ts` to `packages/features/availability/lib/getUserAvailability.ts`, but the import actually goes through the DI container `@calcom/features/di/containers/GetUserAvailability` to UserAvailabilityService. The link holds only indirectly.",
+          "It misses the web server entry point `apps/web/pages/api/book/event.ts`, though it admits this gap.",
+          "It leaves out the side-effect modules: EventManager.ts, handlePayment.ts, handleConfirmation.ts, BookingEmailSmsHandler.ts and handleWebhookTrigger.ts. It also leaves out the request schemas (bookingCreateBodySchema.ts and getBookingDataSchema.ts) and the DI wiring."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q2-locate",
+    "rep": 2,
+    "mapping": {
+      "X": "C",
+      "Y": "D",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.175482,
+    "scores": {
+      "C": {
+        "correctness": 9,
+        "completeness": 6,
+        "errors": [
+          "Never mentions the module-level handler() function (line 486) by its line; claims 'main handler()' correctly but provides no location",
+          "Misses the web entry points apps/web/pages/api/book/event.ts and recurring-event.ts, which call getRegularBookingService().createBooking() (acknowledged gap)",
+          "Misses the DI container (packages/features/bookings/di/RegularBookingService.container) that wires the service",
+          "Misses handleSeats/handleSeats.ts, the main entry point for seated bookings"
+        ]
+      },
+      "D": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Says createBooking() (line 2653) 'runs the whole flow', but it is a thin wrapper that binds and calls the module-level handler() at line 486, where the flow actually lives, and handler() is never named",
+          "Omits apps/web/pages/api/book/recurring-event.ts, the recurring-booking web route",
+          "Does not mention the DI container getRegularBookingService() that event.ts uses"
+        ]
+      },
+      "A": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Leaves the event.ts to RegularBookingService link unverified even though event.ts imports getRegularBookingService from the DI container and calls createBooking() directly; it only searched apps/web/app/api",
+          "Never names the module-level handler() (line 486) that createBooking and rescheduleBooking both delegate to",
+          "Leaves out the API v2 entry points (apps/api/v2/src/lib/services/regular-booking.service.ts and recurring-booking.service.ts, plus the bookings controllers and services that use them)",
+          "useCreateBooking's endpoint is unverified: it posts to /bookings (API v2)"
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q3-trace",
+    "rep": 1,
+    "mapping": {
+      "X": "A",
+      "Y": "C",
+      "Z": "B"
+    },
+    "judge_cost_usd": 0.206557,
+    "scores": {
+      "A": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Minor: the claim that the attendee also gets the scheduled email is hedged and the class is not named, though AttendeeScheduledEmail is real (email-manager.ts:110)",
+          "The flow skips the requires-confirmation emails (sendOrganizerRequestEmail and sendAttendeeRequestEmailAndSMS) and the seated-event path"
+        ]
+      },
+      "C": {
+        "correctness": 6,
+        "completeness": 7,
+        "errors": [
+          "The API route path is wrong: the endpoint is apps/web/pages/api/book/event.ts, and apps/web/app/api/book/event does not exist",
+          "The API hop is never confirmed and the route's checks (Turnstile, bot detection, rate limit, session) are missing",
+          "Saying webhooks fire through scheduleTrigger.ts is imprecise: booking webhooks go through handleWebhookTrigger, and scheduleTrigger is only for scheduled meeting-started and meeting-ended triggers",
+          "getUserAvailability is used through getUserAvailabilityService inside ensureAvailableUsers, and the answer never names ensureAvailableUsers or loadAndValidateUsers",
+          "The async tasker path and the double-send behavior are not mentioned"
+        ]
+      },
+      "B": {
+        "correctness": 9,
+        "completeness": 9,
+        "errors": [
+          "Minor: line ~1414 is the CalendarEventBuilder withConfirmation call, not where requiresConfirmation is decided (isConfirmedByDefault is computed earlier)",
+          "The API route's pre-checks (Turnstile, bot detection, rate limit) are not mentioned",
+          "The email templates were not read, so the attendee and organizer template classes are not named"
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q3-trace",
+    "rep": 2,
+    "mapping": {
+      "X": "B",
+      "Y": "A",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.17405900000000002,
+    "scores": {
+      "B": {
+        "correctness": 8,
+        "completeness": 7,
+        "errors": [
+          "Says AvailableTimeSlots.tsx submits the booking form. Its onSubmit only selects a time slot. The actual submission goes through the useBookings createBooking mutation from the booking form.",
+          "Several line numbers are approximate ('~'). The flow is still accurate: the route checks, handler at line 486, $transaction plus tx.booking.create at line 144, eventManager.create at line 2052, handlePayment at line 2291, _handleConfirmed at line 259 with a dynamic import of sendScheduledEmailsAndSMS.",
+          "Says outright that it did not read lines 600 to 1700 of the handler, and the order of the validation steps is partly inferred."
+        ]
+      },
+      "A": {
+        "correctness": 10,
+        "completeness": 8,
+        "errors": [
+          "Barely covers the validation and availability checks inside the service ('did not read line by line'). Webhooks and workflows inside fireBookingEvents are not traced. The payment path is not described."
+        ]
+      },
+      "C": {
+        "correctness": 6,
+        "completeness": 6,
+        "errors": [
+          "Points to the route under apps/web/app/api/book, which does not exist. The real route is apps/web/pages/api/book/event.ts, and Z only guesses what it does. That misses Turnstile, bot detection, the rate limit, the session lookup and creationSource.",
+          "Says the emailsAndSmsHandler.send call at line 2031 covers the confirmed or pending cases. That call actually uses action rescheduled.",
+          "Puts sendScheduledEmailsAndSMS at email-manager.ts line 79. Line 79 is the internal _sendScheduledEmailsAndSMS. The exported wrapper is at line 130.",
+          "Admits it inferred the roles of the handleNewBooking helpers from their file names alone."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q3-trace",
+    "rep": 1,
+    "mapping": {
+      "X": "A",
+      "Y": "D",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.2761976,
+    "scores": {
+      "A": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Says ensureAvailableUsers covers the booking and duration limits, but the service runs a separate checkBookingAndDurationLimitsService.checkBookingAndDurationLimits (line 817). ensureAvailableUsers only uses limit parsing inside its availability check.",
+          "_handleConfirmed is at line 259, not about line 258 (trivial).",
+          "Does not confirm that the attendee gets AttendeeScheduledEmail (it does, email-manager.ts:110), and leaves webhooks and workflows untraced."
+        ]
+      },
+      "D": {
+        "correctness": 8,
+        "completeness": 9,
+        "errors": [
+          "Gives lines 2031 and 2197 for the confirmation-email call to emailsAndSmsHandler.send. Line 2031 sends the 'rescheduled' action and line 2197 the 'requested' action. The 'confirmed' send is at about line 2153.",
+          "Says tx.booking.create inserts the booking 'with its attendees and references'. Only attendees are nested through createMany. References are only included in the result and are written later, after EventManager runs.",
+          "Line 1835 is where the service creates the EventManager instance, not a line in EventManager.ts. The wording is ambiguous.",
+          "The v2 path is a bit loose: v2 reaches the service through apps/api/v2/src/lib/services/regular-booking.service.ts, which the platform/bookings controllers use."
+        ]
+      },
+      "C": {
+        "correctness": 7,
+        "completeness": 7,
+        "errors": [
+          "Names apps/web/app/api/book/event as the endpoint, but that path does not exist. The real route is apps/web/pages/api/book/event.ts. The answer does flag this hop as unconfirmed.",
+          "Describes computeTeamData (line 269) as 'team and round-robin host selection'. It only builds teamMembers and teamDestinationCalendars. Host selection happens in ensureAvailableUsers and the round-robin logic.",
+          "Says only 'an organizer request email goes out' when the booking needs confirmation. The 'requested' action also sends the attendee request email.",
+          "Does not cover the API route checks (Turnstile, bot detection, rate limit, session) or the confirmed/requested/payment branching in detail."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q3-trace",
+    "rep": 2,
+    "mapping": {
+      "X": "C",
+      "Y": "A",
+      "Z": "D"
+    },
+    "judge_cost_usd": 0.2170612,
+    "scores": {
+      "C": {
+        "correctness": 6,
+        "completeness": 6,
+        "errors": [
+          "Points to the route under apps/web/app/api/book, which does not exist. The real route is apps/web/pages/api/book/event.ts. X says it did not open the file, then guesses what it does.",
+          "Says `new EventManager(...)` at line 1835 is created only if the booking is confirmed by default. In fact it is created for every non-dry-run booking (unless skipCalendarSyncTaskCreation). Only `eventManager.create` at line 2052 depends on isConfirmedByDefault.",
+          "Says the send calls at 2031/2153/2197 cover the confirmed and pending cases. The call at 2031 is the reschedule email (BookingActionMap.rescheduled), and X does not name that case.",
+          "Says email-manager.ts line 79 is `sendScheduledEmailsAndSMS`. Line 79 is the private `_sendScheduledEmailsAndSMS`. The exported wrapper is at line 130 (small error).",
+          "Describes the API route only as 'presumably' passing the request on. It leaves out Turnstile, bot detection, the rate limit and the session lookup.",
+          "Says the booking is created 'as accepted, or as pending' without checking that in the code (no line given)."
+        ]
+      },
+      "A": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Does not cover what the service validates before the write (availability, limits, payment). Y says so openly.",
+          "Leaves out the payment branch (bookingRequiresPayment) and the reschedule email at line 2031.",
+          "Its description of the reschedule tx.booking.update is accurate in the code. The update is the cancellation data for the original booking, so 'updates the original booking' is a little vague but not wrong."
+        ]
+      },
+      "D": {
+        "correctness": 8,
+        "completeness": 6,
+        "errors": [
+          "Says the payment row is connected at createBooking.ts line 125 'when there is one'. In fact that only happens on a reschedule of a paid booking (originalRescheduledBooking.paid). New payments are handled elsewhere.",
+          "Lists the call at line 2031 as a confirmation email. That call is the reschedule email.",
+          "Does not say which send call is the normal confirmed path (2153), which conditions guard it, or that the tasker is disabled (line 2215). Z says openly that it did not read lines 1707-2031.",
+          "Does not describe the pending/requested email variant at 2197 or the fireBookingEvents step at 2217."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q4-impact",
+    "rep": 1,
+    "mapping": {
+      "X": "C",
+      "Y": "A",
+      "Z": "B"
+    },
+    "judge_cost_usd": 0.23128760000000004,
+    "scores": {
+      "C": {
+        "correctness": 8,
+        "completeness": 7,
+        "errors": [
+          "Puts packages/features/bookings/lib/conflictChecker/checkForConflicts.test.ts under 'Tests that mock or call it'. That file only does `import type { CurrentSeats }`. It does not mock or call the service.",
+          "Leaves out the real implementation `_getUserAvailability(params, initialData?)` at L361 and the `GetUserAvailabilityInitialData` type. Those are where a signature change actually happens.",
+          "Does not say that getUserAvailabilityIncludingBusyTimesFromLimits.test.ts spies on `_getUserAvailability` and asserts its arguments (L173/376/397/418). That makes it the test most likely to break.",
+          "Says it 'haven't checked apps/api'. apps/api/v2/src/lib/services/user-availability.service.ts subclasses UserAvailabilityService through platform-libraries/schedules, and available-slots.service/module consume it."
+        ]
+      },
+      "A": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Missed the apps/api/v2 consumers (user-availability.service.ts extends the base service, plus available-slots.service.ts and module). The caveat about searching only .ts/.tsx is wrong: those files are .ts and would have matched.",
+          "Wiring leaves out packages/features/di/tokens.ts and packages/features/di/containers/AvailableSlots.ts, which also loads getUserAvailabilityModule.",
+          "Does not name the troubleshooter feature (apps/web/modules/troubleshooter/components/LargeCalendar.tsx uses viewer.availability.user)."
+        ]
+      },
+      "B": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Did not check apps/api/v2, where user-availability.service.ts subclasses UserAvailabilityService and available-slots.service/module consume it. It does flag this as unchecked.",
+          "Wiring leaves out packages/features/di/tokens.ts and packages/features/di/containers/AvailableSlots.ts.",
+          "Does not mention the troubleshooter UI that sits on the user.handler endpoint, or user.handler.test.ts. That test only mocks the wrapper, so the impact is low."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q4-impact",
+    "rep": 2,
+    "mapping": {
+      "X": "B",
+      "Y": "A",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.2143678,
+    "scores": {
+      "B": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Says 'getUsersAvailability (about line 801)' calls _getUserAvailability. The caller is actually _getUsersAvailability (line 785), and the getUsersAvailability property at line 820 wraps it with withReporting. Minor naming slip.",
+          "Leaves out the DI container packages/features/di/containers/AvailableSlots.ts and packages/features/di/tokens.ts, both of which reference the service.",
+          "Did not classify AvailableTimes.tsx and OutOfOfficeInSlots.tsx, which import the IOutOfOfficeData type only. The answer says so honestly."
+        ]
+      },
+      "A": {
+        "correctness": 7,
+        "completeness": 7,
+        "errors": [
+          "Line numbers are swapped: it says the method is 'wrapped around _getUserAvailability at line 719 and bound at line 361'. In fact _getUserAvailability is defined at 361, and the property is bound and wrapped with withReporting at 719.",
+          "Describes slots/util.ts only vaguely ('imports from the module') and does not give the actual call, getUsersAvailability at util.ts:807.",
+          "Cites ensureAvailableUsers.ts:66. That line only gets the service; the call that matters, getUsersAvailability, is at line 94.",
+          "Leaves out the apps/api/v2 subclass (user-availability.service.ts extends BaseUserAvailabilityService, used by available-slots.service.ts and available-slots.module.ts). It admits it did not search apps.",
+          "Leaves out the calculateHolidayBlockedDates.test.ts test, which builds a new UserAvailabilityService."
+        ]
+      },
+      "C": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "Claims the list is complete for .ts/.tsx under packages and apps, but it misses apps/api/v2/src/lib/services/user-availability.service.ts. That file extends UserAvailabilityService through platform-libraries and feeds available-slots.service.ts and available-slots.module.ts, so the completeness claim is overstated.",
+          "Has the platform API as an external consumer, though in this repo that consumer is the apps/api/v2 subclass, which it never names."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q4-impact",
+    "rep": 1,
+    "mapping": {
+      "X": "D",
+      "Y": "A",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.21202859999999998,
+    "scores": {
+      "D": {
+        "correctness": 8,
+        "completeness": 7,
+        "errors": [
+          "Says it did not check the signature, so it never states the real params or return types (GetUserAvailabilityParams at L79, GetUserAvailabilityResult at L173)",
+          "Lists checkForConflicts.test.ts as a test that references the method, but it only imports the CurrentSeats type",
+          "Misses that apps/api/v2 has its own UserAvailabilityService-based services (user-availability.service.ts, available-slots.service.ts) and the AvailableSlots DI container and tokens.ts",
+          "Gives no line numbers for the getUserAvailabilityIncludingBusyTimesFromLimits and _getUsersAvailability definitions (L672, L785)"
+        ]
+      },
+      "A": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "Calls GetUserAvailabilityParams an exported type, but it is declared as a non-exported `type` at L79",
+          "Misses the apps/api/v2 services that use UserAvailabilityService (user-availability.service.ts, available-slots.service.ts, available-slots.module.ts); it only flags this as a caveat",
+          "Leaves out the DI files packages/features/di/containers/AvailableSlots.ts, modules/AvailableSlots.ts and tokens.ts"
+        ]
+      },
+      "C": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "Hedges on type-only consumers (checkForConflicts, getBusyTimesFromLimits, slots, date-ranges, detectEventTypeScheduleForUser) that all really import types from the file",
+          "Leaves out the IFromUser/IToUser consumers calendars/lib/types.ts, weeklyview/types/state.ts and Booker useAvailableTimeSlots.ts",
+          "Does not check apps/api/v2, where UserAvailabilityService is used in user-availability.service.ts and available-slots.service.ts",
+          "Claims the troubleshooter feature is at risk without verifying it"
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "cal.com",
+    "question": "q4-impact",
+    "rep": 2,
+    "mapping": {
+      "X": "C",
+      "Y": "A",
+      "Z": "D"
+    },
+    "judge_cost_usd": 0.25295019999999996,
+    "scores": {
+      "C": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Says the call-site list is complete for .ts/.tsx under packages and apps, but leaves out apps/api/v2/src/lib/services/user-availability.service.ts (which extends UserAvailabilityService), available-slots.service.ts and available-slots.module.ts. It only mentions 'the platform API' in general terms.",
+          "calculateHolidayBlockedDates.test.ts is listed as a test to update, but it only builds UserAvailabilityService and tests calculateHolidayBlockedDates. A signature change to getUserAvailability does not affect it.",
+          "Never says that the public getUserAvailability property has no direct external callers (grep finds no .getUserAvailability( call). It only implies this through the wrappers."
+        ]
+      },
+      "A": {
+        "correctness": 6,
+        "completeness": 6,
+        "errors": [
+          "Gets the line numbers backwards: it says getUserAvailability is 'wrapped around _getUserAvailability at line 719 and bound at line 361'. Line 361 is the _getUserAvailability definition, and line 719 does both the withReporting wrap and the bind.",
+          "Describes the line 801 call as 'apparently in the dynamic-group path'. It is actually _getUsersAvailability (line 785), the general multi-user path behind getUsersAvailability, which both slots and booking creation use.",
+          "For slots/util.ts it only says the file 'imports from the module'. It misses the real runtime call to userAvailabilityService.getUsersAvailability at line 807.",
+          "Cites ensureAvailableUsers.ts:66, which only fetches the service from DI. The actual call is getUsersAvailability at line 94.",
+          "Leaves out the apps/web importers (AvailableTimes.tsx, OutOfOfficeInSlots.tsx), the apps/api/v2 services that extend the class, and calculateHolidayBlockedDates.test.ts. It does say it did not search apps."
+        ]
+      },
+      "D": {
+        "correctness": 8,
+        "completeness": 9,
+        "errors": [
+          "Lists packages/features/membership/repositories/MembershipRepository.ts as a type-only importer. The name only appears there in a comment ('// needed for getUserAvailability'), with no import. The answer does hedge on this.",
+          "Leaves packages/features/di/containers/AvailableSlots.ts out of the DI wiring, even though it also loads getUserAvailabilityModule.",
+          "calculateHolidayBlockedDates.test.ts is listed as a test to update, but a getUserAvailability signature change does not affect it, because it only constructs the service."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "commerce",
+    "question": "q1-architecture",
+    "rep": 1,
+    "mapping": {
+      "X": "B",
+      "Y": "A",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.1466074,
+    "scores": {
+      "B": {
+        "correctness": 6,
+        "completeness": 7,
+        "errors": [
+          "Cites `graphify-out/GRAPH_REPORT.md` as evidence that there are no import cycles, but that file and folder do not exist in the repo. The source is invented.",
+          "Describes the dependency flow as a strict chain `app/` -> `components/` -> `lib/`. In fact `app/` imports `lib/` directly: `layout.tsx` imports `getCart` and `product/[handle]/page.tsx` imports `getProduct` and `lib/constants`.",
+          "The description of `layout.tsx` leaves out `CartProvider`, which wraps the whole tree and receives the cart promise. That is the key link between server and client cart state."
+        ]
+      },
+      "A": {
+        "correctness": 9,
+        "completeness": 9,
+        "errors": [
+          "Says `components` depends on `lib` 'mainly' through types, constants and the cart actions. This understates it: several server components call `lib/shopify` getters directly (for example the navbar and footer menus, `search/collections`, `grid/three-items` and `carousel`).",
+          "Lists the exports of `cart/actions.ts` but leaves out `createCartAndSetCookie` (minor)."
+        ]
+      },
+      "C": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Says openly that it did not read the source files, so the dependency claims are hedged guesses ('appear', 'likely'), even though they turn out to be correct.",
+          "Does not mention `CartProvider` in the root layout or the `revalidate` export that the webhook calls. The data-flow detail is thin compared with Y."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "commerce",
+    "question": "q1-architecture",
+    "rep": 2,
+    "mapping": {
+      "X": "B",
+      "Y": "C",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.16954799999999998,
+    "scores": {
+      "B": {
+        "correctness": 6,
+        "completeness": 7,
+        "errors": [
+          "Cites `graphify-out/GRAPH_REPORT.md`, but no such folder or file exists in the repo, so the 'graph matches the source layout' claim has no source",
+          "'The graph report found no import cycles' rests on that nonexistent report, so it is fabricated",
+          "Says `lib/shopify/index.ts` imports `fragments/*`. It imports only `queries/*`, `mutations/cart` and `types`. The fragments are pulled in through the query files.",
+          "The dependency chain `app -> components -> lib` leaves out that `app` also imports `lib/shopify` directly (for example `app/layout.tsx` and `app/[page]/page.tsx`)",
+          "Leaves out the `revalidate` delegation, the server-action `updateTag` cache flow, the README archived/deprecated notice, and `fonts/` and `icons/`"
+        ]
+      },
+      "C": {
+        "correctness": 9,
+        "completeness": 9,
+        "errors": [
+          "Says `lib/shopify` depends only on its own queries/types, `lib/constants.ts` and Next's cache APIs. It also imports `lib/type-guards`, `lib/utils`, `next/headers` and `next/server`.",
+          "Says reads are cached with `\"use cache\"`, but `getCart` uses `\"use cache: private\"` and `getPage`/`getPages` are not cached (minor)",
+          "Omits `fonts/` and `components/icons/`"
+        ]
+      },
+      "A": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "Says `lib/shopify depends on nothing else in the repo`, which is false: it imports `lib/constants`, `lib/type-guards` and `lib/utils`",
+          "Gives less detail on `lib/shopify` (no catalog read functions, and the `cacheTag`/`cacheLife` read caching is not described)",
+          "Says the webhook delegates to `revalidate` but does not explain that it invalidates the collections/products tags"
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "commerce",
+    "question": "q1-architecture",
+    "rep": 1,
+    "mapping": {
+      "X": "C",
+      "Y": "A",
+      "Z": "D"
+    },
+    "judge_cost_usd": 0.1857526,
+    "scores": {
+      "C": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "Calls the dependency directions 'inferred' and does not check them against imports, though they turn out correct",
+          "Does not say that some components fetch data themselves as server components: navbar/footer call getMenu, carousel and three-items call getCollectionProducts, collections calls getCollections",
+          "Names no concrete lib/shopify functions such as shopifyFetch, getCart or revalidate, and names no server action functions"
+        ]
+      },
+      "A": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "Says components depends on lib 'mainly its types, constants and the Shopify functions called from cart actions'. This understates it: components/layout/navbar/index.tsx and footer.tsx call getMenu, components/carousel.tsx and grid/three-items.tsx call getCollectionProducts, and components/layout/search/collections.tsx calls getCollections directly",
+          "Leaves out createCartAndSetCookie from the server actions list (minor)",
+          "Leaves out app/error.tsx, app/search/layout.tsx/loading.tsx and the root config files"
+        ]
+      },
+      "D": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "Describes app/search/[collection] as 'search and collection listings' and leaves out app/search/page.tsx, which handles plain search",
+          "Does not say that some components fetch data directly from lib/shopify (navbar/footer getMenu, carousel/three-items getCollectionProducts, collections getCollections)",
+          "Names no concrete lib/shopify functions, and says it did not check import directions",
+          "Mentions a 'graphify graph' (323 nodes) that is irrelevant and cannot be checked"
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "commerce",
+    "question": "q1-architecture",
+    "rep": 2,
+    "mapping": {
+      "X": "C",
+      "Y": "D",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.1802072,
+    "scores": {
+      "C": {
+        "correctness": 8,
+        "completeness": 9,
+        "errors": [
+          "Says lib/shopify depends only on its own queries/types, lib/constants.ts and Next's cache APIs. lib/shopify/index.ts also imports lib/type-guards (isShopifyError), lib/utils (ensureStartsWith), next/headers and next/server.",
+          "Says catalog reads are cached with \"use cache\" and cacheTag, but getPage and getPages have no cache directive. getCart uses \"use cache: private\".",
+          "Does not mention app/error.tsx, the fonts/ folder, or that the revalidate webhook only invalidates the collections and products tags (via revalidateTag, after checking a secret)."
+        ]
+      },
+      "D": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "The list of files that import lib/shopify leaves out components/grid/three-items.tsx and app/layout.tsx. The count of 27 imports is correct.",
+          "Does not describe the data or cache flow: no lib/shopify function names, no \"use cache\"/cacheTag, no updateTag in the cart server actions, and no explanation of how the revalidate webhook invalidates TAGS.",
+          "Only says the role of lib/constants is 'small shared helpers'. It actually holds TAGS, the sorting options and the Shopify endpoint constants."
+        ]
+      },
+      "A": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "Says lib/shopify depends on nothing else in the repo. It imports lib/constants (TAGS, HIDDEN_PRODUCT_TAG, SHOPIFY_GRAPHQL_API_ENDPOINT), lib/type-guards and lib/utils.",
+          "Does not mention the read-side caching (\"use cache\"/cacheTag on getProduct, getCollection*, etc.), or that the webhook invalidates the collections and products tags.",
+          "Leaves out app/error.tsx and the search layout/loading files. The catalog read functions (getProduct, getCollection, getMenu) are not listed."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "commerce",
+    "question": "q2-locate",
+    "rep": 1,
+    "mapping": {
+      "X": "B",
+      "Y": "C",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.48434239999999995,
+    "scores": {
+      "B": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "Lists `constants.ts` under `lib/shopify/`, but the file is `lib/constants.ts` (it holds `TAGS.cart`).",
+          "Calls `open-cart.tsx` the cart icon button that opens the modal. It only renders the icon and the quantity badge; the button and its `onClick` are in `modal.tsx`.",
+          "Never names the server actions (`addItem`, `removeItem`, `updateItemQuantity`, `redirectToCheckout`) and doesn't mention the reducer or `useOptimistic`."
+        ]
+      },
+      "C": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "The range `lib/shopify/index.ts` lines 220-270 cuts off `getCart`, which starts at line 270 and runs to about line 292.",
+          "Calls `open-cart.tsx` the button that opens the modal. It only renders the icon; the button is in `modal.tsx`.",
+          "Says `app/product/[handle]/page.tsx` shows the add-to-cart button. It only renders `ProductDescription`, which renders `AddToCart`.",
+          "Says the modal 'links to checkout'. Checkout is a form that calls the `redirectToCheckout` server action, not a link.",
+          "Leaves out `lib/constants.ts` (`TAGS.cart`), which is used for cache tagging and revalidation."
+        ]
+      },
+      "A": {
+        "correctness": 9,
+        "completeness": 9,
+        "errors": [
+          "The range `lib/shopify/index.ts` lines 220-275 cuts off `getCart`, which ends around line 292.",
+          "Calls `open-cart.tsx` a cart icon button. It only renders the icon; the button is in `modal.tsx`.",
+          "Says the modal 'has the checkout link'. It is a form that calls the `redirectToCheckout` server action.",
+          "Doesn't name the individual server actions (`addItem`, `removeItem`, `updateItemQuantity`, `redirectToCheckout`)."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "commerce",
+    "question": "q2-locate",
+    "rep": 2,
+    "mapping": {
+      "X": "C",
+      "Y": "B",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.5753898000000001,
+    "scores": {
+      "C": {
+        "correctness": 8,
+        "completeness": 7,
+        "errors": [
+          "open-cart.tsx is described as 'the button that opens the modal'. It is only a presentational icon with a quantity badge. The opening button and its onClick live in modal.tsx.",
+          "modal.tsx is said to have a 'checkout link'. Checkout is actually a form submit that calls the redirectToCheckout server action, not a link.",
+          "The actions.ts list leaves out createCartAndSetCookie, which modal.tsx calls when there is no cart.",
+          "It never mentions the cartId cookie that every lib/shopify cart function relies on, so the reader does not learn how the cart is persisted.",
+          "It does not identify the lib/constants.ts constant (TAGS.cart, the cache tag used by getCart and revalidated by the actions) and admits it did not check.",
+          "It does not say that the context's optimistic updates use useOptimistic, or that layout passes an unawaited getCart() promise to CartProvider."
+        ]
+      },
+      "B": {
+        "correctness": 9,
+        "completeness": 9,
+        "errors": [
+          "The claim that the navbar 'presumably renders the modal and the icon' is slightly off: navbar/index.tsx renders only CartModal, and CartModal renders the OpenCart icon.",
+          "The role of app/layout.tsx is hedged rather than confirmed. Its guess is correct: layout calls getCart() without awaiting it and passes the promise to CartProvider.",
+          "It does not mention the cartReducer and useOptimistic mechanism, or that modal.tsx creates the cart and sets the cookie on first load."
+        ]
+      },
+      "A": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "open-cart.tsx is described as 'the cart icon button that opens the drawer'. It is only an icon with a quantity badge. The button and its open handler are in modal.tsx.",
+          "It does not mention the cartId cookie that lib/shopify reads for every operation (createCartAndSetCookie is named but the cookie mechanism is not explained).",
+          "lib/constants.ts and TAGS.cart, which drive cache tagging and revalidation through cacheTag and updateTag, are left out entirely.",
+          "It does not explain how layout wires the cart (an unawaited getCart() promise passed to CartProvider), and says it did not check."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "commerce",
+    "question": "q2-locate",
+    "rep": 1,
+    "mapping": {
+      "X": "C",
+      "Y": "D",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.22812,
+    "scores": {
+      "C": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "modal.tsx does not link to checkout. It submits a form to the redirectToCheckout server action, which then redirects to cart.checkoutUrl.",
+          "The range 'lines 220-270' for the lib/shopify/index.ts functions stops where getCart begins (getCart starts at line 270 and runs past it).",
+          "It leaves out lib/constants.ts (TAGS.cart, used by updateTag to revalidate the cart after each action).",
+          "It does not mention that the lib/shopify functions read the cartId cookie, or that the optimistic update comes from useOptimistic inside useCart."
+        ]
+      },
+      "D": {
+        "correctness": 8,
+        "completeness": 6,
+        "errors": [
+          "It guesses that lib/constants.ts holds 'possibly a cookie name'. It actually holds TAGS.cart, a cache revalidation tag. The cookie name 'cartId' is hard-coded in actions.ts and lib/shopify/index.ts.",
+          "actions.ts is described only vaguely ('most likely forward to the Shopify layer'). It does not name addItem, removeItem, updateItemQuantity, redirectToCheckout or createCartAndSetCookie, even though they are confirmed to call lib/shopify.",
+          "It does not mention the cartId cookie mechanism, the checkout redirect, or that app/layout.tsx fetches the initial cart with getCart().",
+          "It leaves out app/product/[handle]/page.tsx as the page that renders ProductDescription."
+        ]
+      },
+      "A": {
+        "correctness": 9,
+        "completeness": 9,
+        "errors": [
+          "The flow says 'the cart-context.tsx provider updates the UI optimistically'. CartProvider only passes the cartPromise down. The optimistic state lives in the useCart hook (useOptimistic plus cartReducer).",
+          "The range 'lines 220-275' does not cover getCart, which starts at line 270 and continues past 275.",
+          "lib/constants.ts is called 'one cart-related constant' without saying it is the TAGS.cart revalidation tag used by updateTag.",
+          "It does not name cartReducer or redirectToCheckout. Checkout is a form action, not a plain link."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "commerce",
+    "question": "q2-locate",
+    "rep": 2,
+    "mapping": {
+      "X": "D",
+      "Y": "C",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.2683854,
+    "scores": {
+      "D": {
+        "correctness": 9,
+        "completeness": 9,
+        "errors": [
+          "open-cart.tsx is described as the cart icon button, but it only renders a div with the ShoppingCartIcon and the quantity badge. The <button aria-label=\"Open cart\"> that wraps it is in modal.tsx (line 52)",
+          "CartProvider is said to hold the cart client-side, but it only passes cartPromise through the context. The optimistic state (useOptimistic plus cartReducer) lives in useCart()",
+          "It does not say that modal.tsx calls createCartAndSetCookie when there is no cart, which is how the cart and cookie are first created"
+        ]
+      },
+      "C": {
+        "correctness": 8,
+        "completeness": 7,
+        "errors": [
+          "modal.tsx is said to have a checkout link, but it is a form with action={redirectToCheckout} and a CheckoutButton (\"Proceed to Checkout\"), not a link",
+          "open-cart.tsx is called the button that opens the modal, but it is only the icon and badge. The opening button and the openCart handler are in modal.tsx",
+          "The actions.ts description leaves out createCartAndSetCookie (it creates the cart and sets the cartId cookie) and the cache invalidation with updateTag(TAGS.cart)",
+          "lib/constants.ts is listed without naming the constant (it is TAGS.cart = \"cart\"), and the answer admits it did not check",
+          "app/layout.tsx is said to mount the provider, but it does not say that getCart() is called there without await and passed in as cartPromise"
+        ]
+      },
+      "A": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "open-cart.tsx is called the cart icon button that opens the drawer, but it is only a presentational icon with a badge. The button and the open handler are in modal.tsx",
+          "The wiring in app/layout.tsx is left unexplained (getCart() promise passed to <CartProvider cartPromise={cart}>, with Navbar rendered inside it). The answer admits it did not read the file",
+          "It leaves out the cartId cookie flow, the updateTag(TAGS.cart) cache invalidation in the server actions, and the fact that modal.tsx calls createCartAndSetCookie when there is no cart",
+          "It does not mention app/product/[handle]/page.tsx, which renders ProductDescription"
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "commerce",
+    "question": "q3-trace",
+    "rep": 1,
+    "mapping": {
+      "X": "B",
+      "Y": "A",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.1891438,
+    "scores": {
+      "B": {
+        "correctness": 9,
+        "completeness": 9,
+        "errors": [
+          "Minor: step 7 says getCart() reloads and replaces the optimistic cart, but the code never shows how that refresh reaches the client. The answer does not check this. It is inferred from updateTag plus the 'use cache: private' cache tag."
+        ]
+      },
+      "A": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "Minor: it says the request 'will fail' when the cookie is missing. That depends on how Shopify treats an undefined cartId and was not verified. In practice createCartAndSetCookie in modal.tsx:33 creates the cart, and the answer admits it did not check this.",
+          "Omitted: what happens after the mutation (cart revalidation) and where the cart is created."
+        ]
+      },
+      "C": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Minor imprecision: it puts shopifyFetch 'around line 85'. The function starts at line 71, and the fetch call is at line 85.",
+          "Omitted: where createCartAndSetCookie is called (modal.tsx:33), which is how the cartId cookie gets set. The answer admits it did not check this."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "commerce",
+    "question": "q3-trace",
+    "rep": 2,
+    "mapping": {
+      "X": "A",
+      "Y": "B",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.2064788,
+    "scores": {
+      "A": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "Leaves out the entry point: does not say that app/product/[handle]/page.tsx renders ProductDescription, which renders AddToCart",
+          "Does not say that shopifyFetch throws on body.errors, or that the request fails if SHOPIFY_STORE_DOMAIN is not set",
+          "Says it does not know how the cartId cookie is first created. The answer is a one-step grep away: CartModal (components/cart/modal.tsx:31-35) calls createCartAndSetCookie in a useEffect when there is no cart",
+          "Does not mention that the form action calls addItemAction() without awaiting it"
+        ]
+      },
+      "B": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Leaves out the route level: does not say that app/product/[handle]/page.tsx renders ProductDescription",
+          "The endpoint is described as SHOPIFY_STORE_DOMAIN + SHOPIFY_GRAPHQL_API_ENDPOINT, but the code first runs the domain through ensureStartsWith to add 'https://'. Minor imprecision",
+          "Does not find the cartId creation path: modal.tsx calls createCartAndSetCookie in a useEffect when the cart is missing"
+        ]
+      },
+      "C": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Says it did not check where createCart is called, but createCart is called inside createCartAndSetCookie in actions.ts, the file it read. It also missed that modal.tsx calls createCartAndSetCookie",
+          "Does not say that shopifyFetch throws on body.errors, or how the error is wrapped",
+          "'addItem bound to selectedVariantId through useActionState' is slightly loose: the code binds formAction (returned by useActionState), not addItem itself"
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "commerce",
+    "question": "q3-trace",
+    "rep": 1,
+    "mapping": {
+      "X": "C",
+      "Y": "A",
+      "Z": "D"
+    },
+    "judge_cost_usd": 0.1724576,
+    "scores": {
+      "C": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "Says shopifyFetch is 'around line 85'. The function starts at line 71. Line 85 is the fetch call inside it.",
+          "Says reshapeCart only flattens edges into lines. It also sets a default totalTaxAmount (a minor omission, not a false claim).",
+          "Does not find where the cart is created: components/cart/modal.tsx:33 calls createCartAndSetCookie when the component mounts, and that call sets the cartId cookie."
+        ]
+      },
+      "A": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "Leaves out the product page route (app/product/[handle]/page.tsx renders ProductDescription).",
+          "Does not find that createCartAndSetCookie is called in components/cart/modal.tsx:33, so it does not answer where cartId comes from.",
+          "Says the request 'will fail' when the cookie is missing. This is inferred, not checked against Shopify's behavior."
+        ]
+      },
+      "D": {
+        "correctness": 10,
+        "completeness": 8,
+        "errors": [
+          "Leaves out the product page route (app/product/[handle]/page.tsx).",
+          "Does not find that createCartAndSetCookie is called in components/cart/modal.tsx:33 to set the cartId cookie."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "commerce",
+    "question": "q3-trace",
+    "rep": 2,
+    "mapping": {
+      "X": "A",
+      "Y": "C",
+      "Z": "D"
+    },
+    "judge_cost_usd": 0.1672948,
+    "scores": {
+      "A": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "Does not mention the product page entry point (app/product/[handle]/page.tsx, then ProductDescription, then AddToCart)",
+          "Never says where the cartId cookie is created: createCartAndSetCookie is called from components/cart/modal.tsx:33, and addToCart itself creates no cart (the answer admits it did not check)"
+        ]
+      },
+      "C": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Calls addItemAction 'addItem bound to selectedVariantId'; strictly it is the formAction returned by useActionState(addItem), bound to the variant id",
+          "Leaves out the catch path (any exception returns 'Error adding item to cart') and the mutation file lib/shopify/mutations/cart.ts",
+          "Did not find that createCartAndSetCookie is called from components/cart/modal.tsx:33 to create the cartId cookie"
+        ]
+      },
+      "D": {
+        "correctness": 10,
+        "completeness": 8,
+        "errors": [
+          "Leaves out the Content-Type header and the { query, variables } request body (minor)",
+          "Did not find how cartId is created (createCartAndSetCookie is called from components/cart/modal.tsx:33), so the missing-cookie case stays open (the answer admits this)"
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "commerce",
+    "question": "q4-impact",
+    "rep": 1,
+    "mapping": {
+      "X": "B",
+      "Y": "C",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.1437664,
+    "scores": {
+      "B": {
+        "correctness": 9,
+        "completeness": 9,
+        "errors": [
+          "The list of product fields ProductPage reads is incomplete. It also uses product.images (Gallery, line 92), passes the whole product to ProductDescription (line 102), and passes product.id to RelatedProducts (line 106). A return-type change could break all of these, and the answer doesn't mention them."
+        ]
+      },
+      "C": {
+        "correctness": 8,
+        "completeness": 7,
+        "errors": [
+          "The claim 'The graph shows only these two callers (degree 5)' cites graph output that can't be checked against the code. The grep agrees there are only two call sites, but the 'degree 5' number is unverified.",
+          "Lists the log message at line 449 as the only place the body uses the signature. It leaves out `variables: { handle }` at lines 455-457, which is the main place the parameter is used.",
+          "Doesn't mention lib/shopify/types.ts: ShopifyProductOperation.variables.handle (line 250) and Product (line 71) have to change if the variables or return shape change.",
+          "Leaves out the 'use cache' point: the cache key comes from the arguments."
+        ]
+      },
+      "A": {
+        "correctness": 6,
+        "completeness": 8,
+        "errors": [
+          "Says the body uses `handle` in three places, one of them the early `return undefined`. That is false: line 450 doesn't use handle. Only the log at line 449 and the variables at lines 455-457 do.",
+          "Hedges facts it could easily have checked: it says the calls are 'probably' in generateMetadata and the page component, and that the page 'probably' uses notFound(). Both are confirmed at lines 17/19 and 54/56.",
+          "Admits it never opened lib/shopify/types.ts and says 'probably' about types it could have confirmed. In fact Product is at line 71 and ShopifyProductOperation at line 247."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "commerce",
+    "question": "q4-impact",
+    "rep": 2,
+    "mapping": {
+      "X": "C",
+      "Y": "B",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.1300158,
+    "scores": {
+      "C": {
+        "correctness": 9,
+        "completeness": 6,
+        "errors": [
+          "Does not mention ShopifyProductOperation in lib/shopify/types.ts. Its variables type ({ handle: string }) must change along with the query variables.",
+          "Does not mention the \"use cache\"/cacheTag/cacheLife directives (lines 444-446): the arguments become cache keys and must be serializable.",
+          "Does not mention the variables object at lines 455-457, which passes handle to shopifyFetch. It only refers to it vaguely as 'variables passed in index.ts'.",
+          "The note about stale 're-exports in lib/shopify' is speculative. No such re-export exists: the page imports directly from lib/shopify (index.ts)."
+        ]
+      },
+      "B": {
+        "correctness": 10,
+        "completeness": 9,
+        "errors": [
+          "Says ShopifyProductOperation is 'probably' in lib/shopify/types.ts. It is there (line 247, variables: { handle: string }), so the claim is correct but was left unverified.",
+          "Lists the downstream fields product.featuredImage, tags, seo and title but leaves out others the page uses (images, priceRange, availableForSale, id, and the whole object passed to ProductDescription). This is a minor gap."
+        ]
+      },
+      "A": {
+        "correctness": 10,
+        "completeness": 7,
+        "errors": [
+          "Does not check how the callers use the result downstream (it says so itself). It does not list the product fields used or the notFound() checks at lines 19/56.",
+          "Says ShopifyProductOperation needs updating, which is correct (types.ts:247), but labels this as inferred.",
+          "The hedge 'line 17 is probably the metadata path' is unnecessary: it is generateMetadata, and line 54 is ProductPage."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "commerce",
+    "question": "q4-impact",
+    "rep": 1,
+    "mapping": {
+      "X": "C",
+      "Y": "D",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.12408140000000001,
+    "scores": {
+      "C": {
+        "correctness": 8,
+        "completeness": 6,
+        "errors": [
+          "Says 'the graph shows only these two callers (degree 5)', which can't be checked and is confusing: the two call sites are both in one file, app/product/[handle]/page.tsx (lines 17 and 54)",
+          "Leaves out the `variables: { handle }` mapping into shopifyFetch (lib/shopify/index.ts:453-458), which must change if the parameters change",
+          "Leaves out the 'use cache' / cacheTag / cacheLife directives, whose cache keys depend on the arguments",
+          "Leaves out ShopifyProductOperation.variables in lib/shopify/types.ts:247-252, which types `handle: string` and must match any change to the parameters"
+        ]
+      },
+      "D": {
+        "correctness": 10,
+        "completeness": 8,
+        "errors": [
+          "Leaves out ShopifyProductOperation in lib/shopify/types.ts:247-252 (it types variables.handle), which must be updated if the variables change",
+          "Hedges on the undefined -> notFound() handling instead of checking it (it is at lines 19 and 56)"
+        ]
+      },
+      "A": {
+        "correctness": 8,
+        "completeness": 9,
+        "errors": [
+          "Says the body uses `handle` in three places, including 'the early `return undefined`'. That is wrong: the early return does not use handle, so it is used in only two places (the log and the variables)",
+          "Hedges with 'probably' on generateMetadata/ProductPage and the notFound() check, and on the contents of types.ts, without checking them (all are in fact correct)"
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "commerce",
+    "question": "q4-impact",
+    "rep": 2,
+    "mapping": {
+      "X": "D",
+      "Y": "C",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.1285,
+    "scores": {
+      "D": {
+        "correctness": 7,
+        "completeness": 8,
+        "errors": [
+          "The opening says only one file needs updating when the parameters change. In fact both lib/shopify/index.ts and app/product/[handle]/page.tsx must change, and the answer's own caller section says so, so it contradicts itself.",
+          "It cites line 455 for `variables: { handle }`. Line 455 only opens `variables: {`; `handle` is on line 456. This is minor.",
+          "It doesn't mention the import on line 6 of page.tsx, which matters if the function is renamed."
+        ]
+      },
+      "C": {
+        "correctness": 8,
+        "completeness": 7,
+        "errors": [
+          "It leaves out the `\"use cache\"` directive at line 444 and what it means for cache keys and serializable arguments.",
+          "It doesn't name the ShopifyProductOperation type in lib/shopify/types.ts:247, which has to change if the variables change. It only refers vaguely to 'the response type used there'.",
+          "It suggests there might be stale re-exports in `lib/shopify`, but lib/shopify/index.ts is the module itself and nothing re-exports it. The claim is hedged, but it isn't needed.",
+          "It says it didn't open the files, yet it gives function-context details (generateMetadata, ProductPage). Those details are correct, but the answer is inconsistent about what it actually checked."
+        ]
+      },
+      "A": {
+        "correctness": 10,
+        "completeness": 9,
+        "errors": [
+          "It doesn't confirm that the undefined result is handled with notFound() on lines 19 and 56. It says the downstream usage wasn't checked."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q1-architecture",
+    "rep": 1,
+    "mapping": {
+      "X": "B",
+      "Y": "A",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.1698688,
+    "scores": {
+      "B": {
+        "correctness": 7,
+        "completeness": 6,
+        "errors": [
+          "Calls `@excalidraw/laser-pointer` an external package. It is a workspace package at `packages/laser-pointer`.",
+          "Leaves out the workspace packages `packages/fractional-indexing` and `packages/laser-pointer`. `fractional-indexing` is mentioned only as a dependency of `element`.",
+          "Says `common` depends on no other workspace package. That holds for `package.json`, but `common/src` imports types from `@excalidraw/excalidraw` and `@excalidraw/element` (for example `constants.ts` and `emitter.ts`).",
+          "Says `utils` sits beside the chain. In fact `utils/src` re-exports from `@excalidraw/excalidraw/scene/export` and imports `element`, `common` and `math`, which it did not check.",
+          "Does not mention the circular imports at source level."
+        ]
+      },
+      "A": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "Lists `analytics.ts` as an excalidraw-app file. It does not exist in `excalidraw-app/`; it is at `packages/excalidraw/analytics.ts`.",
+          "Leaves out `packages/fractional-indexing` and `packages/laser-pointer` as workspace packages.",
+          "The circular imports it describes are real (38 imports of `@excalidraw/excalidraw` in `element/src`, 3 of `@excalidraw/utils`), but it does not say that many of them are type-only."
+        ]
+      },
+      "C": {
+        "correctness": 6,
+        "completeness": 7,
+        "errors": [
+          "The dependency diagram shows `utils` feeding into `excalidraw`. The direction is reversed: `@excalidraw/excalidraw` does not depend on `utils`, and `utils/src` imports from `@excalidraw/excalidraw`.",
+          "Assumes `excalidraw` depends on `utils`, which is false. Its guess about `math` is correct, but it did not verify it.",
+          "Says `excalidraw` depends on `common` and `element` and does not list `math`, `laser-pointer` or `mermaid-to-excalidraw` among the workspace and `@excalidraw` dependencies, so the list is incomplete.",
+          "Leaves out the `packages/laser-pointer` workspace package.",
+          "Does not mention the circular imports at source level."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q1-architecture",
+    "rep": 2,
+    "mapping": {
+      "X": "A",
+      "Y": "C",
+      "Z": "B"
+    },
+    "judge_cost_usd": 0.23346240000000001,
+    "scores": {
+      "A": {
+        "correctness": 7,
+        "completeness": 6,
+        "errors": [
+          "Says common has no internal dependencies: true for package.json, but packages/common/src imports @excalidraw/math at runtime (clamp, average, degreesToRadians) and types from @excalidraw/element and @excalidraw/excalidraw",
+          "utils is described only by its manifest (laser-pointer) and left out of the dependency diagram. Its source (packages/utils/src/index.ts, shape.ts) imports @excalidraw/excalidraw/scene/export, @excalidraw/element and @excalidraw/math",
+          "Never checked vitest.config.mts (it says so itself), so it gives no detail on how the aliases resolve",
+          "Diagram arrows are ambiguous and leave out utils"
+        ]
+      },
+      "C": {
+        "correctness": 6,
+        "completeness": 8,
+        "errors": [
+          "Says utils does not depend on common, element or math: false, since packages/utils/src imports @excalidraw/element, @excalidraw/math and @excalidraw/excalidraw",
+          "Says lower layers never import upward: false, since common imports @excalidraw/math at runtime and types from @excalidraw/element/types and @excalidraw/excalidraw/types",
+          "Says common depends only on tinycolor2: that matches package.json but ignores its source imports of math",
+          "Says laser-pointer is consumed as the npm package 1.3.1: package.json pins 1.3.1, but vitest.config.mts aliases @excalidraw/laser-pointer to packages/laser-pointer/src, so this is only partly accurate"
+        ]
+      },
+      "B": {
+        "correctness": 7,
+        "completeness": 7,
+        "errors": [
+          "Says element depends on common and math only: packages/element/package.json also lists @excalidraw/fractional-indexing",
+          "Calls laser-pointer an external library, but it is a workspace package in packages/laser-pointer",
+          "Says utils sits to the side: misleading, since its source imports element, math and excalidraw (scene/export)",
+          "Says common has no internal dependencies: its source imports @excalidraw/math at runtime",
+          "Leaves out the fractional-indexing and laser-pointer workspace packages"
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q1-architecture",
+    "rep": 1,
+    "mapping": {
+      "X": "C",
+      "Y": "A",
+      "Z": "D"
+    },
+    "judge_cost_usd": 0.17832540000000002,
+    "scores": {
+      "C": {
+        "correctness": 6,
+        "completeness": 6,
+        "errors": [
+          "Its dependency diagram has `utils` feeding into `@excalidraw/excalidraw`, but `packages/excalidraw/package.json` does not list `@excalidraw/utils` as a dependency",
+          "It leaves out the `packages/laser-pointer` workspace package, which `excalidraw` and `utils` both depend on",
+          "It says it is unsure whether `excalidraw` depends on `math`. The manifest does list `@excalidraw/math`",
+          "It doesn't mention that the source imports are circular: `element/src` imports `@excalidraw/excalidraw`, and `common` and `utils` import `excalidraw` and `element`",
+          "It doesn't say what `utils` depends on inside the workspace (`@excalidraw/laser-pointer`)"
+        ]
+      },
+      "A": {
+        "correctness": 7,
+        "completeness": 7,
+        "errors": [
+          "It lists `analytics.ts` as an app-specific file in `excalidraw-app/`, but no such file exists there. It lives at `packages/excalidraw/analytics.ts`",
+          "It doesn't list `fractional-indexing` or `laser-pointer` as packages in `packages/`. It only names them as dependencies",
+          "Its declared dependency chain leaves out `utils` and `fractional-indexing`",
+          "It implies `excalidraw-app` declares a dependency on the library. The app's `package.json` does not list any `@excalidraw/*` workspace package, and it resolves them through the Vite aliases"
+        ]
+      },
+      "D": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "It doesn't mention that the source imports are circular: `element/src` imports `@excalidraw/excalidraw` in 38 places, and `utils` and `common` import `excalidraw` and `element`",
+          "Its dependency diagram leaves out `utils` and `laser-pointer`",
+          "It says the app and examples depend on `excalidraw` by inference and doesn't check it. The app doesn't declare the dependency at all and resolves it through the Vite aliases in `excalidraw-app/vite.config.mts`"
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q1-architecture",
+    "rep": 2,
+    "mapping": {
+      "X": "A",
+      "Y": "D",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.2240722,
+    "scores": {
+      "A": {
+        "correctness": 8,
+        "completeness": 6,
+        "errors": [
+          "Says common 'has no internal dependencies'. That holds for its package.json, but packages/common/src imports @excalidraw/math at runtime (colors.ts, utils.ts, points.ts) and type-imports from element and excalidraw, so the 'common → math' chain hides a cycle.",
+          "Hedges on utils without settling it: packages/utils/src imports @excalidraw/common, element, math and excalidraw/scene/export, so utils actually sits above excalidraw.",
+          "Does not say how excalidraw-app resolves @excalidraw/excalidraw (a Vite alias in excalidraw-app/vite.config.mts, not package.json). App features are only lightly covered."
+        ]
+      },
+      "D": {
+        "correctness": 6,
+        "completeness": 8,
+        "errors": [
+          "'Per CLAUDE.md, firebase and mermaid are lazy-loaded' attributes this to the wrong source: CLAUDE.md says nothing about it. It comes only from the message of commit 1d4dc2c.",
+          "'Lower layers never import upward' is false: common imports @excalidraw/math at runtime and type-imports from @excalidraw/element/types and @excalidraw/excalidraw/types.",
+          "The diagram puts utils outside the graph with only laser-pointer, yet utils/src imports common, element, math and excalidraw/scene/export (admitted as unchecked)."
+        ]
+      },
+      "C": {
+        "correctness": 6,
+        "completeness": 8,
+        "errors": [
+          "'utils doesn't depend on common, element or math' is false at the code level: packages/utils/src/shape.ts and index.ts import @excalidraw/common, @excalidraw/element, @excalidraw/math and @excalidraw/excalidraw/scene/export. Only the package.json omits them.",
+          "'Lower layers never import upward' is false: common/src imports math at runtime (clamp, average) and types from element and excalidraw.",
+          "Says utils and excalidraw consume laser-pointer 'as the npm package' 1.3.1. It is the local workspace package (also version 1.3.1), aliased to packages/laser-pointer/src in vitest.config.mts, so this is misleading."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q2-locate",
+    "rep": 1,
+    "mapping": {
+      "X": "C",
+      "Y": "A",
+      "Z": "B"
+    },
+    "judge_cost_usd": 0.2220754,
+    "scores": {
+      "C": {
+        "correctness": 9,
+        "completeness": 6,
+        "errors": [
+          "Leaves out packages/excalidraw/data/reconcile.ts, the file that does the actual merge of local and remote elements, and only refers to it indirectly through restore.ts and mutateElement.ts",
+          "Leaves out packages/excalidraw/data/encryption.ts, excalidraw-app/share/ShareDialog.tsx and excalidraw-app/tests/collab.test.tsx",
+          "Calls data/index.ts 'encryption helpers': it imports and uses encrypt/decrypt from the library's encryption.ts rather than defining them (minor)"
+        ]
+      },
+      "A": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "Portal is said to 'receive' scene updates and pointer data, but incoming client-broadcast messages are decrypted and handled in Collab.tsx; Portal only listens for room events such as room-user-change and first-in-room",
+          "excalidraw-app/package.json is listed as a collaboration file because it 'matches socket.io or Collab': it only declares the socket.io-client 4.7.2 dependency, so this is noise",
+          "Leaves out excalidraw-app/data/FileManager.ts, which handles image file sync and is instantiated in Collab",
+          "Calls Collab a 'component' without saying it is a class (it extends PureComponent, so this is acceptable)"
+        ]
+      },
+      "B": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Says it did not check where reconcileElements is defined: it is re-exported from @excalidraw/excalidraw (packages/excalidraw/index.tsx:424), defined in packages/excalidraw/data/reconcile.ts, and this file is not listed",
+          "Leaves out excalidraw-app/data/FileManager.ts",
+          "packages/excalidraw/tests/history.test.tsx is only marginally about collaboration (it has a single isCollaborating prop)",
+          "Calls encryption.ts only an import, without listing it as a file involved (minor)"
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q2-locate",
+    "rep": 2,
+    "mapping": {
+      "X": "B",
+      "Y": "A",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.2674062,
+    "scores": {
+      "B": {
+        "correctness": 7,
+        "completeness": 7,
+        "errors": [
+          "Says packages/excalidraw/components/App.tsx renders remote cursors. In fact renderRemoteCursors is defined in clients.ts and called from renderer/interactiveScene.ts. App.tsx only passes isCollaborating through.",
+          "Says encode.ts is used for collaboration payloads. Portal.tsx imports only encryptData from encryption.ts. encode.ts is used by firebase.ts, FileManager.ts and data/index.ts for persistence and file compression, not for socket payloads.",
+          "Misses clients.ts (collaborator colors and renderRemoteCursors), renderer/interactiveScene.ts (remote pointers and selections), components/UserList.tsx, debugCollaborators.ts and share/QRCode.tsx.",
+          "Toolbar.tsx is only marginally related: it checks isCollaborating to highlight the laser button."
+        ]
+      },
+      "A": {
+        "correctness": 9,
+        "completeness": 9,
+        "errors": [
+          "Leaves out excalidraw-app/app_constants.ts (WS_EVENTS, WS_SUBTYPES, CURSOR_SYNC_TIMEOUT, SYNC_FULL_SCENE_INTERVAL_MS), which Portal and Collab depend on.",
+          "Leaves out data/FileManager.ts, which syncs image files for rooms. The line numbers given (socket.io-client import at 530, _reconcileElements at 772, link helpers at 133-163, reconcile in App.tsx at 352) check out."
+        ]
+      },
+      "C": {
+        "correctness": 7,
+        "completeness": 5,
+        "errors": [
+          "Says the library only provides hooks and UI. That is wrong: the core merge function reconcileElements lives in packages/excalidraw/data/reconcile.ts and is exported from index.tsx. Z leaves this file out entirely.",
+          "Leaves out share/ShareDialog.tsx, LiveCollaborationTrigger.tsx, app_constants.ts, tests/collab.test.tsx, AppMainMenu.tsx, renderer/interactiveScene.ts and data/encryption.ts.",
+          "Lists the library's data/restore.ts as restoring incoming elements, which is vague. Collab imports bumpElementVersions from it, and restoreElements comes from the package entry.",
+          "Every role is inferred from symbol names only. The symbols it cites do exist in Collab.tsx and Portal.tsx."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q2-locate",
+    "rep": 1,
+    "mapping": {
+      "X": "D",
+      "Y": "A",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.2158866,
+    "scores": {
+      "D": {
+        "correctness": 8,
+        "completeness": 7,
+        "errors": [
+          "Says excalidraw-app/data/firebase.ts has been lazy-loaded since the latest commit. In fact Collab.tsx, App.tsx and data/index.ts still import it statically. Only the Firebase SDK in data/firebaseSDK.ts is lazy-loaded.",
+          "Leaves out packages/excalidraw/data/encryption.ts and says it could not confirm end-to-end encryption. In fact Portal._broadcastSocketData calls encryptData and Collab.decryptPayload decrypts incoming payloads.",
+          "Leaves out the session entry points: share/ShareDialog.tsx and the LiveCollaborationTrigger in AppMainMenu.tsx and AppWelcomeScreen.tsx.",
+          "Calls clients.ts 'collaborator data', which is vague. It actually holds getClientColor, getNameInitial and renderRemoteCursors."
+        ]
+      },
+      "A": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "Puts 'the encrypted payload handling' in data/index.ts. That file only defines the EncryptedData and SocketUpdateData types and decrypts in importFromBackend. Socket payloads are decrypted in Collab.decryptPayload and encrypted in Portal.",
+          "The package.json entry is weak: it only declares socket.io-client 4.7.2 and firebase 11.3.1, and it does not 'match Collab'.",
+          "Leaves out data/FileManager.ts, which syncs image files between collaborators, and the library UI pieces: clients.ts (remote cursors), UserList.tsx and laserTrails.ts.",
+          "Gives no symbol-level detail on the flows, such as startCollaboration, initializeRoom, reconcileElements or broadcastScene."
+        ]
+      },
+      "C": {
+        "correctness": 8,
+        "completeness": 6,
+        "errors": [
+          "Leaves out packages/excalidraw/data/reconcile.ts (reconcileElements), the core merge logic that Collab._reconcileElements calls. It points to restore.ts and mutateElement.ts instead.",
+          "Says 'the library only provides the hooks and UI'. This understates the library, which also provides reconcileElements and the encryption in data/encryption.ts.",
+          "Leaves out packages/excalidraw/data/encryption.ts, share/ShareDialog.tsx, the entry points in AppMainMenu.tsx and AppWelcomeScreen.tsx, and the tests (tests/collab.test.tsx and reconcile.test.ts)."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q2-locate",
+    "rep": 2,
+    "mapping": {
+      "X": "C",
+      "Y": "A",
+      "Z": "D"
+    },
+    "judge_cost_usd": 0.27112240000000004,
+    "scores": {
+      "C": {
+        "correctness": 8,
+        "completeness": 5,
+        "errors": [
+          "Leaves out packages/excalidraw/data/reconcile.ts (reconcileElements), the core conflict-resolution logic that both Collab._reconcileElements and data/firebase.ts call",
+          "Leaves out excalidraw-app/app_constants.ts (the WS_SUBTYPES/WS_EVENTS protocol), share/ShareDialog.tsx, data/encryption.ts, tests/collab.test.tsx and the remote-cursor rendering (clients.ts renderRemoteCursors, InteractiveCanvas, interactiveScene)",
+          "Says outright that it opened no source, so every role is inferred from symbol names (the inferences turn out mostly right)"
+        ]
+      },
+      "A": {
+        "correctness": 9,
+        "completeness": 9,
+        "errors": [
+          "Leaves out excalidraw-app/app_constants.ts, which defines the WS_SUBTYPES/WS_EVENTS message protocol that Collab and Portal use",
+          "Leaves out data/FileManager.ts (image file sync used by Collab) and data/firebaseSDK.ts",
+          "Presents data/encryption.ts as a library collab component. It is a generic helper: Portal uses encryptData for socket payloads and Collab uses decryptData, so the role is right but the framing overstates it"
+        ]
+      },
+      "D": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "Leaves out packages/excalidraw/data/reconcile.ts as a file, even though it names the reconcileElements function",
+          "Leaves out data/encryption.ts and data/FileManager.ts (image sync)",
+          "Writes 'excalidraw-app/share/ShareDialog' without the .tsx extension",
+          "Says data/index.ts holds 'encryption helpers'. It only imports generateEncryptionKey to build the room key and also holds EncryptedData/socket types, so the description is loose"
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q3-trace",
+    "rep": 1,
+    "mapping": {
+      "X": "C",
+      "Y": "B",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.30636060000000004,
+    "scores": {
+      "C": {
+        "correctness": 7,
+        "completeness": 8,
+        "errors": [
+          "Says the Export image dialog is opened by `Export()` in main-menu/DefaultItems.tsx. `Export()` (l.356) actually opens the `jsonExport` dialog. The image dialog is opened by `SaveAsImage` (l.134-146, openDialog `imageExport`).",
+          "Leaves out that the fileHandle is stored only if `isImageFileHandle(fileHandle)` passes (minor).",
+          "Doesn't say how fileSave saves the file: File System Access API or a download fallback through browser-fs-access."
+        ]
+      },
+      "B": {
+        "correctness": 9,
+        "completeness": 7,
+        "errors": [
+          "Gives `exportToBlob` at `scene/export.ts:1303`. The definition is at l.1286, and l.1303 is its call to exportToCanvas (minor).",
+          "Step 8 stops short ('Je n'ai pas lu la suite'). The rest is only `this.setState({ fileHandle })` (App.tsx:2809), so the flow is left incomplete for no reason.",
+          "Doesn't say how the export dialog is opened (main menu `SaveAsImage` → openDialog `imageExport`) or which settings it offers."
+        ]
+      },
+      "A": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Writes the call as `onExportImage(\"png\", ...)`. The code passes `EXPORT_IMAGE_TYPES.png` (a simplification, equivalent value).",
+          "Doesn't say how the export dialog is opened from the main menu (`SaveAsImage` → openDialog `imageExport`)."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q3-trace",
+    "rep": 2,
+    "mapping": {
+      "X": "C",
+      "Y": "A",
+      "Z": "B"
+    },
+    "judge_cost_usd": 0.3299154,
+    "scores": {
+      "C": {
+        "correctness": 7,
+        "completeness": 6,
+        "errors": [
+          "Says exportToBlob (scene/export.ts:1286) is 'the public API for the same path'. It is a private function that is not exported. The public entry is exportScene, which sends type 'png'/'jpeg' to exportToBlob, and the UI PNG flow never calls it.",
+          "Leaves out exportScene (scene/export.ts:1347), the dispatcher between exportCanvas and exportToCanvas. The answer admits it did not trace it.",
+          "Step 5 mixes the real UI encoding step (canvasToBlob in data/blob.ts) with exportToBlob, which takes no part in the UI PNG export.",
+          "Does not say how exportedElements and exportingFrame are built (prepareElementsForExport). Does not check fileSave in filesystem.ts, which wraps browser-fs-access; the answer admits it."
+        ]
+      },
+      "A": {
+        "correctness": 8,
+        "completeness": 9,
+        "errors": [
+          "Says exportToBlob is used by 'the Node entry index-node.ts'. That is false: index-node.ts calls exportScene({ type: 'canvas' }) and writes the file with createPNGStream, so it never reaches exportToBlob.",
+          "Calls exportToBlob 'a separate path for the public API'. It is not exported; it is only reachable through exportScene with type png/jpeg (and through exportToClipboard png).",
+          "Does not mention prepareElementsForExport (selection/frame filtering, cloneJSON) as the source of exportedElements, or muteFSAbortError in onExportImage."
+        ]
+      },
+      "B": {
+        "correctness": 9,
+        "completeness": 9,
+        "errors": [
+          "Puts exportToBlob at ~l.1303. It is defined at scene/export.ts:1286; line 1303 is its internal call to exportToCanvas.",
+          "Gives prepareElementsForExport as ~l.61-97. The function starts earlier; 61-97 is only its body after the selection check (a small inaccuracy).",
+          "Does not say that exportToBlob is reached through exportScene (type png/jpeg), not exported directly. Does not mention that exportingFrame is passed into the config / clipToFrame."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q3-trace",
+    "rep": 1,
+    "mapping": {
+      "X": "D",
+      "Y": "C",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.3434916,
+    "scores": {
+      "D": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Step 2 places the element selection in data/index.ts but never names the function that does it (prepareElementsForExport), and doesn't say the dialog calls it at ImageExportDialog.tsx:108",
+          "Doesn't explain how the dialog is opened (the SaveAsImage menu item sets openDialog 'imageExport'), and doesn't say that exportScene({type:'canvas'}) is what dispatches to the internal exportToCanvas"
+        ]
+      },
+      "C": {
+        "correctness": 7,
+        "completeness": 8,
+        "errors": [
+          "Wrong: it says the image export dialog is opened from DefaultItems.tsx `Export()`. Export() opens the 'jsonExport' dialog. The image dialog is opened by `SaveAsImage` (openDialog: { name: 'imageExport' })",
+          "Calls exportToBlob 'the library's exportToBlob' as if it were a public API. It is an internal, non-exported const (export.ts:1286). The public route is exportScene({type:'png'}), and the CHANGELOG says exportToBlob was removed from the public API",
+          "Doesn't say how exportedElements is computed (prepareElementsForExport: the selection, frame handling, cloneJSON)"
+        ]
+      },
+      "A": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Doesn't say how exportedElements is computed (prepareElementsForExport: the selection, frame contents, cloneJSON)",
+          "Doesn't explain how the dialog is opened (the SaveAsImage menu item / the imageExport shortcut)",
+          "Minor: writes the button call as onExportImage(\"png\", ...). The code passes EXPORT_IMAGE_TYPES.png"
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q3-trace",
+    "rep": 2,
+    "mapping": {
+      "X": "D",
+      "Y": "A",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.36616740000000003,
+    "scores": {
+      "D": {
+        "correctness": 8,
+        "completeness": 7,
+        "errors": [
+          "Says exportScene is 'around line 1364'. It is declared at scene/export.ts:1347, and 1364 is only the `case \"canvas\"` branch.",
+          "Says 'the same dialog's other buttons use the same pipeline'. The SVG button goes through exportScene({type:'svg'}) with no canvas render, so only the clipboard button shares the canvas path.",
+          "Leaves out where fileSave lives (data/filesystem.ts) and how the dialog is opened (the SaveAsImage main menu item)."
+        ]
+      },
+      "A": {
+        "correctness": 8,
+        "completeness": 9,
+        "errors": [
+          "Says exportToBlob is used by the Node entry index-node.ts. That is false: index-node.ts:62 calls exportScene({type:'canvas'}) and then createPNGStream, so it never reaches exportToBlob.",
+          "Says exportCanvas calls exportScene({type:'canvas'}) 'for \"png\"'. In fact the call at l.172 runs for every non-SVG type, before the png branch. This is a minor imprecision."
+        ]
+      },
+      "C": {
+        "correctness": 7,
+        "completeness": 7,
+        "errors": [
+          "Calls exportToBlob (export.ts:1286) 'the public API for the same path'. It is a module-private const that is not exported (the public API is exportScene with type png/jpeg), and the UI PNG export does not use it.",
+          "Says it did not trace exportScene, so it misses the dispatch step between exportCanvas and exportToCanvas.",
+          "Says it did not open filesystem.ts, so it never confirms how fileSave works (the browser-fs-access wrapper)."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q4-impact",
+    "rep": 1,
+    "mapping": {
+      "X": "C",
+      "Y": "A",
+      "Z": "B"
+    },
+    "judge_cost_usd": 0.17944020000000002,
+    "scores": {
+      "C": {
+        "correctness": 7,
+        "completeness": 7,
+        "errors": [
+          "Says there are 'about 70 call sites'. A grep for `mutateElement(` finds 200 occurrences in 56 files (wrappers and definitions included), so the figure is far too low, even though its per-file counts are right",
+          "Says `ExcalidrawImperativeAPI.mutateElement` consumers break directly. That API is typed as `App[\"mutateElement\"]` (types.ts:1395), which goes through `Scene.mutateElement` and its own signature, so they break only if the wrapper's signature changes too",
+          "Leaves out several real call sites: `clipboard.ts`, `App.text.ts`, `App.bucketFill.ts`, `ElementLinkDialog.tsx`, `LayerUI.tsx`, `distribute.ts`, `align.ts`, `delta.ts`, `fractionalIndex.ts`, `flowchart.ts`, `stickyNote.ts`, and most of the actions (listed only as 'others')"
+        ]
+      },
+      "A": {
+        "correctness": 8,
+        "completeness": 8,
+        "errors": [
+          "Gives '200 call sites' as the number of direct callers. That count also includes `scene.mutateElement(`, `app.mutateElement(` and the definitions themselves, and the answer does not say so",
+          "Does not mention the public re-export in `packages/excalidraw/index.tsx:458` or the `export *` in `packages/element/src/index.ts:85`, so the semver impact on library users is missing",
+          "Does not check `ExcalidrawImperativeAPI.mutateElement` (it says so openly). The API exists at types.ts:1395"
+        ]
+      },
+      "B": {
+        "correctness": 9,
+        "completeness": 8,
+        "errors": [
+          "Does not mention the public export from `@excalidraw/excalidraw` (`packages/excalidraw/index.tsx:458`), only the `@excalidraw/element` re-export",
+          "Does not check `examples/` (it admits this). That folder contains no references"
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q4-impact",
+    "rep": 2,
+    "mapping": {
+      "X": "C",
+      "Y": "B",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.2555058,
+    "scores": {
+      "C": {
+        "correctness": 5,
+        "completeness": 6,
+        "errors": [
+          "The count is wrong: grep finds 200 occurrences of `mutateElement(` in 56 files, not about 165 in 43 files.",
+          "It says Scene.mutateElement's signature mirrors the original. It does not: Scene.ts:411 takes `(element, updates, options)`, has no elementsMap parameter, and adds `informMutation` to the options.",
+          "It says a change to the free function breaks the public ExcalidrawImperativeAPI through App.tsx:794. That overstates it: App.mutateElement (App.tsx:5070) wraps scene.mutateElement, so the free function reaches the public API only if the Scene wrapper changes too.",
+          "It misses the public npm re-export of the free function at packages/excalidraw/index.tsx:458, which is the real public API break.",
+          "It misses the re-export at packages/element/src/index.ts:85.",
+          "It does not list the test files that call it, only helpers/api.ts and ui.ts. Missed files include packages/element/tests/*, stickyNote.test.ts, actionDeleteSelected.test.tsx and stats.test.tsx.",
+          "It does not say that Scene.mutateElement reads the returned `version` to decide whether to trigger an update."
+        ]
+      },
+      "B": {
+        "correctness": 8,
+        "completeness": 7,
+        "errors": [
+          "The file count is slightly off: 56 files contain `mutateElement(`, not about 57.",
+          "It misses ElementLinkDialog.tsx, and also LayerUI.tsx, which imports and calls the raw function at line 552.",
+          "It does not mention that ExcalidrawImperativeAPI.mutateElement is typed from App['mutateElement'] (types.ts:1395).",
+          "It lists `App.tsx (30)` among the call sites without saying that only 4 of those calls use the raw function. The rest go through this.scene.mutateElement."
+        ]
+      },
+      "A": {
+        "correctness": 8,
+        "completeness": 9,
+        "errors": [
+          "It puts App.tsx (30 calls) under 'direct callers of the function', but only 4 of those calls use the raw function (lines 10320-10356). The rest are this.scene.mutateElement.",
+          "It says types.ts:1395 makes a signature change a breaking change for library consumers. That overstates it: App.mutateElement wraps Scene.mutateElement, so a change to the free function reaches it only if Scene's signature changes too."
+        ]
+      }
+    },
+    "pass": "judge"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q4-impact",
+    "rep": 1,
+    "mapping": {
+      "X": "D",
+      "Y": "A",
+      "Z": "C"
+    },
+    "judge_cost_usd": 0.2222964,
+    "scores": {
+      "D": {
+        "correctness": 5,
+        "completeness": 7,
+        "errors": [
+          "Calls all 200 occurrences in 56 files call sites of the bare function. A grep finds only 32 bare `mutateElement(` calls in 17 files. The other 168 are `scene.mutateElement` or `this.mutateElement` method calls, which are not affected unless `Scene.mutateElement` changes too.",
+          "Implies that `resizeElements.ts` (11) and `linearElementEditor.ts` (10) are affected. `resizeElements.ts` has 0 bare calls and `linearElementEditor.ts` has 1.",
+          "Says the imperative API change 'becomes a breaking public API change'. `App.mutateElement` (App.tsx:5070) wraps `scene.mutateElement`, not the bare function, so it breaks only if the Scene wrapper's signature also changes.",
+          "Misses the direct public re-export in `packages/excalidraw/index.tsx:458` (`export { mutateElement } from \"@excalidraw/element\"`).",
+          "Says `ShapeCache` invalidation depends on `elementsMap` and `options`. `ShapeCache.delete(element)` uses only the element.",
+          "Says test files such as `stickyNote.test.ts` and `binding.test.tsx` call it 'directly'. They have no bare calls; their counts come from method calls."
+        ]
+      },
+      "A": {
+        "correctness": 5,
+        "completeness": 6,
+        "errors": [
+          "Explicitly labels the `packages/element/src` list as 'using the bare function', with counts of 10 for linearElementEditor and 11 for resizeElements. In fact linearElementEditor has 1 bare call, resizeElements has 0, and listMarker, focus, distribute, align, stickyNote and dragElements have 0 as well.",
+          "Counts 200 call sites for the bare function. Only 32 are bare; the rest are `scene.mutateElement` method calls.",
+          "Misses the public re-export of `mutateElement` in `packages/excalidraw/index.tsx:458`, which makes it a semver-breaking change for `@excalidraw/excalidraw`.",
+          "Does not check the imperative API in `types.ts:1395` (it admits this), so the public API impact is left unresolved.",
+          "In its favour: it correctly says that callers using `scene.mutateElement` are affected only if `Scene.mutateElement` changes. That point contradicts its own inflated list."
+        ]
+      },
+      "C": {
+        "correctness": 5,
+        "completeness": 6,
+        "errors": [
+          "'About 70 call sites' is not supported by the code. There are 32 bare calls (17 files), or 200 if you count `scene.mutateElement` method calls.",
+          "Says `yarn test:typecheck` will list indirect callers such as `Scene.mutateElement` users. Those callers are not flagged unless `Scene.mutateElement`'s own signature changes.",
+          "Says it is semver-breaking for `ExcalidrawImperativeAPI.mutateElement` consumers. That API wraps `scene.mutateElement`, not the bare function.",
+          "Per-file counts mix in method calls without saying so. For example, Hyperlink.tsx (5), Stats files, resizeElements (11) and linearElementEditor (10) have almost no bare calls, yet they are presented as impacted.",
+          "Leaves the list incomplete with 'others' for actions, and omits several real bare-call files: `fractionalIndex.ts`, `delta.ts`, `flowchart.ts`, `clipboard.ts`, `LayerUI.tsx` and `actionFrame.ts`.",
+          "In its favour: it correctly identifies the public re-export at `packages/excalidraw/index.tsx:458`, the `index.ts:85` `export *`, and `Scene.ts:411/427`."
+        ]
+      }
+    },
+    "pass": "judge2"
+  },
+  {
+    "repo": "excalidraw",
+    "question": "q4-impact",
+    "rep": 2,
+    "mapping": {
+      "X": "D",
+      "Y": "C",
+      "Z": "A"
+    },
+    "judge_cost_usd": 0.2180432,
+    "scores": {
+      "D": {
+        "correctness": 6,
+        "completeness": 6,
+        "errors": [
+          "Presents the ~200 occurrences in 56 files as call sites of the changed function. In fact only about 30 of them in about 17 files call the free function mutateElement(element, elementsMap, updates, options) directly. The rest, including all 11 in resizeElements.ts and most of the 30 in App.tsx, call scene.mutateElement, which has a different signature (no elementsMap; options include informMutation). Those calls only break if Scene.mutateElement is changed too.",
+          "Did not find App.mutateElement (App.tsx:5070), which is exposed as ExcalidrawImperativeAPI.mutateElement at App.tsx:794 and typed in types.ts:1395.",
+          "Missed that packages/excalidraw/index.tsx:458 re-exports the free mutateElement as public npm API. It only refers vaguely to 'the public package exposes this API'.",
+          "Missed api.ts:115, which derives its parameter types from Parameters<typeof h.app.scene.mutateElement>."
+        ]
+      },
+      "C": {
+        "correctness": 5,
+        "completeness": 6,
+        "errors": [
+          "The count of '~165 occurrences in 43 files' does not match the code: grep finds 200 occurrences in 56 files (153 in 40 non-test files).",
+          "Calls these 'Direct callers' and says a signature change 'breaks all of them at compile time'. That is false: most are calls to scene.mutateElement (for example all of resizeElements.ts and most of App.tsx), and they are not affected unless the Scene wrapper's signature also changes.",
+          "Says Scene.mutateElement's 'own signature mirrors the original'. It does not: it has no elementsMap parameter, and its options object carries a required informMutation and isDragging with a default value.",
+          "App.tsx:794 exposes App.mutateElement (element, updates, informMutation boolean), which wraps Scene and not the free function directly. So a change to the free function's signature does not necessarily break the imperative API.",
+          "Missed that packages/excalidraw/index.tsx:458 publicly re-exports the free mutateElement, which is the real npm API break, and missed newElementWith sharing the ElementUpdate type.",
+          "The test file list leaves out packages/element/tests/* and stickyNote.test.ts."
+        ]
+      },
+      "A": {
+        "correctness": 7,
+        "completeness": 8,
+        "errors": [
+          "The list is headed 'direct callers of the function', but most of the files in it (resizeElements, linearElementEditor apart from one call, binding apart from 3, textElement, Stats/*, Hyperlink, most actions, most of App.tsx) call scene.mutateElement, not the free function. Only about 30 occurrences in about 17 files are direct calls.",
+          "Says 'Callers pass elementsMap positionally', which is false for the majority of the call sites listed. scene.mutateElement callers pass no elementsMap at all.",
+          "'About 20 test files' is an overestimate: about 16 test files match.",
+          "Does not say that the App.mutateElement imperative method (App.tsx:5070) takes an informMutation boolean and wraps Scene, so it does not directly mirror the free function's signature."
+        ]
+      }
+    },
+    "pass": "judge2"
+  }
+]
