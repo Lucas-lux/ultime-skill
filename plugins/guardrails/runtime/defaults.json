@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "exclude_paths": [],
+  "rules": {
+    "em-dash": {"level": "block", "exclude_paths": []},
+    "emoji": {"level": "block", "allow": ["✨", "🤖"], "allow_paths": []},
+    "protected-push": {"level": "block", "branches": ["main", "master"]},
+    "no-verify": {"level": "block"},
+    "secrets": {"level": "block", "exclude_paths": []},
+    "env-file": {"level": "block", "patterns": [".env", ".env.local", ".env.*.local", ".env.prod", ".env.production", ".envrc"]},
+    "conventional-commit": {
+      "level": "block",
+      "types": ["feat", "fix", "docs", "style", "refactor", "perf", "test", "chore", "ci", "build", "revert", "hotfix", "release"],
+      "max_subject": 72
+    },
+    "ai-marker": {"level": "block", "marker": "✨"},
+    "prod-credentials": {"level": "block", "prod_patterns": ["prod"], "allowed_files": []},
+    "lint-config": {"level": "warn"},
+    "config-tamper": {"level": "ask"}
+  }
+}

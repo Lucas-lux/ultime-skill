@@ -16,8 +16,9 @@ claude plugin marketplace add Lucas-lux/ultime-skill
 claude plugin install ultime-profile@ultime-skill
 ```
 
-Ou, depuis un clone : `./install.sh` (Windows : `./install.ps1`), qui fait la même chose. Seul le point
-d'entrée `ultime-profile` est installé : rien d'autre ne pèse sur le contexte des sessions.
+Ou, depuis un clone : `./install.sh` (Windows : `./install.ps1`), qui installe le point d'entrée
+`ultime-profile` et les garde-fous `guardrails` (voir [Garde-fous](#garde-fous) ; `--no-guardrails`,
+ou `-NoGuardrails` sous Windows, pour s'en passer). Rien d'autre ne pèse sur le contexte des sessions.
 
 Le dépôt est privé : il faut un accès git au dépôt. Sans clé SSH GitHub, poser
 `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` pour cloner en HTTPS via les identifiants git déjà stockés
@@ -230,6 +231,28 @@ Certaines skills pilotent un outil à installer à part (`./install.sh --with-to
 - iOS avancé : le plugin [Axiom](https://github.com/CharlesWiltgen/Axiom) (StoreKit, notifications,
   sécurité, App Review) complète `mobile-ios`. Il n'est pas importé : ses skills dépendent de ses propres
   binaires, de son serveur MCP et de ses commandes. L'installer depuis son marketplace si besoin.
+
+## Garde-fous
+
+Le pack `guardrails` fait respecter des règles par des hooks : Claude ne peut ni les oublier ni les
+contourner. Par défaut, il bloque :
+- l'em dash ajouté dans un fichier, un commit, une PR ou une issue ;
+- l'emoji non demandé (le marqueur IA ✨ et la ligne d'attribution restent permis) ;
+- le push sur `main` ou `master` (refspec, branche courante, `HEAD`, suppression) ;
+- tout contournement des hooks git (`--no-verify`, `core.hooksPath`, `HUSKY=0`) ;
+- les secrets dans un fichier, une commande ou un commit, et les fichiers `.env` dans git ;
+- un message de commit hors format Conventional Commits, un titre de PR ou d'issue sans marqueur IA ;
+- la recherche d'identifiants de production hors du projet (secrets Kubernetes, coffres, historique du
+  shell, `.env` d'un autre projet, tunnels vers la prod).
+
+Il avertit seulement quand une configuration de lint est modifiée ou qu'une suppression d'avertissement
+est ajoutée, et demande votre accord avant toute modification de sa propre configuration.
+
+Chaque règle se règle ou se coupe dans `.claude/guardrails.json` (projet) ou `~/.claude/guardrails.json`
+(machine) ; `"enabled": false` coupe tout, `claude plugin disable guardrails@ultime-skill` retire le
+plugin. Pour une équipe sans le plugin, les sessions cloud ou l'autopilot,
+`node <plugin>/runtime/setup.cjs install-project` copie les garde-fous dans le `.claude/` du projet.
+Détail dans la skill `guardrails`. Nécessite `node`.
 
 ## Hooks de session
 

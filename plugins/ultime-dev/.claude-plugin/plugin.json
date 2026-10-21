@@ -15,6 +15,7 @@
     "security",
     "sc-conventions",
     "prod-testing",
+    "guardrails",
     "ultime-profile"
   ]
 }

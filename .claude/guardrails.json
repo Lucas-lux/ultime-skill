@@ -1,0 +1,5 @@
+{
+  "rules": {
+    "secrets": {"exclude_paths": ["plugins/**"]}
+  }
+}

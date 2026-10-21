@@ -1,0 +1,9 @@
+{
+  "name": "guardrails",
+  "description": "Garde-fous imposes par hooks, configurables regle par regle : pas d'em dash ni d'emoji non demande, pas de push sur main ni de contournement des hooks git, pas de secret ni de .env dans git, Conventional Commits, marqueur IA, regle d'or des identifiants de prod. Installable aussi dans un projet pour le cloud et l'equipe.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  },
+  "hooks": "./hooks/hooks.json"
+}

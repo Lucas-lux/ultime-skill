@@ -76,6 +76,10 @@ store, du build au lancement), recharger, et le desactiver apres si l'usage etai
 | Audit de securite | security, sec-audit, sec-defense |
 | Contenu, motion, video | ui-design, motion-design, video-editing |
 
+`guardrails` (garde-fous par hooks) est installe au niveau utilisateur par les scripts d'installation.
+Pour un projet partage en equipe ou pilote en cloud (autopilot), proposer aussi sa copie dans le projet :
+`node <plugin guardrails>/runtime/setup.cjs install-project`, a committer avec `.claude/`.
+
 `ponytail` et `superpowers` ajoutent un hook au demarrage de session (contexte injecte a chaque session) :
 les proposer seulement si leur methode est voulue. `sec-offense` ne s'installe que sur demande explicite,
 pour des tests autorises.

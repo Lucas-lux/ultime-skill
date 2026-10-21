@@ -2,7 +2,7 @@
 
 Errors (exit 1): invalid skill or agent frontmatter, skill name different from its folder, agent name
 different from its file, plugin missing from the marketplace or manifest name mismatch, em dash, invisible
-Unicode character.
+Unicode character, failing test of the hand-written runtimes (tests/, run with node when it is installed).
 Warnings: skill name shared by several plugins, risky shell patterns in bundled files (to review by hand),
 hand-written skill description over budget, SKILL.md over 500 lines.
 
@@ -11,6 +11,8 @@ Usage: python scripts/check.py
 
 import json
 import re
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -123,6 +125,15 @@ def main() -> int:
             for label, pattern in RISKY_PATTERNS.items():
                 if pattern.search(text):
                     warnings.append(f"{location}: {label}")
+
+    tests = sorted(ROOT.glob("tests/**/*.test.cjs"))
+    if tests and shutil.which("node"):
+        run = subprocess.run(["node", "--test", *map(str, tests)], capture_output=True, text=True, encoding="utf-8")
+        if run.returncode != 0:
+            failed = [line for line in run.stdout.splitlines() if line.lstrip().startswith(("not ok", "✖"))]
+            errors.append(f"tests failed: {'; '.join(failed[:5]) or run.stderr.strip()[:300]}")
+    elif tests:
+        warnings.append("node not found: tests/ not run")
 
     for message in warnings:
         print(f"warning  {message}")

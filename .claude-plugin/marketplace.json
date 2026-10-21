@@ -208,6 +208,11 @@
       "description": "Conversion et retention : CRO des pages, inscription, onboarding, paywalls, popups, emails et SMS de cycle de vie, churn, parrainage, lead magnets, tunnel web vers app."
     },
     {
+      "name": "guardrails",
+      "source": "./plugins/guardrails",
+      "description": "Garde-fous imposes par hooks, configurables regle par regle : pas d'em dash ni d'emoji non demande, pas de push sur main ni de contournement des hooks git, pas de secret ni de .env dans git, Conventional Commits, marqueur IA, regle d'or des identifiants de prod. Installable aussi dans un projet pour le cloud et l'equipe."
+    },
+    {
       "name": "ultime-profile",
       "source": "./plugins/ultime-profile",
       "description": "Point d'entree : installe et gere pour chaque projet les seuls packs ultime-skill utiles (detection du projet, installation au niveau du projet, desactivation du reste, ajustement quand la tache change). Catalogue des packs avec leur cout en contexte."

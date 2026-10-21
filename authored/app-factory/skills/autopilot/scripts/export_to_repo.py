@@ -77,6 +77,8 @@ def planned_copies(source: Path, packs: list[str]) -> list[tuple[Path, Path, str
 def warnings_for(source: Path, packs: list[str]) -> list[str]:
     found = []
     for pack in packs:
+        if pack == "guardrails":
+            continue
         if "hooks" in plugin_manifest(source, pack):
             found.append(f"{pack}: plugin hooks are not exported, copy them into .claude/settings.json by hand if needed")
         for file in (source / pack).rglob("*"):
@@ -162,6 +164,9 @@ def main() -> None:
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(f"wrote   {MANIFEST.as_posix()}")
+    if "guardrails" in packs:
+        setup = source / "guardrails" / "runtime" / "setup.cjs"
+        subprocess.run(["node", str(setup), "install-project", "--dir", str(target)], check=True)
     print("next    review and commit .claude/, then in this project disable the exported packs at project "
           f"scope (`claude plugin disable <pack>@{MARKETPLACE} --scope project`) so they do not load twice")
 
