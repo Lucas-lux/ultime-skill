@@ -10,6 +10,7 @@
     "finops",
     "monitoring",
     "prod-testing",
+    "ci-forge",
     "ultime-profile"
   ]
 }

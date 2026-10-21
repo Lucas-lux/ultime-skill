@@ -16,6 +16,7 @@
     "sc-conventions",
     "prod-testing",
     "guardrails",
+    "ci-forge",
     "ultime-profile"
   ]
 }

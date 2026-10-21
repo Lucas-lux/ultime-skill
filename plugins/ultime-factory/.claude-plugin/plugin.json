@@ -8,6 +8,7 @@
   "dependencies": [
     "app-factory",
     "guardrails",
+    "ci-forge",
     "product-management",
     "greenfield",
     "agent-skills",

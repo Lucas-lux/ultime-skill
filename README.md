@@ -4,7 +4,7 @@ Bibliothèque de skills Claude prête pour la production, installable en une com
 meilleures skills open source du moment (sélectionnées, nettoyées, épinglées à un commit) et servira de
 base aux skills que nous créerons nous-mêmes.
 
-**479 skills, 24 agents, 42 packs, 10 bundles.** Chaque pack est un plugin Claude Code indépendant ; les
+**482 skills, 24 agents, 44 packs, 10 bundles.** Chaque pack est un plugin Claude Code indépendant ; les
 bundles en installent plusieurs d'un coup via les dépendances de plugins.
 
 ## Installation
@@ -162,6 +162,7 @@ de leurs alternatives.
 | `agent-skills` | 25 | Cycle de vie logiciel complet (Addy Osmani) : spec, build, test, revue, sécurité, perf, CI/CD, livraison. |
 | `skill-factory` | 2 | Créer et tester des skills et des serveurs MCP (skill-creator, mcp-builder). |
 | `sc-conventions` | 1 | Conventions d'équipe SensCritique transverses (méthode, rédaction, secrets). Écrit maison, rien de confidentiel. |
+| `guardrails` | 1 + hooks | Garde-fous imposés par hooks et configurables (em dash, emoji, push sur main, hooks git, secrets, commits, marqueur IA, identifiants de prod). Installé par défaut. Écrit maison. |
 
 ### Sécurité
 
@@ -180,6 +181,7 @@ de leurs alternatives.
 | `devops` | 17 | Terraform, Docker, Kubernetes, GitOps, CI/CD, SLO, PromQL, k6, monitoring synthétique, incident. |
 | `finops` | 6 | Coûts AWS, GKE/Google Cloud, Azure, et scan shift-left de l'infra as code (Infracost). |
 | `monitoring` | 1 | Observabilité complète adaptée au type de projet (web, API, RAG/LLM, data, cron, ML, mobile) : métriques, logs, traces, SLO, alertes, coût. Écrit maison. |
+| `ci-forge` | 1 | CI/CD générée seule selon la stack et l'architecture cible : lint, typage, tests, end to end, conteneurs, Kubernetes, IaC, sécurité, SBOM, staging et prod ; actions épinglées par SHA, check requis `ci-ok`. Écrit maison. |
 | `prod-testing` | 1 | Stratégie de test de bout en bout et validation en production : pyramide CI/CD, smoke tests, canary et rollback automatique, feature flags, monitoring synthétique, tests instables. Écrit maison. |
 
 ### Data et IA

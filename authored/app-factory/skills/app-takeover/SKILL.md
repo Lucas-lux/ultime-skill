@@ -42,7 +42,7 @@ d'ecrire une ligne. Cette skill couvre la phase P0 du mode reprise ; `app-factor
    (defauts structurels, absence de tests sur une zone critique, dette qui coute plus que la reecriture)
    et consigne dans un ADR. Pas de reecriture totale par defaut.
 6. **Plan de reprise** : un jalon **M0 stabilisation** passe en premier (tests sur les parcours
-   critiques, CI qui bloque, sauvegardes et restauration testees, monitoring de base, secrets sortis du
+   critiques, CI qui bloque (skill `ci-forge` : audit des ecarts puis CI complete, autonome), sauvegardes et restauration testees, monitoring de base, secrets sortis du
    code, failles bloquantes corrigees), puis les fonctionnalites a finir, puis les ameliorations.
    Livrable : backlog initial dans `docs/product/backlog.md`.
 7. **G0** : l'utilisateur valide l'inventaire, l'audit, les decisions par module et le plan.

@@ -208,6 +208,11 @@
       "description": "Conversion et retention : CRO des pages, inscription, onboarding, paywalls, popups, emails et SMS de cycle de vie, churn, parrainage, lead magnets, tunnel web vers app."
     },
     {
+      "name": "ci-forge",
+      "source": "./plugins/ci-forge",
+      "description": "CI/CD generee seule selon la stack et l'architecture cible : lint, format, typage, tests et couverture, end to end Playwright, build, conteneurs (hadolint, Trivy), Kubernetes (kubeconform, kind), IaC, securite (gitleaks, osv-scanner, CodeQL ou Semgrep), SBOM et provenance, staging et prod, actions epinglees par SHA, check requis ci-ok."
+    },
+    {
       "name": "guardrails",
       "source": "./plugins/guardrails",
       "description": "Garde-fous imposes par hooks, configurables regle par regle : pas d'em dash ni d'emoji non demande, pas de push sur main ni de contournement des hooks git, pas de secret ni de .env dans git, Conventional Commits, marqueur IA, regle d'or des identifiants de prod. Installable aussi dans un projet pour le cloud et l'equipe."
