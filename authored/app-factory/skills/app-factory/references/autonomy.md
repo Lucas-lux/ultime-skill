@@ -10,6 +10,13 @@ actions demandent toujours une confirmation au moment de les faire, et d'autres 
   les stories seul.
 - **Etendu** : validation aux portes G2, G3, G6 et G7 seulement ; les autres portes produisent leur
   rapport et continuent si `gate-verifier` ne trouve aucun bloquant.
+- **Autopilot** : le projet avance par reveils planifies, sans session ouverte (skill `autopilot`).
+  L'utilisateur ne tranche que les decisions de vision, d'argent, de droit et d'irreversible, par issue
+  GitHub ; le reste suit la politique de decision de `autopilot`. Choisi apres G0, qui reste interactive.
+  Ce niveau autorise en plus, sans confirmation au moment de le faire : pousser des branches `claude/*`,
+  ouvrir des PR et des issues, laisser GitHub fusionner une PR `autopilot` quand les checks requis sont
+  verts, deployer en staging par la CI. La production reste approuvee par l'utilisateur via
+  l'environnement GitHub `production`.
 
 ## Fait seul, a tout niveau
 
@@ -18,6 +25,10 @@ les tests, la base locale et l'app en local, installer des dependances de develo
 audits en lecture seule.
 
 ## Toujours confirme au moment de le faire
+
+Au niveau autopilot, le push de branches `claude/*`, les PR, les issues et le deploiement en staging par
+la CI ne sont plus confirmes un par un (limites decrites plus haut) ; tout le reste de cette liste,
+production comprise, l'est toujours.
 
 - Pousser vers un depot distant, ouvrir une PR ou des issues.
 - Deployer, en staging la premiere fois, en production a chaque fois.

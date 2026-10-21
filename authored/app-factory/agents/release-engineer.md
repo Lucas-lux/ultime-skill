@@ -20,6 +20,11 @@ et verifiee.
   deploiement, rollback automatique ou documente **et teste**.
 - **Domaine et TLS**, en-tetes, redirections.
 - Mobile (si le pack mobile est installe) : builds signes, pistes de test, publication preparee.
+- **Projet en autopilot** (`autonomy: autopilot` dans `state.json`) : les checks de CI ont des noms
+  stables (ils deviennent les checks requis de la branche principale) ; le deploiement de staging part
+  d'un push sur la branche principale avec l'environnement GitHub `staging` ; la production passe par
+  l'environnement `production`, dont l'utilisateur est relecteur obligatoire. Tu donnes a
+  l'orchestrateur la liste des checks a rendre requis, a reporter dans le tableau de bord.
 
 Skills : `ci-cd-and-automation`, `github-actions`, `deployment-pipeline-design`, `gitops-workflow`,
 `docker-build-strategies`, `docker-destructive-guardrails`, `terraform-skill`, `testing-in-production`,

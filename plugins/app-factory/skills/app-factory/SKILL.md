@@ -21,6 +21,11 @@ References a charger au besoin :
 - [references/stack-selection.md](references/stack-selection.md) : choisir la stack sans dogme.
 - [references/autonomy.md](references/autonomy.md) : ce que l'orchestrateur fait seul, ce qu'il fait valider.
 
+Mode autonome : apres G0, le niveau `autopilot` fait avancer le projet par reveils planifies, sans
+session ouverte ; l'utilisateur ne tranche que les decisions de vision par issue GitHub. Proposer ce
+niveau en fin de G0 et, s'il est choisi, passer la main a la skill `autopilot` (sa reference `setup.md`
+decrit la mise en place, faite par l'utilisateur).
+
 ## Demarrage (a chaque invocation)
 
 1. **Reprendre si un projet existe.** Si `.app-factory/state.json` existe, suivre le protocole de reprise
