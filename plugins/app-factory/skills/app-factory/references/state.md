@@ -14,6 +14,12 @@ compaction de contexte. Il est versionne avec le projet (sauf `reports/`, voir p
   reference/        # mode clone : captures et notes d'observation, usage interne uniquement, jamais livre
 ```
 
+Au niveau autopilot, `.app-factory/` ne vit plus sur la branche principale mais sur la branche
+`claude/autopilot-state` (sans code, sans CI), montee en worktree dans `.app-factory-state/` (ignore par
+git) : les reveils ecrivent l'etat sans PR ni conflit avec le code, et le push sert de verrou. Une session
+interactive sur un projet autopilot monte ce worktree avant de lire l'etat (protocole de la skill
+`autopilot`, etape 1), puis pousse ses changements d'etat sur cette branche.
+
 ## Schema de state.json
 
 ```json
@@ -43,6 +49,20 @@ compaction de contexte. Il est versionne avec le projet (sauf `reports/`, voir p
   "open_questions": [],
   "risks": [],
   "next_action": "Lancer code-reviewer sur S-003"
+}
+```
+
+Au niveau `autopilot`, un bloc de plus (cree par `init_autopilot.py`, detail dans la skill `autopilot`,
+references `budget.md` et `decision-policy.md`) :
+
+```json
+"autopilot": {
+  "repo": "owner/nom", "owner": "login-github", "base_branch": "main", "dashboard_issue": 1,
+  "paused": false, "allow_defaults": false, "default_after_hours": 72, "spend_free_threshold": 0,
+  "lock": {"run_id": "2026-10-21T14:00Z", "started_at": "2026-10-21T14:00:12Z"},
+  "last_run": "2026-10-21T14:00:12Z",
+  "budget": {"per_run": {"agents": 8, "stories": 3, "upgraded": 1}, "per_day": {"agents": 30},
+             "idle_stop_after": 6, "usage": {"day": "2026-10-21", "agents": 5, "idle_streak": 0}}
 }
 ```
 

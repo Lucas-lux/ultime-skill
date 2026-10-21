@@ -125,7 +125,7 @@
     {
       "name": "app-factory",
       "source": "./plugins/app-factory",
-      "description": "Orchestrateur de projet de A a Z : de l'idee, d'une app a cloner en la personnalisant, ou d'une app existante a terminer, jusqu'au produit fini en production. 18 sous-agents (produit, gestion de projet, architecture, donnees, design, securite, conformite, finops, dev, revue, QA, release, SRE, growth, verificateur), phases et portes de validation, etat sur disque et reprise."
+      "description": "Orchestrateur de projet de A a Z : de l'idee, d'une app a cloner en la personnalisant, ou d'une app existante a terminer, jusqu'au produit fini en production. 18 sous-agents (produit, gestion de projet, architecture, donnees, design, securite, conformite, finops, dev, revue, QA, release, SRE, growth, verificateur), phases et portes de validation, etat sur disque et reprise, mode autopilot (reveils planifies, decisions de vision seules remontees par issue GitHub)."
     },
     {
       "name": "product-management",

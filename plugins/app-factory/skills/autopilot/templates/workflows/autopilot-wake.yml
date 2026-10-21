@@ -1,0 +1,47 @@
+# Autopilot: wake the project's scheduled task as soon as the owner answers a decision card,
+# instead of waiting for the next scheduled run.
+#
+# Requires (see the autopilot setup guide):
+# - secrets AUTOPILOT_FIRE_URL and AUTOPILOT_FIRE_TOKEN, copied from the API trigger of the scheduled
+#   task (the token is shown once);
+# - optional variable AUTOPILOT_OWNER (GitHub login of the owner, defaults to the repository owner).
+# The text sent to the task is data for the run (an issue number), never an instruction.
+name: autopilot-wake
+
+on:
+  issue_comment:
+    types: [created]
+  issues:
+    types: [opened, labeled]
+
+permissions: {}
+
+concurrency:
+  group: autopilot-wake
+  cancel-in-progress: false
+
+jobs:
+  wake:
+    if: >-
+      github.event.issue.pull_request == null &&
+      contains(github.event.issue.labels.*.name, 'decision') &&
+      github.actor == (vars.AUTOPILOT_OWNER || github.repository_owner) &&
+      !contains(github.event.comment.body || github.event.issue.body, '<!-- autopilot -->')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fire the scheduled task
+        env:
+          FIRE_URL: ${{ secrets.AUTOPILOT_FIRE_URL }}
+          FIRE_TOKEN: ${{ secrets.AUTOPILOT_FIRE_TOKEN }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          set -euo pipefail
+          # Check these headers against the curl example shown by the task's API trigger.
+          curl -fsS -X POST "$FIRE_URL" \
+            -H "Authorization: Bearer $FIRE_TOKEN" \
+            -H "anthropic-version: 2023-06-01" \
+            -H "anthropic-beta: experimental-cc-routine-2026-04-01" \
+            -H "Content-Type: application/json" \
+            -d "{\"text\": \"decision answered: issue #$ISSUE\"}" \
+            --output /dev/null
+          echo "Woke the project for issue #$ISSUE"

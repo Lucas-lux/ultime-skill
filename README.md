@@ -97,7 +97,7 @@ déclenchent plus. Installer `ultime-all` et tout laisser actif est donc contre-
 
 | Pack | Skills | Rôle |
 |---|---|---|
-| `app-factory` | 3 + 18 agents | Orchestrateur de projet de A à Z, en trois modes : création depuis une idée, clone personnalisé d'une app de référence, reprise d'une app existante ou inachevée. Huit phases avec portes de validation, état sur disque et reprise, sous-agents spécialisés. Écrit maison. |
+| `app-factory` | 4 + 18 agents | Orchestrateur de projet de A à Z, en trois modes : création depuis une idée, clone personnalisé d'une app de référence, reprise d'une app existante ou inachevée. Huit phases avec portes de validation, état sur disque et reprise, sous-agents spécialisés, mode autopilot. Écrit maison. |
 | `product-management` | 46 | Découverte, stratégie, marché, PRD, user stories, roadmap, pre-mortem, rétro, notes de version (phuryn), rétro-spécification d'un code existant (code-to-prd, schematic). |
 | `greenfield` | 22 + 2 agents | Rétro-ingénierie « salle blanche » : specs comportementales, vecteurs de test et critères d'acceptation extraits d'un code sans hériter de son implémentation (`/greenfield:analyze`). Pipeline lourd, réservé au code dont on détient les droits. |
 
@@ -106,6 +106,16 @@ Démarrer un projet : installer `ultime-factory`, ouvrir le dépôt du projet (v
 avance phase par phase. Il fait valider chaque porte et toute action irréversible : paiement, création de
 compte, publication, déploiement en production. L'état vit dans `.app-factory/` : une nouvelle session
 reprend là où la précédente s'est arrêtée.
+
+**Mode autopilot** (skill `autopilot`) : après le cadrage, le projet avance seul par réveils planifiés
+(tâche planifiée Claude Code dans le cloud, payée par le forfait Claude), sans session ouverte. Les agents
+décident ce qui est réversible et le tracent ; seules les décisions de vision, d'argent, de droit ou
+irréversibles arrivent sous forme d'issue GitHub qui vous est assignée, à laquelle on répond par un
+commentaire depuis l'app GitHub. Les PR sont fusionnées par GitHub quand les checks requis sont verts,
+le staging se déploie par la CI, la production attend toujours votre approbation. La mise en place
+(export des skills dans le dépôt, labels, workflows, protection de branche, tâche planifiée) est décrite
+dans `references/setup.md` de la skill et se fait par vous : Claude ne crée rien sur votre compte Claude
+ni dans le cloud.
 
 ### Mobile et stores
 
