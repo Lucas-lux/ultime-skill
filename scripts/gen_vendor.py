@@ -57,6 +57,10 @@ SOURCES = {
     "video-use": ("browser-use/video-use", "43cfc566833548093455c9d4a46bd69913b7e552", "MIT", ["LICENSE"]),
     "ffmpeg": ("bryanwhl/ffmpeg-video-editor", "d5c3ee6e9896fdabccd4e8b5d68149252bbb682c", "MIT", ["LICENSE"]),
     "faster-whisper": ("ThePlasmak/faster-whisper", "1c8d6a682c56813a540640babe49d9b270ea708c", "MIT", ["LICENSE"]),
+    "phuryn": ("phuryn/pm-skills", "07b34f64ee828df08953f505b7f747aef85ae7c6", "MIT", ["LICENSE"]),
+    "schematic": ("blader/schematic", "297fb73e99aa4bccdb228b61252034182fdb4252", "MIT", ["LICENSE"]),
+    "alirezarezvani": ("alirezarezvani/claude-skills", "19392f7a08264ed00486a251f5b2098321771f94", "MIT", ["LICENSE"]),
+    "greenfield": ("prime-radiant-inc/greenfield", "6e6d4b425fe9082d469493d64a5b8e12b15dc9da", "Apache-2.0", ["LICENSE"]),
 }
 
 imports: list[dict] = []
@@ -202,6 +206,36 @@ pack_skill("video-use", "skills/manim-video", "video-editing")
 add("ffmpeg", ".", "plugins/video-editing/skills/ffmpeg-video-editor", exclude=["README.md", ".github"])
 add("faster-whisper", ".", "plugins/video-editing/skills/faster-whisper",
     exclude=["setup.ps1", "setup.sh", "README.md", "CHANGELOG.md", ".github"])
+
+# ---- Product management (discovery, strategy, PRD, backlog, reverse spec) ----
+# phuryn skills end with a "Further Reading" block and a few inline links to the author's newsletter.
+PHURYN = {
+    "pm-execution": ["create-prd", "user-stories", "job-stories", "outcome-roadmap", "pre-mortem",
+                     "prioritization-frameworks", "sprint-plan", "release-notes", "test-scenarios", "retro",
+                     "strategy-red-team", "stakeholder-map", "brainstorm-okrs"],
+    "pm-product-discovery": ["opportunity-solution-tree", "identify-assumptions-new", "identify-assumptions-existing",
+                             "prioritize-assumptions", "prioritize-features", "interview-script",
+                             "summarize-interview", "analyze-feature-requests", "brainstorm-ideas-new",
+                             "brainstorm-ideas-existing", "brainstorm-experiments-new",
+                             "brainstorm-experiments-existing", "metrics-dashboard"],
+    "pm-product-strategy": ["product-vision", "product-strategy", "lean-canvas", "business-model",
+                            "monetization-strategy", "pricing-strategy", "value-proposition", "swot-analysis"],
+    "pm-market-research": ["competitor-analysis", "market-sizing", "market-segments", "user-personas",
+                           "customer-journey-map"],
+    "pm-marketing-growth": ["north-star-metric", "product-name", "positioning-ideas", "value-prop-statements"],
+    "pm-ai-shipping": ["shipping-artifacts", "intended-vs-implemented"],
+}
+for plugin, skills in PHURYN.items():
+    for skill in skills:
+        pack_skill("phuryn", f"{plugin}/skills/{skill}", "product-management",
+                   strip_tail="### Further Reading", drop_lines=r"productcompass\.pm")
+add("schematic", "SKILL.md", "plugins/product-management/skills/schematic/SKILL.md")
+pack_skill("alirezarezvani", "product-team/code-to-prd/skills/code-to-prd", "product-management")
+
+# ---- Greenfield: clean-room behavioral specs from an existing codebase (whole plugin, namespaced) ----
+add("greenfield", "skills", "plugins/greenfield/skills", license_to="plugins/greenfield", exclude=[".gitkeep"])
+add("greenfield", "agents", "plugins/greenfield/agents", license=False, exclude=[".gitkeep"])
+add("greenfield", "commands", "plugins/greenfield/commands", license=False, exclude=[".gitkeep"])
 
 
 def main() -> None:

@@ -92,8 +92,25 @@ def strip_tail(path: Path, marker: str | None) -> None:
         return
     for index, line in enumerate(lines):
         if line.lstrip().startswith(marker):
-            path.write_text("".join(lines[:index]).rstrip() + "\n", encoding="utf-8", newline="")
+            kept = "".join(lines[:index]).rstrip()
+            # A footer is often introduced by a horizontal rule, which would be left dangling.
+            kept = re.sub(r"\n+-{3,}$", "", kept).rstrip()
+            path.write_text(kept + "\n", encoding="utf-8", newline="")
             return
+
+
+def drop_lines(path: Path, pattern: str | None) -> None:
+    """Remove every line matching the regex `pattern` (for example an inline self-promotion link)."""
+    if not pattern or path.suffix.lower() not in (".md", ".markdown", ".txt"):
+        return
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
+    except (UnicodeDecodeError, OSError):
+        return
+    regex = re.compile(pattern)
+    kept = [line for line in lines if not regex.search(line)]
+    if len(kept) != len(lines):
+        path.write_text("".join(kept), encoding="utf-8", newline="")
 
 
 def ignore_patterns(origin: Path, patterns: list[str]):
@@ -127,6 +144,7 @@ def import_entry(entry: dict, source: dict, tree: Path) -> Path:
     for path in files:
         normalize(path)
         strip_tail(path, entry.get("strip_tail"))
+        drop_lines(path, entry.get("drop_lines"))
     if origin.is_dir():
         rename_skill(target)
     if not entry.get("license", True):
@@ -151,8 +169,9 @@ def write_third_party(manifest: dict) -> None:
         "",
         "Contenu importé depuis des dépôts publics, aux commits indiqués, par `scripts/vendor.py`.",
         "Modifications à l'import : les em dash sont remplacés par un tiret simple, les caractères Unicode",
-        "invisibles sont retirés, et les blocs d'autopromotion signalés (par exemple un footer de citation",
-        "imposé) sont coupés. La licence d'origine est copiée dans chaque dossier importé.",
+        "invisibles sont retirés, et les blocs ou liens d'autopromotion signalés (par exemple un footer de",
+        "citation imposé, un lien vers une newsletter) sont retirés. La licence d'origine est copiée dans",
+        "chaque dossier importé.",
         "",
         "| Chemin dans la bibliothèque | Dépôt d'origine | Chemin d'origine | Commit | Licence |",
         "|---|---|---|---|---|",

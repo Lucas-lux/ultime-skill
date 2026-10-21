@@ -36,6 +36,9 @@ PLUGINS = {
     "compliance": ("Reglementaire et conformite : audit RGAA (accessibilite, en francais), regles RGPD a l'ingenierie, conseil WCAG et cartographie legale (EAA), verification de conformite d'une feature, securite du developpement (ANSSI), corrections d'accessibilite au niveau du code.", {}),
     "motion-design": ("Motion design : GSAP (core, timeline, ScrollTrigger, plugins, performance, frameworks), principes de motion agnostiques (LottieFiles), animations mathematiques Manim (ManimCE et planification de scenes).", {}),
     "video-editing": ("Montage video complet : edition par conversation avec EDL et sous-titres (video-use), construction de commandes FFmpeg (coupe, concat, transitions, loudness, presets reseaux sociaux), transcription locale faster-whisper, rendu Manim.", {}),
+    "app-factory": ("Orchestrateur de projet de A a Z : de l'idee, d'une app a cloner en la personnalisant, ou d'une app existante a terminer, jusqu'au produit fini en production. 18 sous-agents (produit, gestion de projet, architecture, donnees, design, securite, conformite, finops, dev, revue, QA, release, SRE, growth, verificateur), phases et portes de validation, etat sur disque et reprise.", {}),
+    "product-management": ("Gestion de produit : decouverte (hypotheses, opportunity solution tree, entretiens), strategie (vision, positionnement, modele economique, prix), marche (concurrence, personas, segments), execution (PRD, user stories, roadmap, pre-mortem, sprint, retro, notes de version), retro-specification d'un code existant (code-to-prd, schematic, intended-vs-implemented).", {}),
+    "greenfield": ("Retro-ingenierie salle blanche : extrait d'un code existant des specs comportementales, vecteurs de test et criteres d'acceptation sans heritage d'implementation (commande /greenfield:analyze). Pipeline lourd en agents, a reserver au code dont on detient les droits.", {}),
 }
 
 # sec-offense (authorized pentest) is never pulled in by a bundle: it is installed explicitly only.
@@ -54,6 +57,9 @@ BUNDLES = {
     "ultime-web": ("Pack web : full stack, design, conformite (RGPD, accessibilite, legal).",
                    ["fullstack", "design", "compliance"]),
     "ultime-ops": ("Pack operations : devops/SRE, finops, monitoring complet et tests en production.", ["devops", "finops", "monitoring", "prod-testing"]),
+    "ultime-factory": ("Usine a produit : l'orchestrateur app-factory et tout ce qu'il pilote (gestion de produit, retro-specification, cycle de vie logiciel, full stack, design, conformite, securite, devops, donnees, monitoring, tests en production, finops).",
+                       ["app-factory", "product-management", "greenfield", "agent-skills", "fullstack", "design",
+                        "compliance", "security", "devops", "data-engineering", "monitoring", "prod-testing", "finops"]),
 }
 
 
@@ -79,7 +85,7 @@ def main() -> None:
     marketplace = {
         "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
         "name": "ultime-skill",
-        "description": "Bibliotheque de skills Claude prete pour la production : securite, devops, finops, data, ML, full stack, design, conformite, motion et video.",
+        "description": "Bibliotheque de skills Claude prete pour la production : orchestration de projet de A a Z, gestion de produit, securite, devops, finops, data, ML, full stack, design, conformite, motion et video.",
         "owner": {"name": "SensCritique", "url": "https://github.com/senscritique"},
         "plugins": plugins_entries,
     }

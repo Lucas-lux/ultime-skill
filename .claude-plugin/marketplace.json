@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "ultime-skill",
-  "description": "Bibliotheque de skills Claude prete pour la production : securite, devops, finops, data, ML, full stack, design, conformite, motion et video.",
+  "description": "Bibliotheque de skills Claude prete pour la production : orchestration de projet de A a Z, gestion de produit, securite, devops, finops, data, ML, full stack, design, conformite, motion et video.",
   "owner": {
     "name": "SensCritique",
     "url": "https://github.com/senscritique"
@@ -123,6 +123,21 @@
       "description": "Montage video complet : edition par conversation avec EDL et sous-titres (video-use), construction de commandes FFmpeg (coupe, concat, transitions, loudness, presets reseaux sociaux), transcription locale faster-whisper, rendu Manim."
     },
     {
+      "name": "app-factory",
+      "source": "./plugins/app-factory",
+      "description": "Orchestrateur de projet de A a Z : de l'idee, d'une app a cloner en la personnalisant, ou d'une app existante a terminer, jusqu'au produit fini en production. 18 sous-agents (produit, gestion de projet, architecture, donnees, design, securite, conformite, finops, dev, revue, QA, release, SRE, growth, verificateur), phases et portes de validation, etat sur disque et reprise."
+    },
+    {
+      "name": "product-management",
+      "source": "./plugins/product-management",
+      "description": "Gestion de produit : decouverte (hypotheses, opportunity solution tree, entretiens), strategie (vision, positionnement, modele economique, prix), marche (concurrence, personas, segments), execution (PRD, user stories, roadmap, pre-mortem, sprint, retro, notes de version), retro-specification d'un code existant (code-to-prd, schematic, intended-vs-implemented)."
+    },
+    {
+      "name": "greenfield",
+      "source": "./plugins/greenfield",
+      "description": "Retro-ingenierie salle blanche : extrait d'un code existant des specs comportementales, vecteurs de test et criteres d'acceptation sans heritage d'implementation (commande /greenfield:analyze). Pipeline lourd en agents, a reserver au code dont on detient les droits."
+    },
+    {
       "name": "ultime-all",
       "source": "./plugins/ultime-all",
       "description": "Tout ultime-skill en une commande : installe l'ensemble des packs, sauf le pentest offensif."
@@ -156,6 +171,11 @@
       "name": "ultime-ops",
       "source": "./plugins/ultime-ops",
       "description": "Pack operations : devops/SRE, finops, monitoring complet et tests en production."
+    },
+    {
+      "name": "ultime-factory",
+      "source": "./plugins/ultime-factory",
+      "description": "Usine a produit : l'orchestrateur app-factory et tout ce qu'il pilote (gestion de produit, retro-specification, cycle de vie logiciel, full stack, design, conformite, securite, devops, donnees, monitoring, tests en production, finops)."
     }
   ]
 }

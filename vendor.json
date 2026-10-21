@@ -362,6 +362,38 @@
       "license_files": [
         "LICENSE"
       ]
+    },
+    "phuryn": {
+      "repo": "phuryn/pm-skills",
+      "commit": "07b34f64ee828df08953f505b7f747aef85ae7c6",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "schematic": {
+      "repo": "blader/schematic",
+      "commit": "297fb73e99aa4bccdb228b61252034182fdb4252",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "alirezarezvani": {
+      "repo": "alirezarezvani/claude-skills",
+      "commit": "19392f7a08264ed00486a251f5b2098321771f94",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "greenfield": {
+      "repo": "prime-radiant-inc/greenfield",
+      "commit": "6e6d4b425fe9082d469493d64a5b8e12b15dc9da",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
     }
   },
   "imports": [
@@ -923,6 +955,358 @@
         "README.md",
         "CHANGELOG.md",
         ".github"
+      ]
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-execution/skills/create-prd",
+      "to": "plugins/product-management/skills/create-prd",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-execution/skills/user-stories",
+      "to": "plugins/product-management/skills/user-stories",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-execution/skills/job-stories",
+      "to": "plugins/product-management/skills/job-stories",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-execution/skills/outcome-roadmap",
+      "to": "plugins/product-management/skills/outcome-roadmap",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-execution/skills/pre-mortem",
+      "to": "plugins/product-management/skills/pre-mortem",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-execution/skills/prioritization-frameworks",
+      "to": "plugins/product-management/skills/prioritization-frameworks",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-execution/skills/sprint-plan",
+      "to": "plugins/product-management/skills/sprint-plan",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-execution/skills/release-notes",
+      "to": "plugins/product-management/skills/release-notes",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-execution/skills/test-scenarios",
+      "to": "plugins/product-management/skills/test-scenarios",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-execution/skills/retro",
+      "to": "plugins/product-management/skills/retro",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-execution/skills/strategy-red-team",
+      "to": "plugins/product-management/skills/strategy-red-team",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-execution/skills/stakeholder-map",
+      "to": "plugins/product-management/skills/stakeholder-map",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-execution/skills/brainstorm-okrs",
+      "to": "plugins/product-management/skills/brainstorm-okrs",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-discovery/skills/opportunity-solution-tree",
+      "to": "plugins/product-management/skills/opportunity-solution-tree",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-discovery/skills/identify-assumptions-new",
+      "to": "plugins/product-management/skills/identify-assumptions-new",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-discovery/skills/identify-assumptions-existing",
+      "to": "plugins/product-management/skills/identify-assumptions-existing",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-discovery/skills/prioritize-assumptions",
+      "to": "plugins/product-management/skills/prioritize-assumptions",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-discovery/skills/prioritize-features",
+      "to": "plugins/product-management/skills/prioritize-features",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-discovery/skills/interview-script",
+      "to": "plugins/product-management/skills/interview-script",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-discovery/skills/summarize-interview",
+      "to": "plugins/product-management/skills/summarize-interview",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-discovery/skills/analyze-feature-requests",
+      "to": "plugins/product-management/skills/analyze-feature-requests",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-discovery/skills/brainstorm-ideas-new",
+      "to": "plugins/product-management/skills/brainstorm-ideas-new",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-discovery/skills/brainstorm-ideas-existing",
+      "to": "plugins/product-management/skills/brainstorm-ideas-existing",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-discovery/skills/brainstorm-experiments-new",
+      "to": "plugins/product-management/skills/brainstorm-experiments-new",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-discovery/skills/brainstorm-experiments-existing",
+      "to": "plugins/product-management/skills/brainstorm-experiments-existing",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-discovery/skills/metrics-dashboard",
+      "to": "plugins/product-management/skills/metrics-dashboard",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-strategy/skills/product-vision",
+      "to": "plugins/product-management/skills/product-vision",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-strategy/skills/product-strategy",
+      "to": "plugins/product-management/skills/product-strategy",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-strategy/skills/lean-canvas",
+      "to": "plugins/product-management/skills/lean-canvas",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-strategy/skills/business-model",
+      "to": "plugins/product-management/skills/business-model",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-strategy/skills/monetization-strategy",
+      "to": "plugins/product-management/skills/monetization-strategy",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-strategy/skills/pricing-strategy",
+      "to": "plugins/product-management/skills/pricing-strategy",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-strategy/skills/value-proposition",
+      "to": "plugins/product-management/skills/value-proposition",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-product-strategy/skills/swot-analysis",
+      "to": "plugins/product-management/skills/swot-analysis",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-market-research/skills/competitor-analysis",
+      "to": "plugins/product-management/skills/competitor-analysis",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-market-research/skills/market-sizing",
+      "to": "plugins/product-management/skills/market-sizing",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-market-research/skills/market-segments",
+      "to": "plugins/product-management/skills/market-segments",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-market-research/skills/user-personas",
+      "to": "plugins/product-management/skills/user-personas",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-market-research/skills/customer-journey-map",
+      "to": "plugins/product-management/skills/customer-journey-map",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-marketing-growth/skills/north-star-metric",
+      "to": "plugins/product-management/skills/north-star-metric",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-marketing-growth/skills/product-name",
+      "to": "plugins/product-management/skills/product-name",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-marketing-growth/skills/positioning-ideas",
+      "to": "plugins/product-management/skills/positioning-ideas",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-marketing-growth/skills/value-prop-statements",
+      "to": "plugins/product-management/skills/value-prop-statements",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-ai-shipping/skills/shipping-artifacts",
+      "to": "plugins/product-management/skills/shipping-artifacts",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "phuryn",
+      "from": "pm-ai-shipping/skills/intended-vs-implemented",
+      "to": "plugins/product-management/skills/intended-vs-implemented",
+      "strip_tail": "### Further Reading",
+      "drop_lines": "productcompass\\.pm"
+    },
+    {
+      "source": "schematic",
+      "from": "SKILL.md",
+      "to": "plugins/product-management/skills/schematic/SKILL.md"
+    },
+    {
+      "source": "alirezarezvani",
+      "from": "product-team/code-to-prd/skills/code-to-prd",
+      "to": "plugins/product-management/skills/code-to-prd"
+    },
+    {
+      "source": "greenfield",
+      "from": "skills",
+      "to": "plugins/greenfield/skills",
+      "license_to": "plugins/greenfield",
+      "exclude": [
+        ".gitkeep"
+      ]
+    },
+    {
+      "source": "greenfield",
+      "from": "agents",
+      "to": "plugins/greenfield/agents",
+      "license": false,
+      "exclude": [
+        ".gitkeep"
+      ]
+    },
+    {
+      "source": "greenfield",
+      "from": "commands",
+      "to": "plugins/greenfield/commands",
+      "license": false,
+      "exclude": [
+        ".gitkeep"
       ]
     }
   ]

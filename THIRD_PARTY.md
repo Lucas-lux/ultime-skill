@@ -2,8 +2,9 @@
 
 Contenu importé depuis des dépôts publics, aux commits indiqués, par `scripts/vendor.py`.
 Modifications à l'import : les em dash sont remplacés par un tiret simple, les caractères Unicode
-invisibles sont retirés, et les blocs d'autopromotion signalés (par exemple un footer de citation
-imposé) sont coupés. La licence d'origine est copiée dans chaque dossier importé.
+invisibles sont retirés, et les blocs ou liens d'autopromotion signalés (par exemple un footer de
+citation imposé, un lien vers une newsletter) sont retirés. La licence d'origine est copiée dans
+chaque dossier importé.
 
 | Chemin dans la bibliothèque | Dépôt d'origine | Chemin d'origine | Commit | Licence |
 |---|---|---|---|---|
@@ -69,6 +70,9 @@ imposé) sont coupés. La licence d'origine est copiée dans chaque dossier impo
 | `plugins/fullstack/skills/vercel-react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/react-best-practices` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) |
 | `plugins/graphify/skills/graphify/SKILL.md` | [safishamsi/graphify](https://github.com/safishamsi/graphify) | `graphify/skill.md` | `fe085cedddde` | Apache-2.0 |
 | `plugins/graphify/skills/graphify/references` | [safishamsi/graphify](https://github.com/safishamsi/graphify) | `graphify/skills/claude/references` | `fe085cedddde` | Apache-2.0 |
+| `plugins/greenfield/agents` | [prime-radiant-inc/greenfield](https://github.com/prime-radiant-inc/greenfield) | `agents` | `6e6d4b425fe9` | Apache-2.0 |
+| `plugins/greenfield/commands` | [prime-radiant-inc/greenfield](https://github.com/prime-radiant-inc/greenfield) | `commands` | `6e6d4b425fe9` | Apache-2.0 |
+| `plugins/greenfield/skills` | [prime-radiant-inc/greenfield](https://github.com/prime-radiant-inc/greenfield) | `skills` | `6e6d4b425fe9` | Apache-2.0 |
 | `plugins/ml-engineering/skills/eval-harness-first` | [wshobson/agents](https://github.com/wshobson/agents) | `plugins/llm-finetuning/skills/eval-harness-first` | `46891e7e60da` | MIT |
 | `plugins/ml-engineering/skills/evaluating-llms-harness` | [Orchestra-Research/AI-Research-SKILLs](https://github.com/Orchestra-Research/AI-Research-SKILLs) | `11-evaluation/lm-evaluation-harness` | `773a52944ba4` | MIT |
 | `plugins/ml-engineering/skills/finetuning-method-selection` | [wshobson/agents](https://github.com/wshobson/agents) | `plugins/llm-finetuning/skills/finetuning-method-selection` | `46891e7e60da` | MIT |
@@ -85,6 +89,53 @@ imposé) sont coupés. La licence d'origine est copiée dans chaque dossier impo
 | `plugins/motion-design/skills/manimce-best-practices` | [adithya-s-k/manim_skill](https://github.com/adithya-s-k/manim_skill) | `skills/manimce-best-practices` | `cef045011722` | MIT |
 | `plugins/ponytail/hooks` | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | `hooks` | `2961b52fc1fe` | MIT |
 | `plugins/ponytail/skills` | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | `skills` | `2961b52fc1fe` | MIT |
+| `plugins/product-management/skills/analyze-feature-requests` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-discovery/skills/analyze-feature-requests` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/brainstorm-experiments-existing` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-discovery/skills/brainstorm-experiments-existing` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/brainstorm-experiments-new` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-discovery/skills/brainstorm-experiments-new` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/brainstorm-ideas-existing` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-discovery/skills/brainstorm-ideas-existing` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/brainstorm-ideas-new` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-discovery/skills/brainstorm-ideas-new` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/brainstorm-okrs` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-execution/skills/brainstorm-okrs` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/business-model` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-strategy/skills/business-model` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/code-to-prd` | [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) | `product-team/code-to-prd/skills/code-to-prd` | `19392f7a0826` | MIT |
+| `plugins/product-management/skills/competitor-analysis` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-market-research/skills/competitor-analysis` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/create-prd` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-execution/skills/create-prd` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/customer-journey-map` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-market-research/skills/customer-journey-map` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/identify-assumptions-existing` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-discovery/skills/identify-assumptions-existing` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/identify-assumptions-new` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-discovery/skills/identify-assumptions-new` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/intended-vs-implemented` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-ai-shipping/skills/intended-vs-implemented` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/interview-script` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-discovery/skills/interview-script` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/job-stories` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-execution/skills/job-stories` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/lean-canvas` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-strategy/skills/lean-canvas` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/market-segments` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-market-research/skills/market-segments` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/market-sizing` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-market-research/skills/market-sizing` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/metrics-dashboard` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-discovery/skills/metrics-dashboard` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/monetization-strategy` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-strategy/skills/monetization-strategy` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/north-star-metric` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-marketing-growth/skills/north-star-metric` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/opportunity-solution-tree` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-discovery/skills/opportunity-solution-tree` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/outcome-roadmap` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-execution/skills/outcome-roadmap` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/positioning-ideas` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-marketing-growth/skills/positioning-ideas` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/pre-mortem` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-execution/skills/pre-mortem` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/pricing-strategy` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-strategy/skills/pricing-strategy` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/prioritization-frameworks` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-execution/skills/prioritization-frameworks` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/prioritize-assumptions` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-discovery/skills/prioritize-assumptions` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/prioritize-features` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-discovery/skills/prioritize-features` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/product-name` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-marketing-growth/skills/product-name` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/product-strategy` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-strategy/skills/product-strategy` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/product-vision` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-strategy/skills/product-vision` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/release-notes` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-execution/skills/release-notes` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/retro` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-execution/skills/retro` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/schematic/SKILL.md` | [blader/schematic](https://github.com/blader/schematic) | `SKILL.md` | `297fb73e99aa` | MIT |
+| `plugins/product-management/skills/shipping-artifacts` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-ai-shipping/skills/shipping-artifacts` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/sprint-plan` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-execution/skills/sprint-plan` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/stakeholder-map` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-execution/skills/stakeholder-map` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/strategy-red-team` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-execution/skills/strategy-red-team` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/summarize-interview` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-discovery/skills/summarize-interview` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/swot-analysis` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-strategy/skills/swot-analysis` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/test-scenarios` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-execution/skills/test-scenarios` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/user-personas` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-market-research/skills/user-personas` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/user-stories` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-execution/skills/user-stories` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/value-prop-statements` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-marketing-growth/skills/value-prop-statements` | `07b34f64ee82` | MIT |
+| `plugins/product-management/skills/value-proposition` | [phuryn/pm-skills](https://github.com/phuryn/pm-skills) | `pm-product-strategy/skills/value-proposition` | `07b34f64ee82` | MIT |
 | `plugins/rea/skills/reverse-engineer-anything` | [morluto/rea](https://github.com/morluto/rea) | `.agents/skills/reverse-engineer-anything` | `0f55f247cdd2` | MIT |
 | `plugins/sec-audit/skills` | [trilwu/secskills](https://github.com/trilwu/secskills) | `secskills-core/skills` | `ca53957bcd8e` | MIT |
 | `plugins/sec-defense/skills` | [trilwu/secskills](https://github.com/trilwu/secskills) | `secskills-defense/skills` | `ca53957bcd8e` | MIT |

@@ -1,7 +1,8 @@
 """Check the library before a commit or a release.
 
-Errors (exit 1): invalid skill frontmatter, skill name different from its folder, plugin missing from the
-marketplace or manifest name mismatch, em dash, invisible Unicode character.
+Errors (exit 1): invalid skill or agent frontmatter, skill name different from its folder, agent name
+different from its file, plugin missing from the marketplace or manifest name mismatch, em dash, invisible
+Unicode character.
 Warnings: skill name shared by several plugins, risky shell patterns in bundled files (to review by hand).
 
 Usage: python scripts/check.py
@@ -89,6 +90,17 @@ def main() -> int:
         if len(plugins) > 1:
             warnings.append(f"skill '{name}' in several plugins: {', '.join(plugins)}")
 
+    agents = sorted(ROOT.glob("plugins/*/agents/*.md"))
+    for agent in agents:
+        location = agent.relative_to(ROOT).as_posix()
+        fields = frontmatter(agent.read_text(encoding="utf-8"))
+        if fields is None:
+            errors.append(f"{location}: no frontmatter")
+        elif fields.get("name") != agent.stem:
+            errors.append(f"{location}: name '{fields.get('name')}' differs from file '{agent.stem}'")
+        elif not fields.get("description"):
+            errors.append(f"{location}: empty description")
+
     for path, text in text_files():
         location = path.relative_to(ROOT).as_posix()
         if EM_DASH in text:
@@ -106,7 +118,8 @@ def main() -> int:
     for message in errors:
         print(f"error    {message}")
     skills = sum(len(plugins) for plugins in owners.values())
-    print(f"{len(marketplace['plugins'])} plugins, {skills} skills, {len(errors)} errors, {len(warnings)} warnings")
+    print(f"{len(marketplace['plugins'])} plugins, {skills} skills, {len(agents)} agents, "
+          f"{len(errors)} errors, {len(warnings)} warnings")
     return 1 if errors else 0
 
 

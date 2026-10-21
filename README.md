@@ -4,8 +4,8 @@ Bibliothèque de skills Claude prête pour la production, installable en une com
 meilleures skills open source du moment (sélectionnées, nettoyées, épinglées à un commit) et servira de
 base aux skills que nous créerons nous-mêmes.
 
-**241 skills, 23 packs, 7 bundles.** Chaque pack est un plugin Claude Code indépendant ; les bundles en
-installent plusieurs d'un coup via les dépendances de plugins.
+**313 skills, 24 agents, 26 packs, 8 bundles.** Chaque pack est un plugin Claude Code indépendant ; les
+bundles en installent plusieurs d'un coup via les dépendances de plugins.
 
 ## Installation en une commande
 
@@ -49,12 +49,27 @@ Redémarrer Claude Code ou lancer `/reload-plugins` après installation.
 | `ultime-media` | design, motion-design, video-editing |
 | `ultime-security` | security, sec-audit, sec-defense, rea |
 | `ultime-web` | fullstack, design, compliance |
-| `ultime-ops` | devops, finops, monitoring |
+| `ultime-ops` | devops, finops, monitoring, prod-testing |
+| `ultime-factory` | app-factory et tout ce qu'il pilote : product-management, greenfield, agent-skills, fullstack, design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops |
 
 Le pack `sec-offense` (pentest offensif, tests autorisés uniquement) n'est tiré par aucun bundle, y compris
 `ultime-all` : il s'installe explicitement avec `claude plugin install sec-offense@ultime-skill`.
 
 ## Catalogue
+
+### Produit et orchestration
+
+| Pack | Skills | Rôle |
+|---|---|---|
+| `app-factory` | 3 + 18 agents | Orchestrateur de projet de A à Z, en trois modes : création depuis une idée, clone personnalisé d'une app de référence, reprise d'une app existante ou inachevée. Huit phases avec portes de validation, état sur disque et reprise, sous-agents spécialisés. Écrit maison. |
+| `product-management` | 47 | Découverte, stratégie, marché, PRD, user stories, roadmap, pre-mortem, rétro, notes de version (phuryn), rétro-spécification d'un code existant (code-to-prd, schematic). |
+| `greenfield` | 22 + 2 agents | Rétro-ingénierie « salle blanche » : specs comportementales, vecteurs de test et critères d'acceptation extraits d'un code sans hériter de son implémentation (`/greenfield:analyze`). Pipeline lourd, réservé au code dont on détient les droits. |
+
+Démarrer un projet : installer `ultime-factory`, ouvrir le dépôt du projet (vide ou existant) et lancer
+`/app-factory:app-factory`. L'orchestrateur demande le mode, le brief et le niveau d'autonomie, puis
+avance phase par phase. Il fait valider chaque porte et toute action irréversible : paiement, création de
+compte, publication, déploiement en production. L'état vit dans `.app-factory/` : une nouvelle session
+reprend là où la précédente s'est arrêtée.
 
 ### Fondations
 
