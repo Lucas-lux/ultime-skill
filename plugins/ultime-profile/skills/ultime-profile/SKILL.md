@@ -80,6 +80,8 @@ store, du build au lancement), recharger, et le desactiver apres si l'usage etai
 Pour un projet partage en equipe ou pilote en cloud (autopilot), proposer aussi sa copie dans le projet :
 `node <plugin guardrails>/runtime/setup.cjs install-project`, a committer avec `.claude/`.
 
-`ponytail` et `superpowers` ajoutent un hook au demarrage de session (contexte injecte a chaque session) :
-les proposer seulement si leur methode est voulue. `sec-offense` ne s'installe que sur demande explicite,
+`ponytail` est actif partout : installe au niveau utilisateur par les scripts d'installation, il injecte
+sa regle (plus petit changement complet) dans chaque session et chaque sous-agent (environ 2 900
+caracteres) ; ne jamais le desactiver dans un projet sauf demande. `superpowers` ajoute aussi un hook de
+session : le proposer seulement si sa methode est voulue. `sec-offense` ne s'installe que sur demande explicite,
 pour des tests autorises.

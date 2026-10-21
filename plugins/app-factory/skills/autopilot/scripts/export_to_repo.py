@@ -1,15 +1,17 @@
 """Copy ultime-skill packs into a project's .claude/ so cloud sessions can load them.
 
 Cloud sessions and scheduled tasks do not install plugins: only the repository's own .claude/skills,
-.claude/agents and .claude/commands are loaded. This script copies the skills, agents and commands of the
-chosen packs there, records what it wrote in .claude/ultime-export.json, and on the next run replaces
-exactly those paths (never a file it did not write).
+.claude/agents, .claude/commands and the hooks of .claude/settings.json are loaded. This script copies the
+skills, agents and commands of the chosen packs there, ports the packs' hooks (ponytail...) to
+.claude/hooks/<pack>/ with their entries in .claude/settings.json, installs the guardrails project copy,
+records what it wrote in .claude/ultime-export.json, and on the next run replaces exactly those paths
+and hook entries (never a file or hook it did not write).
 
 Usage:
     python export_to_repo.py [--target DIR] [--packs app-factory,mobile-expo] [--source DIR] [--dry-run]
 
 Without --packs, the packs are the ultime-skill plugins enabled in the target's .claude/settings.json,
-plus app-factory. Bundles (ultime-*) are expanded to their packs; ultime-profile is never exported.
+plus app-factory, guardrails and ponytail. Bundles (ultime-*) are expanded to their packs; ultime-profile is never exported.
 """
 
 import argparse
@@ -22,7 +24,9 @@ from pathlib import Path
 MARKETPLACE = "ultime-skill"
 DEFAULT_SOURCE = Path.home() / ".claude" / "plugins" / "marketplaces" / MARKETPLACE / "plugins"
 MANIFEST = Path(".claude") / "ultime-export.json"
-ALWAYS = ["app-factory"]
+ALWAYS = ["app-factory", "guardrails", "ponytail"]
+# guardrails ships its own project installer (runtime/setup.cjs) instead of a ported hook file.
+SELF_INSTALLED_HOOKS = {"guardrails"}
 # ultime-profile installs plugins, which a cloud session cannot do: never exported.
 SKIPPED = {"ultime-profile"}
 # Built in two parts so this file does not flag itself.
@@ -71,16 +75,55 @@ def planned_copies(source: Path, packs: list[str]) -> list[tuple[Path, Path, str
         for kind in ("agents", "commands"):
             for file in sorted((root / kind).glob("*.md")):
                 copies.append((file, Path(".claude") / kind / file.name, pack))
+        if hooks_file(source, pack) and pack not in SELF_INSTALLED_HOOKS:
+            copies.append((root / "hooks", Path(".claude/hooks") / pack / "hooks", pack))
     return copies
+
+
+def hooks_file(source: Path, pack: str) -> Path | None:
+    """The hook configuration a pack declares in its plugin.json, if any."""
+    declared = plugin_manifest(source, pack).get("hooks")
+    return (source / pack / declared).resolve() if isinstance(declared, str) else None
+
+
+def ported_hooks(source: Path, pack: str) -> dict[str, list]:
+    """The pack's hook entries, rewritten to run from .claude/hooks/<pack>/ in the project."""
+    root = f".claude/hooks/{pack}"
+    text = hooks_file(source, pack).read_text(encoding="utf-8")
+    text = text.replace("${" + PLUGIN_ROOT_VAR + "}", "${CLAUDE_PROJECT_DIR}/" + root)
+    text = text.replace(f"process.env.{PLUGIN_ROOT_VAR}", f"(process.env.CLAUDE_PROJECT_DIR + '/{root}')")
+    return json.loads(text).get("hooks", {})
+
+
+def hook_commands(hooks: dict[str, list]) -> set[str]:
+    return {hook.get("command", "") for groups in hooks.values() for group in groups for hook in group.get("hooks", [])}
+
+
+def merge_settings_hooks(target: Path, added: dict[str, list], previous_commands: set[str]) -> None:
+    """Replace this script's previous hook entries in .claude/settings.json by the new ones."""
+    settings_path = target / ".claude" / "settings.json"
+    settings = json.loads(settings_path.read_text(encoding="utf-8")) if settings_path.exists() else {}
+    hooks = settings.get("hooks", {})
+    for event in list(hooks):
+        groups = [{**g, "hooks": [h for h in g.get("hooks", []) if h.get("command") not in previous_commands]} for g in hooks[event]]
+        hooks[event] = [g for g in groups if g["hooks"]]
+        if not hooks[event]:
+            del hooks[event]
+    for event, groups in added.items():
+        hooks.setdefault(event, []).extend(groups)
+    if hooks:
+        settings["hooks"] = hooks
+    else:
+        settings.pop("hooks", None)
+    settings_path.parent.mkdir(parents=True, exist_ok=True)
+    settings_path.write_text(json.dumps(settings, indent=2) + "\n", encoding="utf-8")
 
 
 def warnings_for(source: Path, packs: list[str]) -> list[str]:
     found = []
     for pack in packs:
-        if pack == "guardrails":
-            continue
-        if "hooks" in plugin_manifest(source, pack):
-            found.append(f"{pack}: plugin hooks are not exported, copy them into .claude/settings.json by hand if needed")
+        if hooks_file(source, pack):
+            continue  # hook packs are ported: their scripts get the project path
         for file in (source / pack).rglob("*"):
             if file.is_file() and file.suffix in {".md", ".json", ".sh", ".py", ".js"}:
                 if PLUGIN_ROOT_VAR in file.read_text(encoding="utf-8", errors="ignore"):
@@ -105,6 +148,8 @@ def remove(path: Path) -> None:
 
 
 def main() -> None:
+    # Our lines must come before the output of the setup.cjs subprocess.
+    sys.stdout.reconfigure(line_buffering=True)
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--target", type=Path, default=Path.cwd(), help="project repository (default: cwd)")
     parser.add_argument("--packs", help="comma-separated packs or bundles (default: enabled ultime-skill plugins)")
@@ -137,9 +182,11 @@ def main() -> None:
 
     print(f"source  {source} ({source_commit(source)[:12]})")
     print(f"packs   {', '.join(packs)}")
+    hook_packs = [pack for pack in packs if hooks_file(source, pack)]
     print(f"copies  {sum(1 for c in copies if 'skills' in c[1].parts)} skills, "
           f"{sum(1 for c in copies if 'agents' in c[1].parts)} agents, "
-          f"{sum(1 for c in copies if 'commands' in c[1].parts)} commands")
+          f"{sum(1 for c in copies if 'commands' in c[1].parts)} commands, "
+          f"hooks of {', '.join(hook_packs) or 'none'}")
     for warning in warnings_for(source, packs):
         print(f"warning {warning}")
     if args.dry_run:
@@ -155,11 +202,20 @@ def main() -> None:
         else:
             shutil.copy2(origin, full)
 
+    added: dict[str, list] = {}
+    for pack in hook_packs:
+        if pack in SELF_INSTALLED_HOOKS:
+            continue
+        for event, groups in ported_hooks(source, pack).items():
+            added.setdefault(event, []).extend(groups)
+    merge_settings_hooks(target, added, set(previous.get("hook_commands", [])))
+
     manifest = {
         "marketplace": MARKETPLACE,
         "source_commit": source_commit(source),
         "packs": packs,
         "paths": sorted(destination.as_posix() for _, destination, _ in copies),
+        "hook_commands": sorted(hook_commands(added)),
     }
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")

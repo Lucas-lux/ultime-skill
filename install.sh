@@ -3,6 +3,7 @@
 #
 #   ./install.sh                         # ultime-profile and guardrails: then ask Claude, in each project, to set up its skills
 #   ./install.sh --no-guardrails         # without the guardrails hooks (they can be disabled later too)
+#   ./install.sh --no-ponytail           # without ponytail, installed by default for every project
 #   ./install.sh ultime-dev security     # chosen bundles or packs, for every project
 #   ULTIME_SKILL_SOURCE=. ./install.sh   # from this clone instead of GitHub (per-project setup then needs GitHub)
 #   ./install.sh --with-tools ultime-all # also installs the CLIs some skills drive (graphify, rea, asc, gplay)
@@ -57,17 +58,20 @@ SOURCE="${ULTIME_SKILL_SOURCE:-Lucas-lux/ultime-skill}"
 
 with_tools=false
 with_guardrails=true
+with_ponytail=true
 targets=()
 for argument in "$@"; do
   case "$argument" in
     --with-tools) with_tools=true ;;
     --no-guardrails) with_guardrails=false ;;
-    -h|--help) sed -n '2,8p' "$0"; exit 0 ;;
+    --no-ponytail) with_ponytail=false ;;
+    -h|--help) sed -n '2,9p' "$0"; exit 0 ;;
     *) targets+=("$argument") ;;
   esac
 done
 [ ${#targets[@]} -eq 0 ] && targets=(ultime-profile)
 if $with_guardrails && [[ ! " ${targets[*]} " =~ " guardrails " ]]; then targets+=(guardrails); fi
+if $with_ponytail && [[ ! " ${targets[*]} " =~ " ponytail " ]]; then targets+=(ponytail); fi
 
 command -v claude >/dev/null || { echo "Claude Code CLI 'claude' not found on PATH." >&2; exit 1; }
 

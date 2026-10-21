@@ -17,8 +17,9 @@ claude plugin install ultime-profile@ultime-skill
 ```
 
 Ou, depuis un clone : `./install.sh` (Windows : `./install.ps1`), qui installe le point d'entrée
-`ultime-profile` et les garde-fous `guardrails` (voir [Garde-fous](#garde-fous) ; `--no-guardrails`,
-ou `-NoGuardrails` sous Windows, pour s'en passer). Rien d'autre ne pèse sur le contexte des sessions.
+`ultime-profile`, les garde-fous `guardrails` (voir [Garde-fous](#garde-fous)) et `ponytail`, la règle du
+plus petit changement complet appliquée à chaque session et chaque sous-agent (`--no-guardrails`,
+`--no-ponytail`, ou `-NoGuardrails`, `-NoPonytail` sous Windows, pour s'en passer). Rien d'autre ne pèse sur le contexte des sessions.
 
 Le dépôt est privé : il faut un accès git au dépôt. Sans clé SSH GitHub, poser
 `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` pour cloner en HTTPS via les identifiants git déjà stockés
@@ -260,7 +261,9 @@ Détail dans la skill `guardrails`. Nécessite `node`.
 
 Deux packs installent un hook `SessionStart` qui s'exécute à chaque démarrage de session :
 
-- `ponytail` active son mode et peut proposer une status line.
+- `ponytail` active son mode (aussi dans chaque sous-agent, environ 2 900 caractères) et peut proposer
+  une status line. Installé par défaut ; les agents d'app-factory s'appuient sur ses skills
+  (`ponytail-review` en revue, `ponytail-audit` et `ponytail-debt` en reprise).
 - `superpowers` injecte sa méthode de travail.
 
 Ces hooks ont un coût en contexte et modifient le comportement par défaut. Les retirer : désinstaller le

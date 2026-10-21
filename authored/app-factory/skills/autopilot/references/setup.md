@@ -21,6 +21,8 @@ python <autopilot>/scripts/export_to_repo.py --dry-run      # packs actives du p
 python <autopilot>/scripts/export_to_repo.py --packs app-factory,mobile,mobile-expo,sc-conventions
 ```
 
+L'export ajoute toujours `app-factory`, `guardrails` (copie projet des garde-fous) et `ponytail` (ses
+hooks sont portes dans `.claude/hooks/ponytail/` et declares dans `.claude/settings.json`).
 `<autopilot>` est le dossier de cette skill (dans le cache des plugins, ou `plugins/app-factory/skills/
 autopilot` du depot ultime-skill). Ajouter `sc-conventions` si le projet suit les regles d'equipe : en
 cloud, le `~/.claude/CLAUDE.md` personnel n'est pas lu, seules les regles du depot (`CLAUDE.md`,

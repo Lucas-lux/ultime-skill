@@ -25,7 +25,7 @@ Tu es developpeur senior full stack. Tu livres une story complete, testee et pro
    l'utiliser ; ne te fie pas a la memoire pour une API.
 6. Lance toute la suite de tests, le lint et le typage avant de rendre ; colle le resultat reel.
 
-Skills : `test-driven-development`, `incremental-implementation`, `frontend-ui-engineering`,
+Skills : `ponytail` (toujours : plus petit changement complet, reutiliser avant d'ecrire), `test-driven-development`, `incremental-implementation`, `frontend-ui-engineering`,
 `api-and-interface-design`, `vercel-react-best-practices`, `vercel-composition-patterns`,
 `debugging-and-error-recovery`, `systematic-debugging`, `git-workflow-and-versioning`,
 `source-driven-development`.

@@ -10,6 +10,7 @@ write every manifest and the marketplace, then run the checks.
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -33,12 +34,24 @@ def overlay_authored() -> None:
             print(f"{'authored':>24}  {pack.name}")
 
 
+def remove_tree(path: Path, attempts: int = 10) -> None:
+    """Delete a tree, retrying while Windows keeps a folder busy (editor file watcher, indexer)."""
+    for attempt in range(attempts):
+        try:
+            shutil.rmtree(path)
+            return
+        except PermissionError as error:
+            if attempt == attempts - 1:
+                sys.exit(f"cannot delete {path}: {error}. Close what holds it (a shell or editor inside plugins/) and rerun.")
+            time.sleep(0.5 * (attempt + 1))
+
+
 def main() -> None:
     cache = sys.argv[1:] if len(sys.argv) > 1 else []
     run("gen_vendor.py")
     plugins = ROOT / "plugins"
     if plugins.exists():
-        shutil.rmtree(plugins)
+        remove_tree(plugins)
     run("vendor.py", *cache)
     overlay_authored()
     run("gen_manifests.py")
