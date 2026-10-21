@@ -22,11 +22,11 @@ bute toujours sur les mêmes obstacles :
 
 | Obstacle | Ce que fait ultime-skill |
 |---|---|
-| Savoir-faire inconstant | 474 skills et 24 agents, sélectionnés, nettoyés et épinglés à une version, couvrant le cycle complet : produit, code, design, mobile, stores, sécurité, conformité, ops, données, growth |
+| Savoir-faire inconstant | 473 skills et 24 agents, sélectionnés, nettoyés et épinglés à une version, couvrant le cycle complet : produit, code, design, mobile, stores, sécurité, conformité, ops, données, growth |
 | Pilotage permanent | `app-factory` orchestre un projet de l'idée à la production avec des agents spécialisés ; le mode `autopilot` le fait avancer seul et ne remonte que les décisions de vision |
 | Règles oubliées | des hooks (`guardrails`) refusent à la source ce qui est interdit : em dash, emoji non demandé, push sur la branche principale, secrets, contournement des hooks git, recherche d'identifiants de production |
 | Qualité variable | `ci-forge` génère la CI/CD la plus complète pour la stack détectée ; les revues (`security-review`, `sast`, `ui-review`, `ponytail-review`) exigent une preuve par constat ; `ponytail` impose le plus petit changement complet |
-| Contexte saturé | 44 packs indépendants ; `ultime-profile` n'installe dans chaque projet que les packs utiles et des règles par langage chargées seulement quand Claude touche ces fichiers |
+| Contexte saturé | 43 packs indépendants ; `ultime-profile` n'installe dans chaque projet que les packs utiles et des règles par langage chargées seulement quand Claude touche ces fichiers |
 | Licences floues | uniquement des licences permissives (MIT, Apache-2.0, BSD-3-Clause), audit outillé, notices de modification |
 
 ## Le gain concret sur un projet

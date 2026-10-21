@@ -33,11 +33,6 @@
       "description": "Reverse Engineer Anything : binaires, apps Electron/JS, Android, firmware, navigateur. Pilote le serveur MCP rea-agents (a installer a part)."
     },
     {
-      "name": "graphify",
-      "source": "./plugins/graphify",
-      "description": "Transforme un depot ou un dossier en graphe de connaissances interrogeable. Pilote le paquet Python graphifyy (a installer a part)."
-    },
-    {
       "name": "security",
       "source": "./plugins/security",
       "description": "Audit d'application et revue de securite : methode maison (preuves, gravite, pieges de conception), OWASP Top 10 et ASVS, audit de code et revue de diff, Semgrep et CodeQL, analyse de variantes, chaine d'approvisionnement, modele de menace, APIs a risque, scan de skills."

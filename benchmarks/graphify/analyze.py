@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bench  # noqa: E402
 
-runs = [json.loads(p.read_text(encoding="utf-8")) for p in bench.RESULTS.glob("*/*/[ABCD]-[12].json")]
+runs = [json.loads(p.read_text(encoding="utf-8")) for p in bench.RESULTS.glob("*/*/[ABCDE]-[12].json")]
 judges = [json.loads(p.read_text(encoding="utf-8")) for p in bench.RESULTS.glob("*/*/judge-*.json")]
 judges2 = [json.loads(p.read_text(encoding="utf-8")) for p in bench.RESULTS.glob("*/*/judge2-*.json")]
 score, score2 = {}, {}

@@ -6,11 +6,10 @@
 #   ./install.sh --no-ponytail           # without ponytail, installed by default for every project
 #   ./install.sh ultime-dev security     # chosen bundles or packs, for every project
 #   ULTIME_SKILL_SOURCE=. ./install.sh   # from this clone instead of GitHub (per-project setup then needs GitHub)
-#   ./install.sh --with-tools ultime-all # also installs the CLIs some skills drive (graphify, rea, asc, gplay)
+#   ./install.sh --with-tools ultime-all # also installs the CLIs some skills drive (rea, asc, gplay)
 set -euo pipefail
 
 MARKETPLACE="ultime-skill"
-GRAPHIFY_VERSION="0.9.90"
 REA_VERSION="6.5.0"
 ASC_VERSION="5.16.0"
 GPLAY_VERSION="1.0.0"
@@ -113,11 +112,6 @@ for target in "${targets[@]}"; do
 done
 
 if $with_tools; then
-  if command -v uv >/dev/null; then
-    uv tool install "graphifyy==$GRAPHIFY_VERSION"
-  else
-    echo "uv not found: skipping graphify (pip install graphifyy==$GRAPHIFY_VERSION)." >&2
-  fi
   if command -v npx >/dev/null; then
     npx -y "rea-agents@$REA_VERSION" setup --client claude_code --dry-run --json &&
       npx -y "rea-agents@$REA_VERSION" setup --client claude_code

@@ -19,9 +19,9 @@ pour comprendre un code existant : coût de construction du graphe, puis coût, 
   référence**, avec 7 % de tokens et 16 % de temps en moins, pour un coût quasi identique (-1 %).
 - **Le gain grandit sur le gros dépôt** (cal.com, 5 071 fichiers) : -25 % de tokens et deux fois moins de
   tours avec la consigne courte, à exactitude moyenne équivalente mais complétude un peu plus faible.
-- **Recommandation** : ne pas l'intégrer partout. Pour la reprise et les gros dépôts, une intégration
-  légère (construction par la CLI, consigne hybride de deux lignes, sans charger la skill) est gratuite en
-  tokens et légèrement plus rapide ; le gain en tokens reste modeste sur des questions isolées.
+- **Mais livrée par un `CLAUDE.md` (seul moyen de l'installer dans un projet), cette consigne hybride ne
+  rapporte plus rien** : +5 % de coût pour une qualité équivalente (condition E, en fin de rapport).
+- **Décision : graphify est retiré de la bibliothèque** (voir la dernière section).
 
 ## Protocole
 
@@ -122,7 +122,7 @@ La variante D corrige ces erreurs en imposant la vérification, au prix d'une pa
 - Deux répétitions par cellule : les écarts de moins de 0,3 point de qualité ou de quelques pourcents de
   coût ne sont pas significatifs.
 
-## Recommandation
+## Recommandation (avant vérification de l'intégration, voir la dernière section)
 
 | Option | Pour | Contre |
 |---|---|---|
@@ -153,7 +153,38 @@ python bench.py run                 # conditions A, B, C (ajouter D : voir run_o
 python judge.py                     # juge A, B, C ; puis : python judge.py ACD judge2
 python analyze.py                   # tableaux et summary.json
 python build_via_skill.py commerce excalidraw   # coût de construction via la skill (copies <nom>-S)
+# condition E : copie <nom>-E du dépôt avec graphe, data/claude-md-block.md ajouté à la fin de son CLAUDE.md
 ```
 
-Données : `data/runs.csv` (métriques des 96 exécutions), `data/judgments.json` (notes et erreurs relevées
+Données : `data/runs.csv` (métriques des 112 exécutions), `data/claude-md-block.md` (bloc testé en E), `data/judgments.json` (notes et erreurs relevées
 par le juge), `data/builds-via-skill.json`, `data/summary.json`. Le texte des réponses n'est pas versionné.
+
+## Vérification de l'intégration légère (condition E) et décision
+
+L'option légère recommandée plus haut a été testée telle qu'elle serait livrée : graphe construit par la
+CLI et consigne hybride écrite dans le `CLAUDE.md` du projet (et non plus injectée dans le prompt système
+comme en condition D), sur les dépôts M et L, 16 exécutions, jugées à l'aveugle avec A et D.
+
+- Formulée comme en D, la consigne n'a été suivie que dans 1 question sur 4 depuis le `CLAUDE.md`
+  (excalidraw a déjà son propre `CLAUDE.md`). Il a fallu une formulation impérative (« ta première étape
+  est d'interroger le graphe ») pour qu'elle le soit dans 16 cas sur 16.
+- Résultat (moyennes sur M et L) :
+
+| Condition | Coût | Tokens | Durée | Tours | Exactitude | Complétude |
+|---|---|---|---|---|---|---|
+| A référence | 0,133 $ | 191 900 | 22,8 s | 6,5 | 7,69 | 7,31 |
+| D consigne hybride dans le prompt système | 0,123 $ | 170 500 | 19,1 s | 5,8 | 7,69 | 7,38 |
+| E consigne impérative dans `CLAUDE.md` (livrable) | 0,139 $ | 200 800 | 23,0 s | 6,1 | 7,88 | 7,44 |
+
+- Livrée réellement, l'intégration coûte un peu plus que la référence (+5 % de coût et de tokens, durée
+  égale) pour une qualité équivalente : le modèle interroge le graphe **en plus** de sa lecture du code,
+  pas à la place. Le gain de D venait de la place de la consigne dans le prompt système, que ni une
+  skill ni un `CLAUDE.md` ne reproduisent.
+
+**Décision (21 octobre 2026) : graphify est retiré de la bibliothèque.** Pas de gain mesurable en usage
+réel, et un coût réel : dépendance Python, reconstruction de 2 minutes sur un gros dépôt (cache
+inopérant sous Windows), graphe qui peut devenir obsolète. Le pack `graphify` est retiré du catalogue et du
+bundle `ultime-data`, et la CLI n'est plus installée par `--with-tools`. Ce rapport et ses scripts restent
+pour pouvoir refaire la mesure si graphify évolue (cache incrémental fonctionnel, intégration native).
+
+Coût total du benchmark, condition E comprise : **30,75 $**.
