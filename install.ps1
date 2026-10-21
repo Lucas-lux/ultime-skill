@@ -1,8 +1,8 @@
 # Install ultime-skill in Claude Code: registers the marketplace, then installs a bundle or packs.
 #
-#   .\install.ps1                          # bundle ultime-all from this clone
-#   .\install.ps1 ultime-dev security      # chosen bundles or packs
-#   $env:ULTIME_SKILL_SOURCE = "owner/repo"; .\install.ps1   # from GitHub instead of this clone
+#   .\install.ps1                          # ultime-profile only: then ask Claude, in each project, to set up its skills
+#   .\install.ps1 ultime-dev security      # chosen bundles or packs, for every project
+#   $env:ULTIME_SKILL_SOURCE = "."; .\install.ps1   # from this clone instead of GitHub (per-project setup then needs GitHub)
 #   .\install.ps1 -WithTools ultime-all    # also installs the CLIs some skills drive (graphify, rea, asc, gplay)
 param(
     [switch]$WithTools,
@@ -31,8 +31,8 @@ function Install-Binary([string]$Name, [string]$Url, [string]$Sha256) {
     Write-Host "Installed $Name in $ToolsDir"
     return $true
 }
-$Source = if ($env:ULTIME_SKILL_SOURCE) { $env:ULTIME_SKILL_SOURCE } else { $PSScriptRoot }
-if (-not $Targets) { $Targets = @("ultime-all") }
+$Source = if ($env:ULTIME_SKILL_SOURCE) { $env:ULTIME_SKILL_SOURCE } else { "Lucas-lux/ultime-skill" }
+if (-not $Targets) { $Targets = @("ultime-profile") }
 
 if (-not (Get-Command claude -ErrorAction SilentlyContinue)) {
     throw "Claude Code CLI 'claude' not found on PATH."

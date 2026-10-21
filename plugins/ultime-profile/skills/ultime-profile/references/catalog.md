@@ -45,20 +45,20 @@ d'agents qu'un pack active ajoute au contexte de chaque session (environ 4 carac
 | `growth-social` | 3 | 0 | 2589 | Reseaux sociaux : strategie et contenus par plateforme, marketing d'influence et createurs, animation de communaute. |
 | `growth-analytics` | 5 | 0 | 4425 | Mesure marketing : plan de marquage et GA4, UTM, attribution, suivi des conversions (GTM, API de conversion), tests A/B, attribution mobile (MMP, SKAdNetwork). |
 | `growth-cro` | 11 | 0 | 7232 | Conversion et retention : CRO des pages, inscription, onboarding, paywalls, popups, emails et SMS de cycle de vie, churn, parrainage, lead magnets, tunnel web vers app. |
-| `ultime-profile` | 1 | 0 | 305 | N'active pour un projet que les packs ultime-skill utiles (profil par projet ou par tache), pour alleger le contexte charge a chaque session. Catalogue des packs avec leur cout en contexte. |
+| `ultime-profile` | 1 | 0 | 381 | Point d'entree : installe et gere pour chaque projet les seuls packs ultime-skill utiles (detection du projet, installation au niveau du projet, desactivation du reste, ajustement quand la tache change). Catalogue des packs avec leur cout en contexte. |
 | `greenfield` | 22 | 2 | 5229 | Retro-ingenierie salle blanche : extrait d'un code existant des specs comportementales, vecteurs de test et criteres d'acceptation sans heritage d'implementation (commande /greenfield:analyze). Pipeline lourd en agents, a reserver au code dont on detient les droits. |
 
 ## Bundles
 
 | Bundle | Cout (caracteres) | Packs |
 |---|---|---|
-| `ultime-all` | 169498 | ponytail, superpowers, agent-skills, skill-factory, rea, graphify, security, sec-audit, sec-defense, sc-conventions, monitoring, prod-testing, devops, finops, data-engineering, dataviz, ml-engineering, fullstack, design, compliance, motion-design, video-editing, app-factory, product-management, mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, ultime-profile, greenfield |
-| `ultime-dev` | 28239 | ponytail, superpowers, agent-skills, skill-factory, devops, fullstack, security, sc-conventions, prod-testing, ultime-profile |
-| `ultime-data` | 10958 | data-engineering, dataviz, ml-engineering, graphify, ultime-profile |
-| `ultime-media` | 8174 | design, motion-design, video-editing, ultime-profile |
-| `ultime-security` | 30121 | security, sec-audit, sec-defense, rea, ultime-profile |
-| `ultime-web` | 8379 | fullstack, design, compliance, ultime-profile |
-| `ultime-ops` | 10935 | devops, finops, monitoring, prod-testing, ultime-profile |
-| `ultime-mobile` | 51077 | mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, design, compliance, security, ultime-profile |
-| `ultime-growth` | 43997 | growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, store-aso, video-editing, motion-design, ultime-profile |
-| `ultime-factory` | 134081 | app-factory, product-management, greenfield, agent-skills, fullstack, design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, video-editing, motion-design, ultime-profile |
+| `ultime-all` | 169574 | ponytail, superpowers, agent-skills, skill-factory, rea, graphify, security, sec-audit, sec-defense, sc-conventions, monitoring, prod-testing, devops, finops, data-engineering, dataviz, ml-engineering, fullstack, design, compliance, motion-design, video-editing, app-factory, product-management, mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, ultime-profile, greenfield |
+| `ultime-dev` | 28315 | ponytail, superpowers, agent-skills, skill-factory, devops, fullstack, security, sc-conventions, prod-testing, ultime-profile |
+| `ultime-data` | 11034 | data-engineering, dataviz, ml-engineering, graphify, ultime-profile |
+| `ultime-media` | 8250 | design, motion-design, video-editing, ultime-profile |
+| `ultime-security` | 30197 | security, sec-audit, sec-defense, rea, ultime-profile |
+| `ultime-web` | 8455 | fullstack, design, compliance, ultime-profile |
+| `ultime-ops` | 11011 | devops, finops, monitoring, prod-testing, ultime-profile |
+| `ultime-mobile` | 51153 | mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, design, compliance, security, ultime-profile |
+| `ultime-growth` | 44073 | growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, store-aso, video-editing, motion-design, ultime-profile |
+| `ultime-factory` | 134157 | app-factory, product-management, greenfield, agent-skills, fullstack, design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, video-editing, motion-design, ultime-profile |

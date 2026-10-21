@@ -7,35 +7,47 @@ base aux skills que nous créerons nous-mêmes.
 **479 skills, 24 agents, 42 packs, 10 bundles.** Chaque pack est un plugin Claude Code indépendant ; les
 bundles en installent plusieurs d'un coup via les dépendances de plugins.
 
-## Installation en une commande
+## Installation
 
-Dans un clone du dépôt :
-
-```bash
-./install.sh                 # tout : le bundle ultime-all
-./install.sh ultime-dev      # un ou plusieurs bundles ou packs
-./install.sh --with-tools ultime-data   # installe aussi les CLIs externes (graphify, rea)
-```
-
-Sous Windows (PowerShell) : `./install.ps1`, mêmes arguments (`-WithTools` pour les CLIs).
-
-Le script enregistre le marketplace local puis installe les cibles demandées. À la main, c'est la même chose :
-
-```bash
-claude plugin marketplace add .            # depuis le clone (chemin absolu accepté aussi)
-claude plugin install ultime-all@ultime-skill
-```
-
-L'installation se fait aussi sans clone, depuis GitHub :
+### Une fois par machine
 
 ```bash
 claude plugin marketplace add Lucas-lux/ultime-skill
-claude plugin install ultime-all@ultime-skill
+claude plugin install ultime-profile@ultime-skill
 ```
+
+Ou, depuis un clone : `./install.sh` (Windows : `./install.ps1`), qui fait la même chose. Seul le point
+d'entrée `ultime-profile` est installé : rien d'autre ne pèse sur le contexte des sessions.
 
 Le dépôt est privé : il faut un accès git au dépôt. Sans clé SSH GitHub, poser
 `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` pour cloner en HTTPS via les identifiants git déjà stockés
 (`gh auth login` puis `gh auth setup-git` les met en place).
+
+### Dans chaque projet
+
+Ouvrir Claude Code dans le projet et demander simplement, par exemple :
+
+> Installe les skills ultime-factory dont ce projet a besoin.
+
+Claude lit le projet et la demande, propose les packs utiles avec leur coût en contexte, puis les installe
+au niveau du projet. Il choisit avec vous le scope :
+- **partagé** (`.claude/settings.json`, à committer) : l'équipe reçoit le même profil ;
+- **personnel** (`.claude/settings.local.json`).
+
+Il désactive ce qui ne sert pas, puis vous fait lancer `/reload-plugins`. Quand le travail change de
+domaine (passer du code à la fiche store, du build au lancement), redemandez-lui, ou laissez
+l'orchestrateur `app-factory` le faire à ses étapes clés.
+
+### Tout installer pour tous les projets (déconseillé)
+
+```bash
+./install.sh ultime-dev                  # un ou plusieurs bundles ou packs, actifs partout
+./install.sh --with-tools ultime-mobile  # installe aussi les CLI externes (graphify, rea, asc, gplay)
+```
+
+Un bundle large actif partout dépasse le budget de descriptions de Claude Code (voir
+[Économie de contexte](#économie-de-contexte)). `ULTIME_SKILL_SOURCE=.` installe depuis le clone plutôt
+que depuis GitHub, mais l'installation par projet suppose ensuite la source GitHub.
 
 Redémarrer Claude Code ou lancer `/reload-plugins` après installation.
 
@@ -43,7 +55,7 @@ Redémarrer Claude Code ou lancer `/reload-plugins` après installation.
 
 | Bundle | Contenu |
 |---|---|
-| `ultime-all` | Tous les packs |
+| `ultime-all` | Tous les packs (déconseillé : préférer l'installation par projet) |
 | `ultime-dev` | ponytail, superpowers, agent-skills, skill-factory, devops, fullstack, security, sc-conventions |
 | `ultime-data` | data-engineering, dataviz, ml-engineering, graphify |
 | `ultime-media` | design, motion-design, video-editing |

@@ -1,49 +1,67 @@
 ---
 name: ultime-profile
 description: >
-  N'active pour un projet que les packs ultime-skill utiles, pour alleger le contexte charge a chaque
-  session et garder des skills qui se declenchent bien. A utiliser pour configurer ou alleger les skills
-  d'un projet, adapter les packs a une tache, quand trop de skills sont installees, ou "ultime-profile".
+  Installe et gere pour un projet les skills ultime-skill (ultime-factory) dont il a besoin, et seulement
+  celles-la : detection du projet, installation des packs au niveau du projet, desactivation du reste,
+  ajustement quand la tache change. A utiliser pour installer, configurer, mettre a jour ou alleger les
+  skills d'un projet, ou "ultime-factory", "ultime-skill", "ultime-profile".
 ---
 
-# Profil de packs par projet
+# Installer et gerer les skills d'un projet
 
-Chaque skill d'un plugin active ajoute sa description au contexte **a chaque tour**. La liste a un budget
-(environ 1 % de la fenetre de contexte) : au-dela, Claude Code retire des descriptions et les skills
-concernees ne se declenchent plus. Le reglage `skillOverrides` ne s'applique pas aux skills de plugin ; le
-levier est l'activation des plugins par scope (`enabledPlugins`), qu'on pilote avec la CLI.
+Chaque skill d'un plugin actif ajoute sa description au contexte **a chaque tour**, et Claude Code n'en
+garde qu'un budget limite (environ 1 % de la fenetre) : installer tout le catalogue degrade le
+declenchement des skills. Cette skill installe donc, projet par projet, les seuls packs utiles.
+`ultime-factory` designe le catalogue complet dans lequel elle choisit, pas un bundle a installer tel quel.
 
-Catalogue des packs, de leur role et de leur cout en contexte : [references/catalog.md](references/catalog.md).
+Catalogue des packs, de leur role et de leur cout : [references/catalog.md](references/catalog.md).
 
-## Methode
+## 1. Prerequis
 
-1. **Detecter le projet** a partir des fichiers (dependances, manifestes, infra) et de la tache en cours.
-2. **Proposer un profil** par question a choix multiples (plusieurs reponses) : les packs recommandes
-   d'apres le tableau ci-dessous, avec leur cout lu dans le catalogue. Rien n'est active par defaut sans
-   accord.
-3. **Choisir le scope** : `local` par defaut (personnel, hors git, `.claude/settings.local.json`) ;
-   `project` pour partager le profil avec l'equipe (`.claude/settings.json`, a committer).
-4. **Appliquer**, en ne touchant qu'aux plugins `@ultime-skill` (jamais a ceux d'autres marketplaces) :
-   - `claude plugin list --json` pour connaitre les packs installes ;
-   - `claude plugin enable <pack>@ultime-skill --scope <scope>` pour chaque pack retenu ;
-   - `claude plugin disable <pack>@ultime-skill --scope <scope>` pour chaque autre pack installe **et pour
-     chaque bundle `ultime-*`** : un bundle dont une dependance est desactivee echoue au chargement.
-5. **Faire recharger** : l'utilisateur lance `/reload-plugins` (ou redemarre la session).
-6. **Ajuster en cours de route** : quand la tache change de domaine (passer du code a la fiche store, par
-   exemple), activer le pack necessaire au scope `local`, recharger, et le desactiver apres si l'usage est
-   ponctuel.
+- La CLI : `claude` ; si elle n'est pas dans le PATH, `~/.local/bin/claude` (Windows :
+  `%USERPROFILE%\.local\bin\claude.exe`).
+- Le marketplace : `claude plugin marketplace list`. S'il manque `ultime-skill` :
+  `claude plugin marketplace add Lucas-lux/ultime-skill`. Depot prive : il faut un acces git ; sans cle
+  SSH, `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` avec des identifiants git configures (`gh auth setup-git`).
+- Catalogue a jour : `claude plugin marketplace update ultime-skill`.
 
-## Mode sobre global (optionnel)
+## 2. Comprendre le besoin
 
-Pour que rien ne se charge par defaut : desactiver les packs au scope `user`
-(`claude plugin disable <pack>@ultime-skill --scope user`), sauf `ultime-profile` et ce que l'utilisateur
-veut partout ; chaque projet active ensuite son profil. Modifie la configuration personnelle : confirmer
-avant.
+- Lire le projet : dependances et manifestes (`package.json`, `app.json`, `pubspec.yaml`, projet Xcode,
+  `build.gradle`, `pyproject.toml`, `Dockerfile`, Terraform, dbt...), structure, `CLAUDE.md`.
+- Ecouter la demande : un projet a mener de A a Z, a cloner ou a reprendre ajoute `app-factory` et
+  `product-management` ; une app mobile ajoute le pack de sa technologie ; un lancement ajoute stores et
+  growth.
+- Partir du tableau des profils ci-dessous, puis proposer la liste par question a choix multiples
+  (plusieurs reponses), avec le cout de chaque pack. Projet vide : demander ce qui va etre construit.
+
+## 3. Installer
+
+- **Scope** : `project` si le profil doit etre partage avec l'equipe (ecrit dans `.claude/settings.json`,
+  a committer) ; `local` pour un usage personnel (`.claude/settings.local.json`, hors git). Demander.
+- En scope `project`, declarer aussi le marketplace pour l'equipe :
+  `claude plugin marketplace add Lucas-lux/ultime-skill --scope project`.
+- Installer chaque pack retenu **individuellement** :
+  `claude plugin install <pack>@ultime-skill --scope <scope>`. Jamais un bundle `ultime-*` : il tire tous
+  ses packs.
+- Si des packs ou bundles ultime-skill sont deja actifs au niveau utilisateur sans etre utiles ici :
+  `claude plugin disable <nom>@ultime-skill --scope <scope>` (un bundle dont une dependance est
+  desactivee echoue au chargement, donc le desactiver aussi).
+- Ne jamais toucher aux plugins d'autres marketplaces.
+- Faire recharger : l'utilisateur lance `/reload-plugins` (ou redemarre la session). Verifier ensuite avec
+  `claude plugin list` et resumer ce qui est actif et son cout.
+
+## 4. Ajuster en cours de route
+
+Quand la tache change de domaine, installer ou activer le pack necessaire (passer du code a la fiche
+store, du build au lancement), recharger, et le desactiver apres si l'usage etait ponctuel.
+`app-factory` le fait a ses etapes cles (cadrage, choix de stack, pre-production, lancement).
 
 ## Profils types
 
 | Projet ou tache | Packs |
 |---|---|
+| Projet mene par app-factory (creation, clone, reprise) | app-factory, product-management, puis les packs de la stack ; greenfield seulement pour reconstruire un code dont on a les droits |
 | App web (React, Next.js) | agent-skills, fullstack, design, compliance, security, monitoring, prod-testing |
 | API ou backend | agent-skills, security, devops, monitoring, prod-testing ; data-engineering si base de donnees |
 | Mobile Expo ou React Native | mobile, mobile-expo, design, compliance, security |
@@ -55,9 +73,9 @@ avant.
 | Data | data-engineering, dataviz, monitoring |
 | ML ou LLM | ml-engineering, data-engineering, monitoring |
 | Infrastructure et exploitation | devops, finops, monitoring, security, prod-testing |
-| Projet pilote par app-factory | app-factory, product-management, puis les packs de la stack ; greenfield seulement en clone ou reprise d'un code dont on a les droits |
 | Audit de securite | security, sec-audit, sec-defense |
 | Contenu, motion, video | design, motion-design, video-editing |
 
 `ponytail` et `superpowers` ajoutent un hook au demarrage de session (contexte injecte a chaque session) :
-les activer la ou leur methode est voulue, pas partout par reflexe.
+les proposer seulement si leur methode est voulue. `sec-offense` ne s'installe que sur demande explicite,
+pour des tests autorises.

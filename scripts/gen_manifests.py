@@ -54,7 +54,7 @@ PLUGINS = {
     "growth-social": ("Reseaux sociaux : strategie et contenus par plateforme, marketing d'influence et createurs, animation de communaute.", {}),
     "growth-analytics": ("Mesure marketing : plan de marquage et GA4, UTM, attribution, suivi des conversions (GTM, API de conversion), tests A/B, attribution mobile (MMP, SKAdNetwork).", {}),
     "growth-cro": ("Conversion et retention : CRO des pages, inscription, onboarding, paywalls, popups, emails et SMS de cycle de vie, churn, parrainage, lead magnets, tunnel web vers app.", {}),
-    "ultime-profile": ("N'active pour un projet que les packs ultime-skill utiles (profil par projet ou par tache), pour alleger le contexte charge a chaque session. Catalogue des packs avec leur cout en contexte.", {}),
+    "ultime-profile": ("Point d'entree : installe et gere pour chaque projet les seuls packs ultime-skill utiles (detection du projet, installation au niveau du projet, desactivation du reste, ajustement quand la tache change). Catalogue des packs avec leur cout en contexte.", {}),
     "greenfield": ("Retro-ingenierie salle blanche : extrait d'un code existant des specs comportementales, vecteurs de test et criteres d'acceptation sans heritage d'implementation (commande /greenfield:analyze). Pipeline lourd en agents, a reserver au code dont on detient les droits.", {}),
 }
 

@@ -210,7 +210,7 @@
     {
       "name": "ultime-profile",
       "source": "./plugins/ultime-profile",
-      "description": "N'active pour un projet que les packs ultime-skill utiles (profil par projet ou par tache), pour alleger le contexte charge a chaque session. Catalogue des packs avec leur cout en contexte."
+      "description": "Point d'entree : installe et gere pour chaque projet les seuls packs ultime-skill utiles (detection du projet, installation au niveau du projet, desactivation du reste, ajustement quand la tache change). Catalogue des packs avec leur cout en contexte."
     },
     {
       "name": "greenfield",

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Install ultime-skill in Claude Code: registers the marketplace, then installs a bundle or packs.
 #
-#   ./install.sh                         # bundle ultime-all from this clone
-#   ./install.sh ultime-dev security     # chosen bundles or packs
-#   ULTIME_SKILL_SOURCE=owner/repo ./install.sh   # from GitHub instead of this clone
+#   ./install.sh                         # ultime-profile only: then ask Claude, in each project, to set up its skills
+#   ./install.sh ultime-dev security     # chosen bundles or packs, for every project
+#   ULTIME_SKILL_SOURCE=. ./install.sh   # from this clone instead of GitHub (per-project setup then needs GitHub)
 #   ./install.sh --with-tools ultime-all # also installs the CLIs some skills drive (graphify, rea, asc, gplay)
 set -euo pipefail
 
@@ -52,7 +52,7 @@ install_store_clis() {
     "$TOOLS_DIR/asc" telemetry disable >/dev/null || true   # asc sends usage telemetry by default
   install_binary gplay "https://github.com/tamtom/play-console-cli/releases/download/v$GPLAY_VERSION/$gplay_asset" "$gplay_sum" || true
 }
-SOURCE="${ULTIME_SKILL_SOURCE:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
+SOURCE="${ULTIME_SKILL_SOURCE:-Lucas-lux/ultime-skill}"
 
 with_tools=false
 targets=()
@@ -63,7 +63,7 @@ for argument in "$@"; do
     *) targets+=("$argument") ;;
   esac
 done
-[ ${#targets[@]} -eq 0 ] && targets=(ultime-all)
+[ ${#targets[@]} -eq 0 ] && targets=(ultime-profile)
 
 command -v claude >/dev/null || { echo "Claude Code CLI 'claude' not found on PATH." >&2; exit 1; }
 
