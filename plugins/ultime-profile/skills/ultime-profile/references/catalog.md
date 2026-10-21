@@ -24,7 +24,7 @@ d'agents qu'un pack active ajoute au contexte de chaque session (environ 4 carac
 | `dataviz` | 5 | 0 | 2072 | Data visualisation : choix du type de graphique, matplotlib/seaborn/plotly, dashboards HTML autoportants, figures scientifiques accessibles, dashboards Grafana. |
 | `ml-engineering` | 10 | 0 | 3799 | ML engineering : choix de methode de fine-tuning, recettes LoRA/QLoRA, harnais d'evaluation et calibration de juge LLM, TRL, RAG, serving vLLM, benchmarks lm-eval, scikit-learn, tracing MLflow, Hugging Face Hub. |
 | `fullstack` | 2 | 0 | 639 | Full stack web en production : 70 regles de performance React et Next.js, patterns de composition React 19. Se combine avec le pack agent-skills (APIs, securite, perf, livraison). |
-| `design` | 7 | 0 | 2329 | Design qui ne fait pas vibe-code : systeme anti AI-slop (impeccable), direction artistique et liste des tells IA (frontend-design), Web Interface Guidelines de Vercel, contraintes deslop, stress-test d'UI, refonte de sites generiques. |
+| `ui-design` | 7 | 0 | 2329 | Design qui ne fait pas vibe-code : systeme anti AI-slop (impeccable), direction artistique et liste des tells IA (frontend-design), Web Interface Guidelines de Vercel, contraintes deslop, stress-test d'UI, refonte de sites generiques. |
 | `compliance` | 10 | 0 | 5106 | Reglementaire et conformite : audit RGAA (accessibilite, en francais), regles RGPD a l'ingenierie, conseil WCAG et cartographie legale (EAA), verification de conformite d'une feature, securite du developpement (ANSSI), corrections d'accessibilite au niveau du code. |
 | `motion-design` | 11 | 0 | 3544 | Motion design : GSAP (core, timeline, ScrollTrigger, plugins, performance, frameworks), principes de motion agnostiques (LottieFiles), animations mathematiques Manim (ManimCE et planification de scenes). |
 | `video-editing` | 4 | 0 | 1996 | Montage video complet : edition par conversation avec EDL et sous-titres (video-use), construction de commandes FFmpeg (coupe, concat, transitions, loudness, presets reseaux sociaux), transcription locale faster-whisper, rendu Manim. |
@@ -52,13 +52,13 @@ d'agents qu'un pack active ajoute au contexte de chaque session (environ 4 carac
 
 | Bundle | Cout (caracteres) | Packs |
 |---|---|---|
-| `ultime-all` | 169574 | ponytail, superpowers, agent-skills, skill-factory, rea, graphify, security, sec-audit, sec-defense, sc-conventions, monitoring, prod-testing, devops, finops, data-engineering, dataviz, ml-engineering, fullstack, design, compliance, motion-design, video-editing, app-factory, product-management, mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, ultime-profile, greenfield |
+| `ultime-all` | 169574 | ponytail, superpowers, agent-skills, skill-factory, rea, graphify, security, sec-audit, sec-defense, sc-conventions, monitoring, prod-testing, devops, finops, data-engineering, dataviz, ml-engineering, fullstack, ui-design, compliance, motion-design, video-editing, app-factory, product-management, mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, ultime-profile, greenfield |
 | `ultime-dev` | 28315 | ponytail, superpowers, agent-skills, skill-factory, devops, fullstack, security, sc-conventions, prod-testing, ultime-profile |
 | `ultime-data` | 11034 | data-engineering, dataviz, ml-engineering, graphify, ultime-profile |
-| `ultime-media` | 8250 | design, motion-design, video-editing, ultime-profile |
+| `ultime-media` | 8250 | ui-design, motion-design, video-editing, ultime-profile |
 | `ultime-security` | 30197 | security, sec-audit, sec-defense, rea, ultime-profile |
-| `ultime-web` | 8455 | fullstack, design, compliance, ultime-profile |
+| `ultime-web` | 8455 | fullstack, ui-design, compliance, ultime-profile |
 | `ultime-ops` | 11011 | devops, finops, monitoring, prod-testing, ultime-profile |
-| `ultime-mobile` | 51153 | mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, design, compliance, security, ultime-profile |
+| `ultime-mobile` | 51153 | mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, ui-design, compliance, security, ultime-profile |
 | `ultime-growth` | 44073 | growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, store-aso, video-editing, motion-design, ultime-profile |
-| `ultime-factory` | 134157 | app-factory, product-management, greenfield, agent-skills, fullstack, design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, video-editing, motion-design, ultime-profile |
+| `ultime-factory` | 134157 | app-factory, product-management, greenfield, agent-skills, fullstack, ui-design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, video-editing, motion-design, ultime-profile |

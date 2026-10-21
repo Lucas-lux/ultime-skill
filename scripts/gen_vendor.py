@@ -194,14 +194,14 @@ pack_skill("vercel-labs", "skills/react-best-practices", "fullstack", folder="ve
 pack_skill("vercel-labs", "skills/composition-patterns", "fullstack", folder="vercel-composition-patterns")
 
 # ---- Design (anti AI-slop) ----
-pack_skill("impeccable", ".claude/skills/impeccable", "design", exclude=["scripts"])
-pack_skill("anthropic-skills", "skills/frontend-design", "design")
-pack_skill("vercel-labs", "skills/web-design-guidelines", "design", folder="vercel-web-design-guidelines")
-add("wig", "command.md", "plugins/design/skills/vercel-web-design-guidelines/references/web-interface-guidelines.md", license=False)
-pack_skill("ibelick", "skills/baseline-ui", "design")
-pack_skill("emilkowalski", "skills/break-ui", "design")
-pack_skill("emilkowalski", "skills/emil-design-eng", "design")
-pack_skill("taste", "skills/redesign-skill", "design", folder="redesign-existing-projects")
+pack_skill("impeccable", ".claude/skills/impeccable", "ui-design", exclude=["scripts"])
+pack_skill("anthropic-skills", "skills/frontend-design", "ui-design")
+pack_skill("vercel-labs", "skills/web-design-guidelines", "ui-design", folder="vercel-web-design-guidelines")
+add("wig", "command.md", "plugins/ui-design/skills/vercel-web-design-guidelines/references/web-interface-guidelines.md", license=False)
+pack_skill("ibelick", "skills/baseline-ui", "ui-design")
+pack_skill("emilkowalski", "skills/break-ui", "ui-design")
+pack_skill("emilkowalski", "skills/emil-design-eng", "ui-design")
+pack_skill("taste", "skills/redesign-skill", "ui-design", folder="redesign-existing-projects")
 
 # ---- Regulatory / compliance (GDPR, accessibility, legal) ----
 pack_skill("etalab", "skills/rgaa", "compliance")

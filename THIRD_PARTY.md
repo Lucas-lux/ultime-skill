@@ -37,14 +37,6 @@ La licence d'origine est copiée dans chaque dossier importé.
 | `plugins/dataviz/skills/dashboarding` | [grafana/skills](https://github.com/grafana/skills) | `skills/grafana-core/dashboarding` | `1ccacf29049f` | Apache-2.0 |
 | `plugins/dataviz/skills/data-visualization` | [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) | `data/skills/data-visualization` | `02ffa99ff00c` | Apache-2.0 |
 | `plugins/dataviz/skills/scientific-visualization` | [K-Dense-AI/claude-scientific-skills](https://github.com/K-Dense-AI/claude-scientific-skills) | `skills/scientific-visualization` | `a1043ef544e3` | MIT |
-| `plugins/design/skills/baseline-ui` | [ibelick/ui-skills](https://github.com/ibelick/ui-skills) | `skills/baseline-ui` | `c628a5917754` | MIT |
-| `plugins/design/skills/break-ui` | [emilkowalski/skills](https://github.com/emilkowalski/skills) | `skills/break-ui` | `2d228630ba14` | MIT |
-| `plugins/design/skills/emil-design-eng` | [emilkowalski/skills](https://github.com/emilkowalski/skills) | `skills/emil-design-eng` | `2d228630ba14` | MIT |
-| `plugins/design/skills/frontend-design` | [anthropics/skills](https://github.com/anthropics/skills) | `skills/frontend-design` | `dbd4588f9e10` | Apache-2.0 |
-| `plugins/design/skills/impeccable` | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | `.claude/skills/impeccable` | `2f98774f86bc` | Apache-2.0 |
-| `plugins/design/skills/redesign-existing-projects` | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | `skills/redesign-skill` | `a60a36dc2bb3` | MIT |
-| `plugins/design/skills/vercel-web-design-guidelines` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/web-design-guidelines` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) |
-| `plugins/design/skills/vercel-web-design-guidelines/references/web-interface-guidelines.md` | [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) | `command.md` | `434b7f913646` | MIT |
 | `plugins/devops/skills/deployment-pipeline-design` | [wshobson/agents](https://github.com/wshobson/agents) | `plugins/cicd-automation/skills/deployment-pipeline-design` | `46891e7e60da` | MIT |
 | `plugins/devops/skills/docker-build-strategies` | [docker/skills](https://github.com/docker/skills) | `skills/docker-build-strategies` | `f79172733725` | Apache-2.0 |
 | `plugins/devops/skills/docker-destructive-guardrails` | [docker/skills](https://github.com/docker/skills) | `skills/docker-destructive-guardrails` | `f79172733725` | Apache-2.0 |
@@ -309,6 +301,14 @@ La licence d'origine est copiée dans chaque dossier importé.
 | `plugins/store-google/skills/playstore-review` | [devsemih/appstore-review-skill](https://github.com/devsemih/appstore-review-skill) | `skills/playstore-review` | `ab77bb701fe9` | MIT |
 | `plugins/superpowers/hooks` | [obra/superpowers](https://github.com/obra/superpowers) | `hooks` | `bb92a7774141` | MIT |
 | `plugins/superpowers/skills` | [obra/superpowers](https://github.com/obra/superpowers) | `skills` | `bb92a7774141` | MIT |
+| `plugins/ui-design/skills/baseline-ui` | [ibelick/ui-skills](https://github.com/ibelick/ui-skills) | `skills/baseline-ui` | `c628a5917754` | MIT |
+| `plugins/ui-design/skills/break-ui` | [emilkowalski/skills](https://github.com/emilkowalski/skills) | `skills/break-ui` | `2d228630ba14` | MIT |
+| `plugins/ui-design/skills/emil-design-eng` | [emilkowalski/skills](https://github.com/emilkowalski/skills) | `skills/emil-design-eng` | `2d228630ba14` | MIT |
+| `plugins/ui-design/skills/frontend-design` | [anthropics/skills](https://github.com/anthropics/skills) | `skills/frontend-design` | `dbd4588f9e10` | Apache-2.0 |
+| `plugins/ui-design/skills/impeccable` | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | `.claude/skills/impeccable` | `2f98774f86bc` | Apache-2.0 |
+| `plugins/ui-design/skills/redesign-existing-projects` | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | `skills/redesign-skill` | `a60a36dc2bb3` | MIT |
+| `plugins/ui-design/skills/vercel-web-design-guidelines` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/web-design-guidelines` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) |
+| `plugins/ui-design/skills/vercel-web-design-guidelines/references/web-interface-guidelines.md` | [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) | `command.md` | `434b7f913646` | MIT |
 | `plugins/video-editing/skills/faster-whisper` | [ThePlasmak/faster-whisper](https://github.com/ThePlasmak/faster-whisper) | `.` | `1c8d6a682c56` | MIT |
 | `plugins/video-editing/skills/ffmpeg-video-editor` | [bryanwhl/ffmpeg-video-editor](https://github.com/bryanwhl/ffmpeg-video-editor) | `.` | `d5c3ee6e9896` | MIT |
 | `plugins/video-editing/skills/manim-video` | [browser-use/video-use](https://github.com/browser-use/video-use) | `skills/manim-video` | `43cfc5668335` | MIT |

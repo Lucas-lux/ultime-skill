@@ -54,7 +54,7 @@ justifiee dans `decisions.md`, jamais implicite.
 
 - Design system avec tokens ; responsive ; contraste et tailles de cible conformes ; navigation clavier
   et lecteur d'ecran sur les parcours critiques.
-- Pas d'interface generique "IA" (pack design : `impeccable`, `baseline-ui`). Mobile : conventions de la
+- Pas d'interface generique "IA" (pack ui-design : `impeccable`, `baseline-ui`). Mobile : conventions de la
   plateforme (Human Interface Guidelines, Material).
 
 ## Performance

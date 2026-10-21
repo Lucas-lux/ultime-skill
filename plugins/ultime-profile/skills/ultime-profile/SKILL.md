@@ -62,19 +62,19 @@ store, du build au lancement), recharger, et le desactiver apres si l'usage etai
 | Projet ou tache | Packs |
 |---|---|
 | Projet mene par app-factory (creation, clone, reprise) | app-factory, product-management, puis les packs de la stack ; greenfield seulement pour reconstruire un code dont on a les droits |
-| App web (React, Next.js) | agent-skills, fullstack, design, compliance, security, monitoring, prod-testing |
+| App web (React, Next.js) | agent-skills, fullstack, ui-design, compliance, security, monitoring, prod-testing |
 | API ou backend | agent-skills, security, devops, monitoring, prod-testing ; data-engineering si base de donnees |
-| Mobile Expo ou React Native | mobile, mobile-expo, design, compliance, security |
-| Mobile iOS natif | mobile, mobile-ios, design, compliance, security |
-| Mobile Android natif | mobile, mobile-android, design, compliance, security |
-| Mobile Flutter | mobile, mobile-flutter, design, compliance, security |
+| Mobile Expo ou React Native | mobile, mobile-expo, ui-design, compliance, security |
+| Mobile iOS natif | mobile, mobile-ios, ui-design, compliance, security |
+| Mobile Android natif | mobile, mobile-android, ui-design, compliance, security |
+| Mobile Flutter | mobile, mobile-flutter, ui-design, compliance, security |
 | Publication et fiche store (au lancement) | app-stores, puis store-apple et/ou store-google selon les stores vises, store-aso |
 | Marketing et acquisition | growth (toujours : contexte produit partage), puis selon la tache growth-seo, growth-ads, growth-social, growth-analytics, growth-cro ; video-editing et motion-design pour produire des videos |
 | Data | data-engineering, dataviz, monitoring |
 | ML ou LLM | ml-engineering, data-engineering, monitoring |
 | Infrastructure et exploitation | devops, finops, monitoring, security, prod-testing |
 | Audit de securite | security, sec-audit, sec-defense |
-| Contenu, motion, video | design, motion-design, video-editing |
+| Contenu, motion, video | ui-design, motion-design, video-editing |
 
 `ponytail` et `superpowers` ajoutent un hook au demarrage de session (contexte injecte a chaque session) :
 les proposer seulement si leur methode est voulue. `sec-offense` ne s'installe que sur demande explicite,

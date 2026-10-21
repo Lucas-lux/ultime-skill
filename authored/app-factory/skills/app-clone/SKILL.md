@@ -52,7 +52,7 @@ Cette skill couvre la phase P0 du mode clone. Ensuite, `app-factory` reprend a P
    utile, a ignorer ou a ameliorer, plus les irritants releves dans les avis, qui deviennent des
    differenciateurs.
 5. **Brief de personnalisation** (agent `product-strategist`) : nom (`product-name`), positionnement
-   (`positioning-ideas`, `value-proposition`), identite visuelle propre (pack design), ton, langues,
+   (`positioning-ideas`, `value-proposition`), identite visuelle propre (pack ui-design), ton, langues,
    monetisation adaptee au marche, obligations locales. Disponibilite du nom a faire verifier par
    l'utilisateur (bases INPI et EUIPO, stores, nom de domaine) : l'agent liste les recherches, il ne
    conclut pas a la place d'un juriste.

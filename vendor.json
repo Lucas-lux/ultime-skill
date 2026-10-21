@@ -975,7 +975,7 @@
     {
       "source": "impeccable",
       "from": ".claude/skills/impeccable",
-      "to": "plugins/design/skills/impeccable",
+      "to": "plugins/ui-design/skills/impeccable",
       "exclude": [
         "scripts"
       ]
@@ -983,38 +983,38 @@
     {
       "source": "anthropic-skills",
       "from": "skills/frontend-design",
-      "to": "plugins/design/skills/frontend-design"
+      "to": "plugins/ui-design/skills/frontend-design"
     },
     {
       "source": "vercel-labs",
       "from": "skills/web-design-guidelines",
-      "to": "plugins/design/skills/vercel-web-design-guidelines"
+      "to": "plugins/ui-design/skills/vercel-web-design-guidelines"
     },
     {
       "source": "wig",
       "from": "command.md",
-      "to": "plugins/design/skills/vercel-web-design-guidelines/references/web-interface-guidelines.md",
+      "to": "plugins/ui-design/skills/vercel-web-design-guidelines/references/web-interface-guidelines.md",
       "license": false
     },
     {
       "source": "ibelick",
       "from": "skills/baseline-ui",
-      "to": "plugins/design/skills/baseline-ui"
+      "to": "plugins/ui-design/skills/baseline-ui"
     },
     {
       "source": "emilkowalski",
       "from": "skills/break-ui",
-      "to": "plugins/design/skills/break-ui"
+      "to": "plugins/ui-design/skills/break-ui"
     },
     {
       "source": "emilkowalski",
       "from": "skills/emil-design-eng",
-      "to": "plugins/design/skills/emil-design-eng"
+      "to": "plugins/ui-design/skills/emil-design-eng"
     },
     {
       "source": "taste",
       "from": "skills/redesign-skill",
-      "to": "plugins/design/skills/redesign-existing-projects"
+      "to": "plugins/ui-design/skills/redesign-existing-projects"
     },
     {
       "source": "etalab",

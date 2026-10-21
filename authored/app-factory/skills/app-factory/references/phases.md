@@ -90,7 +90,7 @@ Sequence : l'architecte d'abord (il fixe la stack et les frontieres), puis les a
 
 Pour chaque story prete, dans l'ordre des dependances :
 1. `implementer` : `test-driven-development`, `incremental-implementation`, commits petits sur une branche
-   dediee. UI : `frontend-ui-engineering` et les skills du pack design.
+   dediee. UI : `frontend-ui-engineering` et les skills du pack ui-design.
 2. `code-reviewer` : `code-review-and-quality` sur le diff.
 3. `qa-engineer` : criteres d'acceptation verifies, tests de bout en bout des parcours touches.
 4. `security-engineer` : `differential-review` ou `security-review` sur le diff si la story touche

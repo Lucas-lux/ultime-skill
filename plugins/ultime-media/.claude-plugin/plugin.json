@@ -6,7 +6,7 @@
     "url": "https://github.com/senscritique"
   },
   "dependencies": [
-    "design",
+    "ui-design",
     "motion-design",
     "video-editing",
     "ultime-profile"

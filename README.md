@@ -58,13 +58,13 @@ Redémarrer Claude Code ou lancer `/reload-plugins` après installation.
 | `ultime-all` | Tous les packs (déconseillé : préférer l'installation par projet) |
 | `ultime-dev` | ponytail, superpowers, agent-skills, skill-factory, devops, fullstack, security, sc-conventions |
 | `ultime-data` | data-engineering, dataviz, ml-engineering, graphify |
-| `ultime-media` | design, motion-design, video-editing |
+| `ultime-media` | ui-design, motion-design, video-editing |
 | `ultime-security` | security, sec-audit, sec-defense, rea |
-| `ultime-web` | fullstack, design, compliance |
+| `ultime-web` | fullstack, ui-design, compliance |
 | `ultime-ops` | devops, finops, monitoring, prod-testing |
-| `ultime-mobile` | mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, design, compliance, security |
+| `ultime-mobile` | mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, ui-design, compliance, security |
 | `ultime-growth` | growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, store-aso, video-editing, motion-design |
-| `ultime-factory` | app-factory et tout ce qu'il pilote : product-management, greenfield, agent-skills, fullstack, design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, et tous les packs mobile, stores, growth et production vidéo |
+| `ultime-factory` | app-factory et tout ce qu'il pilote : product-management, greenfield, agent-skills, fullstack, ui-design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, et tous les packs mobile, stores, growth et production vidéo |
 
 Chaque bundle installe aussi `ultime-profile` (voir [Économie de contexte](#économie-de-contexte)).
 
@@ -185,7 +185,7 @@ de leurs alternatives.
 | Pack | Skills | Rôle |
 |---|---|---|
 | `fullstack` | 2 | Performance React/Next.js et composition React 19. À combiner avec `agent-skills`. |
-| `design` | 7 | Design anti AI-slop : impeccable, frontend-design, Web Interface Guidelines, deslop, refonte. |
+| `ui-design` | 7 | Design anti AI-slop : impeccable, frontend-design, Web Interface Guidelines, deslop, refonte. |
 | `compliance` | 10 | RGAA, WCAG, conformité d'une feature, sécurité du développement (ANSSI). Skills FR écrites maison : RGPD/CNIL, cookies et consentement, mentions légales et CGU/CGV. |
 
 ### Créatif
@@ -241,7 +241,7 @@ importée garde la licence de son projet d'origine, copiée dans son dossier et 
   l'identique). Elles restent isolées dans leurs dossiers, avec leur licence ; l'agrégation ne contamine
   pas le reste de la bibliothèque, mais toute modification d'une de ces skills doit rester en CC-BY-SA.
 - Les skills `devops` issues de HashiCorp sont en **MPL-2.0** (copyleft faible, par fichier).
-- Les skills Vercel (`fullstack`, `design`) déclarent MIT en frontmatter mais leur dépôt n'a pas de fichier
+- Les skills Vercel (`fullstack`, `ui-design`) déclarent MIT en frontmatter mais leur dépôt n'a pas de fichier
   LICENSE ; la mention de licence voyage dans le frontmatter de la skill.
 - Les skills Flutter sont en **BSD-3-Clause** ; Android (Google) et Play Billing (RevenueCat) en Apache-2.0.
 

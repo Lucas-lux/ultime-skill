@@ -7,7 +7,7 @@
   },
   "dependencies": [
     "fullstack",
-    "design",
+    "ui-design",
     "compliance",
     "ultime-profile"
   ]
