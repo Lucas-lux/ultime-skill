@@ -1,12 +1,10 @@
 ---
 name: finops-multicloud
 description: >
-  FinOps multi-cloud vendor-neutral, au-dela des outils d'un seul fournisseur : normalisation des couts via
-  FOCUS, unit economics (cout par unite metier), showback et chargeback, allocation et optimisation du cout
-  Kubernetes (OpenCost, Kubecost), detection d'anomalies et culture FinOps. A utiliser quand l'utilisateur
-  parle de FinOps, couts multi-cloud, FOCUS, unit economics, showback, chargeback, cout Kubernetes,
-  OpenCost, Kubecost, allocation de couts, ou optimisation de la facture cloud a l'echelle de plusieurs
-  fournisseurs.
+  FinOps multi-cloud vendor-neutral : FOCUS, unit economics, showback et chargeback, cout Kubernetes
+  (OpenCost, Kubecost), anomalies. A utiliser quand l'utilisateur parle de FinOps, couts multi-cloud,
+  FOCUS, unit economics, showback, chargeback, cout Kubernetes, OpenCost, Kubecost, allocation de couts,
+  ou optimisation de la facture cloud multi-fournisseurs.
 ---
 
 # FinOps multi-cloud

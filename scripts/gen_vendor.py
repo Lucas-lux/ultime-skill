@@ -61,6 +61,24 @@ SOURCES = {
     "schematic": ("blader/schematic", "297fb73e99aa4bccdb228b61252034182fdb4252", "MIT", ["LICENSE"]),
     "alirezarezvani": ("alirezarezvani/claude-skills", "19392f7a08264ed00486a251f5b2098321771f94", "MIT", ["LICENSE"]),
     "greenfield": ("prime-radiant-inc/greenfield", "6e6d4b425fe9082d469493d64a5b8e12b15dc9da", "Apache-2.0", ["LICENSE"]),
+    "expo": ("expo/skills", "55ec65cd16499f20f14fb10fe99a2e62901b00a1", "MIT", ["LICENSE"]),
+    "callstack": ("callstackincubator/agent-skills", "59e9d17446a248b21d86f078fcd0bd2d36db1ca4", "MIT", ["LICENSE"]),
+    "rntl": ("callstack/react-native-testing-library", "0ecb9c9c0cef163e01abdeae1b4b7c82af40d0b1", "MIT", ["LICENSE"]),
+    "swiftui-pro": ("twostraws/SwiftUI-Agent-Skill", "ce32af1693b9e78a7d22ff48001c97a304d32063", "MIT", ["LICENSE"]),
+    "swift-concurrency-pro": ("twostraws/Swift-Concurrency-Agent-Skill", "bee3f69ba17142da148d3c5406f148ed62592b69", "MIT", ["LICENSE"]),
+    "swift-testing-pro": ("twostraws/Swift-Testing-Agent-Skill", "2d6bba14a3c8bf3694f218b92fffe617c41ae43e", "MIT", ["LICENSE"]),
+    "swiftdata-pro": ("twostraws/SwiftData-Agent-Skill", "8051f177a0076e7fd45bdf4ee687b070ba58fdc6", "MIT", ["LICENSE"]),
+    "dadederk": ("dadederk/iOS-Accessibility-Agent-Skill", "dcc3a36ce1d0099341d545c1af4eb5a8c989bf66", "MIT", ["LICENSE"]),
+    "android": ("android/skills", "95ea931a1ad8f9b2be132ae0cfb2aad964d71118", "Apache-2.0", ["LICENSE.txt"]),
+    "play-billing": ("RevenueCat/play-billing-skills", "8fa2e4c25d4171be5950888b3ce89d500f6e5cfa", "Apache-2.0", ["LICENSE"]),
+    "flutter": ("flutter/agent-plugins", "6e590650bb4bab87f33187423dc10113d04d4836", "BSD-3-Clause", ["LICENSE"]),
+    "asc": ("rorkai/app-store-connect-cli-skills", "4b496c57b262985df88f2382a65029d3fec3ab95", "MIT", ["LICENSE"]),
+    "gplay": ("tamtom/gplay-cli-skills", "10301b24639e4f768d009b2edda9315cb2149712", "MIT", ["LICENSE"]),
+    "devsemih": ("devsemih/appstore-review-skill", "ab77bb701fe9bee863b89db4634efcf6e128798e", "MIT", ["LICENSE"]),
+    "preflight": ("truongduy2611/app-store-preflight-skills", "cfd9c73577300f9310ca892fefd38fbe1abd73cb", "MIT", ["LICENSE"]),
+    "rshankras": ("rshankras/claude-code-apple-skills", "9ffb83138209057875698dd11c1720c657c47a92", "MIT", ["LICENSE"]),
+    "screenshots": ("ParthJadhav/app-store-screenshots", "5386f227360bddb06c8beaff920a1a34c9f01932", "MIT", ["LICENSE"]),
+    "appeeky": ("appeeky/aso-skills", "3919d7c27402d92c7ef698f2016174b874ea189e", "MIT", ["LICENSE"]),
 }
 
 imports: list[dict] = []
@@ -234,7 +252,91 @@ pack_skill("alirezarezvani", "product-team/code-to-prd/skills/code-to-prd", "pro
 
 # ---- Greenfield: clean-room behavioral specs from an existing codebase (whole plugin, namespaced) ----
 add("greenfield", "skills", "plugins/greenfield/skills", license_to="plugins/greenfield", exclude=[".gitkeep"])
-add("greenfield", "agents", "plugins/greenfield/agents", license=False, exclude=[".gitkeep"])
+# The upstream analyzer preloads all 21 skills (about 500 kB) on every dispatch although each dispatch prompt
+# names the one skill to follow: load that skill on demand instead.
+add("greenfield", "agents", "plugins/greenfield/agents", license=False, exclude=[".gitkeep"], replace=[
+    ["analyzer.md", r"^skills: greenfield:.*\n", ""],
+    ["analyzer.md", r" Loads all analysis skills\.$", " Loads the one skill its prompt names."],
+    ["analyzer.md", r"^(tools: .*)$", r"\1, Skill"],
+    ["analyzer.md", r"^Follow the specified skill\.",
+     "Load the specified skill with the Skill tool before starting (`greenfield:<skill-name>`, for example "
+     "`greenfield:source-analysis`), plus `greenfield:provenance-methodology` when you write behavioral claims. "
+     "Load no other skill unless that methodology points to it. Follow the specified skill."],
+])
+
+# ---- Mobile, split per stack so a project only enables what it builds with ----
+# Every expo skill ends with a "Submitting Feedback" footer that runs an unpinned npx package (telemetry).
+for skill in ["expo-overview", "expo-project-structure", "expo-router", "expo-native-ui", "expo-ui",
+              "expo-design-system", "expo-animation", "expo-data-fetching", "expo-dev-client", "expo-module",
+              "expo-upgrade", "expo-brownfield", "expo-web-to-native", "expo-dom", "expo-examples",
+              "eas-app-stores", "eas-update", "eas-workflows"]:
+    pack_skill("expo", f"plugins/expo/skills/{skill}", "mobile-expo", strip_tail="## Submitting Feedback")
+pack_skill("callstack", "skills/react-native-best-practices", "mobile-expo", exclude=["*.png"])
+pack_skill("callstack", "skills/upgrading-react-native", "mobile-expo")
+pack_skill("callstack", "skills/react-navigation", "mobile-expo")
+pack_skill("rntl", "skills/react-native-testing", "mobile-expo")
+
+# twostraws: the outer folder holds real reference files (the inner skills/ copy uses a symlink).
+for source, skill in [("swiftui-pro", "swiftui-pro"), ("swift-concurrency-pro", "swift-concurrency-pro"),
+                      ("swift-testing-pro", "swift-testing-pro"), ("swiftdata-pro", "swiftdata-pro")]:
+    pack_skill(source, skill, "mobile-ios", exclude=[".claude-plugin", "agents", "assets", "skills"])
+pack_skill("dadederk", "ios-accessibility", "mobile-ios", exclude=["agents"])
+
+for path in ["build-system/agp/agp-9-upgrade", "jetpack-compose/jetpack-compose-performance",
+             "jetpack-compose/adaptive", "jetpack-compose/migration/migrate-xml-views-to-jetpack-compose",
+             "jetpack-compose/theming/styles", "navigation/navigation-3", "system/edge-to-edge",
+             "performance/r8-analyzer", "performance/anr-audit-and-fix", "testing/testing-setup",
+             "play/play-billing-library-version-upgrade", "play/play-policy-insights",
+             "security/android-intent-security", "security/android-permissions-security"]:
+    pack_skill("android", path, "mobile-android")
+# Generic upstream names (security, testing, setup) get a play-billing- prefix.
+for skill, folder in [("integrating-pbl", "play-billing-integration"), ("purchase-flow", "play-billing-purchase-flow"),
+                      ("one-time-products", "play-billing-one-time-products"),
+                      ("subscriptions", "play-billing-subscriptions"),
+                      ("subscription-states", "play-billing-subscription-states"), ("rtdn", "play-billing-rtdn"),
+                      ("backend-architecture", "play-billing-backend"), ("security", "play-billing-security"),
+                      ("error-handling", "play-billing-errors"), ("testing", "play-billing-testing")]:
+    pack_skill("play-billing", f"google-play/{skill}", "mobile-android", folder=folder)
+
+for skill in ["flutter-apply-architecture-best-practices", "flutter-build-responsive-layout",
+              "flutter-fix-layout-issues", "flutter-setup-declarative-routing", "flutter-setup-localization",
+              "flutter-implement-json-serialization", "flutter-use-http-package", "flutter-add-widget-test",
+              "flutter-add-widget-preview", "flutter-add-integration-test", "dart-add-unit-test",
+              "dart-fix-runtime-errors", "dart-run-static-analysis", "dart-resolve-package-conflicts"]:
+    pack_skill("flutter", f"skills/{skill}", "mobile-flutter")
+
+# ---- Stores, split per store; App Store Connect and Play Console through their CLIs first ----
+for skill in ["asc-cli-usage", "asc-id-resolver", "asc-release-flow", "asc-submission-health",
+              "asc-testflight-orchestration", "asc-signing-setup", "asc-xcode-build", "asc-build-lifecycle",
+              "asc-metadata-sync", "asc-localize-metadata", "asc-whats-new-writer", "asc-screenshot-resize",
+              "asc-shots-pipeline", "asc-app-create-ui", "asc-crash-triage", "asc-ppp-pricing"]:
+    pack_skill("asc", f"skills/{skill}", "store-apple")
+add("preflight", ".", "plugins/store-apple/skills/app-store-preflight", exclude=["README.md", ".github"])
+pack_skill("rshankras", "skills/legal/privacy-policy", "store-apple")
+pack_skill("rshankras", "skills/legal/privacy-publish", "store-apple")
+
+for skill in ["gplay-cli-usage", "gplay-gradle-build", "gplay-release-flow", "gplay-rollout-management",
+              "gplay-testers-orchestration", "gplay-metadata-sync", "gplay-screenshot-automation",
+              "gplay-submission-checks", "gplay-preflight", "gplay-iap-setup", "gplay-ppp-pricing",
+              "gplay-vitals-monitoring"]:
+    pack_skill("gplay", f"skills/{skill}", "store-google")
+# playstore-review reads ../../references/play-policy-summary.md relative to its own folder.
+pack_skill("devsemih", "skills/playstore-review", "store-google")
+add("devsemih", "references/play-policy-summary.md", "plugins/store-google/references/play-policy-summary.md",
+    license=False)
+
+pack_skill("screenshots", "skills/app-store-screenshots", "store-aso")
+for skill in ["app-marketing-context", "aso-audit", "keyword-research", "metadata-optimization",
+              "screenshot-optimization", "app-preview-video", "app-icon-optimization", "custom-product-pages",
+              "in-app-events", "ab-test-store-listing", "app-rejection-recovery", "review-management",
+              "rating-prompt-strategy"]:
+    pack_skill("appeeky", f"skills/{skill}", "store-aso")
+pack_skill("appeeky", "skills/localization", "store-aso", folder="store-localization")
+# The upstream vendor sells a keyword tool; keep the method, drop the product pointer.
+pack_skill("appeeky", "skills/android-aso", "store-aso", replace=[
+    ["SKILL.md", r"^Use Appeeky keyword tools, then adapt for Play:$",
+     "Research keywords with the keyword-research skill, then adapt for Play:"],
+])
 add("greenfield", "commands", "plugins/greenfield/commands", license=False, exclude=[".gitkeep"])
 
 

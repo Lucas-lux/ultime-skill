@@ -1,13 +1,10 @@
 ---
 name: testing-in-production
 description: >
-  Strategie de test de bout en bout et validation en production, vendor-neutral : pyramide de tests et
-  etapes de CI/CD (unitaire, contrat, integration, end to end, smoke, canary), tests de fumee post-deploy,
-  deploiement progressif (canary, blue-green) avec criteres de rollback automatique, feature flags
-  (OpenFeature) et leur cycle de vie, monitoring synthetique auto-heberge, gestion des tests instables
-  (flaky). A utiliser quand l'utilisateur parle de tests en production, smoke tests, canary, blue-green,
-  rollback, feature flags, OpenFeature, monitoring synthetique, strategie CI/CD, test de contrat (Pact),
-  ou tests instables.
+  Tests de bout en bout et validation en production : pyramide CI/CD, smoke tests, canary et blue-green
+  avec rollback automatique, feature flags, monitoring synthetique. A utiliser pour tests en production,
+  smoke tests, canary, blue-green, rollback, feature flags, OpenFeature, monitoring synthetique, strategie
+  CI/CD, test de contrat (Pact), ou tests instables (flaky).
 ---
 
 # Tester en production (strategie de bout en bout)

@@ -3,7 +3,8 @@
 Errors (exit 1): invalid skill or agent frontmatter, skill name different from its folder, agent name
 different from its file, plugin missing from the marketplace or manifest name mismatch, em dash, invisible
 Unicode character.
-Warnings: skill name shared by several plugins, risky shell patterns in bundled files (to review by hand).
+Warnings: skill name shared by several plugins, risky shell patterns in bundled files (to review by hand),
+hand-written skill description over budget, SKILL.md over 500 lines.
 
 Usage: python scripts/check.py
 """
@@ -16,6 +17,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SKIPPED_DIRECTORIES = {".git", ".cache", "node_modules", "__pycache__"}
 MAX_DESCRIPTION_LENGTH = 1024
+# Descriptions load into every session; SKILL.md bodies load on use. Limits from the Claude Code skill docs
+# (keep SKILL.md under 500 lines) and from this library's own budget for hand-written skills.
+MAX_AUTHORED_DESCRIPTION = 400
+MAX_SKILL_LINES = 500
 # Built from code points so this checker source holds no literal forbidden character.
 EM_DASH = chr(0x2014)
 INVISIBLE_RANGES = [(0x200B, 0x200F), (0x202A, 0x202E), (0x2060, 0x2064), (0xFEFF, 0xFEFF)]
@@ -72,6 +77,7 @@ def main() -> int:
             errors.append(f"{directory.name}: plugin not listed in marketplace.json")
 
     owners: dict[str, list[str]] = {}
+    authored = {path.parent.name for path in ROOT.glob("authored/*/skills/*/SKILL.md")}
     for skill in sorted(ROOT.glob("plugins/*/skills/*/SKILL.md")):
         location = skill.relative_to(ROOT).as_posix()
         fields = frontmatter(skill.read_text(encoding="utf-8"))
@@ -85,6 +91,11 @@ def main() -> int:
             errors.append(f"{location}: empty description")
         elif len(description) > MAX_DESCRIPTION_LENGTH:
             warnings.append(f"{location}: description of {len(description)} characters")
+        elif len(description) > MAX_AUTHORED_DESCRIPTION and skill.parent.name in authored:
+            warnings.append(f"{location}: authored description of {len(description)} characters, aim for "
+                            f"{MAX_AUTHORED_DESCRIPTION} (it is in the context of every session)")
+        if skill.read_text(encoding="utf-8").count("\n") > MAX_SKILL_LINES:
+            warnings.append(f"{location}: over {MAX_SKILL_LINES} lines, move detail to references/")
         owners.setdefault(skill.parent.name, []).append(skill.parts[-4])
     for name, plugins in owners.items():
         if len(plugins) > 1:

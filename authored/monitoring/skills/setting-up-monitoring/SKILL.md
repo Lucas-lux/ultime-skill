@@ -1,13 +1,10 @@
 ---
 name: setting-up-monitoring
 description: >
-  Met en place le monitoring le plus complet possible pour un projet, adapte a son type (application web,
-  service API, application RAG ou LLM, pipeline de donnees, cron ou batch, entrainement et serving de
-  modele ML, application mobile). Couvre metriques, logs, traces, SLO, alertes, dashboards, cout et les
-  signaux specifiques au domaine (LLMOps, MLOps, qualite des donnees). A utiliser quand l'utilisateur veut
-  monitorer, observer, instrumenter, suivre en production, mettre en place de l'observabilite, des SLO,
-  des alertes ou des dashboards, ou dit "monitoring", "observability", "LLMOps", "MLOps". Vendor-neutral
-  (OpenTelemetry, Prometheus, Grafana, Loki, Tempo), avec les equivalents manages.
+  Monitoring complet adapte au type de projet (web, API, RAG/LLM, data, cron, ML, mobile) : metriques,
+  logs, traces, SLO, alertes, dashboards, cout ; vendor-neutral (OpenTelemetry, Prometheus, Grafana). A
+  utiliser pour monitorer, observer, instrumenter, suivre en production, mettre en place observabilite,
+  SLO, alertes ou dashboards, ou "monitoring", "observability", "LLMOps", "MLOps".
 ---
 
 # Mise en place du monitoring complet

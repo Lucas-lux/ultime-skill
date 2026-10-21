@@ -1,0 +1,8 @@
+{
+  "name": "ultime-profile",
+  "description": "N'active pour un projet que les packs ultime-skill utiles (profil par projet ou par tache), pour alleger le contexte charge a chaque session. Catalogue des packs avec leur cout en contexte.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

@@ -5,6 +5,7 @@ descriptions (loaded into context each session), hook wiring, and which plugins 
 """
 
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,6 +39,16 @@ PLUGINS = {
     "video-editing": ("Montage video complet : edition par conversation avec EDL et sous-titres (video-use), construction de commandes FFmpeg (coupe, concat, transitions, loudness, presets reseaux sociaux), transcription locale faster-whisper, rendu Manim.", {}),
     "app-factory": ("Orchestrateur de projet de A a Z : de l'idee, d'une app a cloner en la personnalisant, ou d'une app existante a terminer, jusqu'au produit fini en production. 18 sous-agents (produit, gestion de projet, architecture, donnees, design, securite, conformite, finops, dev, revue, QA, release, SRE, growth, verificateur), phases et portes de validation, etat sur disque et reprise.", {}),
     "product-management": ("Gestion de produit : decouverte (hypotheses, opportunity solution tree, entretiens), strategie (vision, positionnement, modele economique, prix), marche (concurrence, personas, segments), execution (PRD, user stories, roadmap, pre-mortem, sprint, retro, notes de version), retro-specification d'un code existant (code-to-prd, schematic, intended-vs-implemented).", {}),
+    "mobile": ("Mobile multiplateforme, ecrit maison : publication iOS et Android (signature, versions, TestFlight, pistes Play, fastlane, EAS), securite OWASP MASVS, notifications push, deep links, tests de bout en bout (Maestro, Detox), accessibilite mobile, achats integres sans service tiers.", {}),
+    "mobile-expo": ("Expo et React Native : skills officielles Expo (router, UI native, design system, modules, upgrade, EAS Build/Submit/Update/Workflows, migration web vers natif), performance et upgrade React Native et React Navigation (Callstack), tests React Native Testing Library.", {}),
+    "mobile-ios": ("iOS natif : SwiftUI, concurrence Swift, Swift Testing, SwiftData (Paul Hudson), accessibilite iOS (VoiceOver, Dynamic Type).", {}),
+    "mobile-android": ("Android natif : skills officielles Google (Compose performance et adaptatif, migration XML vers Compose, Navigation 3, edge-to-edge, AGP 9, R8, ANR, tests, securite des intents et permissions, politiques Play) et Google Play Billing (RevenueCat, independant de leur service).", {}),
+    "mobile-flutter": ("Flutter et Dart : skills officielles (architecture, mise en page responsive, routage declaratif, localisation, serialisation JSON, HTTP, tests de widgets et d'integration, analyse statique, erreurs d'execution).", {}),
+    "app-stores": ("Stores, ecrit maison : dossier de fiche App Store et Google Play dans les limites de chaque store, formulaire Data safety depuis le code et les SDK, pilotage des consoles dans le navigateur pour ce que les API ne couvrent pas.", {}),
+    "store-apple": ("App Store Connect par le CLI asc (signature, build, TestFlight, release, metadonnees, captures, prix, crashs), prevention des rejets App Review (preflight par type d'app), politique de confidentialite et labels de confidentialite Apple.", {}),
+    "store-google": ("Google Play par le CLI gplay (build Gradle, release, rollout progressif, testeurs, metadonnees, captures, verifications avant soumission, achats, prix, vitals) et audit des politiques Google Play depuis le code.", {}),
+    "store-aso": ("App Store Optimization pour les deux stores : audit, mots-cles, metadonnees, captures (generateur Next.js inclus), video de presentation, icone, pages produit personnalisees, evenements, tests A/B de fiche, localisation, avis et notes, gestion des rejets.", {}),
+    "ultime-profile": ("N'active pour un projet que les packs ultime-skill utiles (profil par projet ou par tache), pour alleger le contexte charge a chaque session. Catalogue des packs avec leur cout en contexte.", {}),
     "greenfield": ("Retro-ingenierie salle blanche : extrait d'un code existant des specs comportementales, vecteurs de test et criteres d'acceptation sans heritage d'implementation (commande /greenfield:analyze). Pipeline lourd en agents, a reserver au code dont on detient les droits.", {}),
 }
 
@@ -57,13 +68,66 @@ BUNDLES = {
     "ultime-web": ("Pack web : full stack, design, conformite (RGPD, accessibilite, legal).",
                    ["fullstack", "design", "compliance"]),
     "ultime-ops": ("Pack operations : devops/SRE, finops, monitoring complet et tests en production.", ["devops", "finops", "monitoring", "prod-testing"]),
-    "ultime-factory": ("Usine a produit : l'orchestrateur app-factory et tout ce qu'il pilote (gestion de produit, retro-specification, cycle de vie logiciel, full stack, design, conformite, securite, devops, donnees, monitoring, tests en production, finops).",
+    "ultime-mobile": ("Pack mobile : multiplateforme, Expo et React Native, iOS, Android, Flutter, stores (fiche, Data safety, App Store Connect, Google Play, ASO), design, conformite et securite.",
+                      ["mobile", "mobile-expo", "mobile-ios", "mobile-android", "mobile-flutter", "app-stores",
+                       "store-apple", "store-google", "store-aso", "design", "compliance", "security"]),
+    "ultime-factory": ("Usine a produit : l'orchestrateur app-factory et tout ce qu'il pilote (gestion de produit, retro-specification, cycle de vie logiciel, full stack, mobile et stores, design, conformite, securite, devops, donnees, monitoring, tests en production, finops). A combiner avec ultime-profile pour n'activer que l'utile par projet.",
                        ["app-factory", "product-management", "greenfield", "agent-skills", "fullstack", "design",
-                        "compliance", "security", "devops", "data-engineering", "monitoring", "prod-testing", "finops"]),
+                        "compliance", "security", "devops", "data-engineering", "monitoring", "prod-testing", "finops",
+                        "mobile", "mobile-expo", "mobile-ios", "mobile-android", "mobile-flutter", "app-stores",
+                        "store-apple", "store-google", "store-aso"]),
 }
 
 
+# Every bundle also pulls in ultime-profile, the skill that trims a project down to the packs it needs.
+for _, members in BUNDLES.values():
+    if "ultime-profile" not in members:
+        members.append("ultime-profile")
+
 AUTHOR = {"name": "SensCritique", "url": "https://github.com/senscritique"}
+CATALOG = ROOT / "plugins" / "ultime-profile" / "skills" / "ultime-profile" / "references" / "catalog.md"
+
+
+def description(path: Path) -> str:
+    """Return the frontmatter description of a SKILL.md or agent file, folded blocks included."""
+    match = re.match(r"^---\r?\n(.*?)\r?\n---", path.read_text(encoding="utf-8"), re.DOTALL)
+    found = re.search(r"(?m)^description:[ \t]*(.*)$((?:\n[ \t]+.*)*)", match.group(1)) if match else None
+    if not found:
+        return ""
+    head = found.group(1).strip()
+    head = "" if head in (">", "|", ">-", "|-") else head.strip("\"'")
+    return " ".join([head, *(line.strip() for line in found.group(2).splitlines())]).strip()
+
+
+def listing_cost(name: str) -> tuple[int, int, int]:
+    """Skills, agents and description characters a pack adds to the context listing of every session."""
+    directory = ROOT / "plugins" / name
+    skills = list(directory.glob("skills/*/SKILL.md"))
+    agents = list(directory.glob("agents/*.md"))
+    return len(skills), len(agents), sum(len(description(path)) for path in skills + agents)
+
+
+def write_catalog() -> None:
+    costs = {name: listing_cost(name) for name in PLUGINS}
+    lines = [
+        "# Catalogue des packs ultime-skill",
+        "",
+        "Genere par `scripts/gen_manifests.py`. Le cout est la longueur des descriptions de skills et",
+        "d'agents qu'un pack active ajoute au contexte de chaque session (environ 4 caracteres par token).",
+        "",
+        "| Pack | Skills | Agents | Cout (caracteres) | Role |",
+        "|---|---|---|---|---|",
+    ]
+    for name, (text, _) in PLUGINS.items():
+        skills, agents, chars = costs[name]
+        lines.append(f"| `{name}` | {skills} | {agents} | {chars} | {text.replace('|', '/')} |")
+    lines += ["", "## Bundles", "", "| Bundle | Cout (caracteres) | Packs |", "|---|---|---|"]
+    for name, (_, members) in BUNDLES.items():
+        lines.append(f"| `{name}` | {sum(costs[m][2] for m in members)} | {', '.join(members)} |")
+    CATALOG.parent.mkdir(parents=True, exist_ok=True)
+    CATALOG.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    for name, (_, members) in BUNDLES.items():
+        print(f"{name:>16}  {sum(costs[m][2] for m in members):>7} description characters per session")
 
 
 def write_plugin(name: str, description: str, extra: dict) -> None:
@@ -85,7 +149,7 @@ def main() -> None:
     marketplace = {
         "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
         "name": "ultime-skill",
-        "description": "Bibliotheque de skills Claude prete pour la production : orchestration de projet de A a Z, gestion de produit, securite, devops, finops, data, ML, full stack, design, conformite, motion et video.",
+        "description": "Bibliotheque de skills Claude prete pour la production : orchestration de projet de A a Z, gestion de produit, mobile et stores, securite, devops, finops, data, ML, full stack, design, conformite, motion et video.",
         "owner": {"name": "SensCritique", "url": "https://github.com/senscritique"},
         "plugins": plugins_entries,
     }
@@ -93,6 +157,7 @@ def main() -> None:
     directory.mkdir(exist_ok=True)
     (directory / "marketplace.json").write_text(json.dumps(marketplace, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"{len(PLUGINS)} plugins, {len(BUNDLES)} bundles, marketplace.json written")
+    write_catalog()
 
 
 if __name__ == "__main__":

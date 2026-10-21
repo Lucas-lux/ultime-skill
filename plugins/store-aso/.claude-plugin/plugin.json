@@ -1,0 +1,8 @@
+{
+  "name": "store-aso",
+  "description": "App Store Optimization pour les deux stores : audit, mots-cles, metadonnees, captures (generateur Next.js inclus), video de presentation, icone, pages produit personnalisees, evenements, tests A/B de fiche, localisation, avis et notes, gestion des rejets.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

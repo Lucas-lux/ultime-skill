@@ -1,6 +1,6 @@
 """Rebuild the whole library deterministically.
 
-Order: wipe plugins/, import the pinned upstream skills, overlay the hand-written packs from authored/,
+Order: regenerate vendor.json, wipe plugins/, import the pinned upstream skills, overlay the hand-written packs from authored/,
 write every manifest and the marketplace, then run the checks.
 
     python scripts/build.py
@@ -35,6 +35,7 @@ def overlay_authored() -> None:
 
 def main() -> None:
     cache = sys.argv[1:] if len(sys.argv) > 1 else []
+    run("gen_vendor.py")
     plugins = ROOT / "plugins"
     if plugins.exists():
         shutil.rmtree(plugins)

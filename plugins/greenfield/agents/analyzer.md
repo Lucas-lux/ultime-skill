@@ -1,8 +1,7 @@
 ---
 name: analyzer
-description: Generic Analyzer agent. Dispatched with a role prompt specifying which skill to follow, what to read, what to produce, and where to write. Loads all analysis skills.
-tools: Read, Glob, Grep, Write, Edit, Bash, WebFetch, WebSearch
-skills: greenfield:analysis-pipeline, greenfield:provenance-methodology, greenfield:doc-research, greenfield:ecosystem-analysis, greenfield:community-intelligence, greenfield:runtime-observation, greenfield:container-execution, greenfield:source-analysis, greenfield:multi-source-synthesis, greenfield:behavioral-spec-writing, greenfield:binary-analysis, greenfield:validation-methodology, greenfield:second-pass-review, greenfield:fidelity-validation, greenfield:source-completeness, greenfield:autonomous-discovery, greenfield:git-archaeology, greenfield:test-suite-analysis, greenfield:visual-exploration, greenfield:contract-detection, greenfield:incremental-analysis
+description: Generic Analyzer agent. Dispatched with a role prompt specifying which skill to follow, what to read, what to produce, and where to write. Loads the one skill its prompt names.
+tools: Read, Glob, Grep, Write, Edit, Bash, WebFetch, WebSearch, Skill
 ---
 
 # Analyzer Worker
@@ -14,7 +13,7 @@ You are a generic Analyzer. Your dispatch prompt tells you:
 4. **Output** - what to produce and where to write it
 5. **Definition of Done** - when you're finished
 
-Follow the specified skill. Write your output using the Write tool. Every behavioral claim gets a provenance citation.
+Load the specified skill with the Skill tool before starting (`greenfield:<skill-name>`, for example `greenfield:source-analysis`), plus `greenfield:provenance-methodology` when you write behavioral claims. Load no other skill unless that methodology points to it. Follow the specified skill. Write your output using the Write tool. Every behavioral claim gets a provenance citation.
 
 ## YOU MUST USE THE WRITE TOOL
 

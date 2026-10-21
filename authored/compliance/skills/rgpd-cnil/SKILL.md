@@ -1,19 +1,18 @@
 ---
 name: rgpd-cnil
 description: >
-  Conformite RGPD a la francaise (CNIL) pour une application : bases legales, minimisation, durees de
-  conservation, droits des personnes et delais, registre des traitements (Art. 30), analyse d'impact
-  (DPIA), notification de violation sous 72h, sous-traitance (Art. 28). A utiliser quand l'utilisateur
-  parle de RGPD, GDPR, CNIL, donnees personnelles, registre des traitements, DPIA, AIPD, droits des
-  personnes, violation de donnees, DPO, ou conformite d'un traitement. Donne les exigences et les
-  references d'articles, pas des statistiques d'amendes a verifier.
+  RGPD a la francaise (CNIL) pour une application : bases legales, conservation, droits des personnes,
+  registre, AIPD, violations, sous-traitance. A utiliser quand l'utilisateur parle de RGPD, GDPR, CNIL,
+  donnees personnelles, registre des traitements, DPIA, AIPD, droits des personnes, violation de donnees,
+  DPO, ou conformite d'un traitement.
 ---
 
 # RGPD a la francaise (CNIL)
 
 Cadre : RGPD (reglement UE 2016/679) et loi Informatique et Libertes. L'autorite est la CNIL. Ce skill
 couvre l'ingenierie de conformite et les artefacts documentaires. Il ne remplace pas un avis juridique :
-signaler quand une question releve du juriste ou du DPO.
+signaler quand une question releve du juriste ou du DPO. Donner les exigences et les references
+d'articles, pas des statistiques d'amendes a verifier.
 
 Verifier le traitement reel (le code, les flux, la base) plutot que ce que la doc affirme. Ne jamais
 exposer de donnee personnelle dans un log, une metrique ou une trace.

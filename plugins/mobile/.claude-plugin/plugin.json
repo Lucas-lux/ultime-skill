@@ -1,0 +1,8 @@
+{
+  "name": "mobile",
+  "description": "Mobile multiplateforme, ecrit maison : publication iOS et Android (signature, versions, TestFlight, pistes Play, fastlane, EAS), securite OWASP MASVS, notifications push, deep links, tests de bout en bout (Maestro, Detox), accessibilite mobile, achats integres sans service tiers.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

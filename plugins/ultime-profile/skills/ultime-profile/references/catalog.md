@@ -1,0 +1,57 @@
+# Catalogue des packs ultime-skill
+
+Genere par `scripts/gen_manifests.py`. Le cout est la longueur des descriptions de skills et
+d'agents qu'un pack active ajoute au contexte de chaque session (environ 4 caracteres par token).
+
+| Pack | Skills | Agents | Cout (caracteres) | Role |
+|---|---|---|---|---|
+| `ponytail` | 6 | 0 | 1584 | Mode dev senior paresseux : le plus petit changement complet, reutilisation avant ecriture, YAGNI. Hooks d'activation (/ponytail lite/full/ultra) et commandes de revue et d'audit. |
+| `superpowers` | 15 | 0 | 2317 | Methode de travail d'obra : brainstorming, redaction de plans, TDD, debug systematique, sous-agents, verification avant de conclure. Charge sa methode au demarrage de session. |
+| `agent-skills` | 25 | 4 | 9604 | Cycle de vie logiciel complet (Addy Osmani) : spec, plan, build, test, revue, securite, performance, CI/CD, observabilite, mise en prod. Base transverse full stack et devops. |
+| `skill-factory` | 2 | 0 | 596 | Creer, tester et ameliorer des skills et des serveurs MCP (skill-creator et mcp-builder d'Anthropic). |
+| `rea` | 1 | 0 | 300 | Reverse Engineer Anything : binaires, apps Electron/JS, Android, firmware, navigateur. Pilote le serveur MCP rea-agents (a installer a part). |
+| `graphify` | 1 | 0 | 353 | Transforme un depot ou un dossier en graphe de connaissances interrogeable. Pilote le paquet Python graphifyy (a installer a part). |
+| `security` | 12 | 0 | 5459 | Audit d'application et revue de securite : OWASP Top 10 et ASVS, revue de diff orientee risque, Semgrep et CodeQL, analyse de variantes, chaine d'approvisionnement, modele de menace, APIs a risque, scan de skills. |
+| `sec-audit` | 30 | 0 | 12917 | Audit de code et recherche de vulnerabilites (trilwu secskills-core) : analyse de source par taint, reverse de binaires et d'apps, crypto, supply chain, securite des systemes IA et des serveurs MCP. Pour usage autorise uniquement. |
+| `sec-defense` | 22 | 0 | 11140 | Defense et reponse a incident (trilwu secskills-defense) : DFIR disque/memoire/reseau, analyse de malware et de phishing, detections Sigma et Yara, durcissement et investigation cloud (AWS, Azure, GCP, M365), threat hunting. |
+| `sec-offense` | 40 | 0 | 15138 | Pentest pour tests autorises uniquement (trilwu secskills-offense) : exploitation web/API/JWT/SSRF/XXE, Active Directory et Entra, cloud et conteneurs, escalade de privileges, reconnaissance. Reserve aux engagements autorises, CTF et recherche. |
+| `sc-conventions` | 1 | 0 | 339 | Conventions d'equipe SensCritique transverses : verifier plutot que croire, demander avant un gros lot, questions a choix multiples, langues, pas d'em dash, marquage IA, termes techniques en entier, main/replica, secrets hors du code. Regles generiques, rien de confidentiel. |
+| `monitoring` | 1 | 0 | 385 | Mise en place du monitoring le plus complet selon le type de projet (app web, API, RAG/LLM, pipeline data, cron, training et serving ML, mobile) : metriques, logs, traces, SLO, alertes, dashboards, cout, et signaux specifiques au domaine (LLMOps, MLOps, data). Vendor-neutral (OpenTelemetry, Prometheus, Grafana). |
+| `prod-testing` | 1 | 0 | 368 | Strategie de test de bout en bout et validation en production, vendor-neutral : pyramide et etapes CI/CD (unitaire, contrat, integration, end to end, smoke, canary), smoke tests post-deploy, deploiement progressif avec rollback automatique, feature flags (OpenFeature), monitoring synthetique, gestion des tests instables. |
+| `devops` | 17 | 0 | 7028 | DevOps et SRE : Terraform/OpenTofu, Docker, Kubernetes, GitOps, pipelines CI/CD et GitHub Actions, SLO et budgets d'erreur, PromQL, k6, monitoring synthetique, reponse a incident et postmortem. |
+| `finops` | 6 | 0 | 2849 | FinOps multi-cloud : analyse et optimisation des couts AWS (Cost Explorer, SP/RI), GKE/Google Cloud, Azure, et scan de cout shift-left de l'infra as code (Infracost). |
+| `data-engineering` | 12 | 0 | 4429 | Data engineering : modeles et tests dbt, DAGs Airflow (ecriture, test, debug, migration 2 vers 3), SQL multi-dialecte, exploration de donnees, PySpark, Postgres, qualite des donnees. |
+| `dataviz` | 5 | 0 | 2072 | Data visualisation : choix du type de graphique, matplotlib/seaborn/plotly, dashboards HTML autoportants, figures scientifiques accessibles, dashboards Grafana. |
+| `ml-engineering` | 10 | 0 | 3799 | ML engineering : choix de methode de fine-tuning, recettes LoRA/QLoRA, harnais d'evaluation et calibration de juge LLM, TRL, RAG, serving vLLM, benchmarks lm-eval, scikit-learn, tracing MLflow, Hugging Face Hub. |
+| `fullstack` | 2 | 0 | 639 | Full stack web en production : 70 regles de performance React et Next.js, patterns de composition React 19. Se combine avec le pack agent-skills (APIs, securite, perf, livraison). |
+| `design` | 7 | 0 | 2329 | Design qui ne fait pas vibe-code : systeme anti AI-slop (impeccable), direction artistique et liste des tells IA (frontend-design), Web Interface Guidelines de Vercel, contraintes deslop, stress-test d'UI, refonte de sites generiques. |
+| `compliance` | 10 | 0 | 5106 | Reglementaire et conformite : audit RGAA (accessibilite, en francais), regles RGPD a l'ingenierie, conseil WCAG et cartographie legale (EAA), verification de conformite d'une feature, securite du developpement (ANSSI), corrections d'accessibilite au niveau du code. |
+| `motion-design` | 11 | 0 | 3544 | Motion design : GSAP (core, timeline, ScrollTrigger, plugins, performance, frameworks), principes de motion agnostiques (LottieFiles), animations mathematiques Manim (ManimCE et planification de scenes). |
+| `video-editing` | 4 | 0 | 1996 | Montage video complet : edition par conversation avec EDL et sous-titres (video-use), construction de commandes FFmpeg (coupe, concat, transitions, loudness, presets reseaux sociaux), transcription locale faster-whisper, rendu Manim. |
+| `app-factory` | 3 | 18 | 2434 | Orchestrateur de projet de A a Z : de l'idee, d'une app a cloner en la personnalisant, ou d'une app existante a terminer, jusqu'au produit fini en production. 18 sous-agents (produit, gestion de projet, architecture, donnees, design, securite, conformite, finops, dev, revue, QA, release, SRE, growth, verificateur), phases et portes de validation, etat sur disque et reprise. |
+| `product-management` | 47 | 0 | 13489 | Gestion de produit : decouverte (hypotheses, opportunity solution tree, entretiens), strategie (vision, positionnement, modele economique, prix), marche (concurrence, personas, segments), execution (PRD, user stories, roadmap, pre-mortem, sprint, retro, notes de version), retro-specification d'un code existant (code-to-prd, schematic, intended-vs-implemented). |
+| `mobile` | 7 | 0 | 2329 | Mobile multiplateforme, ecrit maison : publication iOS et Android (signature, versions, TestFlight, pistes Play, fastlane, EAS), securite OWASP MASVS, notifications push, deep links, tests de bout en bout (Maestro, Detox), accessibilite mobile, achats integres sans service tiers. |
+| `mobile-expo` | 22 | 0 | 8959 | Expo et React Native : skills officielles Expo (router, UI native, design system, modules, upgrade, EAS Build/Submit/Update/Workflows, migration web vers natif), performance et upgrade React Native et React Navigation (Callstack), tests React Native Testing Library. |
+| `mobile-ios` | 5 | 0 | 1096 | iOS natif : SwiftUI, concurrence Swift, Swift Testing, SwiftData (Paul Hudson), accessibilite iOS (VoiceOver, Dynamic Type). |
+| `mobile-android` | 24 | 0 | 6998 | Android natif : skills officielles Google (Compose performance et adaptatif, migration XML vers Compose, Navigation 3, edge-to-edge, AGP 9, R8, ANR, tests, securite des intents et permissions, politiques Play) et Google Play Billing (RevenueCat, independant de leur service). |
+| `mobile-flutter` | 14 | 0 | 2612 | Flutter et Dart : skills officielles (architecture, mise en page responsive, routage declaratif, localisation, serialisation JSON, HTTP, tests de widgets et d'integration, analyse statique, erreurs d'execution). |
+| `app-stores` | 3 | 0 | 1093 | Stores, ecrit maison : dossier de fiche App Store et Google Play dans les limites de chaque store, formulaire Data safety depuis le code et les SDK, pilotage des consoles dans le navigateur pour ce que les API ne couvrent pas. |
+| `store-apple` | 19 | 0 | 4653 | App Store Connect par le CLI asc (signature, build, TestFlight, release, metadonnees, captures, prix, crashs), prevention des rejets App Review (preflight par type d'app), politique de confidentialite et labels de confidentialite Apple. |
+| `store-google` | 13 | 0 | 3196 | Google Play par le CLI gplay (build Gradle, release, rollout progressif, testeurs, metadonnees, captures, verifications avant soumission, achats, prix, vitals) et audit des politiques Google Play depuis le code. |
+| `store-aso` | 16 | 0 | 6942 | App Store Optimization pour les deux stores : audit, mots-cles, metadonnees, captures (generateur Next.js inclus), video de presentation, icone, pages produit personnalisees, evenements, tests A/B de fiche, localisation, avis et notes, gestion des rejets. |
+| `ultime-profile` | 1 | 0 | 305 | N'active pour un projet que les packs ultime-skill utiles (profil par projet ou par tache), pour alleger le contexte charge a chaque session. Catalogue des packs avec leur cout en contexte. |
+| `greenfield` | 22 | 2 | 5229 | Retro-ingenierie salle blanche : extrait d'un code existant des specs comportementales, vecteurs de test et criteres d'acceptation sans heritage d'implementation (commande /greenfield:analyze). Pipeline lourd en agents, a reserver au code dont on detient les droits. |
+
+## Bundles
+
+| Bundle | Cout (caracteres) | Packs |
+|---|---|---|
+| `ultime-all` | 138488 | ponytail, superpowers, agent-skills, skill-factory, rea, graphify, security, sec-audit, sec-defense, sc-conventions, monitoring, prod-testing, devops, finops, data-engineering, dataviz, ml-engineering, fullstack, design, compliance, motion-design, video-editing, app-factory, product-management, mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, ultime-profile, greenfield |
+| `ultime-dev` | 28239 | ponytail, superpowers, agent-skills, skill-factory, devops, fullstack, security, sc-conventions, prod-testing, ultime-profile |
+| `ultime-data` | 10958 | data-engineering, dataviz, ml-engineering, graphify, ultime-profile |
+| `ultime-media` | 8174 | design, motion-design, video-editing, ultime-profile |
+| `ultime-security` | 30121 | security, sec-audit, sec-defense, rea, ultime-profile |
+| `ultime-web` | 8379 | fullstack, design, compliance, ultime-profile |
+| `ultime-ops` | 10935 | devops, finops, monitoring, prod-testing, ultime-profile |
+| `ultime-mobile` | 51077 | mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, design, compliance, security, ultime-profile |
+| `ultime-factory` | 97531 | app-factory, product-management, greenfield, agent-skills, fullstack, design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, ultime-profile |

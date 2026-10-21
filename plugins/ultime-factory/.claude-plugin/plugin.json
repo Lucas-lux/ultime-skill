@@ -1,6 +1,6 @@
 {
   "name": "ultime-factory",
-  "description": "Usine a produit : l'orchestrateur app-factory et tout ce qu'il pilote (gestion de produit, retro-specification, cycle de vie logiciel, full stack, design, conformite, securite, devops, donnees, monitoring, tests en production, finops).",
+  "description": "Usine a produit : l'orchestrateur app-factory et tout ce qu'il pilote (gestion de produit, retro-specification, cycle de vie logiciel, full stack, mobile et stores, design, conformite, securite, devops, donnees, monitoring, tests en production, finops). A combiner avec ultime-profile pour n'activer que l'utile par projet.",
   "author": {
     "name": "SensCritique",
     "url": "https://github.com/senscritique"
@@ -18,6 +18,16 @@
     "data-engineering",
     "monitoring",
     "prod-testing",
-    "finops"
+    "finops",
+    "mobile",
+    "mobile-expo",
+    "mobile-ios",
+    "mobile-android",
+    "mobile-flutter",
+    "app-stores",
+    "store-apple",
+    "store-google",
+    "store-aso",
+    "ultime-profile"
   ]
 }

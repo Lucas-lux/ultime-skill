@@ -4,7 +4,7 @@ Bibliothèque de skills Claude prête pour la production, installable en une com
 meilleures skills open source du moment (sélectionnées, nettoyées, épinglées à un commit) et servira de
 base aux skills que nous créerons nous-mêmes.
 
-**313 skills, 24 agents, 26 packs, 8 bundles.** Chaque pack est un plugin Claude Code indépendant ; les
+**437 skills, 24 agents, 36 packs, 9 bundles.** Chaque pack est un plugin Claude Code indépendant ; les
 bundles en installent plusieurs d'un coup via les dépendances de plugins.
 
 ## Installation en une commande
@@ -50,10 +50,33 @@ Redémarrer Claude Code ou lancer `/reload-plugins` après installation.
 | `ultime-security` | security, sec-audit, sec-defense, rea |
 | `ultime-web` | fullstack, design, compliance |
 | `ultime-ops` | devops, finops, monitoring, prod-testing |
-| `ultime-factory` | app-factory et tout ce qu'il pilote : product-management, greenfield, agent-skills, fullstack, design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops |
+| `ultime-mobile` | mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, design, compliance, security |
+| `ultime-factory` | app-factory et tout ce qu'il pilote : product-management, greenfield, agent-skills, fullstack, design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, et tous les packs mobile et stores |
+
+Chaque bundle installe aussi `ultime-profile` (voir [Économie de contexte](#économie-de-contexte)).
 
 Le pack `sec-offense` (pentest offensif, tests autorisés uniquement) n'est tiré par aucun bundle, y compris
 `ultime-all` : il s'installe explicitement avec `claude plugin install sec-offense@ultime-skill`.
+
+## Économie de contexte
+
+Chaque skill d'un pack activé ajoute sa description au contexte **à chaque tour**, qu'elle serve ou non ;
+son contenu complet ne se charge que lorsqu'elle est utilisée. Claude Code réserve à cette liste environ
+1 % de la fenêtre de contexte : au-delà, il retire des descriptions et les skills concernées ne se
+déclenchent plus. Installer `ultime-all` et tout laisser actif est donc contre-productif.
+
+- **Un profil par projet** : la skill `ultime-profile` détecte le type de projet, propose les packs utiles
+  et désactive les autres pour ce dépôt seulement (`claude plugin enable|disable --scope local|project`).
+  Elle s'ajuste quand la tâche change de domaine (passer du code à la fiche store, par exemple).
+- **Mode sobre global** : tout désactiver au niveau utilisateur et laisser chaque projet activer son profil.
+- **Coût de chaque pack et bundle** : généré au build dans
+  `plugins/ultime-profile/skills/ultime-profile/references/catalog.md`, affiché par `scripts/build.py`.
+- **Côté maison** : descriptions de 400 caractères au plus (contrôlé par `scripts/check.py`), `SKILL.md`
+  de moins de 500 lignes avec le détail en références, agents d'`app-factory` avec un modèle adapté à
+  leur rôle, des comptes rendus courts et la règle ponytail du plus petit changement complet.
+- **Côté imports** : les descriptions d'origine ne sont pas réécrites (elles portent les mots qui
+  déclenchent la skill) ; seuls les chargements excessifs sont corrigés, comme l'agent `analyzer` de
+  greenfield qui préchargeait ses 22 skills à chaque appel et ne charge plus que celle de sa mission.
 
 ## Catalogue
 
@@ -70,6 +93,24 @@ Démarrer un projet : installer `ultime-factory`, ouvrir le dépôt du projet (v
 avance phase par phase. Il fait valider chaque porte et toute action irréversible : paiement, création de
 compte, publication, déploiement en production. L'état vit dans `.app-factory/` : une nouvelle session
 reprend là où la précédente s'est arrêtée.
+
+### Mobile et stores
+
+| Pack | Skills | Rôle |
+|---|---|---|
+| `mobile` | 7 | Multiplateforme, écrit maison : publication iOS et Android (signature, versions, TestFlight, pistes Play, fastlane, EAS), sécurité OWASP MASVS, notifications push, deep links, tests de bout en bout (Maestro, Detox), accessibilité mobile, achats intégrés. |
+| `mobile-expo` | 22 | Skills officielles Expo (router, UI native, design system, modules, upgrade, EAS Build, Submit, Update et Workflows, migration web vers natif), performance et upgrade React Native, React Navigation (Callstack), React Native Testing Library. |
+| `mobile-ios` | 5 | SwiftUI, concurrence Swift, Swift Testing, SwiftData (Paul Hudson), accessibilité iOS. |
+| `mobile-android` | 24 | Skills officielles Google (Compose, Navigation 3, AGP 9, R8, ANR, tests, sécurité, politiques Play) et Google Play Billing. |
+| `mobile-flutter` | 14 | Skills officielles Flutter et Dart. |
+| `app-stores` | 3 | Écrit maison : dossier de fiche pour les deux stores, formulaire Data safety, saisie dans les consoles via le navigateur pour ce que les API ne couvrent pas. |
+| `store-apple` | 19 | App Store Connect par le CLI `asc`, prévention des rejets App Review, labels de confidentialité Apple. |
+| `store-google` | 13 | Google Play par le CLI `gplay`, audit des politiques Google Play. |
+| `store-aso` | 16 | ASO des deux stores : audit, mots-clés, métadonnées, captures (générateur inclus), vidéo, icône, pages produit, tests A/B, avis. |
+
+Les stores passent d'abord par les CLI et API officielles ; le navigateur (Claude in Chrome, avec vos
+sessions) ne sert qu'à ce qu'elles ne couvrent pas. Connexion, double authentification, paiement,
+acceptation des contrats, envoi en revue et publication restent à l'utilisateur.
 
 ### Fondations
 
@@ -126,13 +167,24 @@ reprend là où la précédente s'est arrêtée.
 
 ## Outils externes
 
-Certaines skills pilotent un outil à installer à part (`./install.sh --with-tools` le fait pour les deux
-premiers) :
+Certaines skills pilotent un outil à installer à part (`./install.sh --with-tools` installe `rea`,
+`graphify`, `asc` et `gplay`) :
 
 - `rea` : serveur MCP `rea-agents` (`npx rea-agents setup --client claude_code`).
 - `graphify` : paquet Python `graphifyy` (`uv tool install graphifyy`).
 - `video-editing` : `ffmpeg` sur le PATH ; `faster-whisper` et `video-use` ont des dépendances Python (voir leurs README). `video-use` utilise l'API payante ElevenLabs pour la transcription : lui préférer `faster-whisper` en local.
 - `ml-engineering`, `data-engineering` : les outils de chaque écosystème (dbt, Airflow, HF, vLLM, MLflow) selon la skill.
+- `store-apple` : CLI `asc` (App Store Connect) et `store-google` : CLI `gplay` (Play Console). L'installeur
+  télécharge la version épinglée et vérifie son empreinte SHA-256. `asc` envoie par défaut une télémétrie
+  d'usage pseudonyme : l'installeur la désactive (`asc telemetry disable`, ou `ASC_TELEMETRY_DISABLED=1`).
+  Les sous-commandes `asc web` passent par une session web Apple non officielle : à utiliser en
+  connaissance de cause. Clés d'API App Store Connect et compte de service Google Play à créer par
+  l'utilisateur.
+- `mobile` et `mobile-expo` : fastlane, EAS CLI, Maestro ou Detox selon le projet, à installer depuis leur
+  documentation officielle.
+- iOS avancé : le plugin [Axiom](https://github.com/CharlesWiltgen/Axiom) (StoreKit, notifications,
+  sécurité, App Review) complète `mobile-ios`. Il n'est pas importé : ses skills dépendent de ses propres
+  binaires, de son serveur MCP et de ses commandes. L'installer depuis son marketplace si besoin.
 
 ## Hooks de session
 
@@ -156,6 +208,7 @@ importée garde la licence de son projet d'origine, copiée dans son dossier et 
 - Les skills `devops` issues de HashiCorp sont en **MPL-2.0** (copyleft faible, par fichier).
 - Les skills Vercel (`fullstack`, `design`) déclarent MIT en frontmatter mais leur dépôt n'a pas de fichier
   LICENSE ; la mention de licence voyage dans le frontmatter de la skill.
+- Les skills Flutter sont en **BSD-3-Clause** ; Android (Google) et Play Billing (RevenueCat) en Apache-2.0.
 
 Aucune skill sous licence non permissive bloquante (Semgrep Rules License, Databricks, AGPL) n'a été
 retenue.
@@ -167,7 +220,7 @@ skills importées viennent des dépôts épinglés ; les skills écrites maison 
 superposées dans `plugins/` au build.
 
 ```bash
-python scripts/build.py          # tout : vendor + overlay authored + manifestes + check
+python scripts/build.py          # tout : vendor.json + import + overlay authored + manifestes + check
 claude plugin validate .         # validation par la CLI Claude Code
 ```
 

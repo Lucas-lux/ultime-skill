@@ -1,11 +1,10 @@
 ---
 name: cookies-consentement-cnil
 description: >
-  Conformite des cookies et traceurs selon les regles de la CNIL (lignes directrices et recommandation de
-  2020) : consentement libre, refus aussi simple que l'acceptation, pas de cases pre-cochees, duree de vie
-  des traceurs et du choix, preuve du consentement, exemptions (mesure d'audience), cookie walls, et
-  integration d'une CMP. A utiliser quand l'utilisateur parle de cookies, traceurs, bandeau ou banniere de
-  consentement, consentement, CMP, tracking, mesure d'audience, ou conformite CNIL des cookies.
+  Cookies et traceurs selon la CNIL : consentement libre, refus aussi simple que l'acceptation, durees,
+  preuve, exemptions, cookie walls, CMP. A utiliser quand l'utilisateur parle de cookies, traceurs,
+  bandeau ou banniere de consentement, consentement, CMP, tracking, mesure d'audience, ou conformite CNIL
+  des cookies.
 ---
 
 # Cookies et traceurs (CNIL)

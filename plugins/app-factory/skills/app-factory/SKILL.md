@@ -1,13 +1,10 @@
 ---
 name: app-factory
 description: >
-  Orchestrateur de projet de A a Z : prend une idee, une app de reference a cloner en la personnalisant,
-  ou une app existante ou inachevee a terminer, et la mene jusqu'a un produit fini en production. Pilote
-  des sous-agents specialises (produit, gestion de projet, architecture, base de donnees, design,
-  securite, conformite, finops, developpement, revue, QA, release, SRE, growth) par phases avec des portes
-  de validation, un etat sur disque et une reprise possible. A utiliser quand l'utilisateur veut creer
-  une app complete, "faire une app de A a Z", cloner ou reproduire une app, reprendre, finir ou
-  ameliorer une app existante, piloter tout un projet, ou dit "app-factory".
+  Orchestrateur de projet de A a Z : d'une idee, d'une app a cloner en la personnalisant ou d'une app
+  existante a terminer jusqu'au produit fini en production, avec sous-agents, phases et portes de
+  validation. A utiliser pour creer une app complete ("de A a Z"), cloner ou reproduire une app,
+  reprendre, finir ou ameliorer une app existante, piloter tout un projet, ou "app-factory".
 ---
 
 # App factory : du projet au produit fini
@@ -38,9 +35,10 @@ References a charger au besoin :
 3. **Recueillir le brief minimal** (questions a choix multiples, pas de suppositions) : plateformes (web,
    iOS, Android, API), utilisateurs cibles, marche et langues, contraintes (budget, delai, stack imposee,
    hebergement, donnees sensibles), niveau d'autonomie (voir `autonomy.md`).
-4. **Verifier l'outillage.** Lister les packs utiles installes (le bundle `ultime-factory` les installe
-   tous). Un pack absent n'est pas bloquant : l'agent applique alors les principes de son propre prompt,
-   et l'orchestrateur signale le manque.
+4. **N'activer que les packs utiles.** Avec la skill `ultime-profile`, proposer le profil du projet
+   (packs actives pour ce depot seulement), puis l'ajuster quand le travail change de domaine : apres le
+   choix de stack en P3, et en P6-P7 pour les packs de lancement (stores, growth). Un pack absent n'est
+   pas bloquant : l'agent applique les principes de son prompt et l'orchestrateur signale le manque.
 
 ## Phases et portes
 
@@ -73,6 +71,20 @@ conformite de G3, ni G6.
 - **Pas de secret dans un prompt d'agent.** Les secrets restent dans le `.env` du projet, ignore par git.
 - **Boucle de correction bornee** : deux allers-retours maximum sur un meme echec, puis escalade a
   l'utilisateur avec le diagnostic.
+
+## Sobriete en tokens
+
+- **Lire au besoin** : une reference seulement quand la phase l'exige, et seulement sa section (chercher
+  le titre de la phase dans `phases.md` puis lire cet extrait).
+- **Prompts d'agents minces** : chemins et decisions, jamais de contenu recopie ni l'historique.
+- **Comptes rendus courts** : 15 lignes au plus, le detail reste dans les livrables ; ne pas relire un
+  livrable entier pour le resumer.
+- **Le bon modele** : chaque agent a un modele adapte a son role ; passer `model: "opus"` seulement pour
+  une story qui a echoue deux fois ou une decision structurante, `model: "haiku"` pour un inventaire,
+  un reformatage ou une recherche simple.
+- **Pas d'agent pour une commande** : ce qui tient en une lecture ou une commande se fait directement.
+- **Paralleliser sans speculer** : grouper les taches independantes, pas de fan-out "au cas ou".
+- **L'etat sur disque fait foi** : apres une compaction, relire `state.json`, pas la conversation.
 
 ## Deroulement d'une porte
 

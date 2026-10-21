@@ -1,11 +1,10 @@
 ---
 name: sc-conventions
 description: >
-  Conventions de travail transverses de l'equipe SensCritique : methode (verifier plutot que croire,
-  demander avant un gros lot, questions a choix multiples), redaction (langues, pas d'em dash, marquage
-  IA, termes techniques en entier, versions concretes, main/replica), et secrets hors du code. A utiliser
-  des qu'on ecrit du code, un commit, une PR, une issue, une doc ou un message pour l'equipe, et quand
-  l'utilisateur dit "conventions", "regles d'equipe" ou "sc-conventions". Ne contient rien de confidentiel.
+  Conventions de travail de l'equipe SensCritique : methode, redaction (langues, pas d'em dash, marquage
+  IA, termes en entier, versions concretes, main/replica), secrets hors du code. A utiliser des qu'on
+  ecrit du code, un commit, une PR, une issue, une doc ou un message pour l'equipe, ou "conventions",
+  "regles d'equipe", "sc-conventions".
 ---
 
 # Conventions d'equipe SensCritique

@@ -1,12 +1,10 @@
 ---
 name: app-clone
 description: >
-  Mode clone de l'orchestrateur app-factory : reproduit la valeur d'une app de reference (fonctionnalites,
-  parcours, niveau de qualite) et en fait un produit distinct et personnalise, sans copier la marque, les
-  assets, les textes ni le code d'autrui. Observe l'app de l'exterieur, ecrit une spec comportementale avec
-  ses propres mots, construit une matrice de parite et un brief de personnalisation, puis passe la main a
-  app-factory. A utiliser quand l'utilisateur veut cloner, copier, reproduire, s'inspirer de ou faire
-  "la meme app que" une app existante, ou dit "app-clone".
+  Mode clone de app-factory : reproduit la valeur d'une app de reference (fonctionnalites, parcours,
+  qualite) en un produit distinct et personnalise, sans copier marque, assets, textes ni code. A utiliser
+  pour cloner, copier, reproduire, s'inspirer de ou faire "la meme app que" une app existante, ou
+  "app-clone".
 ---
 
 # Cloner une app en la personnalisant

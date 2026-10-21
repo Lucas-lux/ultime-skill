@@ -1,12 +1,10 @@
 ---
 name: mentions-legales-cgu-cgv
 description: >
-  Mentions legales (LCEN), conditions generales d'utilisation (CGU) et conditions generales de vente (CGV)
-  pour un site ou un service en France : informations obligatoires de l'editeur et de l'hebergeur, droit de
-  retractation, garanties legales, information sur les prix, bouton de commande, resiliation en ligne. A
-  utiliser quand l'utilisateur parle de mentions legales, CGU, CGV, conditions generales, droit de
-  retractation, garanties, ou conformite d'un site e-commerce francais. Donne les exigences et les
-  references, pas un texte juridique pret a publier : signaler quand un juriste doit valider.
+  Mentions legales (LCEN), CGU et CGV d'un site ou service en France : editeur, hebergeur, retractation,
+  garanties, prix, bouton de commande, resiliation en ligne. A utiliser quand l'utilisateur parle de
+  mentions legales, CGU, CGV, conditions generales, droit de retractation, garanties, ou conformite d'un
+  site e-commerce francais.
 ---
 
 # Mentions legales, CGU et CGV (France)

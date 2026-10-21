@@ -1,0 +1,8 @@
+{
+  "name": "store-google",
+  "description": "Google Play par le CLI gplay (build Gradle, release, rollout progressif, testeurs, metadonnees, captures, verifications avant soumission, achats, prix, vitals) et audit des politiques Google Play depuis le code.",
+  "author": {
+    "name": "SensCritique",
+    "url": "https://github.com/senscritique"
+  }
+}

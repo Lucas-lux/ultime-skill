@@ -8,6 +8,7 @@
   "dependencies": [
     "design",
     "motion-design",
-    "video-editing"
+    "video-editing",
+    "ultime-profile"
   ]
 }

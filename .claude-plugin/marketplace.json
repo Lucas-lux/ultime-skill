@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "ultime-skill",
-  "description": "Bibliotheque de skills Claude prete pour la production : orchestration de projet de A a Z, gestion de produit, securite, devops, finops, data, ML, full stack, design, conformite, motion et video.",
+  "description": "Bibliotheque de skills Claude prete pour la production : orchestration de projet de A a Z, gestion de produit, mobile et stores, securite, devops, finops, data, ML, full stack, design, conformite, motion et video.",
   "owner": {
     "name": "SensCritique",
     "url": "https://github.com/senscritique"
@@ -133,6 +133,56 @@
       "description": "Gestion de produit : decouverte (hypotheses, opportunity solution tree, entretiens), strategie (vision, positionnement, modele economique, prix), marche (concurrence, personas, segments), execution (PRD, user stories, roadmap, pre-mortem, sprint, retro, notes de version), retro-specification d'un code existant (code-to-prd, schematic, intended-vs-implemented)."
     },
     {
+      "name": "mobile",
+      "source": "./plugins/mobile",
+      "description": "Mobile multiplateforme, ecrit maison : publication iOS et Android (signature, versions, TestFlight, pistes Play, fastlane, EAS), securite OWASP MASVS, notifications push, deep links, tests de bout en bout (Maestro, Detox), accessibilite mobile, achats integres sans service tiers."
+    },
+    {
+      "name": "mobile-expo",
+      "source": "./plugins/mobile-expo",
+      "description": "Expo et React Native : skills officielles Expo (router, UI native, design system, modules, upgrade, EAS Build/Submit/Update/Workflows, migration web vers natif), performance et upgrade React Native et React Navigation (Callstack), tests React Native Testing Library."
+    },
+    {
+      "name": "mobile-ios",
+      "source": "./plugins/mobile-ios",
+      "description": "iOS natif : SwiftUI, concurrence Swift, Swift Testing, SwiftData (Paul Hudson), accessibilite iOS (VoiceOver, Dynamic Type)."
+    },
+    {
+      "name": "mobile-android",
+      "source": "./plugins/mobile-android",
+      "description": "Android natif : skills officielles Google (Compose performance et adaptatif, migration XML vers Compose, Navigation 3, edge-to-edge, AGP 9, R8, ANR, tests, securite des intents et permissions, politiques Play) et Google Play Billing (RevenueCat, independant de leur service)."
+    },
+    {
+      "name": "mobile-flutter",
+      "source": "./plugins/mobile-flutter",
+      "description": "Flutter et Dart : skills officielles (architecture, mise en page responsive, routage declaratif, localisation, serialisation JSON, HTTP, tests de widgets et d'integration, analyse statique, erreurs d'execution)."
+    },
+    {
+      "name": "app-stores",
+      "source": "./plugins/app-stores",
+      "description": "Stores, ecrit maison : dossier de fiche App Store et Google Play dans les limites de chaque store, formulaire Data safety depuis le code et les SDK, pilotage des consoles dans le navigateur pour ce que les API ne couvrent pas."
+    },
+    {
+      "name": "store-apple",
+      "source": "./plugins/store-apple",
+      "description": "App Store Connect par le CLI asc (signature, build, TestFlight, release, metadonnees, captures, prix, crashs), prevention des rejets App Review (preflight par type d'app), politique de confidentialite et labels de confidentialite Apple."
+    },
+    {
+      "name": "store-google",
+      "source": "./plugins/store-google",
+      "description": "Google Play par le CLI gplay (build Gradle, release, rollout progressif, testeurs, metadonnees, captures, verifications avant soumission, achats, prix, vitals) et audit des politiques Google Play depuis le code."
+    },
+    {
+      "name": "store-aso",
+      "source": "./plugins/store-aso",
+      "description": "App Store Optimization pour les deux stores : audit, mots-cles, metadonnees, captures (generateur Next.js inclus), video de presentation, icone, pages produit personnalisees, evenements, tests A/B de fiche, localisation, avis et notes, gestion des rejets."
+    },
+    {
+      "name": "ultime-profile",
+      "source": "./plugins/ultime-profile",
+      "description": "N'active pour un projet que les packs ultime-skill utiles (profil par projet ou par tache), pour alleger le contexte charge a chaque session. Catalogue des packs avec leur cout en contexte."
+    },
+    {
       "name": "greenfield",
       "source": "./plugins/greenfield",
       "description": "Retro-ingenierie salle blanche : extrait d'un code existant des specs comportementales, vecteurs de test et criteres d'acceptation sans heritage d'implementation (commande /greenfield:analyze). Pipeline lourd en agents, a reserver au code dont on detient les droits."
@@ -173,9 +223,14 @@
       "description": "Pack operations : devops/SRE, finops, monitoring complet et tests en production."
     },
     {
+      "name": "ultime-mobile",
+      "source": "./plugins/ultime-mobile",
+      "description": "Pack mobile : multiplateforme, Expo et React Native, iOS, Android, Flutter, stores (fiche, Data safety, App Store Connect, Google Play, ASO), design, conformite et securite."
+    },
+    {
       "name": "ultime-factory",
       "source": "./plugins/ultime-factory",
-      "description": "Usine a produit : l'orchestrateur app-factory et tout ce qu'il pilote (gestion de produit, retro-specification, cycle de vie logiciel, full stack, design, conformite, securite, devops, donnees, monitoring, tests en production, finops)."
+      "description": "Usine a produit : l'orchestrateur app-factory et tout ce qu'il pilote (gestion de produit, retro-specification, cycle de vie logiciel, full stack, mobile et stores, design, conformite, securite, devops, donnees, monitoring, tests en production, finops). A combiner avec ultime-profile pour n'activer que l'utile par projet."
     }
   ]
 }

@@ -116,13 +116,17 @@ Pour chaque story prete, dans l'ordre des dependances :
   d'accessibilite, registre ; en mobile, labels de confidentialite des stores.
 - `finops-analyst` : budgets et alertes en place, prevision de cout au lancement.
 - `qa-engineer` : regression complete, tests de charge (`k6`), audit d'accessibilite.
+- Mobile : `release-engineer` avec `mobile-release` (signature, pistes de test, rollout),
+  `security-engineer` avec `mobile-security-masvs`, `compliance-officer` avec `store-listing` et
+  `play-data-safety` ; profil de packs ajuste (`ultime-profile` : app-stores, store-apple, store-google).
 - Livrable : `docs/ops/release-readiness.md`.
 - **G6** go / no-go : la liste des actions irreversibles a venir est presentee explicitement.
 
 ## P7 Lancement et apprentissage
 
 - `release-engineer` : mise en production apres confirmation, smoke tests, deploiement progressif.
-- `growth-lead` : plan de lancement, SEO de base, fiches stores si mobile, analytics conformes au
+- `growth-lead` : plan de lancement, SEO de base, fiches stores si mobile (pack store-aso, saisie via
+  `store-console-browser` ou les CLI), analytics conformes au
   consentement, tableau de bord de la metrique nord, `release-notes`.
 - `project-manager` : `retro`, revue des metriques a J+7 et J+30, backlog de l'iteration suivante.
 - **G7** : revue post-lancement avec l'utilisateur ; l'iteration suivante repart en P4.

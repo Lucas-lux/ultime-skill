@@ -113,6 +113,20 @@ def drop_lines(path: Path, pattern: str | None) -> None:
         path.write_text("".join(kept), encoding="utf-8", newline="")
 
 
+def apply_replacements(target: Path, replacements: list[list[str]]) -> None:
+    """Apply [relative_file, regex, replacement] patches to imported files; a patch that matches nothing fails.
+
+    Used to adapt an upstream file without forking it, for example to stop an agent preloading every skill.
+    """
+    for relative, pattern, replacement in replacements:
+        path = target / relative if target.is_dir() else target
+        text = path.read_text(encoding="utf-8")
+        new_text, count = re.subn(pattern, replacement, text, flags=re.MULTILINE)
+        if not count:
+            sys.exit(f"Patch did not apply to {path.relative_to(ROOT).as_posix()}: {pattern}")
+        path.write_text(new_text, encoding="utf-8", newline="")
+
+
 def ignore_patterns(origin: Path, patterns: list[str]):
     """Exclude entries whose name or path relative to `origin` matches a glob pattern."""
     def ignore(directory: str, names: list[str]) -> set[str]:
@@ -145,6 +159,7 @@ def import_entry(entry: dict, source: dict, tree: Path) -> Path:
         normalize(path)
         strip_tail(path, entry.get("strip_tail"))
         drop_lines(path, entry.get("drop_lines"))
+    apply_replacements(target, entry.get("replace", []))
     if origin.is_dir():
         rename_skill(target)
     if not entry.get("license", True):
@@ -170,8 +185,9 @@ def write_third_party(manifest: dict) -> None:
         "Contenu importé depuis des dépôts publics, aux commits indiqués, par `scripts/vendor.py`.",
         "Modifications à l'import : les em dash sont remplacés par un tiret simple, les caractères Unicode",
         "invisibles sont retirés, et les blocs ou liens d'autopromotion signalés (par exemple un footer de",
-        "citation imposé, un lien vers une newsletter) sont retirés. La licence d'origine est copiée dans",
-        "chaque dossier importé.",
+        "citation imposé, un lien vers une newsletter) sont retirés. Quelques fichiers sont adaptés pour",
+        "réduire le contexte chargé ou retirer une télémétrie (option `replace` dans `scripts/gen_vendor.py`).",
+        "La licence d'origine est copiée dans chaque dossier importé.",
         "",
         "| Chemin dans la bibliothèque | Dépôt d'origine | Chemin d'origine | Commit | Licence |",
         "|---|---|---|---|---|",

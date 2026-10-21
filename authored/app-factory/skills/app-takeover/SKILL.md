@@ -1,13 +1,9 @@
 ---
 name: app-takeover
 description: >
-  Mode reprise de l'orchestrateur app-factory : reprend une app existante, inachevee ou abandonnee pour la
-  terminer et l'ameliorer. Inventaire technique (stack, etat des tests, CI, deploiement, base de donnees,
-  dependances, secrets), retro-specification de ce que fait reellement le code, ecart avec ce qu'il
-  devait faire, audit contre la barre de qualite (securite, conformite, donnees, UX, performance,
-  exploitation, couts), decision module par module (garder, corriger, finir, refaire) et plan de reprise.
-  A utiliser quand l'utilisateur veut reprendre, finir, terminer, sauver, auditer ou ameliorer une app
-  existante ou un projet laisse en plan, ou dit "app-takeover".
+  Mode reprise de app-factory : inventaire, retro-spec, audit qualite et plan pour terminer et ameliorer
+  une app existante, inachevee ou abandonnee. A utiliser pour reprendre, finir, terminer, sauver, auditer
+  ou ameliorer une app existante ou un projet laisse en plan, ou "app-takeover".
 ---
 
 # Reprendre une app existante

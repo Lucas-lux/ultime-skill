@@ -394,6 +394,150 @@
       "license_files": [
         "LICENSE"
       ]
+    },
+    "expo": {
+      "repo": "expo/skills",
+      "commit": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "callstack": {
+      "repo": "callstackincubator/agent-skills",
+      "commit": "59e9d17446a248b21d86f078fcd0bd2d36db1ca4",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "rntl": {
+      "repo": "callstack/react-native-testing-library",
+      "commit": "0ecb9c9c0cef163e01abdeae1b4b7c82af40d0b1",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "swiftui-pro": {
+      "repo": "twostraws/SwiftUI-Agent-Skill",
+      "commit": "ce32af1693b9e78a7d22ff48001c97a304d32063",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "swift-concurrency-pro": {
+      "repo": "twostraws/Swift-Concurrency-Agent-Skill",
+      "commit": "bee3f69ba17142da148d3c5406f148ed62592b69",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "swift-testing-pro": {
+      "repo": "twostraws/Swift-Testing-Agent-Skill",
+      "commit": "2d6bba14a3c8bf3694f218b92fffe617c41ae43e",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "swiftdata-pro": {
+      "repo": "twostraws/SwiftData-Agent-Skill",
+      "commit": "8051f177a0076e7fd45bdf4ee687b070ba58fdc6",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "dadederk": {
+      "repo": "dadederk/iOS-Accessibility-Agent-Skill",
+      "commit": "dcc3a36ce1d0099341d545c1af4eb5a8c989bf66",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "android": {
+      "repo": "android/skills",
+      "commit": "95ea931a1ad8f9b2be132ae0cfb2aad964d71118",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE.txt"
+      ]
+    },
+    "play-billing": {
+      "repo": "RevenueCat/play-billing-skills",
+      "commit": "8fa2e4c25d4171be5950888b3ce89d500f6e5cfa",
+      "license": "Apache-2.0",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "flutter": {
+      "repo": "flutter/agent-plugins",
+      "commit": "6e590650bb4bab87f33187423dc10113d04d4836",
+      "license": "BSD-3-Clause",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "asc": {
+      "repo": "rorkai/app-store-connect-cli-skills",
+      "commit": "4b496c57b262985df88f2382a65029d3fec3ab95",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "gplay": {
+      "repo": "tamtom/gplay-cli-skills",
+      "commit": "10301b24639e4f768d009b2edda9315cb2149712",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "devsemih": {
+      "repo": "devsemih/appstore-review-skill",
+      "commit": "ab77bb701fe9bee863b89db4634efcf6e128798e",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "preflight": {
+      "repo": "truongduy2611/app-store-preflight-skills",
+      "commit": "cfd9c73577300f9310ca892fefd38fbe1abd73cb",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "rshankras": {
+      "repo": "rshankras/claude-code-apple-skills",
+      "commit": "9ffb83138209057875698dd11c1720c657c47a92",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "screenshots": {
+      "repo": "ParthJadhav/app-store-screenshots",
+      "commit": "5386f227360bddb06c8beaff920a1a34c9f01932",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    "appeeky": {
+      "repo": "appeeky/aso-skills",
+      "commit": "3919d7c27402d92c7ef698f2016174b874ea189e",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE"
+      ]
     }
   },
   "imports": [
@@ -1298,6 +1442,658 @@
       "license": false,
       "exclude": [
         ".gitkeep"
+      ],
+      "replace": [
+        [
+          "analyzer.md",
+          "^skills: greenfield:.*\\n",
+          ""
+        ],
+        [
+          "analyzer.md",
+          " Loads all analysis skills\\.$",
+          " Loads the one skill its prompt names."
+        ],
+        [
+          "analyzer.md",
+          "^(tools: .*)$",
+          "\\1, Skill"
+        ],
+        [
+          "analyzer.md",
+          "^Follow the specified skill\\.",
+          "Load the specified skill with the Skill tool before starting (`greenfield:<skill-name>`, for example `greenfield:source-analysis`), plus `greenfield:provenance-methodology` when you write behavioral claims. Load no other skill unless that methodology points to it. Follow the specified skill."
+        ]
+      ]
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-overview",
+      "to": "plugins/mobile-expo/skills/expo-overview",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-project-structure",
+      "to": "plugins/mobile-expo/skills/expo-project-structure",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-router",
+      "to": "plugins/mobile-expo/skills/expo-router",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-native-ui",
+      "to": "plugins/mobile-expo/skills/expo-native-ui",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-ui",
+      "to": "plugins/mobile-expo/skills/expo-ui",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-design-system",
+      "to": "plugins/mobile-expo/skills/expo-design-system",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-animation",
+      "to": "plugins/mobile-expo/skills/expo-animation",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-data-fetching",
+      "to": "plugins/mobile-expo/skills/expo-data-fetching",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-dev-client",
+      "to": "plugins/mobile-expo/skills/expo-dev-client",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-module",
+      "to": "plugins/mobile-expo/skills/expo-module",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-upgrade",
+      "to": "plugins/mobile-expo/skills/expo-upgrade",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-brownfield",
+      "to": "plugins/mobile-expo/skills/expo-brownfield",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-web-to-native",
+      "to": "plugins/mobile-expo/skills/expo-web-to-native",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-dom",
+      "to": "plugins/mobile-expo/skills/expo-dom",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/expo-examples",
+      "to": "plugins/mobile-expo/skills/expo-examples",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/eas-app-stores",
+      "to": "plugins/mobile-expo/skills/eas-app-stores",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/eas-update",
+      "to": "plugins/mobile-expo/skills/eas-update",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "expo",
+      "from": "plugins/expo/skills/eas-workflows",
+      "to": "plugins/mobile-expo/skills/eas-workflows",
+      "strip_tail": "## Submitting Feedback"
+    },
+    {
+      "source": "callstack",
+      "from": "skills/react-native-best-practices",
+      "to": "plugins/mobile-expo/skills/react-native-best-practices",
+      "exclude": [
+        "*.png"
+      ]
+    },
+    {
+      "source": "callstack",
+      "from": "skills/upgrading-react-native",
+      "to": "plugins/mobile-expo/skills/upgrading-react-native"
+    },
+    {
+      "source": "callstack",
+      "from": "skills/react-navigation",
+      "to": "plugins/mobile-expo/skills/react-navigation"
+    },
+    {
+      "source": "rntl",
+      "from": "skills/react-native-testing",
+      "to": "plugins/mobile-expo/skills/react-native-testing"
+    },
+    {
+      "source": "swiftui-pro",
+      "from": "swiftui-pro",
+      "to": "plugins/mobile-ios/skills/swiftui-pro",
+      "exclude": [
+        ".claude-plugin",
+        "agents",
+        "assets",
+        "skills"
+      ]
+    },
+    {
+      "source": "swift-concurrency-pro",
+      "from": "swift-concurrency-pro",
+      "to": "plugins/mobile-ios/skills/swift-concurrency-pro",
+      "exclude": [
+        ".claude-plugin",
+        "agents",
+        "assets",
+        "skills"
+      ]
+    },
+    {
+      "source": "swift-testing-pro",
+      "from": "swift-testing-pro",
+      "to": "plugins/mobile-ios/skills/swift-testing-pro",
+      "exclude": [
+        ".claude-plugin",
+        "agents",
+        "assets",
+        "skills"
+      ]
+    },
+    {
+      "source": "swiftdata-pro",
+      "from": "swiftdata-pro",
+      "to": "plugins/mobile-ios/skills/swiftdata-pro",
+      "exclude": [
+        ".claude-plugin",
+        "agents",
+        "assets",
+        "skills"
+      ]
+    },
+    {
+      "source": "dadederk",
+      "from": "ios-accessibility",
+      "to": "plugins/mobile-ios/skills/ios-accessibility",
+      "exclude": [
+        "agents"
+      ]
+    },
+    {
+      "source": "android",
+      "from": "build-system/agp/agp-9-upgrade",
+      "to": "plugins/mobile-android/skills/agp-9-upgrade"
+    },
+    {
+      "source": "android",
+      "from": "jetpack-compose/jetpack-compose-performance",
+      "to": "plugins/mobile-android/skills/jetpack-compose-performance"
+    },
+    {
+      "source": "android",
+      "from": "jetpack-compose/adaptive",
+      "to": "plugins/mobile-android/skills/adaptive"
+    },
+    {
+      "source": "android",
+      "from": "jetpack-compose/migration/migrate-xml-views-to-jetpack-compose",
+      "to": "plugins/mobile-android/skills/migrate-xml-views-to-jetpack-compose"
+    },
+    {
+      "source": "android",
+      "from": "jetpack-compose/theming/styles",
+      "to": "plugins/mobile-android/skills/styles"
+    },
+    {
+      "source": "android",
+      "from": "navigation/navigation-3",
+      "to": "plugins/mobile-android/skills/navigation-3"
+    },
+    {
+      "source": "android",
+      "from": "system/edge-to-edge",
+      "to": "plugins/mobile-android/skills/edge-to-edge"
+    },
+    {
+      "source": "android",
+      "from": "performance/r8-analyzer",
+      "to": "plugins/mobile-android/skills/r8-analyzer"
+    },
+    {
+      "source": "android",
+      "from": "performance/anr-audit-and-fix",
+      "to": "plugins/mobile-android/skills/anr-audit-and-fix"
+    },
+    {
+      "source": "android",
+      "from": "testing/testing-setup",
+      "to": "plugins/mobile-android/skills/testing-setup"
+    },
+    {
+      "source": "android",
+      "from": "play/play-billing-library-version-upgrade",
+      "to": "plugins/mobile-android/skills/play-billing-library-version-upgrade"
+    },
+    {
+      "source": "android",
+      "from": "play/play-policy-insights",
+      "to": "plugins/mobile-android/skills/play-policy-insights"
+    },
+    {
+      "source": "android",
+      "from": "security/android-intent-security",
+      "to": "plugins/mobile-android/skills/android-intent-security"
+    },
+    {
+      "source": "android",
+      "from": "security/android-permissions-security",
+      "to": "plugins/mobile-android/skills/android-permissions-security"
+    },
+    {
+      "source": "play-billing",
+      "from": "google-play/integrating-pbl",
+      "to": "plugins/mobile-android/skills/play-billing-integration"
+    },
+    {
+      "source": "play-billing",
+      "from": "google-play/purchase-flow",
+      "to": "plugins/mobile-android/skills/play-billing-purchase-flow"
+    },
+    {
+      "source": "play-billing",
+      "from": "google-play/one-time-products",
+      "to": "plugins/mobile-android/skills/play-billing-one-time-products"
+    },
+    {
+      "source": "play-billing",
+      "from": "google-play/subscriptions",
+      "to": "plugins/mobile-android/skills/play-billing-subscriptions"
+    },
+    {
+      "source": "play-billing",
+      "from": "google-play/subscription-states",
+      "to": "plugins/mobile-android/skills/play-billing-subscription-states"
+    },
+    {
+      "source": "play-billing",
+      "from": "google-play/rtdn",
+      "to": "plugins/mobile-android/skills/play-billing-rtdn"
+    },
+    {
+      "source": "play-billing",
+      "from": "google-play/backend-architecture",
+      "to": "plugins/mobile-android/skills/play-billing-backend"
+    },
+    {
+      "source": "play-billing",
+      "from": "google-play/security",
+      "to": "plugins/mobile-android/skills/play-billing-security"
+    },
+    {
+      "source": "play-billing",
+      "from": "google-play/error-handling",
+      "to": "plugins/mobile-android/skills/play-billing-errors"
+    },
+    {
+      "source": "play-billing",
+      "from": "google-play/testing",
+      "to": "plugins/mobile-android/skills/play-billing-testing"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/flutter-apply-architecture-best-practices",
+      "to": "plugins/mobile-flutter/skills/flutter-apply-architecture-best-practices"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/flutter-build-responsive-layout",
+      "to": "plugins/mobile-flutter/skills/flutter-build-responsive-layout"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/flutter-fix-layout-issues",
+      "to": "plugins/mobile-flutter/skills/flutter-fix-layout-issues"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/flutter-setup-declarative-routing",
+      "to": "plugins/mobile-flutter/skills/flutter-setup-declarative-routing"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/flutter-setup-localization",
+      "to": "plugins/mobile-flutter/skills/flutter-setup-localization"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/flutter-implement-json-serialization",
+      "to": "plugins/mobile-flutter/skills/flutter-implement-json-serialization"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/flutter-use-http-package",
+      "to": "plugins/mobile-flutter/skills/flutter-use-http-package"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/flutter-add-widget-test",
+      "to": "plugins/mobile-flutter/skills/flutter-add-widget-test"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/flutter-add-widget-preview",
+      "to": "plugins/mobile-flutter/skills/flutter-add-widget-preview"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/flutter-add-integration-test",
+      "to": "plugins/mobile-flutter/skills/flutter-add-integration-test"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/dart-add-unit-test",
+      "to": "plugins/mobile-flutter/skills/dart-add-unit-test"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/dart-fix-runtime-errors",
+      "to": "plugins/mobile-flutter/skills/dart-fix-runtime-errors"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/dart-run-static-analysis",
+      "to": "plugins/mobile-flutter/skills/dart-run-static-analysis"
+    },
+    {
+      "source": "flutter",
+      "from": "skills/dart-resolve-package-conflicts",
+      "to": "plugins/mobile-flutter/skills/dart-resolve-package-conflicts"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-cli-usage",
+      "to": "plugins/store-apple/skills/asc-cli-usage"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-id-resolver",
+      "to": "plugins/store-apple/skills/asc-id-resolver"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-release-flow",
+      "to": "plugins/store-apple/skills/asc-release-flow"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-submission-health",
+      "to": "plugins/store-apple/skills/asc-submission-health"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-testflight-orchestration",
+      "to": "plugins/store-apple/skills/asc-testflight-orchestration"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-signing-setup",
+      "to": "plugins/store-apple/skills/asc-signing-setup"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-xcode-build",
+      "to": "plugins/store-apple/skills/asc-xcode-build"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-build-lifecycle",
+      "to": "plugins/store-apple/skills/asc-build-lifecycle"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-metadata-sync",
+      "to": "plugins/store-apple/skills/asc-metadata-sync"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-localize-metadata",
+      "to": "plugins/store-apple/skills/asc-localize-metadata"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-whats-new-writer",
+      "to": "plugins/store-apple/skills/asc-whats-new-writer"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-screenshot-resize",
+      "to": "plugins/store-apple/skills/asc-screenshot-resize"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-shots-pipeline",
+      "to": "plugins/store-apple/skills/asc-shots-pipeline"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-app-create-ui",
+      "to": "plugins/store-apple/skills/asc-app-create-ui"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-crash-triage",
+      "to": "plugins/store-apple/skills/asc-crash-triage"
+    },
+    {
+      "source": "asc",
+      "from": "skills/asc-ppp-pricing",
+      "to": "plugins/store-apple/skills/asc-ppp-pricing"
+    },
+    {
+      "source": "preflight",
+      "from": ".",
+      "to": "plugins/store-apple/skills/app-store-preflight",
+      "exclude": [
+        "README.md",
+        ".github"
+      ]
+    },
+    {
+      "source": "rshankras",
+      "from": "skills/legal/privacy-policy",
+      "to": "plugins/store-apple/skills/privacy-policy"
+    },
+    {
+      "source": "rshankras",
+      "from": "skills/legal/privacy-publish",
+      "to": "plugins/store-apple/skills/privacy-publish"
+    },
+    {
+      "source": "gplay",
+      "from": "skills/gplay-cli-usage",
+      "to": "plugins/store-google/skills/gplay-cli-usage"
+    },
+    {
+      "source": "gplay",
+      "from": "skills/gplay-gradle-build",
+      "to": "plugins/store-google/skills/gplay-gradle-build"
+    },
+    {
+      "source": "gplay",
+      "from": "skills/gplay-release-flow",
+      "to": "plugins/store-google/skills/gplay-release-flow"
+    },
+    {
+      "source": "gplay",
+      "from": "skills/gplay-rollout-management",
+      "to": "plugins/store-google/skills/gplay-rollout-management"
+    },
+    {
+      "source": "gplay",
+      "from": "skills/gplay-testers-orchestration",
+      "to": "plugins/store-google/skills/gplay-testers-orchestration"
+    },
+    {
+      "source": "gplay",
+      "from": "skills/gplay-metadata-sync",
+      "to": "plugins/store-google/skills/gplay-metadata-sync"
+    },
+    {
+      "source": "gplay",
+      "from": "skills/gplay-screenshot-automation",
+      "to": "plugins/store-google/skills/gplay-screenshot-automation"
+    },
+    {
+      "source": "gplay",
+      "from": "skills/gplay-submission-checks",
+      "to": "plugins/store-google/skills/gplay-submission-checks"
+    },
+    {
+      "source": "gplay",
+      "from": "skills/gplay-preflight",
+      "to": "plugins/store-google/skills/gplay-preflight"
+    },
+    {
+      "source": "gplay",
+      "from": "skills/gplay-iap-setup",
+      "to": "plugins/store-google/skills/gplay-iap-setup"
+    },
+    {
+      "source": "gplay",
+      "from": "skills/gplay-ppp-pricing",
+      "to": "plugins/store-google/skills/gplay-ppp-pricing"
+    },
+    {
+      "source": "gplay",
+      "from": "skills/gplay-vitals-monitoring",
+      "to": "plugins/store-google/skills/gplay-vitals-monitoring"
+    },
+    {
+      "source": "devsemih",
+      "from": "skills/playstore-review",
+      "to": "plugins/store-google/skills/playstore-review"
+    },
+    {
+      "source": "devsemih",
+      "from": "references/play-policy-summary.md",
+      "to": "plugins/store-google/references/play-policy-summary.md",
+      "license": false
+    },
+    {
+      "source": "screenshots",
+      "from": "skills/app-store-screenshots",
+      "to": "plugins/store-aso/skills/app-store-screenshots"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/app-marketing-context",
+      "to": "plugins/store-aso/skills/app-marketing-context"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/aso-audit",
+      "to": "plugins/store-aso/skills/aso-audit"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/keyword-research",
+      "to": "plugins/store-aso/skills/keyword-research"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/metadata-optimization",
+      "to": "plugins/store-aso/skills/metadata-optimization"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/screenshot-optimization",
+      "to": "plugins/store-aso/skills/screenshot-optimization"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/app-preview-video",
+      "to": "plugins/store-aso/skills/app-preview-video"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/app-icon-optimization",
+      "to": "plugins/store-aso/skills/app-icon-optimization"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/custom-product-pages",
+      "to": "plugins/store-aso/skills/custom-product-pages"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/in-app-events",
+      "to": "plugins/store-aso/skills/in-app-events"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/ab-test-store-listing",
+      "to": "plugins/store-aso/skills/ab-test-store-listing"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/app-rejection-recovery",
+      "to": "plugins/store-aso/skills/app-rejection-recovery"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/review-management",
+      "to": "plugins/store-aso/skills/review-management"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/rating-prompt-strategy",
+      "to": "plugins/store-aso/skills/rating-prompt-strategy"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/localization",
+      "to": "plugins/store-aso/skills/store-localization"
+    },
+    {
+      "source": "appeeky",
+      "from": "skills/android-aso",
+      "to": "plugins/store-aso/skills/android-aso",
+      "replace": [
+        [
+          "SKILL.md",
+          "^Use Appeeky keyword tools, then adapt for Play:$",
+          "Research keywords with the keyword-research skill, then adapt for Play:"
+        ]
       ]
     },
     {
