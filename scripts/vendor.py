@@ -15,6 +15,7 @@ import re
 import shutil
 import subprocess
 import sys
+from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -28,6 +29,15 @@ EM_DASH_CHAR = chr(0x2014)
 EM_DASH = re.compile("[ \t]*" + EM_DASH_CHAR + "[ \t]*")
 INVISIBLE_RANGES = [(0x200B, 0x200F), (0x202A, 0x202E), (0x2060, 0x2064), (0xFEFF, 0xFEFF)]
 INVISIBLE = re.compile("[" + "".join(f"{chr(a)}-{chr(b)}" for a, b in INVISIBLE_RANGES) + "]")
+# Files changed at import, per license folder: Apache 2.0 (4.b) and CC licenses ask modified files to say so.
+MODIFIED: dict[Path, dict[str, dict[str, set[str]]]] = defaultdict(lambda: defaultdict(lambda: defaultdict(set)))
+REASONS = {
+    "normalize": "em dash remplaces par un tiret simple, caracteres Unicode invisibles retires",
+    "strip_tail": "pied de page d'autopromotion retire",
+    "drop_lines": "liens d'autopromotion retires",
+    "replace": "passage adapte (contexte reduit, telemetrie ou publicite retiree)",
+    "rename": "champ name du frontmatter aligne sur le nom du dossier",
+}
 
 
 def run_git(*args: str, cwd: Path | None = None) -> str:
@@ -155,13 +165,27 @@ def import_entry(entry: dict, source: dict, tree: Path) -> Path:
         shutil.copy2(origin, target)
         files = [target]
         license_directory = target.parent
+    origin_label = f"{source['repo']}@{source['commit'][:12]}"
+    notice_directory = license_directory if "license_to" not in entry else ROOT / entry["license_to"]
+    # Every .md of agents/ and commands/ is loaded as a component: the notice goes one level up.
+    if notice_directory.name in {"agents", "commands"}:
+        notice_directory = notice_directory.parent
+    changes = MODIFIED[notice_directory][origin_label]
+
+    def track(step: str, action) -> None:
+        before = {path: path.read_bytes() for path in files if path.exists()}
+        action()
+        for path, content in before.items():
+            if path.exists() and path.read_bytes() != content:
+                changes[path.relative_to(ROOT).as_posix()].add(REASONS[step])
+
     for path in files:
-        normalize(path)
-        strip_tail(path, entry.get("strip_tail"))
-        drop_lines(path, entry.get("drop_lines"))
-    apply_replacements(target, entry.get("replace", []))
+        track("normalize", lambda: normalize(path))
+        track("strip_tail", lambda: strip_tail(path, entry.get("strip_tail")))
+        track("drop_lines", lambda: drop_lines(path, entry.get("drop_lines")))
+    track("replace", lambda: apply_replacements(target, entry.get("replace", [])))
     if origin.is_dir():
-        rename_skill(target)
+        track("rename", lambda: rename_skill(target))
     if not entry.get("license", True):
         return target
     if "license_to" in entry:
@@ -175,7 +199,30 @@ def import_entry(entry: dict, source: dict, tree: Path) -> Path:
             copy = license_directory / path.name
             shutil.copy2(path, copy)
             normalize(copy)
+    # Written after the copy: its name also matches LICENSE* and would otherwise block it.
+    if entry.get("license_note"):
+        note = license_directory / "LICENSE-NOTE.md"
+        note.write_text(f"# Note de licence\n\n{entry['license_note']}\n", encoding="utf-8")
     return target
+
+
+def write_modifications() -> None:
+    """Write MODIFICATIONS.md in every license folder whose files were changed at import."""
+    for directory, origins in MODIFIED.items():
+        lines = ["# Modifications", "",
+                 "Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a",
+                 "leur version d'origine. Le reste du contenu est inchange.", ""]
+        for origin, files in sorted(origins.items()):
+            if not files:
+                continue
+            lines += [f"Origine : https://github.com/{origin.split('@')[0]} (commit {origin.split('@')[1]})", ""]
+            base = directory.relative_to(ROOT)
+            for file, reasons in sorted(files.items()):
+                shown = Path(file).relative_to(base).as_posix() if Path(file).is_relative_to(base) else file
+                lines.append(f"- `{shown}` : {'; '.join(sorted(reasons))}")
+            lines.append("")
+        if any(origins.values()):
+            (directory / "MODIFICATIONS.md").write_text("\n".join(lines), encoding="utf-8")
 
 
 def write_third_party(manifest: dict) -> None:
@@ -196,7 +243,8 @@ def write_third_party(manifest: dict) -> None:
         source = manifest["sources"][entry["source"]]
         lines.append(
             f"| `{entry['to']}` | [{source['repo']}](https://github.com/{source['repo']}) "
-            f"| `{entry['from']}` | `{source['commit'][:12]}` | {source['license']} |"
+            f"| `{entry['from']}` | `{source['commit'][:12]}` | {source['license']}"
+            f"{' (' + entry['license_note'].split('.')[0] + ')' if entry.get('license_note') else ''} |"
         )
     THIRD_PARTY.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -216,6 +264,7 @@ def main() -> None:
             trees[entry["source"]] = checkout(source["repo"], source["commit"], arguments.cache)
         target = import_entry(entry, source, trees[entry["source"]])
         print(f"{entry['source']:>24}  {entry['from']}  ->  {target.relative_to(ROOT).as_posix()}")
+    write_modifications()
     write_third_party(manifest)
 
 

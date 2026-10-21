@@ -20,10 +20,8 @@ SOURCES = {
     "agamm-owasp": ("agamm/claude-code-owasp", "8ac7965caa212b4a850aff8d3df0081ab3fa9eed", "MIT", ["LICENSE"]),
     "getsentry": ("getsentry/skills", "d18b7aa8ba878354e5c348310230e652f7690f9c", "Apache-2.0", ["LICENSE"]),
     "openai": ("openai/skills", "49f948faa9258a0c61caceaf225e179651397431", "Apache-2.0", []),
-    "trailofbits": ("trailofbits/skills", "0f44fe01dcb00bd6929b4ba82a257d305de04554", "CC-BY-SA-4.0", ["LICENSE"]),
     "trilwu": ("trilwu/secskills", "ca53957bcd8e3b83b5d4d190bb3ad008a4f15c84", "MIT", ["LICENSE"]),
     "terraform-skill": ("antonbabenko/terraform-skill", "0a3a4a66e99001347d36a41e10260a825be3ab62", "Apache-2.0", ["LICENSE"]),
-    "hashicorp": ("hashicorp/agent-skills", "f706481af9b8fedb66de909f6243ad29601afa0c", "MPL-2.0", ["LICENSE"]),
     "docker": ("docker/skills", "f79172733725e2fd236343ee7b963c446ed85d09", "Apache-2.0", ["LICENSE"]),
     "jeffallan": ("jeffallan/claude-skills", "1be15d8064f88fc25216442406d40add8fd23b53", "MIT", ["LICENSE"]),
     "akin-ozer": ("akin-ozer/cc-devops-skills", "276af751e659315aaf56d3ad13d7c26f4e72e28a", "Apache-2.0", ["LICENSE"]),
@@ -113,27 +111,27 @@ add("anthropic-skills", "skills/mcp-builder", "plugins/skill-factory/skills/mcp-
 
 # ---- Security (curated) ----
 pack_skill("agamm-owasp", ".claude/skills/owasp-security", "security")
-pack_skill("getsentry", "skills/security-review", "security")
 pack_skill("getsentry", "skills/gha-security-review", "security")
 pack_skill("getsentry", "skills/skill-scanner", "security")
 pack_skill("openai", "skills/.curated/security-threat-model", "security")
-for s in ["supply-chain-risk-auditor", "static-analysis/skills/semgrep", "static-analysis/skills/codeql",
-          "differential-review", "variant-analysis", "sharp-edges"]:
-    name = s.split("/")[-1]
-    frm = f"plugins/{s}" if "/" in s else f"plugins/{s}/skills/{s}"
-    pack_skill("trailofbits", frm, "security", folder=name)
-pack_skill("trailofbits", "plugins/fp-check/skills/fp-check", "security", exclude=["hooks"])
+# Copyleft sources are not imported (trailofbits/skills CC-BY-SA-4.0, hashicorp/agent-skills MPL-2.0, getsentry's
+# security-review derived from the OWASP Cheat Sheets under CC-BY-SA-4.0): the security review, static analysis
+# and supply-chain skills are written in-house in authored/security; Terraform tests and style are covered by
+# terraform-skill (Apache-2.0).
 
 # ---- Security audit, defense and offense (trilwu, whole collections) ----
 # sec-offense is for authorized security testing only (pentest engagements, CTF, research).
-add("trilwu", "secskills-core/skills", "plugins/sec-audit/skills", license_to="plugins/sec-audit")
+# The three general-purpose reviews live in the security pack (used by app-factory), not in sec-audit.
+TRILWU_IN_SECURITY = ["auditing-code-for-vulnerabilities", "reviewing-code-changes", "auditing-supply-chain"]
+add("trilwu", "secskills-core/skills", "plugins/sec-audit/skills", license_to="plugins/sec-audit",
+    exclude=TRILWU_IN_SECURITY)
+for skill in TRILWU_IN_SECURITY:
+    pack_skill("trilwu", f"secskills-core/skills/{skill}", "security")
 add("trilwu", "secskills-defense/skills", "plugins/sec-defense/skills", license_to="plugins/sec-defense")
 add("trilwu", "secskills-offense/skills", "plugins/sec-offense/skills", license_to="plugins/sec-offense")
 
 # ---- DevOps / SRE / CI-CD / observability / prod testing ----
 pack_skill("terraform-skill", "skills/terraform-skill", "devops")
-pack_skill("hashicorp", "plugins/terraform/skills/terraform-test", "devops")
-pack_skill("hashicorp", "plugins/terraform/skills/terraform-style-guide", "devops")
 pack_skill("docker", "skills/docker-build-strategies", "devops")
 pack_skill("docker", "skills/docker-destructive-guardrails", "devops")
 pack_skill("jeffallan", "skills/kubernetes-specialist", "devops")
@@ -186,18 +184,46 @@ pack_skill("huggingface", "skills/trl-training", "ml-engineering")
 pack_skill("huggingface", "skills/hf-cli", "ml-engineering")
 pack_skill("orchestra", "12-inference-serving/vllm", "ml-engineering", folder="serving-llms-vllm")
 pack_skill("orchestra", "11-evaluation/lm-evaluation-harness", "ml-engineering", folder="evaluating-llms-harness")
-pack_skill("kdense", "skills/scikit-learn", "ml-engineering", strip_tail="## Citing Scientific Agent Skills")
+BSD3_TEXT = """Redistribution and use in source and binary forms, with or without modification, are permitted provided
+that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the
+   following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+   following disclaimer in the documentation and/or other materials provided with the distribution.
+3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or
+   promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGE."""
+pack_skill("kdense", "skills/scikit-learn", "ml-engineering", strip_tail="## Citing Scientific Agent Skills",
+           license_note="Le depot K-Dense-AI/claude-scientific-skills est sous licence MIT (LICENSE ci-joint). Cette "
+                        "skill declare dans son frontmatter la licence BSD-3-Clause, celle de scikit-learn dont elle "
+                        "decrit la documentation (Copyright (c) The scikit-learn developers). Les deux licences sont "
+                        "permissives ; conserver les deux notices en cas de redistribution. Texte de la licence "
+                        "BSD-3-Clause :\n\n" + BSD3_TEXT)
 pack_skill("mlflow", "instrumenting-with-mlflow-tracing", "ml-engineering")
 
 # ---- Full stack ----
-pack_skill("vercel-labs", "skills/react-best-practices", "fullstack", folder="vercel-react-best-practices")
-pack_skill("vercel-labs", "skills/composition-patterns", "fullstack", folder="vercel-composition-patterns")
+VERCEL_NOTE = ("Licence MIT declaree par l'auteur (Vercel) dans le frontmatter de la skill ; le depot "
+               "vercel-labs/agent-skills ne contient pas de fichier de licence au commit importe.")
+pack_skill("vercel-labs", "skills/react-best-practices", "fullstack", folder="vercel-react-best-practices",
+           license_note=VERCEL_NOTE)
+pack_skill("vercel-labs", "skills/composition-patterns", "fullstack", folder="vercel-composition-patterns",
+           license_note=VERCEL_NOTE)
 
 # ---- Design (anti AI-slop) ----
 pack_skill("impeccable", ".claude/skills/impeccable", "ui-design", exclude=["scripts"])
 pack_skill("anthropic-skills", "skills/frontend-design", "ui-design")
-pack_skill("vercel-labs", "skills/web-design-guidelines", "ui-design", folder="vercel-web-design-guidelines")
-add("wig", "command.md", "plugins/ui-design/skills/vercel-web-design-guidelines/references/web-interface-guidelines.md", license=False)
+# vercel-labs' web-design-guidelines skill has no license: not imported. The guidelines themselves (MIT) serve
+# the in-house ui-review skill, with their license next to them.
+add("wig", "command.md", "plugins/ui-design/skills/ui-review/references/web-interface-guidelines.md")
 pack_skill("ibelick", "skills/baseline-ui", "ui-design")
 pack_skill("emilkowalski", "skills/break-ui", "ui-design")
 pack_skill("emilkowalski", "skills/emil-design-eng", "ui-design")

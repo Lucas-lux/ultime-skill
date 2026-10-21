@@ -22,7 +22,7 @@ Tu es relecteur senior. Tu relis le diff d'une story comme si tu devais en assum
 - **Donnees** : migrations reversibles, requetes indexees, pas de N+1, transactions correctes.
 - **Robustesse** : gestion d'erreurs, journalisation utile et sans donnee personnelle, pas de secret.
 
-Skills : `ponytail-review` (d'abord : justesse, surete, charge, tests, et chaque ligne est-elle utile), `code-review-and-quality`, `code-simplification`, `differential-review`.
+Skills : `ponytail-review` (d'abord : justesse, surete, charge, tests, et chaque ligne est-elle utile), `code-review-and-quality`, `code-simplification`, `reviewing-code-changes` (diff touchant a la securite).
 
 ## Exigences
 

@@ -1,0 +1,53 @@
+{
+  "comment": "Signals found in a repository -> packs, path-scoped rules and permissions. Read by scripts/suggest_profile.py. A signal is a glob (files) or a dependency name found in package.json, pyproject.toml or requirements files.",
+  "always_for_code": ["guardrails", "ponytail", "agent-skills", "ci-forge", "security"],
+  "signals": [
+    {"id": "app-factory", "files": [".app-factory/state.json", "docs/product/brief.md"], "packs": ["app-factory", "product-management"]},
+    {"id": "web-front", "deps": ["next", "react", "vue", "nuxt", "svelte", "@sveltejs/kit", "astro", "@remix-run/react", "vite"], "packs": ["fullstack", "ui-design", "compliance", "monitoring", "prod-testing"]},
+    {"id": "api", "deps": ["fastapi", "django", "flask", "starlette", "litestar", "@nestjs/core", "express", "fastify", "hono", "@trpc/server"], "files": ["go.mod", "Cargo.toml", "composer.json", "Gemfile", "pom.xml", "build.gradle", "build.gradle.kts"], "packs": ["devops", "monitoring", "prod-testing"]},
+    {"id": "database", "deps": ["sqlalchemy", "alembic", "django", "prisma", "@prisma/client", "drizzle-orm", "typeorm", "sequelize", "psycopg", "psycopg2-binary", "pg", "mysql2"], "files": ["**/migrations/**", "alembic.ini", "**/schema.prisma"], "packs": ["data-engineering"]},
+    {"id": "expo", "deps": ["expo", "react-native"], "packs": ["mobile", "mobile-expo", "ui-design", "compliance"]},
+    {"id": "ios", "files": ["**/*.xcodeproj/project.pbxproj", "Package.swift"], "packs": ["mobile", "mobile-ios", "ui-design", "compliance"]},
+    {"id": "android", "files": ["**/AndroidManifest.xml"], "packs": ["mobile", "mobile-android", "ui-design", "compliance"]},
+    {"id": "flutter", "files": ["pubspec.yaml"], "packs": ["mobile", "mobile-flutter", "ui-design", "compliance"]},
+    {"id": "containers", "files": ["**/Dockerfile", "**/compose*.y*ml", "**/docker-compose*.y*ml"], "packs": ["devops", "monitoring"]},
+    {"id": "kubernetes", "files": ["**/Chart.yaml", "**/kustomization.y*ml", "**/k8s/**/*.y*ml"], "packs": ["devops", "monitoring", "finops"]},
+    {"id": "terraform", "files": ["**/*.tf"], "packs": ["devops", "finops"]},
+    {"id": "data", "deps": ["apache-airflow", "dbt-core", "pyspark", "pandas", "polars", "duckdb"], "packs": ["data-engineering", "dataviz"]},
+    {"id": "ml", "deps": ["torch", "transformers", "scikit-learn", "langchain", "llama-index", "vllm", "anthropic", "openai"], "packs": ["ml-engineering", "monitoring"]}
+  ],
+  "rules": {
+    "python": ["**/*.py"],
+    "typescript": ["**/*.ts", "**/*.tsx"],
+    "react": ["**/*.tsx", "**/*.jsx"],
+    "go": ["**/*.go"],
+    "rust": ["**/*.rs"],
+    "shell": ["**/*.sh", "**/*.bash"],
+    "sql": ["**/*.sql", "**/migrations/**", "**/alembic/**", "**/schema.prisma"],
+    "docker": ["**/Dockerfile", "**/compose*.y*ml", "**/docker-compose*.y*ml"],
+    "terraform": ["**/*.tf"],
+    "kubernetes": ["**/Chart.yaml", "**/kustomization.y*ml", "**/k8s/**/*.y*ml"],
+    "tests": ["**/test_*.py", "**/*.test.*", "**/*.spec.*", "**/*_test.go", "**/tests/**"]
+  },
+  "permissions": {
+    "allow": {
+      "uv": ["Bash(uv sync *)", "Bash(uv run pytest *)", "Bash(uv run ruff *)", "Bash(uv run mypy *)", "Bash(uv run pyright *)"],
+      "poetry": ["Bash(poetry install *)", "Bash(poetry run pytest *)", "Bash(poetry run ruff *)", "Bash(poetry run mypy *)"],
+      "npm": ["Bash(npm ci)", "Bash(npm run lint *)", "Bash(npm run test *)", "Bash(npm run typecheck *)", "Bash(npm run build *)", "Bash(npm test *)", "Bash(npx tsc --noEmit *)", "Bash(npx playwright test *)"],
+      "pnpm": ["Bash(pnpm install --frozen-lockfile *)", "Bash(pnpm lint *)", "Bash(pnpm test *)", "Bash(pnpm typecheck *)", "Bash(pnpm build *)", "Bash(pnpm exec tsc --noEmit *)", "Bash(pnpm exec playwright test *)"],
+      "yarn": ["Bash(yarn install --immutable *)", "Bash(yarn lint *)", "Bash(yarn test *)", "Bash(yarn typecheck *)", "Bash(yarn build *)"],
+      "bun": ["Bash(bun install --frozen-lockfile *)", "Bash(bun run lint *)", "Bash(bun test *)", "Bash(bun run build *)"],
+      "make": ["Bash(make lint *)", "Bash(make test *)", "Bash(make typecheck *)", "Bash(make ci *)", "Bash(make format *)"],
+      "go": ["Bash(go test *)", "Bash(go vet *)", "Bash(go build *)", "Bash(golangci-lint run *)"],
+      "rust": ["Bash(cargo test *)", "Bash(cargo clippy *)", "Bash(cargo fmt *)", "Bash(cargo build *)"]
+    },
+    "ask": [
+      "Bash(npm publish *)", "Bash(pnpm publish *)", "Bash(yarn npm publish *)", "Bash(bun publish *)",
+      "Bash(uv publish *)", "Bash(twine upload *)", "Bash(poetry publish *)", "Bash(cargo publish *)",
+      "Bash(terraform apply *)", "Bash(terraform destroy *)", "Bash(tofu apply *)", "Bash(tofu destroy *)",
+      "Bash(kubectl delete *)", "Bash(kubectl apply *)", "Bash(helm upgrade *)", "Bash(helm uninstall *)",
+      "Bash(docker push *)", "Bash(eas submit *)", "Bash(eas update *)", "Bash(vercel *--prod*)",
+      "Bash(flyctl deploy *)", "Bash(wrangler deploy *)", "Bash(gh release create *)"
+    ]
+  }
+}

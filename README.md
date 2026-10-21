@@ -169,7 +169,7 @@ de leurs alternatives.
 
 | Pack | Skills | Rôle |
 |---|---|---|
-| `security` | 12 | Audit et revue de sécurité : OWASP, revue de diff, Semgrep, CodeQL, variantes, supply chain, modèle de menace. |
+| `security` | 9 | Revue de sécurité maison (méthode, preuves, gravité, pièges de conception), analyse statique Semgrep et CodeQL (maison), audit de code et de diff, supply chain, OWASP, modèle de menace, GitHub Actions. |
 | `sec-audit` | 30 | Recherche de vulnérabilités et reverse (trilwu core). Usage autorisé uniquement. |
 | `sec-defense` | 22 | DFIR, détection (Sigma, Yara), investigation et durcissement cloud (trilwu defense). |
 | `sec-offense` | 40 | Pentest offensif, tests autorisés uniquement (trilwu offense). Hors bundles, installation explicite. |
@@ -275,16 +275,21 @@ Le travail propre à ce dépôt (scripts, manifestes, documentation) est sous li
 importée garde la licence de son projet d'origine, copiée dans son dossier et recensée dans
 [THIRD_PARTY.md](THIRD_PARTY.md). Points d'attention :
 
-- Les skills `security` issues de Trail of Bits sont en **CC-BY-SA-4.0** (attribution et partage à
-  l'identique). Elles restent isolées dans leurs dossiers, avec leur licence ; l'agrégation ne contamine
-  pas le reste de la bibliothèque, mais toute modification d'une de ces skills doit rester en CC-BY-SA.
-- Les skills `devops` issues de HashiCorp sont en **MPL-2.0** (copyleft faible, par fichier).
-- Les skills Vercel (`fullstack`, `ui-design`) déclarent MIT en frontmatter mais leur dépôt n'a pas de fichier
-  LICENSE ; la mention de licence voyage dans le frontmatter de la skill.
-- Les skills Flutter sont en **BSD-3-Clause** ; Android (Google) et Play Billing (RevenueCat) en Apache-2.0.
+- **Uniquement des licences permissives** : MIT, Apache-2.0 et BSD-3-Clause. Aucune source copyleft
+  (GPL, AGPL, CC-BY-SA, MPL) ni sans licence n'est importée : les skills de Trail of Bits (CC-BY-SA), de
+  HashiCorp (MPL) et la revue de sécurité de Sentry (dérivée des fiches OWASP, CC-BY-SA) ont été retirées et
+  remplacées par des skills écrites maison (`security-review`, `sast`, `ui-review`) ou par des skills
+  équivalentes sous licence permissive.
+- Chaque dossier importé dont des fichiers ont été modifiés à l'import contient un `MODIFICATIONS.md` qui
+  dit lesquels et comment (exigence d'Apache-2.0 4.b), en plus de la licence et du `NOTICE` d'origine.
+- Deux skills Vercel (`fullstack`) déclarent MIT dans leur frontmatter sans fichier de licence dans leur
+  dépôt, et la skill `scikit-learn` déclare BSD-3-Clause dans un dépôt MIT : un `LICENSE-NOTE.md` le précise.
+- Les marques (Expo, Vercel, Flutter, Apple...) ne sont pas concédées par ces licences, ni les droits sur
+  les cadres d'appareils Apple de `app-store-screenshots` : pour une fiche App Store, préférer les cadres
+  officiels d'Apple (Apple Design Resources).
 
-Aucune skill sous licence non permissive bloquante (Semgrep Rules License, Databricks, AGPL) n'a été
-retenue.
+Licences écartées à l'import : non commerciales (CC-BY-NC-SA), PolyForm, AGPL, GPL, CC-BY-SA, MPL, et
+dépôts sans licence.
 
 ## Maintenance
 

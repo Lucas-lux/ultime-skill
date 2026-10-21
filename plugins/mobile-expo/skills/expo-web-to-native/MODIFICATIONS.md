@@ -1,0 +1,12 @@
+# Modifications
+
+Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
+leur version d'origine. Le reste du contenu est inchange.
+
+Origine : https://github.com/expo/skills (commit 55ec65cd1649)
+
+- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires; pied de page d'autopromotion retire
+- `references/false-friends.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `references/native-patterns.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `references/run-as-goal.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `references/verify-on-device.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
