@@ -1,8 +1,0 @@
-{
-  "name": "graphify",
-  "description": "Transforme un depot ou un dossier en graphe de connaissances interrogeable. Pilote le paquet Python graphifyy (a installer a part).",
-  "author": {
-    "name": "Lucas-lux",
-    "url": "https://github.com/Lucas-lux"
-  }
-}

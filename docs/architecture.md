@@ -12,7 +12,7 @@
 
 ## Packs, bundles, profils
 
-- **Pack** : un plugin cohérent (`security`, `mobile-expo`, `ci-forge`...). 44 packs, chacun installable
+- **Pack** : un plugin cohérent (`security`, `mobile-expo`, `ci-forge`...). 43 packs, chacun installable
   seul.
 - **Bundle** : un plugin vide qui dépend de plusieurs packs (`ultime-starter`, `ultime-dev`,
   `ultime-factory`, `ultime-all`...). Pratique, mais un bundle large actif partout coûte cher en contexte.

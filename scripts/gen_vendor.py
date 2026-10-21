@@ -13,7 +13,6 @@ SOURCES = {
     # name: (repo, commit, license, [license_files])
     "ponytail": ("DietrichGebert/ponytail", "2961b52fc1fe6a5a87c7a959a79512e5c2f3ffe5", "MIT", ["LICENSE"]),
     "rea": ("morluto/rea", "0f55f247cdd2ae9bd7903d5e45962b19dfc233dc", "MIT", ["LICENSE"]),
-    "graphify": ("safishamsi/graphify", "fe085cedddde3a18554f8749b230bfe47f3dcce7", "Apache-2.0", ["LICENSE", "NOTICE"]),
     "agent-skills": ("addyosmani/agent-skills", "aeac41d4d005999432bb7312f7ff06383a91d59d", "MIT", ["LICENSE"]),
     "superpowers": ("obra/superpowers", "bb92a77741419a4ab5f06e711a283343f1ada0c3", "MIT", ["LICENSE"]),
     "anthropic-skills": ("anthropics/skills", "dbd4588f9e1033efb41dad4bef2f7947c8993d44", "Apache-2.0", []),
@@ -98,8 +97,6 @@ add("ponytail", "skills", "plugins/ponytail/skills", license_to="plugins/ponytai
 add("ponytail", "hooks", "plugins/ponytail/hooks", license=False,
     exclude=["copilot-hooks.json", "cursor-hooks.json", "qoder-hooks.json"])
 add("rea", ".agents/skills/reverse-engineer-anything", "plugins/rea/skills/reverse-engineer-anything")
-add("graphify", "graphify/skill.md", "plugins/graphify/skills/graphify/SKILL.md")
-add("graphify", "graphify/skills/claude/references", "plugins/graphify/skills/graphify/references", license=False)
 add("agent-skills", "skills", "plugins/agent-skills/skills", license_to="plugins/agent-skills")
 add("agent-skills", "agents", "plugins/agent-skills/agents", license=False)
 add("agent-skills", "references", "plugins/agent-skills/references", license=False)

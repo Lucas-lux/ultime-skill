@@ -20,7 +20,7 @@ des skills). Le dépôt étant privé, il faut un accès git à GitHub : une cl�
 
 Variante depuis un clone, avec les mêmes options : `./install.sh` (Windows : `./install.ps1`), qui accepte
 `--no-guardrails`, `--no-ponytail` et `--with-tools` (installe aussi les CLI que certaines skills
-pilotent : graphify, rea, asc, gplay, téléchargés à une version figée et vérifiés par somme SHA-256).
+pilotent : rea, asc, gplay, téléchargés à une version figée et vérifiés par somme SHA-256).
 
 ## Équiper un projet
 
@@ -75,7 +75,7 @@ environ 2 300, et un profil typique d'application web ou d'API entre 24 000 et 2
 
 **Puis-je tout installer partout ?**
 `claude plugin install ultime-all@ultime-skill` le permet, mais c'est déconseillé : les descriptions de
-474 skills dépassent ce que Claude Code garde en contexte, et le choix de la bonne skill se dégrade.
+473 skills dépassent ce que Claude Code garde en contexte, et le choix de la bonne skill se dégrade.
 
 **Comment mettre à jour ?**
 `claude plugin marketplace update ultime-skill`, puis `/reload-plugins` dans la session.

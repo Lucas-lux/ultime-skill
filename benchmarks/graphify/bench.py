@@ -5,6 +5,7 @@ Conditions (same model, same prompt, same tools):
   B  skill    : graph present, graphify plugin loaded (the library's current integration)
   C  lean     : graph present, no skill, one appended instruction to use the graphify CLI first
   D  hybrid   : like C, but the graph only orients; every claim is verified in the source before stating it
+  E  shipped  : graph plus an imperative version of D written into the repository's CLAUDE.md
 
 Each run is a fresh `claude -p` session; usage, cost, duration and tool calls come from stream-json.
 Usage: python bench.py run [--only REPO] [--jobs N]
@@ -64,7 +65,8 @@ VERIFY_HINT = (" Use the graph only to orient yourself: verify every file path, 
 
 
 def repo_dir(repo: str, condition: str) -> Path:
-    return REPOS / (f"{repo}-A" if condition == "A" else f"{repo}-G")
+    # E: graph plus data/claude-md-block.md appended to the repository's CLAUDE.md (copy named <repo>-E)
+    return REPOS / {"A": f"{repo}-A", "E": f"{repo}-E"}.get(condition, f"{repo}-G")
 
 
 def command(condition: str, prompt: str) -> list[str]:
