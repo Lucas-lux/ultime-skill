@@ -32,8 +32,11 @@ Catalogue des packs, de leur role et de leur cout : [references/catalog.md](refe
 - Ecouter la demande : un projet a mener de A a Z, a cloner ou a reprendre ajoute `app-factory` et
   `product-management` ; une app mobile ajoute le pack de sa technologie ; un lancement ajoute stores et
   growth.
-- Partir du tableau des profils ci-dessous, puis proposer la liste par question a choix multiples
-  (plusieurs reponses), avec le cout de chaque pack. Projet vide : demander ce qui va etre construit.
+- `python <skill>/scripts/suggest_profile.py .` : packs justifies par les signaux du depot (table
+  `references/stack-map.json`), regles par langage, permissions. C'est la base de la proposition ; le
+  tableau des profils ci-dessous la complete selon la demande.
+- Proposer la liste par question a choix multiples (plusieurs reponses), avec le cout de chaque pack.
+  Projet vide : demander ce qui va etre construit.
 
 ## 3. Installer
 
@@ -48,6 +51,14 @@ Catalogue des packs, de leur role et de leur cout : [references/catalog.md](refe
   `claude plugin disable <nom>@ultime-skill --scope <scope>` (un bundle dont une dependance est
   desactivee echoue au chargement, donc le desactiver aussi).
 - Ne jamais toucher aux plugins d'autres marketplaces.
+- **Regles par langage** : `suggest_profile.py . --write-rules` copie dans `.claude/rules/ultime/` les
+  regles des langages presents (frontmatter `paths:`, chargees seulement quand Claude touche ces
+  fichiers : cout nul ailleurs). Dossier entierement regenere a chaque passage, a committer en scope
+  projet.
+- **Permissions** (avec accord, scope choisi) : `--write-permissions project|local` ajoute les commandes
+  de verification du projet en `allow` (tests, lint, typage, build) et met en `ask` la publication et le
+  deploiement (npm publish, terraform apply, kubectl apply, docker push...). Les regles existantes sont
+  gardees.
 - Faire recharger : l'utilisateur lance `/reload-plugins` (ou redemarre la session). Verifier ensuite avec
   `claude plugin list` et resumer ce qui est actif et son cout.
 

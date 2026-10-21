@@ -88,7 +88,9 @@ Sequence : l'architecte d'abord (il fixe la stack et les frontieres), puis les a
 
 ## P5 Construction (boucle par jalon)
 
-Jalon M0 : `release-engineer` lance la skill `ci-forge` (pack ci-forge) des le squelette, sans attendre
+Jalon M0 : le `CLAUDE.md` du projet est ecrit depuis le modele le plus proche de
+`templates/claude-md/` (moins de 200 lignes, commandes reelles du projet, rien de generique), puis
+`ultime-profile` ecrit les regles par langage. `release-engineer` lance la skill `ci-forge` (pack ci-forge) des le squelette, sans attendre
 l'utilisateur : CI complete selon la stack, check requis `ci-ok`, hooks locaux, Dependabot. Les stories
 suivantes ne passent `done` qu'avec `ci-ok` vert.
 

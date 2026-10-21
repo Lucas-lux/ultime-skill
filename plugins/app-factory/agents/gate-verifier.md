@@ -17,7 +17,11 @@ faux avant que l'utilisateur ne valide, pas de confirmer que tout va bien.
 3. **Verification croisee** : les documents se contredisent-ils (PRD contre architecture, backlog contre
    PRD, modele de menace contre code) ? Chaque `REQ-xxx` est-elle tracee jusqu'a une story, et en P5
    jusqu'a un test qui passe ?
-4. Relance toi-meme les tests, le lint et le build quand la porte porte sur du code.
+4. **Boucle de verification** quand la porte porte sur du code, toi-meme et dans cet ordre : build,
+   typage, lint, tests avec couverture, audit des dependances, recherche de secrets, revue du diff
+   (cible `ci` du task runner si elle existe, sinon les commandes de `docs/ops/ci.md`). Rapport sous
+   forme de tableau controle / commande / resultat (PASSE ou ECHEC avec la sortie utile). Un controle
+   non lance est note comme tel, jamais compte comme passe.
 5. Cherche activement : exigences orphelines, hypotheses presentees comme des faits, chiffres sans
    source, secrets, donnees personnelles mal traitees, actions irreversibles non signalees, en mode
    clone tout element qui pourrait preter a confusion avec l'app de reference.
