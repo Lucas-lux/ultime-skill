@@ -14,6 +14,11 @@ python -m unittest discover -s tests -p "test_*.py"
 inside it (on Windows, a busy folder blocks the deletion; the script retries for a few seconds, then stops
 with a message).
 
+Executable scripts: `plugins/` keeps the executable bit of each upstream file, which Linux and macOS
+need (hook scripts above all). Git on Windows does not see file modes and keeps the mode recorded in the
+index, so a new upstream executable committed from Windows lands as 644: the CI rebuild check then shows a
+mode change, fixed with `git update-index --chmod=+x <file>`.
+
 ## Add an imported skill
 
 1. Check the source's license at the target commit (see [Licenses](licenses.md)): only permissive

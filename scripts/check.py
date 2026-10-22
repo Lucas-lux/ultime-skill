@@ -156,7 +156,8 @@ def main() -> int:
         run = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", str(ROOT / "tests"), "-p", "test_*.py"],
                              capture_output=True, text=True, encoding="utf-8")
         if run.returncode != 0:
-            errors.append(f"python tests failed: {run.stderr.strip().splitlines()[-1] if run.stderr.strip() else 'see unittest output'}")
+            failed = [line for line in run.stderr.splitlines() if line.startswith(("FAIL:", "ERROR:"))]
+            errors.append(f"python tests failed: {'; '.join(failed[:5]) or run.stderr.strip()[-300:]}")
 
     for message in warnings:
         print(f"warning  {message}")
