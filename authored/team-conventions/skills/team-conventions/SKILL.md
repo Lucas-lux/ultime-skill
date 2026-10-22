@@ -34,10 +34,11 @@ silently.
 
 ## Writing
 
-- **Languages.** Code, comments, commit messages and branch names in English; PRs and issues in
-  French; README in the team's language.
+- **Languages.** Code, comments, commit messages and branch names in English. PRs, issues, README, docs
+  and messages in the team's language: the one the repository already uses, else the user's language.
 - **AI marking.** On any text written by the AI and intended for other people (PRs, issues, review
-  comments and replies, messages): a visible mark at the end of the title and at the end of the text.
+  comments and replies, messages): a visible mark (the team's marker, for example ✨) at the end of the
+  title and at the end of the text.
   Never in the code (comments included), commit messages, repository descriptions or documentation
   (README, `docs/`).
 - **No em dash.** Never the em dash, anywhere (replies, PRs, issues, commits, comments, docs). Replace
