@@ -1,0 +1,30 @@
+name: Bug report
+description: A skill, an agent, the guardrails or the installer does not behave as documented.
+labels: [bug]
+body:
+  - type: input
+    id: agent
+    attributes:
+      label: Coding agent and version
+      placeholder: Claude Code 2.x, Codex CLI 0.x, Cursor 2.x...
+    validations:
+      required: true
+  - type: input
+    id: component
+    attributes:
+      label: Pack, skill or command
+      placeholder: guardrails, app-factory:app-factory, npx github:Lucas-lux/ultime-skill install...
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected
+      description: Steps to reproduce, the output or error. Remove any secret before posting.
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system and shell
+      placeholder: macOS 15, zsh / Windows 11, PowerShell / Ubuntu 24.04, bash
