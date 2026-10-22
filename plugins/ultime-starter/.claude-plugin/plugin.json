@@ -1,6 +1,6 @@
 {
   "name": "ultime-starter",
-  "description": "Demarrage en une commande : le point d'entree ultime-profile (installe ensuite par projet les seuls packs utiles), les garde-fous guardrails et la methode ponytail.",
+  "description": "One-command start: the ultime-profile entry point (which then installs only the useful packs per project), the guardrails and the ponytail method.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

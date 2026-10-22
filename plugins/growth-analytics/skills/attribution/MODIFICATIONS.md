@@ -1,13 +1,13 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/coreyhaines31/marketingskills (commit e85f3cbc2e4a)
+Origin: https://github.com/coreyhaines31/marketingskills (commit e85f3cbc2e4a)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `evals/evals.json` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/attribution-models.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/by-business-type.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/first-party-tracking.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/measurement-paradigms.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `evals/evals.json`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/attribution-models.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/by-business-type.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/first-party-tracking.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/measurement-paradigms.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

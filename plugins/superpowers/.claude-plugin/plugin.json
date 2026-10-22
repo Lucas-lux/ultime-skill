@@ -1,6 +1,6 @@
 {
   "name": "superpowers",
-  "description": "Methode de travail d'obra : brainstorming, redaction de plans, TDD, debug systematique, sous-agents, verification avant de conclure. Charge sa methode au demarrage de session.",
+  "description": "obra's working method: brainstorming, writing plans, TDD, systematic debugging, subagents, verification before concluding. Loads its method at session start.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

@@ -1,73 +1,73 @@
 ---
 name: mobile-release
 description: >
-  Publier une app iOS et Android de bout en bout : signature, versions, builds, TestFlight, pistes Google
-  Play, deploiement progressif, fastlane, EAS, CI. A utiliser pour signer, builder, publier, soumettre ou
-  mettre a jour une app mobile, configurer fastlane (match, pilot, deliver, supply), une piste de test ou
-  un rollout.
+  Ship an iOS and Android app end to end: signing, versions, builds, TestFlight, Google Play tracks,
+  staged rollout, fastlane, EAS, CI. Use to sign, build, publish, submit or update a mobile app,
+  configure fastlane (match, pilot, deliver, supply), a test track or a rollout.
 ---
 
-# Publier une app mobile
+# Releasing a mobile app
 
-Les CLI officielles ou dediees passent en premier (skills `asc-*` du pack store-apple, `gplay-*` du pack
-store-google, `eas-app-stores` pour Expo) ; fastlane reste le standard multiplateforme. Chaque soumission,
-publication ou acceptation de contrat est confirmee par l'utilisateur au moment de la faire.
+Official or dedicated CLIs come first (`asc-*` skills from the store-apple pack, `gplay-*` from the
+store-google pack, `eas-app-stores` for Expo); fastlane remains the cross-platform standard. Every
+submission, publication or contract acceptance is confirmed by the user at the moment it is done.
 
-## Prealables (a faire par l'utilisateur)
+## Prerequisites (done by the user)
 
-- Comptes developpeur Apple et Google Play a son nom ou a celui de l'organisation (verification
-  d'identite, numero D-U-N-S pour une organisation chez Apple, frais d'inscription) : l'agent ne cree pas
-  de compte et ne paie pas.
-- Cles d'API : cle App Store Connect (.p8) et compte de service Google Play avec les droits minimaux,
-  stockees hors du depot (gestionnaire de secrets de la CI, `.env` ignore par git).
+- Apple and Google Play developer accounts in their name or the organization's (identity
+  verification, D-U-N-S number for an organization at Apple, registration fees): the agent does not
+  create accounts and does not pay.
+- API keys: App Store Connect key (.p8) and Google Play service account with minimal rights, stored
+  outside the repository (CI secrets manager, `.env` ignored by git).
 
-## Identite et versions
+## Identity and versions
 
-- Identifiants stables des le depart : bundle ID iOS, `applicationId` Android ; ils ne changent plus
-  apres la premiere publication.
-- iOS : `CFBundleShortVersionString` (version visible) et `CFBundleVersion` (build, croissant). Android :
-  `versionName` et `versionCode` (entier strictement croissant). Les incrementer en CI, pas a la main.
+- Stable identifiers from the start: iOS bundle ID, Android `applicationId`; they never change after
+  the first publication.
+- iOS: `CFBundleShortVersionString` (visible version) and `CFBundleVersion` (build, increasing).
+  Android: `versionName` and `versionCode` (strictly increasing integer). Increment them in CI, not by
+  hand.
 
-## Signature
+## Signing
 
-- **iOS** : certificats et profils geres par `fastlane match` (stockage chiffre partage) ou par la
-  signature automatique du compte via l'API ; jamais de certificat dans le depot en clair.
-- **Android** : Android App Bundle (AAB) et Play App Signing, obligatoires pour les nouvelles apps ;
-  Google detient la cle de signature de l'app, l'equipe garde la cle d'upload (sauvegardee, avec
-  procedure de reinitialisation documentee). L'empreinte SHA-256 de la cle de signature Play sert aussi
-  aux App Links (skill `deep-links`).
+- **iOS**: certificates and profiles managed by `fastlane match` (shared encrypted storage) or by the
+  account's automatic signing through the API; never a certificate in plain text in the repository.
+- **Android**: Android App Bundle (AAB) and Play App Signing, mandatory for new apps; Google holds the
+  app signing key, the team keeps the upload key (backed up, with a documented reset procedure). The
+  SHA-256 fingerprint of the Play signing key is also used for App Links (skill `deep-links`).
 
-## Pistes de test et diffusion
+## Test tracks and distribution
 
-- **iOS** : TestFlight, testeurs internes (membres de l'equipe App Store Connect) puis externes (soumis a
-  une revue beta). Mise en production avec diffusion progressive sur 7 jours (phased release), pausable.
-- **Android** : pistes interne, fermee, ouverte, production ; deploiement progressif par pourcentage,
-  pausable et arretable. Un compte developpeur personnel recent doit faire tourner un test ferme avec un
-  minimum de testeurs pendant une duree donnee avant d'acceder a la production : verifier les seuils en
-  vigueur dans l'aide Play Console.
-- Exigences qui changent chaque annee : niveau d'API Android cible, taille de page memoire, SDK et
-  version de Xcode minimum pour soumettre. Les verifier dans la documentation officielle avant chaque
-  release, ne pas les supposer.
+- **iOS**: TestFlight, internal testers (App Store Connect team members) then external testers
+  (subject to a beta review). Production release with phased release over 7 days, pausable.
+- **Android**: internal, closed, open and production tracks; staged rollout by percentage, pausable
+  and haltable. A recent personal developer account must run a closed test with a minimum number of
+  testers for a given period before accessing production: check the current thresholds in the Play
+  Console help.
+- Requirements that change every year: Android target API level, memory page size, minimum SDK and
+  Xcode version to submit. Check them in the official documentation before each release, do not
+  assume them.
 
-## Automatisation
+## Automation
 
-- **fastlane** : `match` (signature), `gym` (build iOS), `pilot` (TestFlight), `deliver` (metadonnees et
-  soumission App Store), `supply` (upload Play et metadonnees), `snapshot` et `screengrab` (captures).
-- **Expo** : EAS Build et EAS Submit (skill `eas-app-stores`), mises a jour OTA avec EAS Update
-  (`eas-update`) pour le JavaScript et les assets seulement ; une OTA ne change pas la finalite de l'app ni
-  ne contourne la revue.
-- **CI** : build signe a chaque tag, upload automatique vers la piste de test, promotion manuelle vers la
-  production. Secrets injectes par la CI ; journaux sans secret.
+- **fastlane**: `match` (signing), `gym` (iOS build), `pilot` (TestFlight), `deliver` (App Store
+  metadata and submission), `supply` (Play upload and metadata), `snapshot` and `screengrab`
+  (screenshots).
+- **Expo**: EAS Build and EAS Submit (skill `eas-app-stores`), OTA updates with EAS Update
+  (`eas-update`) for JavaScript and assets only; an OTA update does not change the app's purpose nor
+  bypass review.
+- **CI**: signed build on every tag, automatic upload to the test track, manual promotion to
+  production. Secrets injected by CI; logs without secrets.
 
-## Checklist avant soumission
+## Pre-submission checklist
 
-- Version et build incrementes ; notes de version dans chaque langue (`release-notes`).
-- Fiche, captures, confidentialite et classification a jour (pack app-stores).
-- iOS : manifeste de confidentialite (`PrivacyInfo.xcprivacy`) pour les API a raison declaree et les SDK
-  concernes ; suppression de compte depuis l'app si l'app permet d'en creer un.
-- Android : formulaire Data safety coherent avec le code (skill `play-data-safety`) ; suppression de
-  compte depuis l'app et via un lien web si l'app permet d'en creer un.
-- Compte de demonstration fourni aux reviewers si l'app exige une connexion, transmis par la console,
-  jamais committe.
-- Crash reporting et monitoring actifs (skill `setting-up-monitoring`, couche mobile) ; plan de retour
-  arriere (pause du rollout, build precedent pret).
+- Version and build incremented; release notes in each language (`release-notes`).
+- Listing, screenshots, privacy and rating up to date (app-stores pack).
+- iOS: privacy manifest (`PrivacyInfo.xcprivacy`) for required-reason APIs and the relevant SDKs;
+  account deletion from within the app if the app lets users create one.
+- Android: Data safety form consistent with the code (skill `play-data-safety`); account deletion
+  from within the app and through a web link if the app lets users create one.
+- Demo account provided to reviewers if the app requires login, sent through the console, never
+  committed.
+- Crash reporting and monitoring active (skill `setting-up-monitoring`, mobile layer); rollback plan
+  (rollout pause, previous build ready).

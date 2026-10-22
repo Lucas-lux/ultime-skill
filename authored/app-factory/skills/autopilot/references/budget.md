@@ -1,11 +1,11 @@
-# Budget et sobriete
+# Budget and token economy
 
-Une session cloud ne peut pas lire son cout en dollars (pas de `--max-budget-usd` hors mode `-p`, pas de
-`/cost` documente en cloud). Le budget se tient donc en unites que le reveil compte lui-meme, et en
-frequence de reveil, reglee dans la tache planifiee. Les reveils consomment le forfait Claude du
-proprietaire : un reveil refuse pour limite d'usage n'est pas une erreur, le suivant reprendra.
+A cloud session cannot read its cost in dollars (no `--max-budget-usd` outside `-p` mode, no
+documented `/cost` in the cloud). The budget is therefore kept in units that the wake-up counts itself, and in
+wake-up frequency, set in the scheduled task. Wake-ups consume the owner's Claude
+plan: a wake-up refused for a usage limit is not an error, the next one will resume.
 
-## Plafonds (dans `state.json`, bloc `autopilot.budget`)
+## Caps (in `state.json`, `autopilot.budget` block)
 
 ```json
 "budget": {
@@ -15,36 +15,36 @@ proprietaire : un reveil refuse pour limite d'usage n'est pas une erreur, le sui
 }
 ```
 
-- `per_run.agents` : appels a l'outil Agent par reveil (un workflow compte pour ses agents).
-- `per_run.stories` : stories menees jusqu'a la PR par reveil.
-- `per_run.upgraded` : appels avec un modele superieur a celui de l'agent (voir plus bas).
-- `per_day.agents` : quand il est atteint, le reveil ne fait plus que lire les decisions et reparer une
-  PR rouge, jusqu'au lendemain.
-- Reveils a vide : ils n'ecrivent rien, donc ne se comptent pas ; le tableau de bord donne la date du
-  dernier reveil qui a travaille. Si elle est souvent ancienne alors que la tache tourne, la frequence
-  est trop haute pour l'activite du projet : le proprietaire l'ajuste.
-- Remettre `usage` a zero quand la date change. Incrementer `usage.agents` au fil du reveil.
+- `per_run.agents`: calls to the Agent tool per wake-up (a workflow counts for its agents).
+- `per_run.stories`: stories carried through to the PR per wake-up.
+- `per_run.upgraded`: calls with a model higher than the agent's (see below).
+- `per_day.agents`: when it is reached, the wake-up only reads the decisions and fixes a
+  red PR, until the next day.
+- Empty wake-ups: they write nothing, so they are not counted; the dashboard gives the date of the
+  last wake-up that did work. If it is often old while the task is running, the frequency
+  is too high for the project's activity: the owner adjusts it.
+- Reset `usage` to zero when the date changes. Increment `usage.agents` as the wake-up goes.
 
-## Le bon moteur pour chaque tache
+## The right engine for each task
 
-| Tache | Comment |
+| Task | How |
 |---|---|
-| Lecture, une commande, un petit correctif | Directement, sans agent |
-| Inventaire, recherche simple, reformatage | Agent au modele `haiku` |
-| Story standard, revue, QA, livrable de phase | L'agent avec son modele par defaut (`sonnet`) |
-| Architecture, donnees, securite, conformite, verification de porte | Agent en `inherit` (modele de la session) |
-| Echec repete (2 essais) ou decision structurante | `model: "opus"`, compte dans `per_run.upgraded` |
+| Reading, one command, a small fix | Directly, without an agent |
+| Inventory, simple search, reformatting | Agent with the `haiku` model |
+| Standard story, review, QA, phase deliverable | The agent with its default model (`sonnet`) |
+| Architecture, data, security, compliance, gate verification | Agent in `inherit` (session model) |
+| Repeated failure (2 attempts) or structuring decision | `model: "opus"`, counted in `per_run.upgraded` |
 
-- Effort : laisser celui de l'agent ; ne monter l'effort que pour un echec repete.
-- Pas de fan-out "au cas ou" : paralleliser seulement des taches decidees et independantes.
-- Prompts d'agents minces (chemins, decisions), comptes rendus de 15 lignes au plus.
-- Un reveil a vide (rien a faire, tout attend une decision) s'arrete apres les lectures de l'etape 2 et 3,
-  sans charger de reference ni lancer d'agent.
+- Effort: leave the agent's; only raise the effort for a repeated failure.
+- No "just in case" fan-out: only parallelize decided and independent tasks.
+- Thin agent prompts (paths, decisions), reports of 15 lines at most.
+- An empty wake-up (nothing to do, everything waits on a decision) stops after the reads of steps 2 and 3,
+  without loading a reference or launching an agent.
 
-## Frequence conseillee de la tache planifiee
+## Recommended frequency of the scheduled task
 
-- Construction active (P5) : toutes les 1 a 2 h en journee.
-- Specification, conception, attente de decisions : 2 a 3 fois par jour.
-- Projet en veille ou apres lancement : une fois par jour.
-- Le declencheur "reponse a une carte" (workflow `autopilot-wake`) reveille le projet sans attendre ;
-  c'est lui qui permet une frequence basse sans perdre de reactivite.
+- Active build (P5): every 1 to 2 h during the day.
+- Specification, design, waiting for decisions: 2 to 3 times a day.
+- Dormant project or after launch: once a day.
+- The "answer to a card" trigger (`autopilot-wake` workflow) wakes the project up without waiting;
+  it is what allows a low frequency without losing responsiveness.

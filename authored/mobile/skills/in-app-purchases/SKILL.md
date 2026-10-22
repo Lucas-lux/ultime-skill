@@ -1,56 +1,57 @@
 ---
 name: in-app-purchases
 description: >
-  Achats integres et abonnements iOS et Android sans dependre d'un service tiers : StoreKit 2, Google Play
-  Billing, react-native-iap, expo-iap, in_app_purchase Flutter, verification serveur, droits d'acces,
-  restauration, tests, regles des stores. A utiliser pour ajouter des achats in-app, abonnements, paywall,
-  StoreKit, Play Billing ou verification de recus.
+  iOS and Android in-app purchases and subscriptions without depending on a third-party service:
+  StoreKit 2, Google Play Billing, react-native-iap, expo-iap, Flutter in_app_purchase, server
+  verification, entitlements, restore, testing, store rules. Use to add in-app purchases,
+  subscriptions, paywall, StoreKit, Play Billing or receipt verification.
 ---
 
-# Achats integres et abonnements
+# In-app purchases and subscriptions
 
-Option geree : RevenueCat (service tiers, payant au-dela d'un seuil). Cette skill decrit la voie directe ;
-details Android dans les skills `play-billing-*` (pack mobile-android).
+Managed option: RevenueCat (third-party service, paid beyond a threshold). This skill describes the
+direct route; Android details in the `play-billing-*` skills (mobile-android pack).
 
 ## Architecture
 
-- **Le serveur est la source de verite des droits** (entitlements) : l'app affiche, le serveur decide.
-- iOS : StoreKit 2 ; ecouter `Transaction.updates` des le lancement ; transactions signees (JWS) a
-  verifier ; cote serveur, App Store Server API et App Store Server Notifications V2.
-- Android : Google Play Billing Library ; **acquitter chaque achat** (sinon il est rembourse
-  automatiquement apres quelques jours) ; verification via la Google Play Developer API ; notifications
-  temps reel (RTDN) via Pub/Sub.
-- Multiplateforme : `react-native-iap` ou `expo-iap` (React Native, Expo avec build de developpement),
-  `in_app_purchase` (Flutter). La verification reste cote serveur.
+- **The server is the source of truth for entitlements**: the app displays, the server decides.
+- iOS: StoreKit 2; listen to `Transaction.updates` from launch; signed transactions (JWS) to verify;
+  server side, App Store Server API and App Store Server Notifications V2.
+- Android: Google Play Billing Library; **acknowledge every purchase** (otherwise it is refunded
+  automatically after a few days); verification through the Google Play Developer API; real-time
+  notifications (RTDN) through Pub/Sub.
+- Cross-platform: `react-native-iap` or `expo-iap` (React Native, Expo with a development build),
+  `in_app_purchase` (Flutter). Verification stays server side.
 
-## Parcours a couvrir
+## Flows to cover
 
-- Achat, achat en attente (moyen de paiement differe), annulation, echec.
-- Abonnement : essai, renouvellement, changement de formule, periode de grace, suspension,
-  resiliation, remboursement, reabonnement (skill `play-billing-subscription-states` pour Android).
-- **Restaurer les achats** : bouton visible, obligatoire sur iOS.
-- Connexion de compte : rattacher les achats a l'utilisateur (identifiant de compte transmis au store)
-  pour les retrouver sur un autre appareil.
+- Purchase, pending purchase (deferred payment method), cancellation, failure.
+- Subscription: trial, renewal, plan change, grace period, suspension, cancellation, refund,
+  resubscription (skill `play-billing-subscription-states` for Android).
+- **Restore purchases**: visible button, mandatory on iOS.
+- Account login: link purchases to the user (account identifier passed to the store) to find them on
+  another device.
 
-## Regles des stores
+## Store rules
 
-- Les biens et contenus numeriques consommes dans l'app passent par l'achat integre du store, sauf
-  exceptions par region et par type d'app (liens de paiement externes, alternatives liees au DMA dans
-  l'UE...). Ces regles et les commissions evoluent : les verifier dans les App Review Guidelines et la
-  Payments policy de Google Play au moment de concevoir.
-- Paywall : prix, periode, renouvellement automatique et conditions affiches clairement avant l'achat ;
-  lien de gestion ou de resiliation de l'abonnement.
+- Digital goods and content consumed in the app go through the store's in-app purchase, except for
+  exceptions by region and app type (external payment links, DMA-related alternatives in the EU...).
+  These rules and the commissions change: check them in the App Review Guidelines and Google Play's
+  Payments policy at design time.
+- Paywall: price, period, automatic renewal and terms shown clearly before purchase; link to manage
+  or cancel the subscription.
 
 ## Tests
 
-- iOS : fichier de configuration StoreKit dans Xcode (tests locaux), comptes sandbox, puis TestFlight.
-- Android : testeurs de licence et pistes de test ; produits actifs dans la Play Console.
-- Tester renouvellements acceleres, echecs de paiement, remboursements, restauration et changement
-  d'appareil. Verifier que le serveur traite les notifications de facon idempotente.
+- iOS: StoreKit configuration file in Xcode (local tests), sandbox accounts, then TestFlight.
+- Android: license testers and test tracks; active products in the Play Console.
+- Test accelerated renewals, payment failures, refunds, restore and device change. Check that the
+  server processes notifications idempotently.
 
-## Donnees et conformite
+## Data and compliance
 
-- Ne stocker que l'identifiant de transaction et l'etat des droits, pas de donnee de carte (le store
-  s'en charge).
-- Declarer les achats dans les labels Apple et le Data safety Google.
-- CGV et information precontractuelle (skill `mentions-legales-cgu-cgv`).
+- Store only the transaction identifier and the entitlement state, no card data (the store handles
+  it).
+- Declare purchases in the Apple labels and the Google Data safety form.
+- CGV (conditions generales de vente, terms of sale) and pre-contractual information (skill
+  `mentions-legales-cgu-cgv`).

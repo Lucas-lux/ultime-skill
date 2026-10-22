@@ -1,17 +1,17 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/getsentry/skills (commit d18b7aa8ba87)
+Origin: https://github.com/getsentry/skills (commit d18b7aa8ba87)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/ai-prompt-injection-via-ci.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/comment-triggered-commands.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/credential-escalation.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/expression-injection.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/permissions-and-secrets.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/pwn-request.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/real-world-attacks.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/runner-infrastructure.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/supply-chain.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/ai-prompt-injection-via-ci.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/comment-triggered-commands.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/credential-escalation.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/expression-injection.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/permissions-and-secrets.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/pwn-request.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/real-world-attacks.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/runner-infrastructure.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/supply-chain.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

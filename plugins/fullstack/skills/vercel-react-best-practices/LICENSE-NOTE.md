@@ -1,3 +1,3 @@
-# Note de licence
+# License note
 
-Licence MIT declaree par l'auteur (Vercel) dans le frontmatter de la skill ; le depot vercel-labs/agent-skills ne contient pas de fichier de licence au commit importe.
+MIT license declared by the author (Vercel) in the skill frontmatter; the vercel-labs/agent-skills repository has no license file at the imported commit.

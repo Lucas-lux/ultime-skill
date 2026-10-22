@@ -1,59 +1,58 @@
 ---
 name: deep-links
 description: >
-  Liens profonds mobiles : Universal Links iOS, Android App Links, schemas personnalises, liens differes,
-  routage Expo Router, React Navigation et go_router, tests et securite. A utiliser pour ajouter ou
-  deboguer des deep links, universal links, app links, apple-app-site-association, assetlinks.json, ou des
-  liens qui ouvrent l'app.
+  Mobile deep links: iOS Universal Links, Android App Links, custom schemes, deferred links, Expo Router,
+  React Navigation and go_router routing, testing and security. Use to add or debug deep links,
+  universal links, app links, apple-app-site-association, assetlinks.json, or links that open the app.
 ---
 
-# Liens profonds
+# Deep links
 
-## iOS : Universal Links
+## iOS: Universal Links
 
-- Fichier `apple-app-site-association` (JSON, sans extension) servi en HTTPS a
-  `https://<domaine>/.well-known/apple-app-site-association`, sans redirection, avec un type JSON.
-- Entitlement Associated Domains : `applinks:<domaine>`.
-- Apple met ce fichier en cache via son CDN : une modification n'est pas visible immediatement ; le mode
-  developpeur des Associated Domains aide en test.
+- `apple-app-site-association` file (JSON, no extension) served over HTTPS at
+  `https://<domaine>/.well-known/apple-app-site-association`, without redirect, with a JSON type.
+- Associated Domains entitlement: `applinks:<domaine>`.
+- Apple caches this file through its CDN: a change is not visible immediately; the Associated Domains
+  developer mode helps when testing.
 
-## Android : App Links
+## Android: App Links
 
-- Fichier `https://<domaine>/.well-known/assetlinks.json` avec le nom de package et l'empreinte SHA-256
-  du certificat de signature. Avec Play App Signing, c'est l'empreinte de la cle de signature de Google
-  (affichee dans la Play Console), pas celle de la cle d'upload.
-- Intent filter avec `android:autoVerify="true"` sur les hotes concernes.
-- Verifier l'etat : `adb shell pm get-app-links <package>`.
+- `https://<domaine>/.well-known/assetlinks.json` file with the package name and the SHA-256 fingerprint
+  of the signing certificate. With Play App Signing, it is the fingerprint of Google's signing key
+  (shown in the Play Console), not the upload key's.
+- Intent filter with `android:autoVerify="true"` on the relevant hosts.
+- Check the state: `adb shell pm get-app-links <package>`.
 
-## Schemas personnalises
+## Custom schemes
 
-- `monapp://...` : utiles pour un retour d'authentification ou en secours, mais n'importe quelle app peut
-  declarer le meme schema. Ne jamais y faire transiter de secret ; preferer les liens HTTPS verifies.
+- `monapp://...`: useful for an authentication return or as a fallback, but any app can declare the
+  same scheme. Never pass a secret through it; prefer verified HTTPS links.
 
-## Liens differes (avant installation)
+## Deferred links (before install)
 
-- Firebase Dynamic Links a ete arrete : ne plus l'utiliser. Alternatives : un fournisseur d'attribution
-  ou de liens (Branch, AppsFlyer, Adjust...) ou une solution maison.
-- Android : le Play Install Referrer transmet un parametre a l'installation. iOS n'offre pas de mecanisme
-  deterministe equivalent ; eviter le fingerprinting, contraire aux regles de confidentialite.
+- Firebase Dynamic Links has been shut down: do not use it anymore. Alternatives: an attribution or
+  linking provider (Branch, AppsFlyer, Adjust...) or an in-house solution.
+- Android: the Play Install Referrer passes a parameter at install time. iOS offers no equivalent
+  deterministic mechanism; avoid fingerprinting, which goes against privacy rules.
 
-## Routage dans l'app
+## In-app routing
 
-- Expo Router : les routes de fichiers sont des liens par defaut ; declarer le schema dans la config de
-  l'app (skill `expo-router`).
-- React Native sans Expo : configuration `linking` de React Navigation (skill `react-navigation`).
-- Flutter : `go_router` (skill `flutter-setup-declarative-routing`).
-- Natif : `onOpenURL` / scene delegate (iOS), intent de l'activite (Android), avec Navigation 3 ou la
-  navigation du projet.
+- Expo Router: file routes are links by default; declare the scheme in the app config
+  (skill `expo-router`).
+- React Native without Expo: React Navigation `linking` configuration (skill `react-navigation`).
+- Flutter: `go_router` (skill `flutter-setup-declarative-routing`).
+- Native: `onOpenURL` / scene delegate (iOS), activity intent (Android), with Navigation 3 or the
+  project's navigation.
 
-## Securite
+## Security
 
-- Valider et normaliser chaque parametre ; un lien ne declenche jamais seul une action sensible
-  (paiement, suppression, changement d'email) : il ouvre un ecran qui demande confirmation.
-- Pas de jeton d'authentification dans un lien ; attention aux redirections ouvertes.
+- Validate and normalize every parameter; a link never triggers a sensitive action on its own
+  (payment, deletion, email change): it opens a screen that asks for confirmation.
+- No authentication token in a link; watch out for open redirects.
 
 ## Tests
 
-- iOS : `xcrun simctl openurl booted "<url>"` ; Android :
+- iOS: `xcrun simctl openurl booted "<url>"`; Android:
   `adb shell am start -W -a android.intent.action.VIEW -d "<url>" <package>`.
-- Cas : app installee et fermee, en arriere-plan, non installee (page web de repli), lien invalide.
+- Cases: app installed and closed, in the background, not installed (fallback web page), invalid link.

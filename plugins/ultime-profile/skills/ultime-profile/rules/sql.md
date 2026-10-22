@@ -7,10 +7,10 @@ paths:
   - "**/schema.prisma"
 ---
 
-# SQL et migrations
+# SQL and migrations
 
-- Une migration = un changement reversible (montee et descente) ; jamais modifier une migration deja
-  appliquee, en ajouter une.
-- Changements sans interruption : ajouter une colonne nullable puis remplir puis contraindre ; index
-  crees sans verrou bloquant (`CONCURRENTLY` en Postgres) sur une grosse table.
-- Pas de donnees personnelles en clair dans les fixtures ; jamais de donnees de production en local.
+- One migration = one reversible change (up and down); never modify a migration already applied, add a
+  new one.
+- Zero-downtime changes: add a nullable column then backfill then constrain; indexes created without a
+  blocking lock (`CONCURRENTLY` in Postgres) on a large table.
+- No personal data in clear in fixtures; never production data locally.

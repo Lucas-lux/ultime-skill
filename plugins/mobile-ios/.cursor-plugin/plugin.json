@@ -1,0 +1,10 @@
+{
+  "name": "mobile-ios",
+  "description": "Native iOS: SwiftUI, Swift concurrency, Swift Testing, SwiftData (Paul Hudson), iOS accessibility (VoiceOver, Dynamic Type).",
+  "author": {
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
+  },
+  "skills": "./skills/",
+  "hooks": "./.cursor-plugin/hooks.json"
+}

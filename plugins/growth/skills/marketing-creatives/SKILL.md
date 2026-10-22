@@ -1,66 +1,62 @@
 ---
 name: marketing-creatives
 description: >
-  Chaine de production des creatives marketing d'une app ou d'un produit : brief, concepts, images,
-  videos (UGC, demo, motion), declinaisons par plateforme, droits et mentions, organisation et tests. A
-  utiliser pour produire des creatives publicitaires, visuels, videos marketing, videos UGC, contenus de
-  lancement ou un kit de campagne.
+  Production pipeline for the marketing creatives of an app or product: brief, concepts, images,
+  videos (UGC, demo, motion), platform variants, rights and mentions, organization and testing. Use to
+  produce ad creatives, visuals, marketing videos, UGC videos, launch content or a campaign kit.
 ---
 
-# Creatives marketing (images et videos)
+# Marketing creatives (images and videos)
 
-Cette skill orchestre les outils de production ; la strategie creative detaillee est dans
-`ad-creative`, les textes dans `copywriting`.
+This skill orchestrates the production tools; the detailed creative strategy is in `ad-creative`, the
+copy in `copywriting`.
 
-## Chaine
+## Pipeline
 
-1. **Contexte** : lire `.agents/product-marketing.md` (skill `product-marketing`) ; sinon le creer.
-2. **Brief** : objectif (notoriete, installs, conversion), audience, plateforme, message, preuve, appel a
-   l'action, contraintes de marque et de budget.
-3. **Concepts** : chaque concept est une hypothese testable (audience, motivation, angle, format)
+1. **Context**: read `.agents/product-marketing.md` (skill `product-marketing`); otherwise create it.
+2. **Brief**: goal (awareness, installs, conversion), audience, platform, message, proof, call to
+   action, brand and budget constraints.
+3. **Concepts**: each concept is a testable hypothesis (audience, motivation, angle, format)
    (`ad-creative`, `marketing-psychology`).
-4. **Production** avec l'outil adapte (voir tableau), estimation du cout avant toute generation payante,
-   et accord de l'utilisateur.
-5. **Declinaisons** par format et plateforme ; sous-titres incrustes (beaucoup de videos sont vues sans
-   le son) ; zones de securite des interfaces respectees.
-6. **Controle** : fidelite au produit, lisibilite sur mobile, droits, mentions obligatoires.
-7. **Livraison et tests** : manifeste de campagne, puis suivi des resultats par concept.
+4. **Production** with the appropriate tool (see table), cost estimate before any paid generation, and
+   the user's approval.
+5. **Variants** per format and platform; burned-in subtitles (many videos are watched without sound);
+   interface safe zones respected.
+6. **Check**: faithfulness to the product, readability on mobile, rights, mandatory mentions.
+7. **Delivery and tests**: campaign manifest, then tracking of results by concept.
 
-## Outils
+## Tools
 
-| Besoin | Skills (si installees) |
+| Need | Skills (if installed) |
 |---|---|
-| Images marketing, visuels sociaux | `image` ; `gen-ai-images` ; `google-flow-generate` (inclus dans un abonnement Google AI Pro) |
-| Video generee ou programmatique | `video` ; `gen-ai-video` ; `google-flow-generate` |
-| Video UGC avec un acteur recurrent qui presente l'app | `ugc-app-video` |
-| Voix off, musique, sons | `gen-ai-audio` |
-| Montage, sous-titres, formats | pack video-editing (`ffmpeg-video-editor`, `video-use`, `faster-whisper`) |
-| Animation et motion design | pack motion-design (GSAP, Lottie, Manim) |
-| Captures et video de fiche store | `app-store-screenshots`, `app-preview-video` (pack store-aso) |
+| Marketing images, social visuals | `image`; `gen-ai-images`; `google-flow-generate` (included in a Google AI Pro subscription) |
+| Generated or programmatic video | `video`; `gen-ai-video`; `google-flow-generate` |
+| UGC video with a recurring actor presenting the app | `ugc-app-video` |
+| Voice-over, music, sounds | `gen-ai-audio` |
+| Editing, subtitles, formats | video-editing pack (`ffmpeg-video-editor`, `video-use`, `faster-whisper`) |
+| Animation and motion design | motion-design pack (GSAP, Lottie, Manim) |
+| Store screenshots and preview video | `app-store-screenshots`, `app-preview-video` (store-aso pack) |
 
-Privilegier ce que l'utilisateur paie deja (abonnement) avant des credits a l'usage ; annoncer le cout
-estime avant de generer.
+Favor what the user already pays for (subscription) before pay-per-use credits; announce the estimated
+cost before generating.
 
-## Formats courants
+## Common formats
 
-Vertical 9:16 (Reels, TikTok, Shorts, Stories), 4:5 et 1:1 (fils), 16:9 (YouTube, web). Les durees,
-poids et zones de securite exacts changent : les verifier dans la documentation de chaque plateforme
-avant export.
+Vertical 9:16 (Reels, TikTok, Shorts, Stories), 4:5 and 1:1 (feeds), 16:9 (YouTube, web). The exact
+durations, file sizes and safe zones change: check them in each platform's documentation before export.
 
-## Droits et mentions
+## Rights and mentions
 
-- Musique sous licence adaptee a la publicite (les bibliotheques gratuites des plateformes ne couvrent pas
-  toujours l'usage publicitaire).
-- Personnes filmees ou createurs : autorisation ecrite (droit a l'image), contrat precisant usages,
-  supports et duree ; mention de la collaboration commerciale.
-- Pas de faux temoignage presente comme reel, pas de fonctionnalite absente de l'app, pas de fausse
-  interface systeme (notification, bouton) qui trompe.
-- Contenu genere par IA : appliquer les etiquettes exigees par les plateformes pour les contenus
-  realistes ; dans l'UE, l'AI Act impose de signaler les hypertrucages ; en France, la loi sur
-  l'influence commerciale impose des mentions pour les images retouchees ou virtuelles (detail dans
-  `marketing-compliance-fr`).
+- Music licensed for advertising (the platforms' free libraries do not always cover advertising use).
+- Filmed people or creators: written authorization (image rights), contract specifying uses, media and
+  duration; mention of the commercial collaboration.
+- No fake testimonial presented as real, no feature absent from the app, no fake system interface
+  (notification, button) that deceives.
+- AI-generated content: apply the labels required by the platforms for realistic content; in the EU,
+  the AI Act requires disclosing deepfakes; in France, the influencer marketing law requires mentions
+  for retouched or virtual images (details in `marketing-compliance-fr`).
 
-## Organisation
+## Organization
 
-`creatives/<campagne>/<concept>/<format>/` et un `manifest.md` par campagne : concept, hypothese, fichiers,
-outil et cout, droits et mentions, statut (brouillon, valide, en ligne), resultats.
+`creatives/<campagne>/<concept>/<format>/` and one `manifest.md` per campaign: concept, hypothesis,
+files, tool and cost, rights and mentions, status (draft, approved, live), results.

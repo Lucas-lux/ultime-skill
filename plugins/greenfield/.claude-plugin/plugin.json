@@ -1,6 +1,6 @@
 {
   "name": "greenfield",
-  "description": "Retro-ingenierie salle blanche : extrait d'un code existant des specs comportementales, vecteurs de test et criteres d'acceptation sans heritage d'implementation (commande /greenfield:analyze). Pipeline lourd en agents, a reserver au code dont on detient les droits.",
+  "description": "Clean-room reverse engineering: extracts behavioral specs, test vectors and acceptance criteria from existing code without inheriting its implementation (/greenfield:analyze command). Heavy agent pipeline, for code you own the rights to.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

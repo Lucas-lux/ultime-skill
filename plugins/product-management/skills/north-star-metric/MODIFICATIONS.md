@@ -1,8 +1,8 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/phuryn/pm-skills (commit 07b34f64ee82)
+Origin: https://github.com/phuryn/pm-skills (commit 07b34f64ee82)
 
-- `SKILL.md` : liens d'autopromotion retires; pied de page d'autopromotion retire
+- `SKILL.md`: self-promotion footer removed; self-promotion links removed

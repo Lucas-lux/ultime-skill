@@ -1,77 +1,75 @@
 ---
 name: finops-multicloud
 description: >
-  FinOps multi-cloud vendor-neutral : FOCUS, unit economics, showback et chargeback, cout Kubernetes
-  (OpenCost, Kubecost), anomalies. A utiliser quand l'utilisateur parle de FinOps, couts multi-cloud,
-  FOCUS, unit economics, showback, chargeback, cout Kubernetes, OpenCost, Kubecost, allocation de couts,
-  ou optimisation de la facture cloud multi-fournisseurs.
+  Vendor-neutral multi-cloud FinOps: FOCUS, unit economics, showback and chargeback, Kubernetes cost
+  (OpenCost, Kubecost), anomalies. Use when the user mentions FinOps, multi-cloud costs, FOCUS, unit
+  economics, showback, chargeback, Kubernetes cost, OpenCost, Kubecost, cost allocation, or optimizing
+  a multi-provider cloud bill.
 ---
 
-# FinOps multi-cloud
+# Multi-cloud FinOps
 
-Complete les skills par fournisseur du pack `finops` (AWS, Google Cloud, Azure, Infracost) par une vue
-normalisee et inter-cloud. Cadre : FinOps Framework (inform, optimize, operate). Verifier les chiffres
-contre les exports de facturation reels, pas contre une estimation.
+Complements the per-provider skills of the `finops` pack (AWS, Google Cloud, Azure, Infracost) with a
+normalized, cross-cloud view. Framework: FinOps Framework (inform, optimize, operate). Check the figures
+against the actual billing exports, not against an estimate.
 
-## Normaliser les couts (FOCUS)
+## Normalizing costs (FOCUS)
 
-- Les exports de facturation des fournisseurs ont des schemas differents. **FOCUS** (FinOps Open Cost and
-  Usage Specification) est un format normalise : s'y aligner permet d'agreger AWS, Google Cloud et Azure
-  dans un meme modele (colonnes communes : cout facture, cout amorti, service, region, compte,
-  etiquettes...).
-- Ingerer les exports FOCUS (ou les Cost and Usage Reports convertis) dans un entrepot (voir le pack
-  `data-engineering`) et construire des modeles de cout par equipe, produit et environnement.
-- Distinguer cout facture, cout amorti (engagements etales) et cout effectif apres remises.
+- Providers' billing exports have different schemas. **FOCUS** (FinOps Open Cost and Usage
+  Specification) is a normalized format: aligning with it makes it possible to aggregate AWS, Google
+  Cloud and Azure in the same model (common columns: billed cost, amortized cost, service, region,
+  account, tags...).
+- Ingest the FOCUS exports (or converted Cost and Usage Reports) into a warehouse (see the
+  `data-engineering` pack) and build cost models by team, product and environment.
+- Distinguish billed cost, amortized cost (spread commitments) and effective cost after discounts.
 
 ## Unit economics
 
-- Rapporter le cout a une unite metier : cout par requete, par utilisateur actif, par commande, par
-  locataire, par 1000 inferences. C'est la metrique qui rend une hausse de cout interpretable.
-- Suivre la tendance du cout unitaire : une facture qui monte avec l'usage est saine, un cout unitaire qui
-  monte ne l'est pas.
-- Relier au pack `monitoring` : exposer le cout unitaire comme une metrique suivie dans le temps.
+- Relate cost to a business unit: cost per request, per active user, per order, per tenant, per 1000
+  inferences. This is the metric that makes a cost increase interpretable.
+- Track the unit cost trend: a bill that grows with usage is healthy, a unit cost that grows is not.
+- Link to the `monitoring` pack: expose the unit cost as a metric tracked over time.
 
-## Showback et chargeback
+## Showback and chargeback
 
-- **Showback** : montrer a chaque equipe le cout qu'elle genere, sans refacturer. Premiere etape de
-  responsabilisation.
-- **Chargeback** : refacturer reellement aux equipes ou entites.
-- Les deux reposent sur une **allocation** fiable : une politique d'etiquetage (tags) appliquee et
-  verifiee (compte, equipe, produit, environnement), et une regle de repartition des couts partages
-  (reseau, cluster, support) documentee.
-- Mesurer le taux de couverture des etiquettes : un cout non etiquete n'est pas allouable.
+- **Showback**: show each team the cost it generates, without billing it back. First step toward
+  accountability.
+- **Chargeback**: actually bill the costs back to teams or entities.
+- Both rely on reliable **allocation**: a tagging policy applied and verified (account, team, product,
+  environment), and a documented rule for splitting shared costs (network, cluster, support).
+- Measure the tag coverage rate: an untagged cost cannot be allocated.
 
-## Cout Kubernetes
+## Kubernetes cost
 
-- Un cluster partage masque qui consomme quoi. **OpenCost** (open source, standard CNCF) ou **Kubecost**
-  allouent le cout aux namespaces, charges de travail et labels, a partir des demandes et de l'usage reel
-  (CPU, memoire, stockage, reseau).
-- Reperer les ressources sur-demandees (requests tres au-dessus de l'usage), les charges sans limites, les
-  volumes orphelins, et dimensionner (rightsizing, VPA). Voir aussi la skill `gke-cost-optimization` du
-  pack finops pour GKE.
-- Allouer le cout du cluster aux equipes via les labels, pour alimenter le showback.
+- A shared cluster hides who consumes what. **OpenCost** (open source, CNCF standard) or **Kubecost**
+  allocate cost to namespaces, workloads and labels, based on requests and actual usage (CPU, memory,
+  storage, network).
+- Spot over-requested resources (requests far above usage), workloads without limits, orphaned
+  volumes, and rightsize (rightsizing, VPA). See also the `gke-cost-optimization` skill of the finops
+  pack for GKE.
+- Allocate the cluster cost to teams through labels, to feed showback.
 
-## Optimisation transverse
+## Cross-cutting optimization
 
-- Engagements (reserved instances, savings plans, committed use) pilotes par la couverture et le taux
-  d'utilisation, pas au doigt mouille.
-- Ressources inactives ou orphelines (volumes, IP, instances arretees mais facturees, snapshots anciens).
-- Rightsizing guide par les metriques d'usage reelles, pas par les valeurs par defaut.
-- Stockage par palier selon la frequence d'acces ; sortie de donnees (egress) inter-region et inter-cloud
-  surveillee, c'est un cout souvent sous-estime.
+- Commitments (reserved instances, savings plans, committed use) driven by coverage and utilization
+  rate, not by guesswork.
+- Idle or orphaned resources (volumes, IPs, stopped but billed instances, old snapshots).
+- Rightsizing guided by actual usage metrics, not by default values.
+- Storage tiering by access frequency; inter-region and inter-cloud data egress monitored, it is an
+  often underestimated cost.
 
-## Detection d'anomalies et culture
+## Anomaly detection and culture
 
-- Alerter sur une derive de cout (quotidienne et par service) via les detecteurs d'anomalie des
-  fournisseurs ou un suivi maison sur les donnees FOCUS.
-- Budgets par equipe et par environnement, avec alertes a l'approche du seuil.
-- Boucle FinOps : visibilite (inform), optimisation (optimize), puis gouvernance continue (operate), avec
-  une revue reguliere partagee entre ingenierie, produit et finance.
+- Alert on cost drift (daily and per service) through the providers' anomaly detectors or in-house
+  tracking on the FOCUS data.
+- Budgets per team and per environment, with alerts as the threshold approaches.
+- FinOps loop: visibility (inform), optimization (optimize), then continuous governance (operate), with
+  a regular review shared between engineering, product and finance.
 
 ## Definition of done
 
-- Les couts des fournisseurs sont normalises (FOCUS) et agreges dans un modele commun.
-- Au moins un cout unitaire metier est suivi dans le temps.
-- L'allocation par etiquettes couvre l'essentiel du cout ; showback en place par equipe.
-- Le cout Kubernetes est alloue par namespace et equipe.
-- Des alertes d'anomalie et des budgets sont actifs.
+- Provider costs are normalized (FOCUS) and aggregated in a common model.
+- At least one business unit cost is tracked over time.
+- Tag-based allocation covers most of the cost; showback in place per team.
+- Kubernetes cost is allocated per namespace and team.
+- Anomaly alerts and budgets are active.

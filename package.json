@@ -1,0 +1,24 @@
+{
+  "name": "ultime-skill",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-ready skills, subagents and guardrails for AI coding agents: Claude Code, Codex, Gemini CLI, Cursor, GitHub Copilot, OpenCode and more.",
+  "license": "MIT",
+  "author": "Lucas-lux (https://github.com/Lucas-lux)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lucas-lux/ultime-skill.git"
+  },
+  "homepage": "https://github.com/Lucas-lux/ultime-skill#readme",
+  "bugs": "https://github.com/Lucas-lux/ultime-skill/issues",
+  "keywords": ["agent-skills", "claude-code", "codex", "gemini-cli", "cursor", "copilot", "opencode", "skills", "subagents", "guardrails"],
+  "bin": {
+    "ultime-skill": "bin/ultime-skill.cjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test tests/guardrails/guard.test.cjs tests/guardrails/harness.test.cjs tests/installer/installer.test.cjs"
+  }
+}

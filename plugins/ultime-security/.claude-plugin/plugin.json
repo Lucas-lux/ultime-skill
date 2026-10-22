@@ -1,6 +1,6 @@
 {
   "name": "ultime-security",
-  "description": "Pack securite defensive : audit et revue de securite, audit de code, defense et reponse a incident, reverse engineering.",
+  "description": "Defensive security pack: security audit and review, code audit, defense and incident response, reverse engineering.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

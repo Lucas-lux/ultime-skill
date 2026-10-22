@@ -1,6 +1,6 @@
 {
   "name": "store-google",
-  "description": "Google Play par le CLI gplay (build Gradle, release, rollout progressif, testeurs, metadonnees, captures, verifications avant soumission, achats, prix, vitals) et audit des politiques Google Play depuis le code.",
+  "description": "Google Play through the gplay CLI (Gradle build, release, staged rollout, testers, metadata, screenshots, pre-submission checks, purchases, pricing, vitals) and Google Play policy audit from the code.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

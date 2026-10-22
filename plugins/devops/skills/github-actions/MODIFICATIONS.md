@@ -1,21 +1,21 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/tartinerlabs/skills (commit a7812b928cd3)
+Origin: https://github.com/tartinerlabs/skills (commit a7812b928cd3)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/go.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/python.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/ruby.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/rust.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `rules/action-pinning.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `rules/caching.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `rules/concurrency.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `rules/matrix.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `rules/migration-drift.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `rules/node-version.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `rules/parallel-steps.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `rules/permissions.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `rules/triggers.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/go.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/python.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/ruby.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/rust.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `rules/action-pinning.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `rules/caching.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `rules/concurrency.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `rules/matrix.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `rules/migration-drift.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `rules/node-version.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `rules/parallel-steps.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `rules/permissions.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `rules/triggers.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

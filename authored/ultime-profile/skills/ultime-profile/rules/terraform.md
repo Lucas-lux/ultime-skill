@@ -5,15 +5,15 @@ paths:
   - "**/*.hcl"
 ---
 
-# Terraform et OpenTofu
+# Terraform and OpenTofu
 
-- Versions de Terraform et des fournisseurs figees, `.terraform.lock.hcl` versionne.
-- Jamais de secret dans le code ni les `.tfvars` versionnes ; etat distant chiffre et verrouille.
-- Jamais `apply` ni `destroy` sans confirmation explicite de l'utilisateur ; `plan` d'abord.
-- `terraform fmt`, `validate` et `tflint` propres sur les modules touches.
-- Style : `snake_case`, une ressource nommee `this` quand elle est unique dans le module ; chaque
-  variable avec `type` et `description` (et `validation` si le domaine est restreint), chaque sortie avec
-  `description` ; dans un bloc : `count` ou `for_each` en premier, puis les arguments, les blocs
-  imbriques, et `lifecycle` en dernier.
-- Tests natifs (`*.tftest.hcl`) : blocs `run` avec `command = plan` pour les tests rapides,
-  `mock_provider` pour se passer d'identifiants, `expect_failures` pour verifier les `validation`.
+- Terraform and provider versions pinned, `.terraform.lock.hcl` versioned.
+- Never a secret in the code or in versioned `.tfvars`; remote state encrypted and locked.
+- Never `apply` or `destroy` without the user's explicit confirmation; `plan` first.
+- `terraform fmt`, `validate` and `tflint` clean on the touched modules.
+- Style: `snake_case`, a resource named `this` when it is unique in the module; every variable with
+  `type` and `description` (and `validation` if the domain is restricted), every output with
+  `description`; in a block: `count` or `for_each` first, then the arguments, the nested blocks, and
+  `lifecycle` last.
+- Native tests (`*.tftest.hcl`): `run` blocks with `command = plan` for fast tests, `mock_provider` to do
+  without credentials, `expect_failures` to check the `validation` blocks.

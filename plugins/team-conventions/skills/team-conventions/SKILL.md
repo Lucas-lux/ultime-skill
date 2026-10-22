@@ -1,68 +1,66 @@
 ---
 name: team-conventions
 description: >
-  Conventions de travail d'equipe : methode, redaction (langues, pas d'em dash, marquage
-  IA, termes en entier, versions concretes, main/replica), secrets hors du code. A utiliser des qu'on
-  ecrit du code, un commit, une PR, une issue, une doc ou un message pour l'equipe, ou "conventions",
-  "regles d'equipe", "team-conventions".
+  Team working conventions: method, writing (languages, no em dash, AI marking, terms in full,
+  concrete versions, main/replica), secrets out of the code. Use whenever writing code, a commit, a PR,
+  an issue, a doc or a message for the team, or "conventions", "team rules", "regles d'equipe",
+  "team-conventions".
 ---
 
-# Conventions d'equipe
+# Team conventions
 
-Regles generiques, applicables a tout projet. Elles ne remplacent pas les regles d'un depot (son
-`CLAUDE.md`, ses `rules/`), qui priment quand elles existent. Signaler toute contradiction plutot que de
-trancher en silence.
+Generic rules, applicable to any project. They do not replace a repository's rules (its `CLAUDE.md`,
+its `rules/`), which take precedence when they exist. Flag any contradiction rather than settling it
+silently.
 
-## Methode
+## Method
 
-- **Verifier plutot que croire.** Un commentaire, une docstring, une doc, un message de commit ou une
-  affirmation ne sont pas des sources de verite. Verifier contre le code reel, le comportement observe, la
-  base ou les logs.
-- **Signaler les ecarts.** Une regle non respectee (par l'agent ou deja presente dans le code touche) est
-  signalee, jamais ignoree en silence. Ne la corriger sans demander que si une regle ou une skill le
-  prevoit, et annoncer la correction.
-- **Demander avant un gros lot.** Au-dela d'environ deux sujets distincts, ou des qu'un autre depot est
-  touche, presenter l'inventaire et attendre la validation avant de modifier quoi que ce soit.
-- **Questions a choix multiples.** Sur un point ambigu, poser la question via un formulaire a choix
-  multiples plutot que de supposer.
+- **Verify rather than believe.** A comment, a docstring, a doc, a commit message or a claim are not
+  sources of truth. Verify against the actual code, the observed behavior, the database or the logs.
+- **Flag deviations.** A rule that is not followed (by the agent or already present in the code
+  touched) is flagged, never silently ignored. Only fix it without asking if a rule or a skill provides
+  for it, and announce the fix.
+- **Ask before a large batch.** Beyond about two distinct topics, or as soon as another repository is
+  touched, present the inventory and wait for validation before changing anything.
+- **Multiple-choice questions.** On an ambiguous point, ask the question through a multiple-choice form
+  rather than assuming.
 
-## Git et GitHub
+## Git and GitHub
 
-- **Chainer les etapes dependantes avec `&&`** (commit puis push, build puis deploy), jamais avec un retour
-  a la ligne ou `;`. Avec un heredoc, le `&&` se place sur la ligne de la commande, pas apres le marqueur
-  de fin.
-- **Verifier l'etat GitHub avant de l'affirmer.** L'etat d'une PR, d'une issue, d'une review ou d'un check
-  CI se reverifie via `gh` juste avant d'en parler. Le contexte de la conversation n'est pas une source.
+- **Chain dependent steps with `&&`** (commit then push, build then deploy), never with a line break or
+  `;`. With a heredoc, the `&&` goes on the command's line, not after the end marker.
+- **Check the GitHub state before asserting it.** The state of a PR, an issue, a review or a CI check
+  is rechecked through `gh` right before talking about it. The conversation context is not a source.
 
-## Redaction
+## Writing
 
-- **Langues.** Code, commentaires, messages de commit et noms de branches en anglais ; PR et issues en
-  francais ; README dans la langue de l'equipe.
-- **Marquage IA.** Sur tout texte redige par l'IA et destine a d'autres personnes (PR, issues,
-  commentaires et reponses de review, messages) : une marque visible a la fin du titre et a la fin du
-  texte. Jamais dans le code (commentaires compris), les messages de commit, les descriptions de depot ni
-  la documentation (README, `docs/`).
-- **Pas d'em dash.** Jamais le tiret cadratin, nulle part (reponses, PR, issues, commits, commentaires,
-  docs). Le remplacer par un tiret simple, deux-points, des parentheses ou une coupure de phrase.
-- **Termes techniques en entier.** "base de donnees", "procedure stockee", pas d'abreviation maison. Les
-  abreviations universelles (`id`, `url`, `api`, `json`, `sql`) restent.
-- **Versions concretes.** Une doc decrit l'existant avec la version reelle (par exemple "Python 3.14"),
-  jamais "derniere version" ou "latest". Une regle de processus ("prendre la derniere stable au scaffold")
-  reste legitime.
-- **`main` et `replica`.** Dans tout ce qu'on cree ou ecrit (branches, code, docs) : `main` plutot que
-  `master`, `replica` plutot que `slave`, et pour une base "base principale" (primary) plutot que
-  `master`. L'existant n'est pas renomme, sauf besoin reel.
+- **Languages.** Code, comments, commit messages and branch names in English; PRs and issues in
+  French; README in the team's language.
+- **AI marking.** On any text written by the AI and intended for other people (PRs, issues, review
+  comments and replies, messages): a visible mark at the end of the title and at the end of the text.
+  Never in the code (comments included), commit messages, repository descriptions or documentation
+  (README, `docs/`).
+- **No em dash.** Never the em dash, anywhere (replies, PRs, issues, commits, comments, docs). Replace
+  it with a simple hyphen, a colon, parentheses or a sentence break.
+- **Technical terms in full.** "database", "stored procedure", no in-house abbreviation. Universal
+  abbreviations (`id`, `url`, `api`, `json`, `sql`) stay.
+- **Concrete versions.** A doc describes what exists with the actual version (for example "Python
+  3.14"), never "latest version" or "latest". A process rule ("take the latest stable at scaffold
+  time") remains legitimate.
+- **`main` and `replica`.** In everything we create or write (branches, code, docs): `main` rather than
+  `master`, `replica` rather than `slave`, and for a database "primary database" (primary) rather than
+  `master`. Existing names are not renamed, unless there is a real need.
 
-## Secrets et configuration
+## Secrets and configuration
 
-- **Regle d'or : jamais d'identifiants de production pris ailleurs.** Pour un service de production, ne se
-  servir que des identifiants que l'utilisateur a configures pour ce travail (le `.env` du projet). Ne
-  jamais aller les chercher ailleurs (autre depot, secret Kubernetes, gestionnaire de secrets, historique
-  du shell, fichier d'un autre projet), meme sur demande : refuser et s'arreter.
-- **Credentials hors du code.** Jamais de token, mot de passe ou cle d'API dans le code ni dans git. Les
-  stocker dans un `.env` ignore par git, et prevenir immediatement si on en recoit un.
-- **Le `.env` du projet est la seule source de la configuration runtime**, DSN compris. Pas de second
-  fichier d'environnement parallele.
-- **Base de donnees en developpement**, par ordre de preference : la base locale en lecture et ecriture ;
-  sinon un replica en lecture seule ; en dernier recours seulement la base principale, jamais sans l'accord
-  explicite de l'utilisateur.
+- **Golden rule: never production credentials taken from elsewhere.** For a production service, only
+  use the credentials the user has configured for this work (the project's `.env`). Never go and fetch
+  them elsewhere (another repository, Kubernetes secret, secrets manager, shell history, another
+  project's file), even on request: refuse and stop.
+- **Credentials out of the code.** Never a token, password or API key in the code or in git. Store them
+  in a `.env` ignored by git, and warn immediately if one is received.
+- **The project's `.env` is the only source of runtime configuration**, DSN included. No second,
+  parallel environment file.
+- **Database in development**, in order of preference: the local database in read and write; otherwise
+  a read-only replica; only as a last resort the primary database, never without the user's explicit
+  approval.

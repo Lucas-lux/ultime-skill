@@ -1,0 +1,10 @@
+{
+  "name": "rea",
+  "description": "Reverse Engineer Anything: binaries, Electron/JS apps, Android, firmware, browser. Drives the rea-agents MCP server (installed separately).",
+  "author": {
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
+  },
+  "skills": "./skills/",
+  "hooks": "./.cursor-plugin/hooks.json"
+}

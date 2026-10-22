@@ -1,13 +1,13 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/callstackincubator/agent-skills (commit 59e9d17446a2)
+Origin: https://github.com/callstackincubator/agent-skills (commit 59e9d17446a2)
 
-- `references/bundle-native-assets.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/bundle-r8-android.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/bundle-tree-shaking.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/js-bottomsheet.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/js-react-compiler.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/native-android-16kb-alignment.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `references/bundle-native-assets.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/bundle-r8-android.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/bundle-tree-shaking.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/js-bottomsheet.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/js-react-compiler.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/native-android-16kb-alignment.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

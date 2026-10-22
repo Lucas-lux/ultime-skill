@@ -1,14 +1,14 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/DietrichGebert/ponytail (commit 2961b52fc1fe)
+Origin: https://github.com/DietrichGebert/ponytail (commit 2961b52fc1fe)
 
-- `ponytail-activate.js` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `ponytail-config.js` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `ponytail-instructions.js` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `ponytail-map.js` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `ponytail-mode-tracker.js` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `ponytail-runtime.js` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `ponytail-subagent.js` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `ponytail-activate.js`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `ponytail-config.js`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `ponytail-instructions.js`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `ponytail-map.js`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `ponytail-mode-tracker.js`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `ponytail-runtime.js`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `ponytail-subagent.js`: em dashes replaced with a hyphen, invisible Unicode characters removed

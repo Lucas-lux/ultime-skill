@@ -1,6 +1,6 @@
 {
   "name": "store-apple",
-  "description": "App Store Connect par le CLI asc (signature, build, TestFlight, release, metadonnees, captures, prix, crashs), prevention des rejets App Review (preflight par type d'app), politique de confidentialite et labels de confidentialite Apple.",
+  "description": "App Store Connect through the asc CLI (signing, build, TestFlight, release, metadata, screenshots, pricing, crashes), App Review rejection prevention (preflight per app type), privacy policy and Apple privacy labels.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

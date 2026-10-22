@@ -1,9 +1,9 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/dbt-labs/dbt-agent-skills (commit 7c7b5fa39e61)
+Origin: https://github.com/dbt-labs/dbt-agent-skills (commit 7c7b5fa39e61)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/managing-packages.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/managing-packages.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

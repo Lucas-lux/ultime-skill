@@ -1,59 +1,57 @@
 ---
 name: store-listing
 description: >
-  Construit le dossier complet de fiche App Store et Google Play d'une nouvelle app, dans les limites de
-  chaque store : textes par langue, categories, classification, confidentialite, URLs, visuels, notes pour
-  la revue. A utiliser pour creer ou refaire une fiche store, preparer une premiere soumission, ou "fiche
-  App Store", "fiche Play Store", "store listing".
+  Builds the complete App Store and Google Play listing file set for a new app, within each store's
+  limits: texts per language, categories, rating, privacy, URLs, visuals, review notes. Use to create
+  or redo a store listing, prepare a first submission, or "App Store listing", "Play Store listing",
+  "store listing", "fiche App Store", "fiche Play Store".
 ---
 
-# Dossier de fiche store (App Store et Google Play)
+# Store listing file set (App Store and Google Play)
 
-Produit un dossier unique, versionne dans le depot, qui alimente ensuite les outils de publication
-(`asc-metadata-sync`, `gplay-metadata-sync`, fastlane) ou la saisie dans les consoles
-(`store-console-browser`). L'optimisation fine des mots-cles et visuels vient du pack store-aso.
+Produces a single file set, versioned in the repository, which then feeds the publishing tools
+(`asc-metadata-sync`, `gplay-metadata-sync`, fastlane) or the entry in the consoles
+(`store-console-browser`). Fine-tuning of keywords and visuals comes from the store-aso pack.
 
-## Champs et limites
+## Fields and limits
 
-Limites de caracteres les plus utilisees, a reverifier dans la documentation des stores avant
-soumission :
+Most used character limits, to recheck in the stores' documentation before submission:
 
-| App Store | Limite | Google Play | Limite |
+| App Store | Limit | Google Play | Limit |
 |---|---|---|---|
-| Nom | 30 | Titre | 30 |
-| Sous-titre | 30 | Description courte | 80 |
-| Texte promotionnel (modifiable sans version) | 170 | Description complete | 4000 |
+| Name | 30 | Title | 30 |
+| Subtitle | 30 | Short description | 80 |
+| Promotional text (editable without a version) | 170 | Full description | 4000 |
 | Description | 4000 | | |
-| Mots-cles (separes par des virgules) | 100 | | |
-| Notes de version | 4000 | Notes de version | 500 par langue |
+| Keywords (comma-separated) | 100 | | |
+| Release notes | 4000 | Release notes | 500 per language |
 
-## Contenu du dossier
+## File set contents
 
-1. **Identite** : nom (distinct de toute app existante, voir `app-clone`), sous-titre, categorie
-   principale et secondaire, developpeur affiche.
-2. **Textes par langue** : ecrits pour le marche (pas une traduction mot a mot), sans superlatif non
-   prouve, sans nom de concurrent ni mot-cle de marque d'autrui.
-3. **Classification** : questionnaire d'age Apple et questionnaire IARC de Google Play, remplis d'apres
-   le contenu reel (contenus generes par les utilisateurs, achats, communications entre utilisateurs).
-4. **Confidentialite** : URL de politique de confidentialite (obligatoire sur les deux stores), labels
-   Apple (`privacy-policy`, `privacy-publish`), formulaire Data safety (`play-data-safety`), suppression de
-   compte (in-app et lien web).
-5. **URLs** : support (obligatoire chez Apple), site marketing, conditions d'utilisation si abonnements.
-6. **Visuels** : icone, captures par taille d'appareil exigee, image de presentation Google Play (1024 x
-   500), video facultative. Specifications exactes a verifier (elles suivent les nouveaux appareils) ;
-   production avec `app-store-screenshots`, strategie avec `screenshot-optimization`.
-7. **Prix et disponibilite** : pays, prix, achats integres et abonnements declares.
-8. **Revue** : notes pour les reviewers, compte de demonstration transmis par la console (jamais dans le
-   depot), declarations specifiques (publicite, chiffrement, contenu sensible, public cible et enfants).
+1. **Identity**: name (distinct from any existing app, see `app-clone`), subtitle, primary and
+   secondary category, displayed developer.
+2. **Texts per language**: written for the market (not a word-for-word translation), without unproven
+   superlatives, without competitor names or other parties' brand keywords.
+3. **Rating**: Apple age questionnaire and Google Play IARC questionnaire, filled in according to the
+   actual content (user-generated content, purchases, communication between users).
+4. **Privacy**: privacy policy URL (mandatory on both stores), Apple labels (`privacy-policy`,
+   `privacy-publish`), Data safety form (`play-data-safety`), account deletion (in-app and web link).
+5. **URLs**: support (mandatory at Apple), marketing site, terms of use if subscriptions.
+6. **Visuals**: icon, screenshots for each required device size, Google Play feature graphic (1024 x
+   500), optional video. Exact specifications to check (they follow new devices); production with
+   `app-store-screenshots`, strategy with `screenshot-optimization`.
+7. **Pricing and availability**: countries, price, declared in-app purchases and subscriptions.
+8. **Review**: notes for reviewers, demo account sent through the console (never in the repository),
+   specific declarations (advertising, encryption, sensitive content, target audience and children).
 
-## Format de sortie
+## Output format
 
-- `store/listing.md` : vue d'ensemble relue par l'utilisateur.
-- Un fichier par champ et par langue dans le format de l'outil retenu (voir la skill de l'outil :
-  `asc-metadata-sync`, `gplay-metadata-sync` ou la structure `fastlane/metadata`).
-- Un controle de longueur automatique de chaque champ avant envoi.
+- `store/listing.md`: overview reviewed by the user.
+- One file per field and per language in the format of the chosen tool (see the tool's skill:
+  `asc-metadata-sync`, `gplay-metadata-sync` or the `fastlane/metadata` structure).
+- An automatic length check of each field before sending.
 
-## Coherence
+## Consistency
 
-La fiche decrit l'app reelle : chaque fonctionnalite citee existe, les captures montrent l'app, la
-confidentialite declaree correspond au code et aux SDK. Une incoherence est un motif de rejet frequent.
+The listing describes the actual app: every feature mentioned exists, the screenshots show the app,
+the declared privacy matches the code and the SDKs. An inconsistency is a frequent rejection reason.

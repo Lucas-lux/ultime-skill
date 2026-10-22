@@ -7,14 +7,14 @@ paths:
   - "**/components/**"
 ---
 
-# React et Next.js
+# React and Next.js
 
-- Composants serveur par defaut (App Router) ; `'use client'` seulement pour l'etat, les effets ou les
-  evenements, au plus bas de l'arbre.
-- Pas de `useEffect` pour deriver une valeur ou charger des donnees cote serveur ; pas de fetch en
-  cascade : charger en parallele, `Suspense` pour le streaming.
-- Accessibilite : elements natifs (`button`, `a`, `label`), textes alternatifs, focus visible, contraste.
-- Formulaires : validation cote serveur obligatoire (actions serveur ou route), le client ne fait foi
-  de rien.
-- Secrets jamais dans un composant client ni dans une variable `NEXT_PUBLIC_`.
-- Images par `next/image`, polices par `next/font`, metadonnees par l'API `metadata`.
+- Server components by default (App Router); `'use client'` only for state, effects or events, as low
+  in the tree as possible.
+- No `useEffect` to derive a value or to load data on the server side; no cascading fetches: load in
+  parallel, `Suspense` for streaming.
+- Accessibility: native elements (`button`, `a`, `label`), alternative text, visible focus, contrast.
+- Forms: server-side validation mandatory (server actions or route), the client is trusted for
+  nothing.
+- Secrets never in a client component nor in a `NEXT_PUBLIC_` variable.
+- Images through `next/image`, fonts through `next/font`, metadata through the `metadata` API.

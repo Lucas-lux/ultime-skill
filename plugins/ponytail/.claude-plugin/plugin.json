@@ -1,6 +1,6 @@
 {
   "name": "ponytail",
-  "description": "Mode dev senior paresseux : le plus petit changement complet, reutilisation avant ecriture, YAGNI. Hooks d'activation (/ponytail lite|full|ultra) et commandes de revue et d'audit.",
+  "description": "Lazy senior developer mode: the smallest complete change, reuse before writing, YAGNI. Activation hooks (/ponytail lite|full|ultra) and review and audit commands.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

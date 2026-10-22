@@ -1,85 +1,134 @@
 # ultime-skill
 
-Bibliothèque de skills, d'agents et de hooks pour Claude Code, prête pour la production. Elle donne à
-Claude le savoir-faire d'une équipe complète (produit, code, design, mobile, stores, sécurité, conformité,
-ops, données, growth), un orchestrateur qui mène un projet de l'idée à la production, éventuellement en
-autonomie, des garde-fous qui ne s'oublient pas, et une CI générée pour chaque stack. Chaque projet
-n'active que ce qui lui sert.
+[![CI](https://github.com/Lucas-lux/ultime-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/Lucas-lux/ultime-skill/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-standard-black.svg)](https://agentskills.io)
 
-**473 skills, 24 agents, 43 packs, 11 bundles**, uniquement sous licences permissives.
+A production-ready library of skills, subagents and guardrails for AI coding agents. It gives your agent
+the know-how of a complete team (product, code, design, mobile, app stores, security, compliance, ops,
+data, growth), an orchestrator that takes a project from idea to production, optionally on its own,
+guardrails that cannot be forgotten, and a CI generated for each stack. Each project enables only what
+it needs.
 
-## Installation en une commande
+**473 skills, 24 subagents, 43 packs, 11 bundles**, all under permissive licenses. Works natively in
+**Claude Code** and installs into **Codex, Gemini CLI, Cursor, GitHub Copilot, OpenCode, Qwen Code,
+Antigravity, Windsurf, Devin, Junie, Factory Droid, Kilo Code, Cline, Kiro, Amp, Goose and Zed**.
+
+## Quick start
+
+**Claude Code** (native plugins, every feature):
 
 ```bash
 claude plugin marketplace add Lucas-lux/ultime-skill && claude plugin install ultime-starter@ultime-skill
 ```
 
-Puis, dans chaque projet : « Installe les skills ultime-factory dont ce projet a besoin. »
+**Any other coding agent** (Node.js 18+):
+
+```bash
+npx github:Lucas-lux/ultime-skill install --agent codex      # or gemini, cursor, copilot, opencode... or auto
+```
+
+Both install the starter set: the `ultime-profile` entry point, the `guardrails` and `ponytail`. Then,
+in each project, ask your agent:
+
+> Install the ultime-factory skills this project needs.
+
+It reads the project, proposes the useful packs with their context cost, and installs them for that
+project only.
+
+**Skills only**, with the community installer: `npx skills add Lucas-lux/ultime-skill`.
+
+## Supported agents
+
+| Agent | Skills | Subagents | Commands | Guardrails (hooks) |
+|---|---|---|---|---|
+| Claude Code | native | native | native | native |
+| OpenAI Codex | yes | yes (TOML) | - | yes |
+| Gemini CLI, Qwen Code | yes | yes | yes | yes |
+| Cursor | yes | yes | yes | yes |
+| GitHub Copilot (CLI, VS Code, coding agent) | yes | yes | yes (prompts) | yes |
+| OpenCode, Kilo Code | yes | yes | yes | yes (plugin) |
+| Factory Droid | yes | yes | - | yes |
+| Kiro | yes | - | - | yes (project) |
+| Antigravity, Windsurf, Devin, Junie, Cline, Amp, Goose, Zed | yes | where supported | - | written rules |
+
+Paths, formats and differences from Claude Code: [Coding agents](docs/harnesses.md).
+
+## What you get
+
+- **An orchestrator, `app-factory`**: from an idea, an app to clone and personalize, or an unfinished app,
+  to a finished product in production. Eight phases with validation gates, state on disk and resume,
+  18 specialized subagents, and an **autopilot** mode where the project moves forward on scheduled
+  wakeups and only vision, money, legal or irreversible decisions reach you as a GitHub issue.
+- **Guardrails enforced by hooks**: no em dash or unrequested emoji, no push to `main`, no git hook bypass,
+  no secrets or `.env` in git, Conventional Commits, an AI marker on PR and issue titles, and a golden rule
+  on production credentials. Configurable rule by rule, and wired into every agent that has hooks.
+- **A CI generated for the stack (`ci-forge`)**: lint, typing, tests, end to end, containers, Kubernetes,
+  IaC, security scanning, SBOM, staging and production, actions pinned by SHA.
+- **Per-project profiles (`ultime-profile`)**: only the packs a project needs, because every enabled
+  skill costs context on every turn.
+- **The best open-source skills**, imported at pinned commits with their licenses, plus skills written
+  in-house where the public ones were missing or too weak (mobile release, stores, monitoring,
+  testing in production, security review, French and EU compliance...).
 
 ## Documentation
 
-- [Pourquoi et ce que ça apporte](docs/pourquoi-et-gains.md) : le problème, le gain concret, les limites.
-- [Démarrer](docs/demarrer.md) : installation, équiper un projet, questions fréquentes.
-- [Architecture](docs/architecture.md) : packs, bundles, profils, économie de contexte, construction.
-- [App factory et autopilot](docs/app-factory-et-autopilot.md) : de l'idée à la production, en autonomie.
-- [Qualité et sécurité](docs/qualite-et-securite.md) : garde-fous, CI générée, revues, règles.
-- [Licences](docs/licences.md) et [Maintenance](docs/maintenance.md).
+- [Why, and what it brings](docs/why.md): the problem, the concrete gain, the limits.
+- [Getting started](docs/getting-started.md): install, equip a project, FAQ.
+- [Coding agents](docs/harnesses.md): Codex, Gemini CLI, Cursor, Copilot, OpenCode and the others.
+- [Architecture](docs/architecture.md): packs, bundles, profiles, context economy, reproducible build.
+- [App factory and autopilot](docs/app-factory-and-autopilot.md): from idea to production, autonomously.
+- [Quality and security](docs/quality-and-security.md): guardrails, generated CI, reviews, rules.
+- [Licenses](docs/licenses.md) and [Maintenance](docs/maintenance.md).
 
-## Installation détaillée
+## Installation options
 
-### Une fois par machine
+### Claude Code
 
-`ultime-starter` installe le point d'entrée `ultime-profile`, les garde-fous `guardrails` et `ponytail`.
-Pour n'installer que le point d'entrée :
+`ultime-starter` installs `ultime-profile`, `guardrails` and `ponytail` (the smallest-complete-change rule,
+applied in every session and subagent). To install the entry point only:
 
 ```bash
 claude plugin marketplace add Lucas-lux/ultime-skill
 claude plugin install ultime-profile@ultime-skill
 ```
 
-Ou, depuis un clone : `./install.sh` (Windows : `./install.ps1`), qui installe le point d'entrée
-`ultime-profile`, les garde-fous `guardrails` (voir [Garde-fous](#garde-fous)) et `ponytail`, la règle du
-plus petit changement complet appliquée à chaque session et chaque sous-agent (`--no-guardrails`,
-`--no-ponytail`, ou `-NoGuardrails`, `-NoPonytail` sous Windows, pour s'en passer). Rien d'autre ne pèse sur le contexte des sessions.
+From a clone: `./install.sh` (Windows: `./install.ps1`), with `--no-guardrails`, `--no-ponytail`
+(`-NoGuardrails`, `-NoPonytail` on Windows) and `--with-tools` (also installs the CLIs some skills drive:
+`rea`, `asc`, `gplay`, pinned and checked by SHA-256). In each project, Claude installs the packs at
+project scope, shared (`.claude/settings.json`, to commit) or personal (`.claude/settings.local.json`),
+disables what is not needed, and asks you to run `/reload-plugins`.
 
-Le dépôt est privé : il faut un accès git au dépôt. Sans clé SSH GitHub, poser
-`CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` pour cloner en HTTPS via les identifiants git déjà stockés
-(`gh auth login` puis `gh auth setup-git` les met en place).
-
-### Dans chaque projet
-
-Ouvrir Claude Code dans le projet et demander simplement, par exemple :
-
-> Installe les skills ultime-factory dont ce projet a besoin.
-
-Claude lit le projet et la demande, propose les packs utiles avec leur coût en contexte, puis les installe
-au niveau du projet. Il choisit avec vous le scope :
-- **partagé** (`.claude/settings.json`, à committer) : l'équipe reçoit le même profil ;
-- **personnel** (`.claude/settings.local.json`).
-
-Il désactive ce qui ne sert pas, puis vous fait lancer `/reload-plugins`. Quand le travail change de
-domaine (passer du code à la fiche store, du build au lancement), redemandez-lui, ou laissez
-l'orchestrateur `app-factory` le faire à ses étapes clés.
-
-### Tout installer pour tous les projets (déconseillé)
+### Other agents
 
 ```bash
-./install.sh ultime-dev                  # un ou plusieurs bundles ou packs, actifs partout
-./install.sh --with-tools ultime-mobile  # installe aussi les CLI externes (rea, asc, gplay)
+npx github:Lucas-lux/ultime-skill install [packs or bundles...] --agent <ids|all|auto> [--scope user|project] [--dir <project>]
+npx github:Lucas-lux/ultime-skill uninstall [packs...] --agent <ids>
+npx github:Lucas-lux/ultime-skill list      # packs and bundles
+npx github:Lucas-lux/ultime-skill agents    # supported agents, the detected ones starred
 ```
 
-Un bundle large actif partout dépasse le budget de descriptions de Claude Code (voir
-[Économie de contexte](#économie-de-contexte)). `ULTIME_SKILL_SOURCE=.` installe depuis le clone plutôt
-que depuis GitHub, mais l'installation par projet suppose ensuite la source GitHub.
+Skills go once into the shared `.agents/skills` folder, subagents and commands into each agent's folder
+and format, the guardrails into its hook file, and the always-on rules into `AGENTS.md` (or `GEMINI.md`,
+`.cursor/rules/`...). Uninstall removes only what the installer wrote, and leaves your own content in
+shared files untouched.
 
-Redémarrer Claude Code ou lancer `/reload-plugins` après installation.
+### Everything, everywhere (not recommended)
+
+```bash
+./install.sh ultime-dev                  # one or more bundles or packs, active in every project
+./install.sh --with-tools ultime-mobile  # also installs the external CLIs
+```
+
+A large bundle active everywhere overflows the skill description budget of the agent (see
+[Context economy](#context-economy)).
 
 ## Bundles
 
-| Bundle | Contenu |
+| Bundle | Contents |
 |---|---|
-| `ultime-starter` | ultime-profile, guardrails, ponytail : l'installation recommandée |
-| `ultime-all` | Tous les packs (déconseillé : préférer l'installation par projet) |
+| `ultime-starter` | ultime-profile, guardrails, ponytail: the recommended install |
+| `ultime-all` | Every pack (not recommended: prefer per-project install) |
 | `ultime-dev` | ponytail, superpowers, agent-skills, skill-factory, devops, fullstack, security, team-conventions, prod-testing, guardrails, ci-forge |
 | `ultime-data` | data-engineering, dataviz, ml-engineering |
 | `ultime-media` | ui-design, motion-design, video-editing |
@@ -88,252 +137,178 @@ Redémarrer Claude Code ou lancer `/reload-plugins` après installation.
 | `ultime-ops` | devops, finops, monitoring, prod-testing, ci-forge |
 | `ultime-mobile` | mobile, mobile-expo, mobile-ios, mobile-android, mobile-flutter, app-stores, store-apple, store-google, store-aso, ui-design, compliance, security |
 | `ultime-growth` | growth, growth-seo, growth-ads, growth-social, growth-analytics, growth-cro, store-aso, video-editing, motion-design |
-| `ultime-factory` | app-factory et tout ce qu'il pilote : guardrails, ci-forge, product-management, greenfield, agent-skills, fullstack, ui-design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, et tous les packs mobile, stores, growth et production vidéo |
+| `ultime-factory` | app-factory and everything it drives: guardrails, ci-forge, product-management, greenfield, agent-skills, fullstack, ui-design, compliance, security, devops, data-engineering, monitoring, prod-testing, finops, and every mobile, store, growth and video pack |
 
-Chaque bundle installe aussi `ultime-profile` (voir [Économie de contexte](#économie-de-contexte)).
+Every bundle also installs `ultime-profile`. The `sec-offense` pack (offensive pentest, authorized testing
+only) is pulled in by no bundle, not even `ultime-all`: install it explicitly.
 
-Le pack `sec-offense` (pentest offensif, tests autorisés uniquement) n'est tiré par aucun bundle, y compris
-`ultime-all` : il s'installe explicitement avec `claude plugin install sec-offense@ultime-skill`.
+## Context economy
 
-## Économie de contexte
+Every skill of an enabled pack adds its description to the context **on every turn**, used or not; its
+full content loads only when it is used. Claude Code keeps about 1% of the context window for that list:
+beyond it, descriptions are dropped and those skills stop triggering. Other agents have similar limits.
+Installing `ultime-all` and leaving everything on is counterproductive.
 
-Chaque skill d'un pack activé ajoute sa description au contexte **à chaque tour**, qu'elle serve ou non ;
-son contenu complet ne se charge que lorsqu'elle est utilisée. Claude Code réserve à cette liste environ
-1 % de la fenêtre de contexte : au-delà, il retire des descriptions et les skills concernées ne se
-déclenchent plus. Installer `ultime-all` et tout laisser actif est donc contre-productif.
+- **One profile per project**: `ultime-profile` detects the project type, proposes the useful packs and
+  disables the others for that repository only, and adjusts when the task changes domain.
+- **Cost of each pack and bundle**: generated at build time in
+  `plugins/ultime-profile/skills/ultime-profile/references/catalog.md`.
+- **In-house skills**: descriptions of 400 characters at most (checked by `scripts/check.py`), `SKILL.md`
+  under 500 lines with the detail in references, `app-factory` subagents with a model suited to their
+  role, short reports.
+- **Imported skills**: original descriptions are not rewritten (they carry the words that trigger the
+  skill); only excessive loading is fixed.
 
-- **Un profil par projet** : la skill `ultime-profile` détecte le type de projet, propose les packs utiles
-  et désactive les autres pour ce dépôt seulement (`claude plugin enable|disable --scope local|project`).
-  Elle s'ajuste quand la tâche change de domaine (passer du code à la fiche store, par exemple).
-- **Mode sobre global** : tout désactiver au niveau utilisateur et laisser chaque projet activer son profil.
-- **Coût de chaque pack et bundle** : généré au build dans
-  `plugins/ultime-profile/skills/ultime-profile/references/catalog.md`, affiché par `scripts/build.py`.
-- **Côté maison** : descriptions de 400 caractères au plus (contrôlé par `scripts/check.py`), `SKILL.md`
-  de moins de 500 lignes avec le détail en références, agents d'`app-factory` avec un modèle adapté à
-  leur rôle, des comptes rendus courts et la règle ponytail du plus petit changement complet.
-- **Côté imports** : les descriptions d'origine ne sont pas réécrites (elles portent les mots qui
-  déclenchent la skill) ; seuls les chargements excessifs sont corrigés, comme l'agent `analyzer` de
-  greenfield qui préchargeait ses 22 skills à chaque appel et ne charge plus que celle de sa mission.
+## Catalog
 
-## Catalogue
+### Product and orchestration
 
-### Produit et orchestration
-
-| Pack | Skills | Rôle |
+| Pack | Skills | Role |
 |---|---|---|
-| `app-factory` | 4 + 18 agents | Orchestrateur de projet de A à Z, en trois modes : création depuis une idée, clone personnalisé d'une app de référence, reprise d'une app existante ou inachevée. Huit phases avec portes de validation, état sur disque et reprise, sous-agents spécialisés, mode autopilot. Écrit maison. |
-| `product-management` | 46 | Découverte, stratégie, marché, PRD, user stories, roadmap, pre-mortem, rétro, notes de version (phuryn), rétro-spécification d'un code existant (code-to-prd, schematic). |
-| `greenfield` | 22 + 2 agents | Rétro-ingénierie « salle blanche » : specs comportementales, vecteurs de test et critères d'acceptation extraits d'un code sans hériter de son implémentation (`/greenfield:analyze`). Pipeline lourd, réservé au code dont on détient les droits. |
+| `app-factory` | 4 + 18 agents | End-to-end project orchestrator in three modes: creation from an idea, personalized clone of a reference app, takeover of an existing or unfinished app. Eight phases with gates, state on disk, specialized subagents, autopilot mode. In-house. |
+| `product-management` | 46 | Discovery, strategy, market, PRD, user stories, roadmap, pre-mortem, retro, release notes (phuryn), reverse specification of existing code (code-to-prd, schematic). |
+| `greenfield` | 22 + 2 agents | Clean-room reverse engineering: behavioral specs, test vectors and acceptance criteria extracted from code without inheriting its implementation (`/greenfield:analyze`). Heavy pipeline, for code you own the rights to. |
 
-Démarrer un projet : installer `ultime-factory`, ouvrir le dépôt du projet (vide ou existant) et lancer
-`/app-factory:app-factory`. L'orchestrateur demande le mode, le brief et le niveau d'autonomie, puis
-avance phase par phase. Il fait valider chaque porte et toute action irréversible : paiement, création de
-compte, publication, déploiement en production. L'état vit dans `.app-factory/` : une nouvelle session
-reprend là où la précédente s'est arrêtée.
+### Mobile and stores
 
-**Mode autopilot** (skill `autopilot`) : après le cadrage, le projet avance seul par réveils planifiés
-(tâche planifiée Claude Code dans le cloud, payée par le forfait Claude), sans session ouverte. Les agents
-décident ce qui est réversible et le tracent ; seules les décisions de vision, d'argent, de droit ou
-irréversibles arrivent sous forme d'issue GitHub qui vous est assignée, à laquelle on répond par un
-commentaire depuis l'app GitHub. Les PR sont fusionnées par GitHub quand les checks requis sont verts,
-le staging se déploie par la CI, la production attend toujours votre approbation. La mise en place
-(export des skills dans le dépôt, labels, workflows, protection de branche, tâche planifiée) est décrite
-dans `references/setup.md` de la skill et se fait par vous : Claude ne crée rien sur votre compte Claude
-ni dans le cloud.
-
-### Mobile et stores
-
-| Pack | Skills | Rôle |
+| Pack | Skills | Role |
 |---|---|---|
-| `mobile` | 7 | Multiplateforme, écrit maison : publication iOS et Android (signature, versions, TestFlight, pistes Play, fastlane, EAS), sécurité OWASP MASVS, notifications push, deep links, tests de bout en bout (Maestro, Detox), accessibilité mobile, achats intégrés. |
-| `mobile-expo` | 22 | Skills officielles Expo (router, UI native, design system, modules, upgrade, EAS Build, Submit, Update et Workflows, migration web vers natif), performance et upgrade React Native, React Navigation (Callstack), React Native Testing Library. |
-| `mobile-ios` | 5 | SwiftUI, concurrence Swift, Swift Testing, SwiftData (Paul Hudson), accessibilité iOS. |
-| `mobile-android` | 24 | Skills officielles Google (Compose, Navigation 3, AGP 9, R8, ANR, tests, sécurité, politiques Play) et Google Play Billing. |
-| `mobile-flutter` | 14 | Skills officielles Flutter et Dart. |
-| `app-stores` | 3 | Écrit maison : dossier de fiche pour les deux stores, formulaire Data safety, saisie dans les consoles via le navigateur pour ce que les API ne couvrent pas. |
-| `store-apple` | 19 | App Store Connect par le CLI `asc`, prévention des rejets App Review, labels de confidentialité Apple. |
-| `store-google` | 13 | Google Play par le CLI `gplay`, audit des politiques Google Play. |
-| `store-aso` | 16 | ASO des deux stores : audit, mots-clés, métadonnées, captures (générateur inclus), vidéo, icône, pages produit, tests A/B, avis. |
+| `mobile` | 7 | Cross-platform, in-house: iOS and Android release (signing, versions, TestFlight, Play tracks, fastlane, EAS), OWASP MASVS security, push notifications, deep links, end-to-end tests (Maestro, Detox), mobile accessibility, in-app purchases. |
+| `mobile-expo` | 22 | Official Expo skills (router, native UI, design system, modules, upgrade, EAS Build, Submit, Update and Workflows, web to native migration), React Native performance and upgrade, React Navigation (Callstack), React Native Testing Library. |
+| `mobile-ios` | 5 | SwiftUI, Swift concurrency, Swift Testing, SwiftData (Paul Hudson), iOS accessibility. |
+| `mobile-android` | 24 | Official Google skills (Compose, Navigation 3, AGP 9, R8, ANR, tests, security, Play policies) and Google Play Billing. |
+| `mobile-flutter` | 14 | Official Flutter and Dart skills. |
+| `app-stores` | 3 | In-house: listing kit for both stores, Data safety form, entering what the APIs do not cover in the consoles through the browser. |
+| `store-apple` | 19 | App Store Connect through the `asc` CLI, App Review rejection prevention, Apple privacy labels. |
+| `store-google` | 13 | Google Play through the `gplay` CLI, Google Play policy audit. |
+| `store-aso` | 16 | ASO for both stores: audit, keywords, metadata, screenshots (generator included), video, icon, product pages, A/B tests, reviews. |
 
-Les stores passent d'abord par les CLI et API officielles ; le navigateur (Claude in Chrome, avec vos
-sessions) ne sert qu'à ce qu'elles ne couvrent pas. Connexion, double authentification, paiement,
-acceptation des contrats, envoi en revue et publication restent à l'utilisateur.
+Stores go through the official CLIs and APIs first; the browser (with your sessions) only covers what
+they do not. Sign-in, two-factor authentication, payment, accepting agreements, submitting for review and
+publishing stay with you.
 
-### Growth et marketing
+### Growth and marketing
 
-| Pack | Skills | Rôle |
+| Pack | Skills | Role |
 |---|---|---|
-| `growth` | 8 | Socle : contexte produit partagé par toutes les skills marketing, plan marketing, lancement, relations presse. Écrit maison : campagnes d'installation d'app, production de créatives et vidéos, publication sur les réseaux sociaux, conformité marketing France et UE. |
-| `growth-seo` | 7 | Audit SEO, recherche IA (GEO), données structurées, SEO programmatique, architecture du site, stratégie de contenu, netlinking. |
-| `growth-ads` | 9 | Publicité Google, Meta, TikTok, LinkedIn, créatives, copywriting, psychologie, images et vidéos marketing, Apple Ads, campagnes d'acquisition d'app. |
-| `growth-social` | 3 | Réseaux sociaux, influence et créateurs, communauté. |
-| `growth-analytics` | 5 | Plan de marquage, GA4, attribution, suivi des conversions, tests A/B, attribution mobile. |
-| `growth-cro` | 11 | Conversion des pages, inscription, onboarding, paywalls, popups, emails et SMS, churn, parrainage, tunnel web vers app. |
+| `growth` | 8 | Base: product context shared by every marketing skill, marketing plan, launch, press relations. In-house: app install campaigns, creative and video production, social media publishing, marketing compliance for France and the EU. |
+| `growth-seo` | 7 | SEO audit, AI search (GEO), structured data, programmatic SEO, site architecture, content strategy, link building. |
+| `growth-ads` | 9 | Google, Meta, TikTok, LinkedIn ads, creatives, copywriting, psychology, marketing images and videos, Apple Ads, app acquisition campaigns. |
+| `growth-social` | 3 | Social media, influencers and creators, community. |
+| `growth-analytics` | 5 | Tracking plan, GA4, attribution, conversion tracking, A/B tests, mobile attribution. |
+| `growth-cro` | 11 | Page conversion, signup, onboarding, paywalls, popups, emails and SMS, churn, referral, web to app funnel. |
 
-Les skills issues de marketingskills lisent un contexte commun (`.agents/product-marketing.md`, créé par
-la skill `product-marketing`) : activer `growth` avec n'importe quel pack `growth-*`. Aucune campagne,
-dépense ni publication ne part sans validation de l'utilisateur. Quelques outils cités par marketingskills
-sont des partenaires rémunérés de ce dépôt d'origine : ils sont signalés comme tels et présentés à côté
-de leurs alternatives.
+The marketingskills skills read a shared context (`.agents/product-marketing.md`, created by the
+`product-marketing` skill): enable `growth` with any `growth-*` pack. No campaign, spend or publication
+goes out without your approval. A few tools cited by marketingskills are paid partners of that upstream
+repository: they are flagged as such and listed next to their alternatives.
 
-### Fondations
+### Foundations
 
-| Pack | Skills | Rôle |
+| Pack | Skills | Role |
 |---|---|---|
-| `ponytail` | 6 | Mode dev senior paresseux : plus petit changement complet, YAGNI, revue et audit. Hooks d'activation. |
-| `superpowers` | 15 | Méthode de travail d'obra : plans, TDD, debug systématique, sous-agents, vérification. Hook de session. |
-| `agent-skills` | 25 | Cycle de vie logiciel complet (Addy Osmani) : spec, build, test, revue, sécurité, perf, CI/CD, livraison. |
-| `skill-factory` | 2 | Créer et tester des skills et des serveurs MCP (skill-creator, mcp-builder). |
-| `team-conventions` | 1 | Conventions de travail d'équipe transverses (méthode, rédaction, secrets). Écrit maison. |
-| `guardrails` | 1 + hooks | Garde-fous imposés par hooks et configurables (em dash, emoji, push sur main, hooks git, secrets, commits, marqueur IA, identifiants de prod). Installé par défaut. Écrit maison. |
+| `ponytail` | 6 | Lazy senior developer mode: smallest complete change, YAGNI, review and audit. Activation hooks. |
+| `superpowers` | 15 | obra's working method: plans, TDD, systematic debugging, subagents, verification. Session hook. |
+| `agent-skills` | 25 | Full software lifecycle (Addy Osmani): spec, build, test, review, security, performance, CI/CD, delivery. |
+| `skill-factory` | 2 | Create and test skills and MCP servers (skill-creator, mcp-builder). |
+| `team-conventions` | 1 | Cross-cutting team working conventions (method, writing, secrets). In-house. |
+| `guardrails` | 1 + hooks | Guardrails enforced by hooks and configurable (em dash, emoji, push to main, git hooks, secrets, commits, AI marker, production credentials). Installed by default. In-house. |
 
-### Sécurité
+### Security
 
-| Pack | Skills | Rôle |
+| Pack | Skills | Role |
 |---|---|---|
-| `security` | 9 | Revue de sécurité maison (méthode, preuves, gravité, pièges de conception), analyse statique Semgrep et CodeQL (maison), audit de code et de diff, supply chain, OWASP, modèle de menace, GitHub Actions. |
-| `sec-audit` | 30 | Recherche de vulnérabilités et reverse (trilwu core). Usage autorisé uniquement. |
-| `sec-defense` | 22 | DFIR, détection (Sigma, Yara), investigation et durcissement cloud (trilwu defense). |
-| `sec-offense` | 40 | Pentest offensif, tests autorisés uniquement (trilwu offense). Hors bundles, installation explicite. |
-| `rea` | 1 | Reverse Engineer Anything. Nécessite le serveur MCP `rea-agents`. |
+| `security` | 9 | In-house security review (method, evidence, severity, design pitfalls), Semgrep and CodeQL static analysis (in-house), code and diff audit, supply chain, OWASP, threat model, GitHub Actions. |
+| `sec-audit` | 30 | Vulnerability research and reversing (trilwu core). Authorized use only. |
+| `sec-defense` | 22 | DFIR, detection (Sigma, Yara), cloud investigation and hardening (trilwu defense). |
+| `sec-offense` | 40 | Offensive pentest, authorized testing only (trilwu offense). Outside bundles, explicit install. |
+| `rea` | 1 | Reverse Engineer Anything. Requires the `rea-agents` MCP server. |
 
 ### Ops
 
-| Pack | Skills | Rôle |
+| Pack | Skills | Role |
 |---|---|---|
-| `devops` | 17 | Terraform, Docker, Kubernetes, GitOps, CI/CD, SLO, PromQL, k6, monitoring synthétique, incident. |
-| `finops` | 6 | Coûts AWS, GKE/Google Cloud, Azure, et scan shift-left de l'infra as code (Infracost). |
-| `monitoring` | 1 | Observabilité complète adaptée au type de projet (web, API, RAG/LLM, data, cron, ML, mobile) : métriques, logs, traces, SLO, alertes, coût. Écrit maison. |
-| `ci-forge` | 1 | CI/CD générée seule selon la stack et l'architecture cible : lint, typage, tests, end to end, conteneurs, Kubernetes, IaC, sécurité, SBOM, staging et prod ; actions épinglées par SHA, check requis `ci-ok`. Écrit maison. |
-| `prod-testing` | 1 | Stratégie de test de bout en bout et validation en production : pyramide CI/CD, smoke tests, canary et rollback automatique, feature flags, monitoring synthétique, tests instables. Écrit maison. |
+| `devops` | 17 | Terraform, Docker, Kubernetes, GitOps, CI/CD, SLOs, PromQL, k6, synthetic monitoring, incidents. |
+| `finops` | 6 | AWS, GKE/Google Cloud and Azure costs, and shift-left scanning of infrastructure as code (Infracost). |
+| `monitoring` | 1 | Complete observability for the project type (web, API, RAG/LLM, data, cron, ML, mobile): metrics, logs, traces, SLOs, alerts, cost. In-house. |
+| `ci-forge` | 1 | CI/CD generated for the stack and target architecture: lint, typing, tests, end to end, containers, Kubernetes, IaC, security, SBOM, staging and prod; actions pinned by SHA, required check `ci-ok`. In-house. |
+| `prod-testing` | 1 | End-to-end test strategy and production validation: CI/CD pyramid, smoke tests, canary and automatic rollback, feature flags, synthetic monitoring, flaky tests. In-house. |
 
-### Data et IA
+### Data and AI
 
-| Pack | Skills | Rôle |
+| Pack | Skills | Role |
 |---|---|---|
-| `data-engineering` | 12 | dbt, Airflow, SQL multi-dialecte, exploration, PySpark, Postgres, qualité des données. |
-| `dataviz` | 5 | Choix de graphique, matplotlib/plotly, dashboards HTML, figures scientifiques, Grafana. |
-| `ml-engineering` | 10 | Fine-tuning (LoRA/QLoRA), évaluation LLM, TRL, RAG, serving vLLM, scikit-learn, MLflow, HF Hub. |
+| `data-engineering` | 12 | dbt, Airflow, multi-dialect SQL, exploration, PySpark, Postgres, data quality. |
+| `dataviz` | 5 | Chart choice, matplotlib/plotly, HTML dashboards, scientific figures, Grafana. |
+| `ml-engineering` | 10 | Fine-tuning (LoRA/QLoRA), LLM evaluation, TRL, RAG, vLLM serving, scikit-learn, MLflow, HF Hub. |
 
 ### Web
 
-| Pack | Skills | Rôle |
+| Pack | Skills | Role |
 |---|---|---|
-| `fullstack` | 2 | Performance React/Next.js et composition React 19. À combiner avec `agent-skills`. |
-| `ui-design` | 7 | Design anti AI-slop : impeccable, frontend-design, Web Interface Guidelines, deslop, refonte. |
-| `compliance` | 10 | RGAA, WCAG, conformité d'une feature, sécurité du développement (ANSSI). Skills FR écrites maison : RGPD/CNIL, cookies et consentement, mentions légales et CGU/CGV. |
+| `fullstack` | 2 | React/Next.js performance and React 19 composition. Combine with `agent-skills`. |
+| `ui-design` | 7 | Anti AI-slop design: impeccable, frontend-design, Web Interface Guidelines, deslop, redesign, UI review (in-house). |
+| `compliance` | 10 | RGAA, WCAG, feature compliance, secure development (ANSSI). In-house French-law skills: GDPR/CNIL, cookies and consent, legal notices and terms. |
 
-### Créatif
+### Creative
 
-| Pack | Skills | Rôle |
+| Pack | Skills | Role |
 |---|---|---|
-| `motion-design` | 11 | GSAP, principes de motion (LottieFiles), Manim. |
-| `video-editing` | 4 | Montage par conversation (video-use), FFmpeg, transcription locale (faster-whisper), Manim. |
+| `motion-design` | 11 | GSAP, motion principles (LottieFiles), Manim. |
+| `video-editing` | 4 | Conversational editing (video-use), FFmpeg, local transcription (faster-whisper), Manim. |
 
-## Outils externes
+## External tools
 
-Certaines skills pilotent un outil à installer à part (`./install.sh --with-tools` installe `rea`,
-`asc` et `gplay`) :
+Some skills drive a tool installed separately (`./install.sh --with-tools` installs `rea`, `asc` and
+`gplay`):
 
-- `rea` : serveur MCP `rea-agents` (`npx rea-agents setup --client claude_code`).
-- `video-editing` : `ffmpeg` sur le PATH ; `faster-whisper` et `video-use` ont des dépendances Python (voir leurs README). `video-use` utilise l'API payante ElevenLabs pour la transcription : lui préférer `faster-whisper` en local.
-- `ml-engineering`, `data-engineering` : les outils de chaque écosystème (dbt, Airflow, HF, vLLM, MLflow) selon la skill.
-- `store-apple` : CLI `asc` (App Store Connect) et `store-google` : CLI `gplay` (Play Console). L'installeur
-  télécharge la version épinglée et vérifie son empreinte SHA-256. `asc` envoie par défaut une télémétrie
-  d'usage pseudonyme : l'installeur la désactive (`asc telemetry disable`, ou `ASC_TELEMETRY_DISABLED=1`).
-  Les sous-commandes `asc web` passent par une session web Apple non officielle : à utiliser en
-  connaissance de cause. Clés d'API App Store Connect et compte de service Google Play à créer par
-  l'utilisateur.
-- `mobile` et `mobile-expo` : fastlane, EAS CLI, Maestro ou Detox selon le projet, à installer depuis leur
-  documentation officielle.
-- SEO technique et audit publicitaire approfondis : les plugins
-  [claude-seo](https://github.com/AgriciDaniel/claude-seo) et [claude-ads](https://github.com/AgriciDaniel/claude-ads)
-  complètent `growth-seo` et `growth-ads`. Ils ne sont pas importés : ce sont des systèmes complets avec
-  leur environnement Python, qui recoupent largement marketingskills. Les installer depuis leur dépôt si
-  besoin.
-- iOS avancé : le plugin [Axiom](https://github.com/CharlesWiltgen/Axiom) (StoreKit, notifications,
-  sécurité, App Review) complète `mobile-ios`. Il n'est pas importé : ses skills dépendent de ses propres
-  binaires, de son serveur MCP et de ses commandes. L'installer depuis son marketplace si besoin.
+- `rea`: the `rea-agents` MCP server (`npx rea-agents setup --client claude_code`, or the client of your agent).
+- `video-editing`: `ffmpeg` on the PATH; `faster-whisper` and `video-use` have Python dependencies (see
+  their READMEs). `video-use` uses the paid ElevenLabs API for transcription: prefer local `faster-whisper`.
+- `ml-engineering`, `data-engineering`: each ecosystem's tools (dbt, Airflow, HF, vLLM, MLflow) as needed.
+- `store-apple`: the `asc` CLI (App Store Connect) and `store-google`: the `gplay` CLI (Play Console). The
+  installer downloads the pinned version and checks its SHA-256. `asc` sends pseudonymous usage telemetry
+  by default: the installer turns it off (`asc telemetry disable`, or `ASC_TELEMETRY_DISABLED=1`). The
+  `asc web` subcommands use an unofficial Apple web session: use them knowingly. App Store Connect API
+  keys and the Google Play service account are created by you.
+- `mobile` and `mobile-expo`: fastlane, EAS CLI, Maestro or Detox depending on the project, from their
+  official documentation.
+- Deeper technical SEO and ad audits: [claude-seo](https://github.com/AgriciDaniel/claude-seo) and
+  [claude-ads](https://github.com/AgriciDaniel/claude-ads) complement `growth-seo` and `growth-ads`. They
+  are not imported: they are complete systems with their own Python environment that largely overlap
+  marketingskills.
+- Advanced iOS: [Axiom](https://github.com/CharlesWiltgen/Axiom) complements `mobile-ios`. It is not
+  imported: its skills depend on its own binaries, MCP server and commands.
 
-## Garde-fous
+## Session hooks (Claude Code)
 
-Le pack `guardrails` fait respecter des règles par des hooks : Claude ne peut ni les oublier ni les
-contourner. Par défaut, il bloque :
-- l'em dash ajouté dans un fichier, un commit, une PR ou une issue ;
-- l'emoji non demandé (le marqueur IA ✨ et la ligne d'attribution restent permis) ;
-- le push sur `main` ou `master` (refspec, branche courante, `HEAD`, suppression) ;
-- tout contournement des hooks git (`--no-verify`, `core.hooksPath`, `HUSKY=0`) ;
-- les secrets dans un fichier, une commande ou un commit, et les fichiers `.env` dans git ;
-- un message de commit hors format Conventional Commits, un titre de PR ou d'issue sans marqueur IA ;
-- la recherche d'identifiants de production hors du projet (secrets Kubernetes, coffres, historique du
-  shell, `.env` d'un autre projet, tunnels vers la prod).
+Two packs install a `SessionStart` hook that runs at every session start:
 
-Il avertit seulement quand une configuration de lint est modifiée ou qu'une suppression d'avertissement
-est ajoutée, et demande votre accord avant toute modification de sa propre configuration.
+- `ponytail` turns on its mode (also in each subagent, about 2,900 characters) and can offer a status
+  line. Installed by default; `app-factory` subagents rely on its skills (`ponytail-review` in review,
+  `ponytail-audit` and `ponytail-debt` in takeover). Other agents get its rules in their instructions file.
+- `superpowers` injects its working method.
 
-Chaque règle se règle ou se coupe dans `.claude/guardrails.json` (projet) ou `~/.claude/guardrails.json`
-(machine) ; `"enabled": false` coupe tout, `claude plugin disable guardrails@ultime-skill` retire le
-plugin. Pour une équipe sans le plugin, les sessions cloud ou l'autopilot,
-`node <plugin>/runtime/setup.cjs install-project` copie les garde-fous dans le `.claude/` du projet.
-Détail dans la skill `guardrails`. Nécessite `node`.
+These hooks cost context and change the default behavior. To remove them, uninstall the pack.
 
-## Hooks de session
+## Licenses
 
-Deux packs installent un hook `SessionStart` qui s'exécute à chaque démarrage de session :
+The original work of this repository (scripts, manifests, installer, in-house skills, documentation) is
+under the [MIT license](LICENSE). Each imported skill keeps the license of its upstream project, copied
+into its folder and listed in [THIRD_PARTY.md](THIRD_PARTY.md).
 
-- `ponytail` active son mode (aussi dans chaque sous-agent, environ 2 900 caractères) et peut proposer
-  une status line. Installé par défaut ; les agents d'app-factory s'appuient sur ses skills
-  (`ponytail-review` en revue, `ponytail-audit` et `ponytail-debt` en reprise).
-- `superpowers` injecte sa méthode de travail.
+- **Permissive licenses only**: MIT, Apache-2.0 and BSD-3-Clause. No copyleft (GPL, AGPL, CC-BY-SA, MPL)
+  or unlicensed source is imported; the skills that were (Trail of Bits, HashiCorp, Sentry's security
+  review) were removed and replaced by in-house skills or permissively licensed equivalents.
+- Every imported folder whose files were changed at import time contains a `MODIFICATIONS.md` saying which
+  ones and how (Apache-2.0 section 4.b), next to the upstream license and `NOTICE`.
+- Trademarks (Expo, Vercel, Flutter, Apple...) are not granted by these licenses, nor the rights to the
+  Apple device frames of `app-store-screenshots`: for an App Store listing, prefer Apple's official frames.
 
-Ces hooks ont un coût en contexte et modifient le comportement par défaut. Les retirer : désinstaller le
-pack, ou supprimer le champ `hooks` de son `plugin.json`.
+Details in [Licenses](docs/licenses.md).
 
-## Licences
+## Contributing
 
-Le travail propre à ce dépôt (scripts, manifestes, documentation) est sous licence MIT. Chaque skill
-importée garde la licence de son projet d'origine, copiée dans son dossier et recensée dans
-[THIRD_PARTY.md](THIRD_PARTY.md). Points d'attention :
-
-- **Uniquement des licences permissives** : MIT, Apache-2.0 et BSD-3-Clause. Aucune source copyleft
-  (GPL, AGPL, CC-BY-SA, MPL) ni sans licence n'est importée : les skills de Trail of Bits (CC-BY-SA), de
-  HashiCorp (MPL) et la revue de sécurité de Sentry (dérivée des fiches OWASP, CC-BY-SA) ont été retirées et
-  remplacées par des skills écrites maison (`security-review`, `sast`, `ui-review`) ou par des skills
-  équivalentes sous licence permissive.
-- Chaque dossier importé dont des fichiers ont été modifiés à l'import contient un `MODIFICATIONS.md` qui
-  dit lesquels et comment (exigence d'Apache-2.0 4.b), en plus de la licence et du `NOTICE` d'origine.
-- Deux skills Vercel (`fullstack`) déclarent MIT dans leur frontmatter sans fichier de licence dans leur
-  dépôt, et la skill `scikit-learn` déclare BSD-3-Clause dans un dépôt MIT : un `LICENSE-NOTE.md` le précise.
-- Les marques (Expo, Vercel, Flutter, Apple...) ne sont pas concédées par ces licences, ni les droits sur
-  les cadres d'appareils Apple de `app-store-screenshots` : pour une fiche App Store, préférer les cadres
-  officiels d'Apple (Apple Design Resources).
-
-Licences écartées à l'import : non commerciales (CC-BY-NC-SA), PolyForm, AGPL, GPL, CC-BY-SA, MPL, et
-dépôts sans licence.
-
-## Maintenance
-
-La bibliothèque est reproductible : `plugins/` est entièrement régénéré, rien n'y est édité à la main. Les
-skills importées viennent des dépôts épinglés ; les skills écrites maison vivent sous `authored/` et sont
-superposées dans `plugins/` au build.
-
-```bash
-python scripts/build.py          # tout : vendor.json + import + overlay authored + manifestes + check
-claude plugin validate .         # validation par la CLI Claude Code
-```
-
-Détail des étapes, lancées par `build.py` (ou à la main) :
-
-```bash
-python scripts/gen_vendor.py     # réécrit vendor.json (sources épinglées + liste des imports)
-python scripts/vendor.py         # réimporte depuis les dépôts, nettoie, écrit THIRD_PARTY.md
-python scripts/gen_manifests.py  # réécrit les plugin.json, les bundles et marketplace.json
-python scripts/check.py          # contrôles (frontmatter, em dash, unicode invisible, motifs à risque)
-```
-
-- Ajouter ou changer une skill **importée** : éditer `scripts/gen_vendor.py` (et le catalogue dans
-  `scripts/gen_manifests.py` si c'est un nouveau pack), puis `python scripts/build.py`.
-- Ajouter une skill **écrite maison** : la créer sous `authored/<pack>/skills/<skill>/SKILL.md`, déclarer
-  le pack dans `scripts/gen_manifests.py` s'il est nouveau, puis `python scripts/build.py`.
-
-`scripts/vendor.py` ne modifie jamais les dépôts d'origine et n'exécute aucun de leurs scripts.
+Issues and pull requests are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). The library is reproducible:
+`plugins/` is fully regenerated by `python scripts/build.py` and never edited by hand; in-house content
+lives in `authored/`. Security issues: [SECURITY.md](SECURITY.md).

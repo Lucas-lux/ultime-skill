@@ -41,7 +41,7 @@ def table(group_key, title):
     for r in runs:
         groups[group_key(r)].append(r)
     print(f"\n## {title}")
-    print("| groupe | n | " + " | ".join(METRICS) + " | reads | greps | graphify |")
+    print("| group | n | " + " | ".join(METRICS) + " | reads | greps | graphify |")
     print("|---" * (len(METRICS) + 5) + "|")
     out = {}
     for key in sorted(groups):
@@ -58,9 +58,9 @@ def table(group_key, title):
 
 
 summary = {
-    "by_condition": table(lambda r: (r["condition"],), "Par condition"),
-    "by_repo_condition": table(lambda r: (r["repo"], r["condition"]), "Par depot et condition"),
-    "by_question_type_condition": table(lambda r: (r["question"], r["condition"]), "Par type de question et condition"),
+    "by_condition": table(lambda r: (r["condition"],), "By condition"),
+    "by_repo_condition": table(lambda r: (r["repo"], r["condition"]), "By repo and condition"),
+    "by_question_type_condition": table(lambda r: (r["question"], r["condition"]), "By question type and condition"),
     "judge_cost_usd": round(sum(j.get("judge_cost_usd") or 0 for j in judges + judges2), 2),
     "runs_cost_usd": round(sum(r["cost_usd"] or 0 for r in runs), 2),
 }

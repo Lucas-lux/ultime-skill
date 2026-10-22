@@ -1,33 +1,32 @@
-# Conteneurs et Kubernetes
+# Containers and Kubernetes
 
-## Conteneurs (un Dockerfile ou un compose detecte)
+## Containers (a Dockerfile or a compose file detected)
 
-| Job | Comment | Niveau |
+| Job | How | Level |
 |---|---|---|
 | lint | `hadolint/hadolint-action@v3.5.0` (hadolint 2.15.1), `failure-threshold: warning` | PR |
-| build | `docker/setup-buildx-action@v4` puis `docker/build-push-action@v7` avec `load: true`, `cache-from/to: type=gha`, `platforms` de la cible | PR |
-| scan | `aquasecurity/trivy-action@v0.36.0` (Trivy 0.76.1) sur l'image : `severity: HIGH,CRITICAL`, `ignore-unfixed: true`, `exit-code: 1`, SARIF publie si GitHub Advanced Security | PR |
-| structure | `container-structure-test` (1.22.1) : utilisateur non root, ports, fichiers attendus, absence d'outils de build dans l'image finale | PR |
-| smoke | `docker compose up -d --wait` (healthchecks obligatoires), requete sur `/health` et un parcours minimal, `docker compose logs` si echec | PR |
-| publish | `docker/login-action@v4` sur GHCR avec `GITHUB_TOKEN` (`packages: write`), `docker/metadata-action@v6` (tags SHA et version), push | principale |
-| sbom | `anchore/sbom-action@v0.24.3` (SPDX) attache a l'image ; `actions/attest-build-provenance@v4` (`id-token: write`, `attestations: write`) | principale |
-| sign | `sigstore/cosign-installer@v4.1.2` (pas de tag majeur mobile `v4`) puis `cosign sign --yes` en keyless (OIDC) | release |
+| build | `docker/setup-buildx-action@v4` then `docker/build-push-action@v7` with `load: true`, `cache-from/to: type=gha`, the target's `platforms` | PR |
+| scan | `aquasecurity/trivy-action@v0.36.0` (Trivy 0.76.1) on the image: `severity: HIGH,CRITICAL`, `ignore-unfixed: true`, `exit-code: 1`, SARIF published if GitHub Advanced Security | PR |
+| structure | `container-structure-test` (1.22.1): non-root user, ports, expected files, no build tools in the final image | PR |
+| smoke | `docker compose up -d --wait` (healthchecks mandatory), request on `/health` and a minimal journey, `docker compose logs` on failure | PR |
+| publish | `docker/login-action@v4` on GHCR with `GITHUB_TOKEN` (`packages: write`), `docker/metadata-action@v6` (SHA and version tags), push | main |
+| sbom | `anchore/sbom-action@v0.24.3` (SPDX) attached to the image; `actions/attest-build-provenance@v4` (`id-token: write`, `attestations: write`) | main |
+| sign | `sigstore/cosign-installer@v4.1.2` (no moving major tag `v4`) then `cosign sign --yes` keyless (OIDC) | release |
 
-Exigences verifiees : build multi-etapes, image de base epinglee par digest (Dependabot `docker`),
-utilisateur non root, `HEALTHCHECK` ou probe equivalente, pas de secret en `ARG` ou `ENV`,
-`.dockerignore` present.
+Verified requirements: multi-stage build, base image pinned by digest (Dependabot `docker`), non-root
+user, `HEALTHCHECK` or equivalent probe, no secret in `ARG` or `ENV`, `.dockerignore` present.
 
-## Kubernetes (manifestes, Helm ou Kustomize detectes)
+## Kubernetes (manifests, Helm or Kustomize detected)
 
-| Job | Comment | Niveau |
+| Job | How | Level |
 |---|---|---|
-| render | `helm lint --strict` puis `helm template` (Helm 4.3.1, `azure/setup-helm@v5`) ; `kustomize build` | PR |
-| schema | `kubeconform -strict -summary -ignore-missing-schemas` (0.8.0) avec le catalogue de CRD (`-schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'`) sur le rendu | PR |
-| policy | `kube-linter lint` (0.8.3) sur le rendu : limites de ressources, probes, `runAsNonRoot`, `readOnlyRootFilesystem`, pas de `latest` ; `trivy config` en complement | PR |
-| deploy-test | `helm/kind-action@v1` (kind 0.33.0) : cluster ephemere, `kind load docker-image` de l'image construite, `helm upgrade --install --wait --timeout 5m` (ou `kubectl apply -k`), `kubectl rollout status`, test de fumee par `kubectl port-forward` ou Job de test, `kubectl get events` et logs si echec | principale (PR si chart modifie) |
-| upgrade | dans le meme cluster : installer la version precedente du chart, puis la nouvelle (montee de version sans casse) | nuit |
+| render | `helm lint --strict` then `helm template` (Helm 4.3.1, `azure/setup-helm@v5`); `kustomize build` | PR |
+| schema | `kubeconform -strict -summary -ignore-missing-schemas` (0.8.0) with the CRD catalog (`-schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'`) on the render | PR |
+| policy | `kube-linter lint` (0.8.3) on the render: resource limits, probes, `runAsNonRoot`, `readOnlyRootFilesystem`, no `latest`; `trivy config` as a complement | PR |
+| deploy-test | `helm/kind-action@v1` (kind 0.33.0): ephemeral cluster, `kind load docker-image` of the built image, `helm upgrade --install --wait --timeout 5m` (or `kubectl apply -k`), `kubectl rollout status`, smoke test through `kubectl port-forward` or a test Job, `kubectl get events` and logs on failure | main (PR if the chart changed) |
+| upgrade | in the same cluster: install the previous version of the chart, then the new one (upgrade without breakage) | nightly |
 
-- Valeurs de CI dediees (`values-ci.yaml`) : une replique, ressources faibles, dependances en
-  sous-charts ou conteneurs de service.
-- Pas d'acces a un cluster reel depuis la CI de PR ; le deploiement reel passe par `cd.md` (GitOps ou
-  environnement GitHub).
+- Dedicated CI values (`values-ci.yaml`): one replica, low resources, dependencies as subcharts or
+  service containers.
+- No access to a real cluster from the PR CI; the real deployment goes through `cd.md` (GitOps or
+  GitHub environment).

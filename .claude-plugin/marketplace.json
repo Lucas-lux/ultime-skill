@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "ultime-skill",
-  "description": "Bibliotheque de skills Claude prete pour la production : orchestration de projet de A a Z, gestion de produit, mobile et stores, growth et marketing, securite, devops, finops, data, ML, full stack, design, conformite, motion et video.",
+  "description": "Production-ready skills, subagents and guardrails for AI coding agents: end-to-end project orchestration, product management, mobile and stores, growth and marketing, security, devops, finops, data, ML, full stack, design, compliance, motion and video.",
   "owner": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"
@@ -10,272 +10,272 @@
     {
       "name": "ponytail",
       "source": "./plugins/ponytail",
-      "description": "Mode dev senior paresseux : le plus petit changement complet, reutilisation avant ecriture, YAGNI. Hooks d'activation (/ponytail lite|full|ultra) et commandes de revue et d'audit."
+      "description": "Lazy senior developer mode: the smallest complete change, reuse before writing, YAGNI. Activation hooks (/ponytail lite|full|ultra) and review and audit commands."
     },
     {
       "name": "superpowers",
       "source": "./plugins/superpowers",
-      "description": "Methode de travail d'obra : brainstorming, redaction de plans, TDD, debug systematique, sous-agents, verification avant de conclure. Charge sa methode au demarrage de session."
+      "description": "obra's working method: brainstorming, writing plans, TDD, systematic debugging, subagents, verification before concluding. Loads its method at session start."
     },
     {
       "name": "agent-skills",
       "source": "./plugins/agent-skills",
-      "description": "Cycle de vie logiciel complet (Addy Osmani) : spec, plan, build, test, revue, securite, performance, CI/CD, observabilite, mise en prod. Base transverse full stack et devops."
+      "description": "Full software lifecycle (Addy Osmani): spec, plan, build, test, review, security, performance, CI/CD, observability, release. Cross-cutting base for full stack and devops."
     },
     {
       "name": "skill-factory",
       "source": "./plugins/skill-factory",
-      "description": "Creer, tester et ameliorer des skills et des serveurs MCP (skill-creator et mcp-builder d'Anthropic)."
+      "description": "Create, test and improve skills and MCP servers (Anthropic's skill-creator and mcp-builder)."
     },
     {
       "name": "rea",
       "source": "./plugins/rea",
-      "description": "Reverse Engineer Anything : binaires, apps Electron/JS, Android, firmware, navigateur. Pilote le serveur MCP rea-agents (a installer a part)."
+      "description": "Reverse Engineer Anything: binaries, Electron/JS apps, Android, firmware, browser. Drives the rea-agents MCP server (installed separately)."
     },
     {
       "name": "security",
       "source": "./plugins/security",
-      "description": "Audit d'application et revue de securite : methode maison (preuves, gravite, pieges de conception), OWASP Top 10 et ASVS, audit de code et revue de diff, Semgrep et CodeQL, analyse de variantes, chaine d'approvisionnement, modele de menace, APIs a risque, scan de skills."
+      "description": "Application audit and security review: in-house method (evidence, severity, design pitfalls), OWASP Top 10 and ASVS, code audit and diff review, Semgrep and CodeQL, variant analysis, supply chain, threat model, risky APIs, skill scanning."
     },
     {
       "name": "sec-audit",
       "source": "./plugins/sec-audit",
-      "description": "Audit de code et recherche de vulnerabilites (trilwu secskills-core) : analyse de source par taint, reverse de binaires et d'apps, crypto, supply chain, securite des systemes IA et des serveurs MCP. Pour usage autorise uniquement."
+      "description": "Code audit and vulnerability research (trilwu secskills-core): taint analysis of source, reversing binaries and apps, crypto, supply chain, security of AI systems and MCP servers. Authorized use only."
     },
     {
       "name": "sec-defense",
       "source": "./plugins/sec-defense",
-      "description": "Defense et reponse a incident (trilwu secskills-defense) : DFIR disque/memoire/reseau, analyse de malware et de phishing, detections Sigma et Yara, durcissement et investigation cloud (AWS, Azure, GCP, M365), threat hunting."
+      "description": "Defense and incident response (trilwu secskills-defense): disk/memory/network DFIR, malware and phishing analysis, Sigma and Yara detections, cloud hardening and investigation (AWS, Azure, GCP, M365), threat hunting."
     },
     {
       "name": "sec-offense",
       "source": "./plugins/sec-offense",
-      "description": "Pentest pour tests autorises uniquement (trilwu secskills-offense) : exploitation web/API/JWT/SSRF/XXE, Active Directory et Entra, cloud et conteneurs, escalade de privileges, reconnaissance. Reserve aux engagements autorises, CTF et recherche."
+      "description": "Pentest for authorized testing only (trilwu secskills-offense): web/API/JWT/SSRF/XXE exploitation, Active Directory and Entra, cloud and containers, privilege escalation, reconnaissance. Reserved for authorized engagements, CTFs and research."
     },
     {
       "name": "team-conventions",
       "source": "./plugins/team-conventions",
-      "description": "Conventions de travail d'equipe transverses : verifier plutot que croire, demander avant un gros lot, questions a choix multiples, langues, pas d'em dash, marquage IA, termes techniques en entier, main/replica, secrets hors du code."
+      "description": "Cross-cutting team working conventions: verify rather than trust, ask before a large batch, multiple-choice questions, languages, no em dash, AI marker, technical terms in full, main/replica, secrets out of the code."
     },
     {
       "name": "monitoring",
       "source": "./plugins/monitoring",
-      "description": "Mise en place du monitoring le plus complet selon le type de projet (app web, API, RAG/LLM, pipeline data, cron, training et serving ML, mobile) : metriques, logs, traces, SLO, alertes, dashboards, cout, et signaux specifiques au domaine (LLMOps, MLOps, data). Vendor-neutral (OpenTelemetry, Prometheus, Grafana)."
+      "description": "The most complete monitoring for the project type (web app, API, RAG/LLM, data pipeline, cron, ML training and serving, mobile): metrics, logs, traces, SLOs, alerts, dashboards, cost, and domain signals (LLMOps, MLOps, data). Vendor-neutral (OpenTelemetry, Prometheus, Grafana)."
     },
     {
       "name": "prod-testing",
       "source": "./plugins/prod-testing",
-      "description": "Strategie de test de bout en bout et validation en production, vendor-neutral : pyramide et etapes CI/CD (unitaire, contrat, integration, end to end, smoke, canary), smoke tests post-deploy, deploiement progressif avec rollback automatique, feature flags (OpenFeature), monitoring synthetique, gestion des tests instables."
+      "description": "End-to-end test strategy and production validation, vendor-neutral: CI/CD pyramid and stages (unit, contract, integration, end to end, smoke, canary), post-deploy smoke tests, progressive delivery with automatic rollback, feature flags (OpenFeature), synthetic monitoring, flaky tests."
     },
     {
       "name": "devops",
       "source": "./plugins/devops",
-      "description": "DevOps et SRE : Terraform/OpenTofu, Docker, Kubernetes, GitOps, pipelines CI/CD et GitHub Actions, SLO et budgets d'erreur, PromQL, k6, monitoring synthetique, reponse a incident et postmortem."
+      "description": "DevOps and SRE: Terraform/OpenTofu, Docker, Kubernetes, GitOps, CI/CD pipelines and GitHub Actions, SLOs and error budgets, PromQL, k6, synthetic monitoring, incident response and postmortems."
     },
     {
       "name": "finops",
       "source": "./plugins/finops",
-      "description": "FinOps multi-cloud : analyse et optimisation des couts AWS (Cost Explorer, SP/RI), GKE/Google Cloud, Azure, et scan de cout shift-left de l'infra as code (Infracost)."
+      "description": "Multi-cloud FinOps: AWS cost analysis and optimization (Cost Explorer, SP/RI), GKE/Google Cloud, Azure, and shift-left cost scanning of infrastructure as code (Infracost)."
     },
     {
       "name": "data-engineering",
       "source": "./plugins/data-engineering",
-      "description": "Data engineering : modeles et tests dbt, DAGs Airflow (ecriture, test, debug, migration 2 vers 3), SQL multi-dialecte, exploration de donnees, PySpark, Postgres, qualite des donnees."
+      "description": "Data engineering: dbt models and tests, Airflow DAGs (writing, testing, debugging, 2 to 3 migration), multi-dialect SQL, data exploration, PySpark, Postgres, data quality."
     },
     {
       "name": "dataviz",
       "source": "./plugins/dataviz",
-      "description": "Data visualisation : choix du type de graphique, matplotlib/seaborn/plotly, dashboards HTML autoportants, figures scientifiques accessibles, dashboards Grafana."
+      "description": "Data visualization: choosing the chart type, matplotlib/seaborn/plotly, self-contained HTML dashboards, accessible scientific figures, Grafana dashboards."
     },
     {
       "name": "ml-engineering",
       "source": "./plugins/ml-engineering",
-      "description": "ML engineering : choix de methode de fine-tuning, recettes LoRA/QLoRA, harnais d'evaluation et calibration de juge LLM, TRL, RAG, serving vLLM, benchmarks lm-eval, scikit-learn, tracing MLflow, Hugging Face Hub."
+      "description": "ML engineering: choosing a fine-tuning method, LoRA/QLoRA recipes, evaluation harnesses and LLM judge calibration, TRL, RAG, vLLM serving, lm-eval benchmarks, scikit-learn, MLflow tracing, Hugging Face Hub."
     },
     {
       "name": "fullstack",
       "source": "./plugins/fullstack",
-      "description": "Full stack web en production : 70 regles de performance React et Next.js, patterns de composition React 19. Se combine avec le pack agent-skills (APIs, securite, perf, livraison)."
+      "description": "Production full stack web: 70 React and Next.js performance rules, React 19 composition patterns. Combines with the agent-skills pack (APIs, security, performance, delivery)."
     },
     {
       "name": "ui-design",
       "source": "./plugins/ui-design",
-      "description": "Design qui ne fait pas vibe-code : systeme anti AI-slop (impeccable), direction artistique et liste des tells IA (frontend-design), Web Interface Guidelines de Vercel, contraintes deslop, stress-test d'UI, refonte de sites generiques."
+      "description": "Design that does not look vibe-coded: anti AI-slop system (impeccable), art direction and the list of AI tells (frontend-design), Vercel's Web Interface Guidelines, deslop constraints, UI stress tests, redesign of generic sites."
     },
     {
       "name": "compliance",
       "source": "./plugins/compliance",
-      "description": "Reglementaire et conformite : audit RGAA (accessibilite, en francais), regles RGPD a l'ingenierie, conseil WCAG et cartographie legale (EAA), verification de conformite d'une feature, securite du developpement (ANSSI), corrections d'accessibilite au niveau du code."
+      "description": "Regulation and compliance: RGAA audit (French accessibility standard), GDPR rules for engineering, WCAG advice and legal mapping (EAA), feature compliance check, secure development (ANSSI), code-level accessibility fixes. French law: CNIL, cookies, legal notices and terms."
     },
     {
       "name": "motion-design",
       "source": "./plugins/motion-design",
-      "description": "Motion design : GSAP (core, timeline, ScrollTrigger, plugins, performance, frameworks), principes de motion agnostiques (LottieFiles), animations mathematiques Manim (ManimCE et planification de scenes)."
+      "description": "Motion design: GSAP (core, timeline, ScrollTrigger, plugins, performance, frameworks), framework-agnostic motion principles (LottieFiles), Manim mathematical animations (ManimCE and scene planning)."
     },
     {
       "name": "video-editing",
       "source": "./plugins/video-editing",
-      "description": "Montage video complet : edition par conversation avec EDL et sous-titres (video-use), construction de commandes FFmpeg (coupe, concat, transitions, loudness, presets reseaux sociaux), transcription locale faster-whisper, rendu Manim."
+      "description": "Complete video editing: conversational editing with EDL and subtitles (video-use), building FFmpeg commands (cut, concat, transitions, loudness, social media presets), local faster-whisper transcription, Manim rendering."
     },
     {
       "name": "app-factory",
       "source": "./plugins/app-factory",
-      "description": "Orchestrateur de projet de A a Z : de l'idee, d'une app a cloner en la personnalisant, ou d'une app existante a terminer, jusqu'au produit fini en production. 18 sous-agents (produit, gestion de projet, architecture, donnees, design, securite, conformite, finops, dev, revue, QA, release, SRE, growth, verificateur), phases et portes de validation, etat sur disque et reprise, mode autopilot (reveils planifies, decisions de vision seules remontees par issue GitHub)."
+      "description": "End-to-end project orchestrator: from an idea, an app to clone and personalize, or an existing app to finish, to the finished product in production. 18 subagents (product, project management, architecture, data, design, security, compliance, finops, dev, review, QA, release, SRE, growth, verifier), phases and validation gates, state on disk and resume, autopilot mode (scheduled wakeups, only vision decisions raised as GitHub issues)."
     },
     {
       "name": "product-management",
       "source": "./plugins/product-management",
-      "description": "Gestion de produit : decouverte (hypotheses, opportunity solution tree, entretiens), strategie (vision, positionnement, modele economique, prix), marche (concurrence, personas, segments), execution (PRD, user stories, roadmap, pre-mortem, sprint, retro, notes de version), retro-specification d'un code existant (code-to-prd, schematic, intended-vs-implemented)."
+      "description": "Product management: discovery (assumptions, opportunity solution tree, interviews), strategy (vision, positioning, business model, pricing), market (competition, personas, segments), execution (PRD, user stories, roadmap, pre-mortem, sprint, retro, release notes), reverse specification of existing code (code-to-prd, schematic, intended-vs-implemented)."
     },
     {
       "name": "mobile",
       "source": "./plugins/mobile",
-      "description": "Mobile multiplateforme, ecrit maison : publication iOS et Android (signature, versions, TestFlight, pistes Play, fastlane, EAS), securite OWASP MASVS, notifications push, deep links, tests de bout en bout (Maestro, Detox), accessibilite mobile, achats integres sans service tiers."
+      "description": "Cross-platform mobile, written in-house: iOS and Android release (signing, versions, TestFlight, Play tracks, fastlane, EAS), OWASP MASVS security, push notifications, deep links, end-to-end tests (Maestro, Detox), mobile accessibility, in-app purchases without a third-party service."
     },
     {
       "name": "mobile-expo",
       "source": "./plugins/mobile-expo",
-      "description": "Expo et React Native : skills officielles Expo (router, UI native, design system, modules, upgrade, EAS Build/Submit/Update/Workflows, migration web vers natif), performance et upgrade React Native et React Navigation (Callstack), tests React Native Testing Library."
+      "description": "Expo and React Native: official Expo skills (router, native UI, design system, modules, upgrade, EAS Build/Submit/Update/Workflows, web to native migration), React Native performance and upgrade and React Navigation (Callstack), React Native Testing Library tests."
     },
     {
       "name": "mobile-ios",
       "source": "./plugins/mobile-ios",
-      "description": "iOS natif : SwiftUI, concurrence Swift, Swift Testing, SwiftData (Paul Hudson), accessibilite iOS (VoiceOver, Dynamic Type)."
+      "description": "Native iOS: SwiftUI, Swift concurrency, Swift Testing, SwiftData (Paul Hudson), iOS accessibility (VoiceOver, Dynamic Type)."
     },
     {
       "name": "mobile-android",
       "source": "./plugins/mobile-android",
-      "description": "Android natif : skills officielles Google (Compose performance et adaptatif, migration XML vers Compose, Navigation 3, edge-to-edge, AGP 9, R8, ANR, tests, securite des intents et permissions, politiques Play) et Google Play Billing (RevenueCat, independant de leur service)."
+      "description": "Native Android: official Google skills (Compose performance and adaptive layouts, XML to Compose migration, Navigation 3, edge-to-edge, AGP 9, R8, ANR, testing, intent and permission security, Play policies) and Google Play Billing (RevenueCat, independent of their service)."
     },
     {
       "name": "mobile-flutter",
       "source": "./plugins/mobile-flutter",
-      "description": "Flutter et Dart : skills officielles (architecture, mise en page responsive, routage declaratif, localisation, serialisation JSON, HTTP, tests de widgets et d'integration, analyse statique, erreurs d'execution)."
+      "description": "Flutter and Dart: official skills (architecture, responsive layout, declarative routing, localization, JSON serialization, HTTP, widget and integration tests, static analysis, runtime errors)."
     },
     {
       "name": "app-stores",
       "source": "./plugins/app-stores",
-      "description": "Stores, ecrit maison : dossier de fiche App Store et Google Play dans les limites de chaque store, formulaire Data safety depuis le code et les SDK, pilotage des consoles dans le navigateur pour ce que les API ne couvrent pas."
+      "description": "Stores, written in-house: App Store and Google Play listing kit within each store's limits, Data safety form from the code and SDKs, driving the consoles in the browser for what the APIs do not cover."
     },
     {
       "name": "store-apple",
       "source": "./plugins/store-apple",
-      "description": "App Store Connect par le CLI asc (signature, build, TestFlight, release, metadonnees, captures, prix, crashs), prevention des rejets App Review (preflight par type d'app), politique de confidentialite et labels de confidentialite Apple."
+      "description": "App Store Connect through the asc CLI (signing, build, TestFlight, release, metadata, screenshots, pricing, crashes), App Review rejection prevention (preflight per app type), privacy policy and Apple privacy labels."
     },
     {
       "name": "store-google",
       "source": "./plugins/store-google",
-      "description": "Google Play par le CLI gplay (build Gradle, release, rollout progressif, testeurs, metadonnees, captures, verifications avant soumission, achats, prix, vitals) et audit des politiques Google Play depuis le code."
+      "description": "Google Play through the gplay CLI (Gradle build, release, staged rollout, testers, metadata, screenshots, pre-submission checks, purchases, pricing, vitals) and Google Play policy audit from the code."
     },
     {
       "name": "store-aso",
       "source": "./plugins/store-aso",
-      "description": "App Store Optimization pour les deux stores : audit, mots-cles, metadonnees, captures (generateur Next.js inclus), video de presentation, icone, pages produit personnalisees, evenements, tests A/B de fiche, localisation, avis et notes, gestion des rejets."
+      "description": "App Store Optimization for both stores: audit, keywords, metadata, screenshots (Next.js generator included), preview video, icon, custom product pages, events, listing A/B tests, localization, reviews and ratings, handling rejections."
     },
     {
       "name": "growth",
       "source": "./plugins/growth",
-      "description": "Growth, socle : contexte produit partage par toutes les skills marketing, plan marketing, lancement, relations presse ; ecrit maison : campagnes d'installation d'app, production de creatives et videos, publication sur les reseaux sociaux, conformite marketing France et UE."
+      "description": "Growth base: product context shared by every marketing skill, marketing plan, launch, press relations; written in-house: app install campaigns, creative and video production, social media publishing, marketing compliance for France and the EU."
     },
     {
       "name": "growth-seo",
       "source": "./plugins/growth-seo",
-      "description": "SEO du site : audit technique et on-page, recherche IA (GEO), donnees structurees, SEO programmatique, architecture du site, strategie de contenu, netlinking."
+      "description": "Site SEO: technical and on-page audit, AI search (GEO), structured data, programmatic SEO, site architecture, content strategy, link building."
     },
     {
       "name": "growth-ads",
       "source": "./plugins/growth-ads",
-      "description": "Publicite payante : strategie Google, Meta, TikTok, LinkedIn, creatives publicitaires, copywriting et relecture, psychologie, images et videos marketing, Apple Ads, campagnes d'acquisition d'app."
+      "description": "Paid advertising: Google, Meta, TikTok, LinkedIn strategy, ad creatives, copywriting and editing, psychology, marketing images and videos, Apple Ads, app acquisition campaigns."
     },
     {
       "name": "growth-social",
       "source": "./plugins/growth-social",
-      "description": "Reseaux sociaux : strategie et contenus par plateforme, marketing d'influence et createurs, animation de communaute."
+      "description": "Social media: strategy and content per platform, influencer and creator marketing, community management."
     },
     {
       "name": "growth-analytics",
       "source": "./plugins/growth-analytics",
-      "description": "Mesure marketing : plan de marquage et GA4, UTM, attribution, suivi des conversions (GTM, API de conversion), tests A/B, attribution mobile (MMP, SKAdNetwork)."
+      "description": "Marketing measurement: tracking plan and GA4, UTMs, attribution, conversion tracking (GTM, conversion APIs), A/B tests, mobile attribution (MMP, SKAdNetwork)."
     },
     {
       "name": "growth-cro",
       "source": "./plugins/growth-cro",
-      "description": "Conversion et retention : CRO des pages, inscription, onboarding, paywalls, popups, emails et SMS de cycle de vie, churn, parrainage, lead magnets, tunnel web vers app."
+      "description": "Conversion and retention: page CRO, signup, onboarding, paywalls, popups, lifecycle emails and SMS, churn, referral, lead magnets, web to app funnel."
     },
     {
       "name": "ci-forge",
       "source": "./plugins/ci-forge",
-      "description": "CI/CD generee seule selon la stack et l'architecture cible : lint, format, typage, tests et couverture, end to end Playwright, build, conteneurs (hadolint, Trivy), Kubernetes (kubeconform, kind), IaC, securite (gitleaks, osv-scanner, CodeQL ou Semgrep), SBOM et provenance, staging et prod, actions epinglees par SHA, check requis ci-ok."
+      "description": "CI/CD generated for the stack and target architecture: lint, format, typing, tests and coverage, Playwright end to end, build, containers (hadolint, Trivy), Kubernetes (kubeconform, kind), IaC, security (gitleaks, osv-scanner, CodeQL or Semgrep), SBOM and provenance, staging and prod, actions pinned by SHA, required check ci-ok."
     },
     {
       "name": "guardrails",
       "source": "./plugins/guardrails",
-      "description": "Garde-fous imposes par hooks, configurables regle par regle : pas d'em dash ni d'emoji non demande, pas de push sur main ni de contournement des hooks git, pas de secret ni de .env dans git, Conventional Commits, marqueur IA, regle d'or des identifiants de prod. Installable aussi dans un projet pour le cloud et l'equipe."
+      "description": "Guardrails enforced by hooks, configurable rule by rule: no em dash or unrequested emoji, no push to main or git hook bypass, no secret or .env in git, Conventional Commits, AI marker, production credentials golden rule. Also installable in a project for the cloud, the team and other coding agents."
     },
     {
       "name": "ultime-profile",
       "source": "./plugins/ultime-profile",
-      "description": "Point d'entree : installe et gere pour chaque projet les seuls packs ultime-skill utiles (detection du projet, installation au niveau du projet, desactivation du reste, ajustement quand la tache change). Catalogue des packs avec leur cout en contexte."
+      "description": "Entry point: installs and manages, for each project, only the useful ultime-skill packs (project detection, project-level install, disabling the rest, adjusting when the task changes). Catalog of packs with their context cost."
     },
     {
       "name": "greenfield",
       "source": "./plugins/greenfield",
-      "description": "Retro-ingenierie salle blanche : extrait d'un code existant des specs comportementales, vecteurs de test et criteres d'acceptation sans heritage d'implementation (commande /greenfield:analyze). Pipeline lourd en agents, a reserver au code dont on detient les droits."
+      "description": "Clean-room reverse engineering: extracts behavioral specs, test vectors and acceptance criteria from existing code without inheriting its implementation (/greenfield:analyze command). Heavy agent pipeline, for code you own the rights to."
     },
     {
       "name": "ultime-starter",
       "source": "./plugins/ultime-starter",
-      "description": "Demarrage en une commande : le point d'entree ultime-profile (installe ensuite par projet les seuls packs utiles), les garde-fous guardrails et la methode ponytail."
+      "description": "One-command start: the ultime-profile entry point (which then installs only the useful packs per project), the guardrails and the ponytail method."
     },
     {
       "name": "ultime-all",
       "source": "./plugins/ultime-all",
-      "description": "Tout ultime-skill en une commande : installe l'ensemble des packs, sauf le pentest offensif."
+      "description": "All of ultime-skill in one command: installs every pack except offensive pentest."
     },
     {
       "name": "ultime-dev",
       "source": "./plugins/ultime-dev",
-      "description": "Pack developpeur : ponytail, superpowers, cycle de vie logiciel, usine a skills, devops, full stack, securite, conventions d'equipe, tests en production."
+      "description": "Developer pack: ponytail, superpowers, software lifecycle, skill factory, devops, full stack, security, team conventions, testing in production."
     },
     {
       "name": "ultime-data",
       "source": "./plugins/ultime-data",
-      "description": "Pack data : data engineering, data visualisation, ML engineering, graphe de connaissances."
+      "description": "Data pack: data engineering, data visualization, ML engineering."
     },
     {
       "name": "ultime-media",
       "source": "./plugins/ultime-media",
-      "description": "Pack creatif : design anti AI-slop, motion design, montage video."
+      "description": "Creative pack: anti AI-slop design, motion design, video editing."
     },
     {
       "name": "ultime-security",
       "source": "./plugins/ultime-security",
-      "description": "Pack securite defensive : audit et revue de securite, audit de code, defense et reponse a incident, reverse engineering."
+      "description": "Defensive security pack: security audit and review, code audit, defense and incident response, reverse engineering."
     },
     {
       "name": "ultime-web",
       "source": "./plugins/ultime-web",
-      "description": "Pack web : full stack, design, conformite (RGPD, accessibilite, legal)."
+      "description": "Web pack: full stack, design, compliance (GDPR, accessibility, legal)."
     },
     {
       "name": "ultime-ops",
       "source": "./plugins/ultime-ops",
-      "description": "Pack operations : devops/SRE, finops, monitoring complet et tests en production."
+      "description": "Operations pack: devops/SRE, finops, complete monitoring and testing in production."
     },
     {
       "name": "ultime-mobile",
       "source": "./plugins/ultime-mobile",
-      "description": "Pack mobile : multiplateforme, Expo et React Native, iOS, Android, Flutter, stores (fiche, Data safety, App Store Connect, Google Play, ASO), design, conformite et securite."
+      "description": "Mobile pack: cross-platform, Expo and React Native, iOS, Android, Flutter, stores (listing, Data safety, App Store Connect, Google Play, ASO), design, compliance and security."
     },
     {
       "name": "ultime-growth",
       "source": "./plugins/ultime-growth",
-      "description": "Pack growth : socle marketing, SEO, publicite et creatives, reseaux sociaux, mesure et attribution, conversion et retention, ASO, production video."
+      "description": "Growth pack: marketing base, SEO, advertising and creatives, social media, measurement and attribution, conversion and retention, ASO, video production."
     },
     {
       "name": "ultime-factory",
       "source": "./plugins/ultime-factory",
-      "description": "Usine a produit : l'orchestrateur app-factory et tout ce qu'il pilote (gestion de produit, retro-specification, cycle de vie logiciel, full stack, mobile et stores, growth, design, conformite, securite, devops, donnees, monitoring, tests en production, finops). A combiner avec ultime-profile pour n'activer que l'utile par projet."
+      "description": "Product factory: the app-factory orchestrator and everything it drives (product management, reverse specification, software lifecycle, full stack, mobile and stores, growth, design, compliance, security, devops, data, monitoring, testing in production, finops). Combine with ultime-profile to enable only what each project needs."
     }
   ]
 }

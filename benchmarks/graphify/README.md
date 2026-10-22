@@ -1,190 +1,191 @@
-# Benchmark graphify
+# graphify benchmark
 
-Mesure, le 21 octobre 2026, de ce que graphify (graphe de connaissances d'un dépôt) apporte à Claude Code
-pour comprendre un code existant : coût de construction du graphe, puis coût, temps et qualité des réponses
-à des questions de reprise, avec et sans graphe.
+Measurement, on October 21, 2026, of what graphify (a knowledge graph of a repository) brings to Claude
+Code for understanding existing code: cost of building the graph, then cost, time and quality of the
+answers to takeover questions, with and without the graph.
 
-## En bref
+## In short
 
-- **Construire le graphe d'un code ne coûte aucun token avec la CLI** (`graphify update .`) : 3 s pour 66
-  fichiers, 14 s pour 712, 116 s pour 5 071. Via la skill, la même construction coûte **0,56 $ à 1,48 $**,
-  car elle fait extraire la documentation et les images par des sous-agents et nommer les communautés par
-  le modèle.
-- **La skill graphify telle qu'elle est intégrée aujourd'hui n'apporte rien** : avec le graphe présent, elle
-  ne s'est déclenchée seule dans aucune des 24 exécutions.
-- **Interroger le graphe en premier (consigne courte, sans la skill) économise 16 % de tokens et 7 % de
-  coût, mais dégrade les réponses** (exactitude 7,7 contre 8,3 sur 10) : le modèle fait confiance au graphe
-  et ne vérifie plus le code.
-- **La variante hybride (le graphe oriente, tout est vérifié dans le code) garde la qualité de la
-  référence**, avec 7 % de tokens et 16 % de temps en moins, pour un coût quasi identique (-1 %).
-- **Le gain grandit sur le gros dépôt** (cal.com, 5 071 fichiers) : -25 % de tokens et deux fois moins de
-  tours avec la consigne courte, à exactitude moyenne équivalente mais complétude un peu plus faible.
-- **Mais livrée par un `CLAUDE.md` (seul moyen de l'installer dans un projet), cette consigne hybride ne
-  rapporte plus rien** : +5 % de coût pour une qualité équivalente (condition E, en fin de rapport).
-- **Décision : graphify est retiré de la bibliothèque** (voir la dernière section).
+- **Building the graph of a codebase costs no tokens with the CLI** (`graphify update .`): 3 s for 66
+  files, 14 s for 712, 116 s for 5,071. Through the skill, the same build costs **$0.56 to $1.48**,
+  because it has subagents extract the documentation and images and the model name the communities.
+- **The graphify skill as currently integrated brings nothing**: with the graph present, it did not
+  trigger on its own in any of the 24 runs.
+- **Querying the graph first (short instruction, without the skill) saves 16% of tokens and 7% of cost,
+  but degrades the answers** (correctness 7.7 versus 8.3 out of 10): the model trusts the graph and no
+  longer checks the code.
+- **The hybrid variant (the graph orients, everything is checked in the code) keeps the quality of the
+  baseline**, with 7% fewer tokens and 16% less time, for an almost identical cost (-1%).
+- **The gain grows on the large repository** (cal.com, 5,071 files): -25% tokens and half as many turns
+  with the short instruction, at equivalent average correctness but slightly lower completeness.
+- **But delivered through a `CLAUDE.md` (the only way to install it in a project), this hybrid
+  instruction no longer brings anything**: +5% cost for equivalent quality (condition E, at the end of the
+  report).
+- **Decision: graphify is removed from the library** (see the last section).
 
-## Protocole
+## Protocol
 
-| Élément | Valeur |
+| Item | Value |
 |---|---|
-| Outils | Claude Code 2.1.289, graphifyy 0.9.90 (environnement virtuel isolé), Windows 11 |
-| Modèle des réponses | Sonnet, sessions `claude -p` neuves, sans MCP, outils Read, Grep, Glob, Bash, Skill ; écriture interdite |
-| Dépôts | S : vercel/commerce `f7521d5` (66 fichiers de code, 4 000 lignes) ; M : excalidraw `1d4dc2c` (712 fichiers, 225 000 lignes) ; L : cal.com `0f19cc4` (5 071 fichiers, 551 000 lignes) |
-| Questions | 4 par dépôt, typiques d'une reprise : vue d'architecture, localisation d'une fonctionnalité, traçage d'un flux, analyse d'impact d'un changement de signature (voir `bench.py`) ; réponse en 300 mots au plus avec chemins de fichiers |
-| Répétitions | 2 par cellule, chaque condition sur sa propre copie du dépôt |
-| Juge | Opus, à l'aveugle (réponses anonymisées et mélangées), vérifie les affirmations dans le code et note exactitude et complétude sur 10 |
+| Tools | Claude Code 2.1.289, graphifyy 0.9.90 (isolated virtual environment), Windows 11 |
+| Answer model | Sonnet, fresh `claude -p` sessions, no MCP, tools Read, Grep, Glob, Bash, Skill; writing forbidden |
+| Repositories | S: vercel/commerce `f7521d5` (66 code files, 4,000 lines); M: excalidraw `1d4dc2c` (712 files, 225,000 lines); L: cal.com `0f19cc4` (5,071 files, 551,000 lines) |
+| Questions | 4 per repository, typical of a takeover: architecture overview, locating a feature, tracing a flow, impact analysis of a signature change (see `bench.py`); answer in at most 300 words with file paths |
+| Repetitions | 2 per cell, each condition on its own copy of the repository |
+| Judge | Opus, blind (answers anonymized and shuffled), checks the claims in the code and scores correctness and completeness out of 10 |
 
-Conditions :
+Conditions:
 
 | Code | Condition |
 |---|---|
-| A | Référence : pas de graphe, pas de skill |
-| B | Graphe présent et skill graphify chargeable (intégration actuelle de la bibliothèque) |
-| C | Graphe présent, sans skill, consigne courte : interroger le graphe (`graphify query`, `explain`, `path`) avant de lire le code |
-| D | Comme C, en ajoutant : le graphe sert à s'orienter, chaque chemin, sens de dépendance, signature, ligne et comptage est vérifié dans le code avant d'être affirmé |
+| A | Baseline: no graph, no skill |
+| B | Graph present and graphify skill loadable (current integration in the library) |
+| C | Graph present, no skill, short instruction: query the graph (`graphify query`, `explain`, `path`) before reading the code |
+| D | Like C, adding: the graph is used to get oriented, every path, dependency direction, signature, line and count is checked in the code before being stated |
 
-A, B et C ont été jugées ensemble ; A, C et D ont été jugées ensemble lors d'une seconde passe. La
-référence A notée deux fois donne 8,29 puis 8,08 : **un écart de moins de 0,3 point est du bruit**.
+A, B and C were judged together; A, C and D were judged together in a second pass. The baseline A,
+scored twice, gives 8.29 then 8.08: **a difference of less than 0.3 points is noise**.
 
-## Construction et mise à jour du graphe
+## Building and updating the graph
 
-| Dépôt | CLI : durée | CLI : tokens | Graphe | Via la skill : coût | Via la skill : durée |
+| Repository | CLI: duration | CLI: tokens | Graph | Through the skill: cost | Through the skill: duration |
 |---|---|---|---|---|---|
-| S | 3 s | 0 | 323 nœuds, 744 arêtes | 0,56 $ | 98 s |
-| M | 14 s | 0 | 8 069 nœuds, 31 122 arêtes, 12 Mo | 1,48 $ | 253 s |
-| L | 116 s | 0 | 35 991 nœuds, 106 131 arêtes, 47 Mo | non mesuré | non mesuré |
+| S | 3 s | 0 | 323 nodes, 744 edges | $0.56 | 98 s |
+| M | 14 s | 0 | 8,069 nodes, 31,122 edges, 12 MB | $1.48 | 253 s |
+| L | 116 s | 0 | 35,991 nodes, 106,131 edges, 47 MB | not measured | not measured |
 
-- Sur le dépôt M, la skill s'est d'abord arrêtée pour demander quel sous-dossier analyser (68 documents et
-  52 images détectés) ; en mode non interactif, il a fallu lui dire de continuer.
-- Mise à jour après la modification d'un fichier : **la version testée réextrait 100 % des fichiers** sous
-  Windows (cache inopérant), donc 20 s sur M et 115 s sur L à chaque mise à jour. Toujours sans token,
-  mais un hook à chaque commit serait pénible sur un gros dépôt.
-- Les communautés construites par la CLI restent anonymes ; les nommer demande le modèle (`graphify label`).
-- La skill elle-même fait 742 lignes (environ 11 000 tokens chargés à chaque invocation).
+- On repository M, the skill first stopped to ask which subfolder to analyze (68 documents and 52 images
+  detected); in non-interactive mode, it had to be told to continue.
+- Update after modifying one file: **the tested version re-extracts 100% of the files** on Windows
+  (cache not working), so 20 s on M and 115 s on L at every update. Still without tokens, but a hook on
+  every commit would be painful on a large repository.
+- The communities built by the CLI remain anonymous; naming them requires the model (`graphify label`).
+- The skill itself is 742 lines long (about 11,000 tokens loaded on every invocation).
 
-## Résultats des requêtes
+## Query results
 
-Moyennes par exécution. Tokens = entrée + cache (création et lecture) + sortie.
+Averages per run. Tokens = input + cache (creation and read) + output.
 
-### Par condition (24 exécutions chacune)
+### By condition (24 runs each)
 
-| Condition | Coût | Tokens | Durée | Tours | Appels d'outils | Exactitude | Complétude |
+| Condition | Cost | Tokens | Duration | Turns | Tool calls | Correctness | Completeness |
 |---|---|---|---|---|---|---|---|
-| A référence | 0,121 $ | 173 900 | 21,0 s | 5,7 | 4,7 | 8,29 / 8,08 | 7,75 / 7,71 |
-| B skill | 0,121 $ | 168 000 | 21,0 s | 6,0 | 5,0 | 8,25 | 7,79 |
-| C graphe d'abord | 0,113 $ | 146 400 | 19,1 s | 4,3 | 3,3 | 7,71 / 7,75 | 7,08 / 7,00 |
-| D hybride | 0,120 $ | 162 400 | 17,6 s | 5,5 | 4,5 | 8,17 | 7,54 |
+| A baseline | $0.121 | 173,900 | 21.0 s | 5.7 | 4.7 | 8.29 / 8.08 | 7.75 / 7.71 |
+| B skill | $0.121 | 168,000 | 21.0 s | 6.0 | 5.0 | 8.25 | 7.79 |
+| C graph first | $0.113 | 146,400 | 19.1 s | 4.3 | 3.3 | 7.71 / 7.75 | 7.08 / 7.00 |
+| D hybrid | $0.120 | 162,400 | 17.6 s | 5.5 | 4.5 | 8.17 | 7.54 |
 
-Deux valeurs : première passe du juge / seconde passe.
+Two values: first judge pass / second pass.
 
-### Par taille de dépôt
+### By repository size
 
-| Dépôt | Condition | Coût | Tokens | Tours | Exactitude (moyenne des passes) | Complétude |
+| Repository | Condition | Cost | Tokens | Turns | Correctness (average of passes) | Completeness |
 |---|---|---|---|---|---|---|
-| S commerce | A | 0,098 $ | 137 900 | 4,0 | 8,63 | 8,00 |
-| | C | 0,096 $ | 119 000 | 4,1 | 8,56 | 7,50 |
-| | D | 0,113 $ | 146 300 | 4,9 | 9,00 | 7,63 |
-| M excalidraw | A | 0,127 $ | 159 000 | 5,4 | 7,88 | 7,88 |
-| | C | 0,123 $ | 150 900 | 5,0 | 6,63 | 6,56 |
-| | D | 0,113 $ | 130 400 | 4,9 | 7,50 | 7,13 |
-| L cal.com | A | 0,138 $ | 224 800 | 7,6 | 8,06 | 7,31 |
-| | C | 0,121 $ | 169 300 | 3,9 | 8,00 | 7,06 |
-| | D | 0,134 $ | 210 700 | 6,6 | 8,00 | 7,88 |
+| S commerce | A | $0.098 | 137,900 | 4.0 | 8.63 | 8.00 |
+| | C | $0.096 | 119,000 | 4.1 | 8.56 | 7.50 |
+| | D | $0.113 | 146,300 | 4.9 | 9.00 | 7.63 |
+| M excalidraw | A | $0.127 | 159,000 | 5.4 | 7.88 | 7.88 |
+| | C | $0.123 | 150,900 | 5.0 | 6.63 | 6.56 |
+| | D | $0.113 | 130,400 | 4.9 | 7.50 | 7.13 |
+| L cal.com | A | $0.138 | 224,800 | 7.6 | 8.06 | 7.31 |
+| | C | $0.121 | 169,300 | 3.9 | 8.00 | 7.06 |
+| | D | $0.134 | 210,700 | 6.6 | 8.00 | 7.88 |
 
-### Par type de question
+### By question type
 
-| Question | Meilleure condition | Remarque |
+| Question | Best condition | Note |
 |---|---|---|
-| Architecture | C et D (7,8 contre 7,5 à 7,7) | Seul type où le graphe améliore légèrement la qualité ; la skill B dégrade (6,5) |
-| Localisation | A et D (8,7) | C perd en complétude (6,5 contre 8,3) |
-| Traçage d'un flux | A et D (8,8 à 9,0) | C perd nettement (7,3 à 7,5) ; D lit environ 20 % de tokens de moins que A |
-| Impact d'un changement | B (9,0, une seule passe) ; A, C et D entre 7,3 et 8,0 | C perd en complétude (6,7 à 6,8 contre 7,7 à 7,8) sur le décompte des appelants |
+| Architecture | C and D (7.8 versus 7.5 to 7.7) | The only type where the graph slightly improves quality; skill B degrades it (6.5) |
+| Locating | A and D (8.7) | C loses completeness (6.5 versus 8.3) |
+| Tracing a flow | A and D (8.8 to 9.0) | C clearly loses (7.3 to 7.5); D reads about 20% fewer tokens than A |
+| Impact of a change | B (9.0, a single pass); A, C and D between 7.3 and 8.0 | C loses completeness (6.7 to 6.8 versus 7.7 to 7.8) on the caller count |
 
-## Pourquoi la consigne « graphe d'abord » dégrade les réponses
+## Why the "graph first" instruction degrades the answers
 
-Erreurs relevées par le juge sur les réponses C :
-- chemins déduits des noms de nœuds sans ouvrir le fichier (une route API placée dans `app/` au lieu de
-  `pages/`) ;
-- sens de dépendance inversé entre deux paquets (le graphe d'AST ne distingue pas toujours qui importe
-  qui) ;
-- comptages d'appelants faux (environ 70 annoncés pour 200 occurrences réelles dans 56 fichiers) ;
-- numéros de ligne approximatifs, fonctions privées présentées comme publiques.
+Errors noted by the judge in the C answers:
+- paths inferred from node names without opening the file (an API route placed in `app/` instead of
+  `pages/`);
+- dependency direction reversed between two packages (the AST graph does not always distinguish who
+  imports whom);
+- wrong caller counts (about 70 announced for 200 actual occurrences in 56 files);
+- approximate line numbers, private functions presented as public.
 
-La variante D corrige ces erreurs en imposant la vérification, au prix d'une partie de l'économie.
+Variant D fixes these errors by enforcing verification, at the cost of part of the savings.
 
-## Ce que ce benchmark ne mesure pas
+## What this benchmark does not measure
 
-- Des sessions longues ou des agents qui réexplorent le même dépôt à répétition (cas d'`app-factory`) : le
-  graphe s'amortit sur plusieurs requêtes, mais l'économie par requête mesurée ici reste modeste.
-- Des dépôts plus gros que cal.com, d'autres langages que TypeScript et JavaScript, d'autres modèles
-  (notamment Haiku pour l'inventaire), des questions ouvertes sans limite de longueur.
-- La valeur de la visualisation (`graph.html`) et du rapport `GRAPH_REPORT.md` pour un humain.
-- Deux répétitions par cellule : les écarts de moins de 0,3 point de qualité ou de quelques pourcents de
-  coût ne sont pas significatifs.
+- Long sessions or agents that re-explore the same repository repeatedly (the `app-factory` case): the
+  graph pays for itself over several queries, but the per-query savings measured here remain modest.
+- Repositories larger than cal.com, languages other than TypeScript and JavaScript, other models
+  (notably Haiku for the inventory), open questions without a length limit.
+- The value of the visualization (`graph.html`) and of the `GRAPH_REPORT.md` report for a human.
+- Two repetitions per cell: differences of less than 0.3 quality points or a few percent of cost are not
+  significant.
 
-## Recommandation (avant vérification de l'intégration, voir la dernière section)
+## Recommendation (before verifying the integration, see the last section)
 
-| Option | Pour | Contre |
+| Option | For | Against |
 |---|---|---|
-| Ne pas intégrer | Aucun risque, la référence répond déjà bien en 3 à 7 appels d'outils | On se prive d'un gain de temps sur les gros dépôts |
-| **Intégration légère pour la reprise et les gros dépôts** (proposée) | Construction gratuite en tokens par la CLI ; consigne hybride D dans le `CLAUDE.md` du projet ; qualité préservée, -16 % de temps ; pas de skill de 11 000 tokens à charger | Gain en tokens modeste (-7 %) ; reconstruction lente sur un gros dépôt tant que le cache ne marche pas sous Windows ; dépendance Python en plus |
-| Intégrer partout | Uniformité | Rien à gagner sur les petits dépôts ; coût de la skill si elle est utilisée pour construire |
+| Do not integrate | No risk, the baseline already answers well in 3 to 7 tool calls | Gives up a time gain on large repositories |
+| **Light integration for takeover and large repositories** (proposed) | Token-free build through the CLI; hybrid instruction D in the project's `CLAUDE.md`; quality preserved, -16% time; no 11,000-token skill to load | Modest token gain (-7%); slow rebuild on a large repository as long as the cache does not work on Windows; an extra Python dependency |
+| Integrate everywhere | Uniformity | Nothing to gain on small repositories; cost of the skill if it is used to build |
 
-Mise en œuvre proposée pour l'option légère : dans `ultime-profile`, profils « reprise » et « gros dépôt »
-(au-delà de quelques milliers de fichiers de code) :
-1. installer `graphifyy` (version épinglée) et construire avec `graphify update .`, sans nommer les
-   communautés ;
-2. ajouter `graphify-out/` au `.gitignore` ;
-3. ajouter au `CLAUDE.md` du projet la consigne hybride D (deux phrases) ;
-4. reconstruire avant une tâche d'exploration importante plutôt qu'à chaque commit ;
-5. ne pas activer le pack `graphify` (la skill) dans ces profils.
+Proposed implementation for the light option: in `ultime-profile`, "takeover" and "large repository"
+profiles (beyond a few thousand code files):
+1. install `graphifyy` (pinned version) and build with `graphify update .`, without naming the
+   communities;
+2. add `graphify-out/` to `.gitignore`;
+3. add the hybrid instruction D (two sentences) to the project's `CLAUDE.md`;
+4. rebuild before a significant exploration task rather than on every commit;
+5. do not enable the `graphify` pack (the skill) in these profiles.
 
-## Coût du benchmark
+## Cost of the benchmark
 
-Réponses 11,40 $, juges 10,95 $, constructions via la skill 2,29 $ : **24,64 $** au total.
+Answers $11.40, judges $10.95, builds through the skill $2.29: **$24.64** in total.
 
-## Reproduire
+## Reproduce
 
 ```bash
 python -m venv ~/graphify-bench/gvenv && ~/graphify-bench/gvenv/bin/pip install graphifyy==0.9.90
-# cloner les trois dépôts aux commits ci-dessus dans ~/graphify-bench/repos/<nom>-G, construire le graphe
-# (graphify update .), puis copier chaque dossier en <nom>-A sans graphify-out/
-python bench.py run                 # conditions A, B, C (ajouter D : voir run_one)
-python judge.py                     # juge A, B, C ; puis : python judge.py ACD judge2
-python analyze.py                   # tableaux et summary.json
-python build_via_skill.py commerce excalidraw   # coût de construction via la skill (copies <nom>-S)
-# condition E : copie <nom>-E du dépôt avec graphe, data/claude-md-block.md ajouté à la fin de son CLAUDE.md
+# clone the three repositories at the commits above into ~/graphify-bench/repos/<name>-G, build the graph
+# (graphify update .), then copy each folder to <name>-A without graphify-out/
+python bench.py run                 # conditions A, B, C (to add D: see run_one)
+python judge.py                     # judges A, B, C; then: python judge.py ACD judge2
+python analyze.py                   # tables and summary.json
+python build_via_skill.py commerce excalidraw   # build cost through the skill (copies <name>-S)
+# condition E: copy <name>-E of the repository with graph, data/claude-md-block.md appended to its CLAUDE.md
 ```
 
-Données : `data/runs.csv` (métriques des 112 exécutions), `data/claude-md-block.md` (bloc testé en E), `data/judgments.json` (notes et erreurs relevées
-par le juge), `data/builds-via-skill.json`, `data/summary.json`. Le texte des réponses n'est pas versionné.
+Data: `data/runs.csv` (metrics of the 112 runs), `data/claude-md-block.md` (block tested in E), `data/judgments.json` (scores and errors noted
+by the judge), `data/builds-via-skill.json`, `data/summary.json`. The text of the answers is not versioned.
 
-## Vérification de l'intégration légère (condition E) et décision
+## Verification of the light integration (condition E) and decision
 
-L'option légère recommandée plus haut a été testée telle qu'elle serait livrée : graphe construit par la
-CLI et consigne hybride écrite dans le `CLAUDE.md` du projet (et non plus injectée dans le prompt système
-comme en condition D), sur les dépôts M et L, 16 exécutions, jugées à l'aveugle avec A et D.
+The light option recommended above was tested as it would be delivered: graph built by the CLI and
+hybrid instruction written in the project's `CLAUDE.md` (and no longer injected into the system prompt
+as in condition D), on repositories M and L, 16 runs, judged blind together with A and D.
 
-- Formulée comme en D, la consigne n'a été suivie que dans 1 question sur 4 depuis le `CLAUDE.md`
-  (excalidraw a déjà son propre `CLAUDE.md`). Il a fallu une formulation impérative (« ta première étape
-  est d'interroger le graphe ») pour qu'elle le soit dans 16 cas sur 16.
-- Résultat (moyennes sur M et L) :
+- Worded as in D, the instruction was followed in only 1 question out of 4 from the `CLAUDE.md`
+  (excalidraw already has its own `CLAUDE.md`). An imperative wording was needed ("your first step is to
+  query the graph") for it to be followed in 16 cases out of 16.
+- Result (averages over M and L):
 
-| Condition | Coût | Tokens | Durée | Tours | Exactitude | Complétude |
+| Condition | Cost | Tokens | Duration | Turns | Correctness | Completeness |
 |---|---|---|---|---|---|---|
-| A référence | 0,133 $ | 191 900 | 22,8 s | 6,5 | 7,69 | 7,31 |
-| D consigne hybride dans le prompt système | 0,123 $ | 170 500 | 19,1 s | 5,8 | 7,69 | 7,38 |
-| E consigne impérative dans `CLAUDE.md` (livrable) | 0,139 $ | 200 800 | 23,0 s | 6,1 | 7,88 | 7,44 |
+| A baseline | $0.133 | 191,900 | 22.8 s | 6.5 | 7.69 | 7.31 |
+| D hybrid instruction in the system prompt | $0.123 | 170,500 | 19.1 s | 5.8 | 7.69 | 7.38 |
+| E imperative instruction in `CLAUDE.md` (deliverable) | $0.139 | 200,800 | 23.0 s | 6.1 | 7.88 | 7.44 |
 
-- Livrée réellement, l'intégration coûte un peu plus que la référence (+5 % de coût et de tokens, durée
-  égale) pour une qualité équivalente : le modèle interroge le graphe **en plus** de sa lecture du code,
-  pas à la place. Le gain de D venait de la place de la consigne dans le prompt système, que ni une
-  skill ni un `CLAUDE.md` ne reproduisent.
+- Actually delivered, the integration costs a little more than the baseline (+5% cost and tokens, same
+  duration) for equivalent quality: the model queries the graph **in addition to** reading the code, not
+  instead of it. D's gain came from the instruction's place in the system prompt, which neither a skill
+  nor a `CLAUDE.md` reproduces.
 
-**Décision (21 octobre 2026) : graphify est retiré de la bibliothèque.** Pas de gain mesurable en usage
-réel, et un coût réel : dépendance Python, reconstruction de 2 minutes sur un gros dépôt (cache
-inopérant sous Windows), graphe qui peut devenir obsolète. Le pack `graphify` est retiré du catalogue et du
-bundle `ultime-data`, et la CLI n'est plus installée par `--with-tools`. Ce rapport et ses scripts restent
-pour pouvoir refaire la mesure si graphify évolue (cache incrémental fonctionnel, intégration native).
+**Decision (October 21, 2026): graphify is removed from the library.** No measurable gain in real use,
+and a real cost: Python dependency, 2-minute rebuild on a large repository (cache not working on
+Windows), a graph that can become stale. The `graphify` pack is removed from the catalog and from the
+`ultime-data` bundle, and the CLI is no longer installed by `--with-tools`. This report and its scripts
+remain so the measurement can be redone if graphify evolves (working incremental cache, native
+integration).
 
-Coût total du benchmark, condition E comprise : **30,75 $**.
+Total cost of the benchmark, condition E included: **$30.75**.

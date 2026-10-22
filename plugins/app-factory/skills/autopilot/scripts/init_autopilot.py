@@ -27,10 +27,10 @@ from pathlib import Path
 STATE_BRANCH = "claude/autopilot-state"
 TEMPLATES = Path(__file__).resolve().parent.parent / "templates" / "workflows"
 LABELS = {
-    "decision": ("d93f0b", "Decision qui attend le proprietaire"),
-    "autopilot": ("0e8a16", "PR autopilot, fusion automatique si les checks requis sont verts"),
-    "needs-human": ("fbca04", "A relire et fusionner a la main"),
-    "autopilot-dashboard": ("5319e7", "Tableau de bord autopilot"),
+    "decision": ("d93f0b", "Decision waiting for the owner"),
+    "autopilot": ("0e8a16", "Autopilot PR, automatic merge if the required checks are green"),
+    "needs-human": ("fbca04", "To review and merge by hand"),
+    "autopilot-dashboard": ("5319e7", "Autopilot dashboard"),
 }
 AUTOPILOT_BLOCK = {
     "repo": None,
@@ -49,8 +49,8 @@ AUTOPILOT_BLOCK = {
         "usage": {"day": None, "agents": 0},
     },
 }
-DASHBOARD = ("<!-- autopilot -->\n**Autopilot** : initialise, en attente du premier reveil.\n\n"
-             "Les decisions qui t'attendent arrivent en issues `decision` qui te sont assignees. ✨\n")
+DASHBOARD = ("<!-- autopilot -->\n**Autopilot**: initialized, waiting for the first wake-up.\n\n"
+             "The decisions waiting for you arrive as `decision` issues assigned to you. ✨\n")
 
 
 def run(*cmd: str, cwd: Path | None = None, check: bool = True) -> str:
@@ -129,7 +129,7 @@ def main() -> None:
         if not block.get("dashboard_issue"):
             with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-8") as body:
                 body.write(DASHBOARD)
-            number = gh_api(f"repos/{repo}/issues", "-f", "title=Autopilot : tableau de bord ✨",
+            number = gh_api(f"repos/{repo}/issues", "-f", "title=Autopilot: dashboard ✨",
                             "-F", f"body=@{body.name}", "-f", "labels[]=autopilot-dashboard", "--jq", ".number")
             Path(body.name).unlink()
             gh("issue", "pin", number, "--repo", repo, check=False)

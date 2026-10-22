@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "command": "node \"${CLAUDE_PLUGIN_ROOT}/runtime/guard.cjs\" --harness cursor"
+      }
+    ]
+  }
+}

@@ -1,97 +1,97 @@
-# Mise en place (par le proprietaire, une fois par projet)
+# Setup (by the owner, once per project)
 
-Claude prepare les fichiers et peut lancer les scripts **sur la machine du proprietaire, a sa demande**.
-Il ne cree jamais lui-meme la tache planifiee, l'environnement cloud, ni rien sur le compte Claude : ces
-etapes sont faites par le proprietaire dans claude.ai. Duree : 20 a 30 minutes la premiere fois.
+Claude prepares the files and can run the scripts **on the owner's machine, at their request**.
+It never creates the scheduled task, the cloud environment, or anything on the Claude account itself: these
+steps are done by the owner in claude.ai. Duration: 20 to 30 minutes the first time.
 
-## 0. Prerequis
+## 0. Prerequisites
 
-- Le projet a passe G0 en session interactive (`app-factory` : mode, brief, plateformes, marche), et
-  `.app-factory/state.json` existe.
-- Le depot est sur GitHub, l'app Claude GitHub y est installee (claude.ai/code, ou `/install-github-app`).
-- En local : `gh` authentifie (`gh auth status`), Python 3.10 ou plus, le marketplace ultime-skill a
-  jour (`claude plugin marketplace update ultime-skill`).
+- The project has passed G0 in an interactive session (`app-factory`: mode, brief, platforms, market), and
+  `.app-factory/state.json` exists.
+- The repository is on GitHub, the Claude GitHub app is installed on it (claude.ai/code, or `/install-github-app`).
+- Locally: `gh` authenticated (`gh auth status`), Python 3.10 or higher, the ultime-skill marketplace up
+  to date (`claude plugin marketplace update ultime-skill`).
 
-## 1. Copier les skills dans le depot
+## 1. Copy the skills into the repository
 
-Les sessions cloud n'installent pas les plugins : seul le `.claude/` du depot est charge.
+Cloud sessions do not install plugins: only the repository's `.claude/` is loaded.
 
 ```bash
-python <autopilot>/scripts/export_to_repo.py --dry-run      # packs actives du projet + app-factory
+python <autopilot>/scripts/export_to_repo.py --dry-run      # project's enabled packs + app-factory
 python <autopilot>/scripts/export_to_repo.py --packs app-factory,mobile,mobile-expo,team-conventions
 ```
 
-L'export ajoute toujours `app-factory`, `guardrails` (copie projet des garde-fous) et `ponytail` (ses
-hooks sont portes dans `.claude/hooks/ponytail/` et declares dans `.claude/settings.json`).
-`<autopilot>` est le dossier de cette skill (dans le cache des plugins, ou `plugins/app-factory/skills/
-autopilot` du depot ultime-skill). Ajouter `team-conventions` si le projet suit les regles d'equipe : en
-cloud, le `~/.claude/CLAUDE.md` personnel n'est pas lu, seules les regles du depot (`CLAUDE.md`,
-`.claude/rules/`, skills exportees) s'appliquent. Relancer l'export apres chaque mise a jour du
-marketplace. Puis desactiver les packs exportes au niveau du projet pour ne pas les charger deux fois.
+The export always adds `app-factory`, `guardrails` (project copy of the guardrails) and `ponytail` (its
+hooks are carried into `.claude/hooks/ponytail/` and declared in `.claude/settings.json`).
+`<autopilot>` is the folder of this skill (in the plugin cache, or `plugins/app-factory/skills/
+autopilot` of the ultime-skill repository). Add `team-conventions` if the project follows the team rules: in
+the cloud, the personal `~/.claude/CLAUDE.md` is not read, only the repository rules (`CLAUDE.md`,
+`.claude/rules/`, exported skills) apply. Rerun the export after each update of the
+marketplace. Then disable the exported packs at the project level so they are not loaded twice.
 
-## 2. Preparer GitHub
+## 2. Prepare GitHub
 
 ```bash
-python <autopilot>/scripts/init_autopilot.py            # affiche le plan, ne change rien
-python <autopilot>/scripts/init_autopilot.py --apply    # labels, tableau de bord, branche d'etat montee
-                                                        # en .app-factory/, workflows
+python <autopilot>/scripts/init_autopilot.py            # shows the plan, changes nothing
+python <autopilot>/scripts/init_autopilot.py --apply    # labels, dashboard, state branch mounted
+                                                        # as .app-factory/, workflows
 ```
 
-Puis dans les reglages du depot (navigateur ou `gh`) :
-1. **Ruleset sur la branche principale** : PR obligatoire, check `ci-ok` **requis**, pas de push direct
-   ni de force push, et **aucun contournement autorise, administrateurs compris**. Sans check requis, la
-   fusion automatique n'attendrait pas la CI ; sans interdiction de contournement, le token de fusion (le
-   tien) pourrait passer outre. C'est le garde-fou central : en cloud, l'agent agit avec tes identifiants
-   GitHub, et le proxy ne limite pas les branches qu'il peut pousser.
-2. **Secret `AUTOPILOT_MERGE_TOKEN`** : token fine-grained limite a ce depot, permissions Contents et Pull
-   requests en lecture et ecriture, expiration courte (90 jours, a renouveler). Il sert seulement a activer
-   la fusion automatique de GitHub.
-3. **Environnements** : `staging` sans relecteur ; `production` avec toi comme relecteur obligatoire.
-   Tout deploiement de production attend ainsi ton approbation (notification sur l'app GitHub).
-   Les secrets de deploiement vont dans ces environnements, jamais dans le depot ni dans l'environnement
-   cloud. Les workflows de deploiement sont ecrits par `release-engineer` en P6.
-4. Commiter sur une branche et fusionner : `.gitignore`, `.github/workflows/`, `.claude/`, et le retrait
-   de `.app-factory/` de la branche principale (deja indexe par le script). En local, l'etat est desormais
-   le worktree de `claude/autopilot-state` monte en `.app-factory/` ; l'ancien dossier reste dans
-   `.app-factory.pre-autopilot/` (a supprimer quand tout fonctionne).
+Then in the repository settings (browser or `gh`):
+1. **Ruleset on the main branch**: PR required, `ci-ok` check **required**, no direct push
+   or force push, and **no bypass allowed, administrators included**. Without a required check, the
+   automatic merge would not wait for the CI; without the bypass ban, the merge token (yours)
+   could override it. This is the central guardrail: in the cloud, the agent acts with your GitHub
+   credentials, and the proxy does not limit the branches it can push.
+2. **`AUTOPILOT_MERGE_TOKEN` secret**: fine-grained token limited to this repository, Contents and Pull
+   requests permissions in read and write, short expiration (90 days, to renew). It only serves to enable
+   GitHub's automatic merge.
+3. **Environments**: `staging` without reviewer; `production` with you as required reviewer.
+   Every production deployment thus waits for your approval (notification on the GitHub app).
+   Deployment secrets go into these environments, never into the repository or the cloud
+   environment. The deployment workflows are written by `release-engineer` in P6.
+4. Commit on a branch and merge: `.gitignore`, `.github/workflows/`, `.claude/`, and the removal
+   of `.app-factory/` from the main branch (already staged by the script). Locally, the state is now
+   the worktree of `claude/autopilot-state` mounted as `.app-factory/`; the old folder stays in
+   `.app-factory.pre-autopilot/` (to delete when everything works).
 
-## 3. Creer la tache planifiee (claude.ai/code, rubrique des taches planifiees)
+## 3. Create the scheduled task (claude.ai/code, scheduled tasks section)
 
-1. **Environnement cloud** : acces reseau "Trusted" (par defaut) ; aucune variable secrete ; script
-   d'installation seulement si la stack l'exige (le cloud fournit deja Python, Node, Docker, git, gh, jq).
-2. **Nouvelle tache** : un seul depot (le projet ; avec plusieurs depots, les reglages `.claude/` ne
-   s'appliquent pas), cet environnement, le prompt de `templates/routine-prompt.md`.
-3. **Frequence** : voir `budget.md` (toutes les 2 h en construction, 2 a 3 fois par jour sinon ; 1 h
+1. **Cloud environment**: "Trusted" network access (default); no secret variable; setup
+   script only if the stack requires it (the cloud already provides Python, Node, Docker, git, gh, jq).
+2. **New task**: a single repository (the project; with several repositories, the `.claude/` settings do not
+   apply), this environment, the prompt from `templates/routine-prompt.md`.
+3. **Frequency**: see `budget.md` (every 2 h during build, 2 to 3 times a day otherwise; 1 h
    minimum).
-4. **Declencheur API** : l'activer, copier l'URL et le token (affiche une seule fois) dans les secrets du
-   depot `AUTOPILOT_FIRE_URL` et `AUTOPILOT_FIRE_TOKEN`. Comparer les en-tetes de l'exemple curl affiche
-   avec ceux de `.github/workflows/autopilot-wake.yml` et corriger si besoin.
+4. **API trigger**: enable it, copy the URL and the token (shown only once) into the repository secrets
+   `AUTOPILOT_FIRE_URL` and `AUTOPILOT_FIRE_TOKEN`. Compare the headers of the displayed curl example
+   with those of `.github/workflows/autopilot-wake.yml` and fix if needed.
 
-## 4. Premier reveil, sous surveillance
+## 4. First wake-up, under supervision
 
-- "Lancer maintenant" depuis la tache, puis suivre la session dans l'app Claude (onglet Code).
-- Verifier : le verrou est pris puis rendu sur `claude/autopilot-state`, les appels `gh api` passent (pas
-  de 403), une PR `autopilot` declenche le workflow `autopilot-merge`, le tableau de bord est reecrit.
-- Tester le reveil sur reponse : ouvrir une issue `decision` de test, commenter `1`, verifier que le
-  workflow `autopilot-wake` part et qu'une session demarre.
+- "Run now" from the task, then follow the session in the Claude app (Code tab).
+- Check: the lock is taken then released on `claude/autopilot-state`, the `gh api` calls go through (no
+  403), an `autopilot` PR triggers the `autopilot-merge` workflow, the dashboard is rewritten.
+- Test the wake-up on answer: open a test `decision` issue, comment `1`, check that the
+  `autopilot-wake` workflow starts and that a session starts.
 
-## 5. Piloter depuis le telephone
+## 5. Steering from the phone
 
-- **App GitHub** : notifications des cartes `decision` (en cloud elles sont creees avec ton compte, et
-  GitHub ne notifie pas ses propres actions : le workflow `autopilot-wake` te mentionne alors depuis
-  `github-actions[bot]`, ce qui declenche la notification), reponse par commentaire,
-  approbation des deploiements de production, fusion des PR `needs-human`. Le tableau de bord est
-  l'issue epinglee de chaque depot.
-- **Portefeuille** : un projet GitHub (Projects) "Portefeuille" au niveau de ton compte, avec ses workflows
-  integres "Auto-add to project" (un par depot : `label:decision`, `label:autopilot`) et "Item closed ->
-  Done". C'est la vue de tous tes projets.
-- **App Claude** (onglet Code) : suivre ou reorienter une session en cours, lancer un reveil a la main.
-- **Pause** : `"paused": true` dans `state.json` (branche d'etat) ou desactiver la tache planifiee.
+- **GitHub app**: notifications of the `decision` cards (in the cloud they are created with your account, and
+  GitHub does not notify you of your own actions: the `autopilot-wake` workflow then mentions you from
+  `github-actions[bot]`, which triggers the notification), answer by comment,
+  approval of production deployments, merge of `needs-human` PRs. The dashboard is
+  the pinned issue of each repository.
+- **Portfolio**: a GitHub project (Projects) "Portfolio" at your account level, with its built-in
+  workflows "Auto-add to project" (one per repository: `label:decision`, `label:autopilot`) and "Item closed ->
+  Done". It is the view of all your projects.
+- **Claude app** (Code tab): follow or redirect a running session, launch a wake-up by hand.
+- **Pause**: `"paused": true` in `state.json` (state branch) or disable the scheduled task.
 
-## Limites connues
+## Known limits
 
-- Pas de plafond en dollars par reveil en cloud : le budget se tient en nombre d'agents et en frequence.
-- La duree maximale d'une session cloud n'est pas documentee : le reveil garde ses unites de travail
-  courtes (`per_run.stories`) et ecrit l'etat apres chaque story.
-- La fonction de taches planifiees est en apercu (research preview) : verifier son comportement au
-  premier reveil et a chaque changement annonce.
+- No dollar cap per wake-up in the cloud: the budget is kept in number of agents and in frequency.
+- The maximum duration of a cloud session is not documented: the wake-up keeps its work units
+  short (`per_run.stories`) and writes the state after each story.
+- The scheduled tasks feature is in preview (research preview): check its behaviour at the
+  first wake-up and at each announced change.

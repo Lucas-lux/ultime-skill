@@ -32,11 +32,11 @@ INVISIBLE = re.compile("[" + "".join(f"{chr(a)}-{chr(b)}" for a, b in INVISIBLE_
 # Files changed at import, per license folder: Apache 2.0 (4.b) and CC licenses ask modified files to say so.
 MODIFIED: dict[Path, dict[str, dict[str, set[str]]]] = defaultdict(lambda: defaultdict(lambda: defaultdict(set)))
 REASONS = {
-    "normalize": "em dash remplaces par un tiret simple, caracteres Unicode invisibles retires",
-    "strip_tail": "pied de page d'autopromotion retire",
-    "drop_lines": "liens d'autopromotion retires",
-    "replace": "passage adapte (contexte reduit, telemetrie ou publicite retiree)",
-    "rename": "champ name du frontmatter aligne sur le nom du dossier",
+    "normalize": "em dashes replaced with a hyphen, invisible Unicode characters removed",
+    "strip_tail": "self-promotion footer removed",
+    "drop_lines": "self-promotion links removed",
+    "replace": "passage adapted (reduced context, telemetry or advertising removed)",
+    "rename": "frontmatter name field aligned with the folder name",
 }
 
 
@@ -202,7 +202,7 @@ def import_entry(entry: dict, source: dict, tree: Path) -> Path:
     # Written after the copy: its name also matches LICENSE* and would otherwise block it.
     if entry.get("license_note"):
         note = license_directory / "LICENSE-NOTE.md"
-        note.write_text(f"# Note de licence\n\n{entry['license_note']}\n", encoding="utf-8")
+        note.write_text(f"# License note\n\n{entry['license_note']}\n", encoding="utf-8")
     return target
 
 
@@ -210,16 +210,16 @@ def write_modifications() -> None:
     """Write MODIFICATIONS.md in every license folder whose files were changed at import."""
     for directory, origins in MODIFIED.items():
         lines = ["# Modifications", "",
-                 "Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a",
-                 "leur version d'origine. Le reste du contenu est inchange.", ""]
+                 "Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with",
+                 "their original version. The rest of the content is unchanged.", ""]
         for origin, files in sorted(origins.items()):
             if not files:
                 continue
-            lines += [f"Origine : https://github.com/{origin.split('@')[0]} (commit {origin.split('@')[1]})", ""]
+            lines += [f"Origin: https://github.com/{origin.split('@')[0]} (commit {origin.split('@')[1]})", ""]
             base = directory.relative_to(ROOT)
             for file, reasons in sorted(files.items()):
                 shown = Path(file).relative_to(base).as_posix() if Path(file).is_relative_to(base) else file
-                lines.append(f"- `{shown}` : {'; '.join(sorted(reasons))}")
+                lines.append(f"- `{shown}`: {'; '.join(sorted(reasons))}")
             lines.append("")
         if any(origins.values()):
             (directory / "MODIFICATIONS.md").write_text("\n".join(lines), encoding="utf-8")
@@ -227,16 +227,16 @@ def write_modifications() -> None:
 
 def write_third_party(manifest: dict) -> None:
     lines = [
-        "# Composants tiers",
+        "# Third-party components",
         "",
-        "Contenu importé depuis des dépôts publics, aux commits indiqués, par `scripts/vendor.py`.",
-        "Modifications à l'import : les em dash sont remplacés par un tiret simple, les caractères Unicode",
-        "invisibles sont retirés, et les blocs ou liens d'autopromotion signalés (par exemple un footer de",
-        "citation imposé, un lien vers une newsletter) sont retirés. Quelques fichiers sont adaptés pour",
-        "réduire le contexte chargé ou retirer une télémétrie (option `replace` dans `scripts/gen_vendor.py`).",
-        "La licence d'origine est copiée dans chaque dossier importé.",
+        "Content imported from public repositories, at the commits shown, by `scripts/vendor.py`.",
+        "Changes at import: em dashes are replaced with a hyphen, invisible Unicode characters are",
+        "removed, and flagged self-promotion blocks or links (for example a mandatory citation footer, a",
+        "link to a newsletter) are removed. A few files are adapted to reduce the loaded context or",
+        "remove telemetry (`replace` option in `scripts/gen_vendor.py`).",
+        "The original license is copied into each imported folder.",
         "",
-        "| Chemin dans la bibliothèque | Dépôt d'origine | Chemin d'origine | Commit | Licence |",
+        "| Path in the library | Source repository | Source path | Commit | License |",
         "|---|---|---|---|---|",
     ]
     for entry in sorted(manifest["imports"], key=lambda item: item["to"]):

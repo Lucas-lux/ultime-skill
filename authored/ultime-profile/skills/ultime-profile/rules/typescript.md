@@ -9,9 +9,9 @@ paths:
 
 # TypeScript
 
-- `strict` respecte : pas de `any` (preferer `unknown` puis un garde de type), pas de `!` non justifie,
-  pas de `@ts-ignore` (au besoin `@ts-expect-error` avec la raison).
-- Types derives des donnees (`z.infer`, `typeof`, `satisfies`) plutot que dupliques a la main.
-- Erreurs : `Error` avec `cause`, jamais un rejet de chaine ; toute promesse est attendue ou geree.
-- Imports : ceux du projet (alias de `tsconfig`), pas de barrels qui creent des cycles.
-- Verifier avec `tsc --noEmit` et le lint du projet sur les fichiers touches.
+- `strict` respected: no `any` (prefer `unknown` then a type guard), no unjustified `!`, no
+  `@ts-ignore` (if needed `@ts-expect-error` with the reason).
+- Types derived from data (`z.infer`, `typeof`, `satisfies`) rather than duplicated by hand.
+- Errors: `Error` with `cause`, never a string rejection; every promise is awaited or handled.
+- Imports: the project's own (`tsconfig` aliases), no barrels that create cycles.
+- Check with `tsc --noEmit` and the project's lint on the touched files.

@@ -1,138 +1,138 @@
-# Phases, agents, livrables et portes
+# Phases, agents, deliverables and gates
 
-Les livrables vivent dans le depot du projet (ils sont sa documentation durable) ; l'etat de
-l'orchestration vit dans `.app-factory/` (voir `state.md`). Les noms de skills entre backticks sont a
-charger via l'outil Skill quand le pack correspondant est installe.
+Deliverables live in the project repository (they are its durable documentation); the
+orchestration state lives in `.app-factory/` (see `state.md`). Skill names in backticks are to be
+loaded via the Skill tool when the matching pack is installed.
 
-## Gabarit de prompt d'agent
+## Agent prompt template
 
 ```
-Role : <role> pour le projet <nom> (mode <creation|clone|reprise>), phase <Pn>.
-Contexte a lire : <chemins : brief, PRD, ADR, etc.>
-Tache : <une tache bornee>
-Livrable : <chemin exact du fichier a ecrire ou du code a produire>
-Definition of done : <criteres verifiables>
-Skills a charger : <noms>
-Contraintes : <stack, conventions du depot, decisions deja prises>
-Rends : un resume court (fait, fichiers produits, verifications faites, questions ouvertes, risques).
+Role: <role> for the project <name> (mode <creation|clone|takeover>), phase <Pn>.
+Context to read: <paths: brief, PRD, ADR, etc.>
+Task: <one bounded task>
+Deliverable: <exact path of the file to write or the code to produce>
+Definition of done: <verifiable criteria>
+Skills to load: <names>
+Constraints: <stack, repository conventions, decisions already made>
+Return: a short summary (done, files produced, checks done, open questions, risks).
 ```
 
-## P0 Cadrage
+## P0 Framing
 
-- **Creation** : affiner l'idee avec l'utilisateur (`interview-me`, `idea-refine` ou `brainstorming`).
-- **Clone** : skill `app-clone` (dossier de reference, matrice de parite, brief de personnalisation).
-- **Reprise** : skill `app-takeover` (inventaire, retro-spec, audit, plan de reprise).
-- Livrable : `docs/product/brief.md` (probleme, cible, plateformes, marche et langues, contraintes,
-  criteres de succes, mode, niveau d'autonomie).
-- **G0** : le brief est complet et valide par l'utilisateur ; en clone, le controle de distinction est
-  fait ; en reprise, l'inventaire et l'audit sont partages.
+- **Creation**: refine the idea with the user (`interview-me`, `idea-refine` or `brainstorming`).
+- **Clone**: `app-clone` skill (reference dossier, parity matrix, customization brief).
+- **Takeover**: `app-takeover` skill (inventory, reverse spec, audit, takeover plan).
+- Deliverable: `docs/product/brief.md` (problem, target, platforms, market and languages, constraints,
+  success criteria, mode, autonomy level).
+- **G0**: the brief is complete and validated by the user; in clone, the distinctiveness check is
+  done; in takeover, the inventory and the audit are shared.
 
-## P1 Decouverte
+## P1 Discovery
 
-- Agent `product-strategist`. Skills : `competitor-analysis`, `user-personas`, `market-segments`,
-  `market-sizing` (si utile), `identify-assumptions-new` ou `identify-assumptions-existing`,
+- Agent `product-strategist`. Skills: `competitor-analysis`, `user-personas`, `market-segments`,
+  `market-sizing` (if useful), `identify-assumptions-new` or `identify-assumptions-existing`,
   `opportunity-solution-tree`, `value-proposition`, `positioning-ideas`, `business-model`,
   `monetization-strategy`, `pricing-strategy`, `north-star-metric`.
-- Livrable : `docs/product/discovery.md` (cibles et besoins, alternatives, positionnement, modele
-  economique, metrique nord, hypotheses les plus risquees et comment les tester).
-- **G1** : go, pivot ou stop. Les hypotheses risquees ont chacune un test ou une mitigation. Aucun
-  chiffre de marche presente comme un fait sans source.
+- Deliverable: `docs/product/discovery.md` (targets and needs, alternatives, positioning, business
+  model, north star metric, riskiest assumptions and how to test them).
+- **G1**: go, pivot or stop. The risky assumptions each have a test or a mitigation. No
+  market figure presented as a fact without a source.
 
 ## P2 Specification
 
-- `product-manager` : `create-prd`, puis `strategy-red-team` ou `pre-mortem` sur le PRD. Exigences non
-  fonctionnelles chiffrees : performance, disponibilite, securite, accessibilite, langues, hors ligne
-  (mobile), volumetrie. Perimetre MVP, versions suivantes, non-objectifs.
-- `compliance-officer` : scan reglementaire initial (donnees personnelles, cookies, mentions legales,
-  CGU/CGV si vente, accessibilite, IA, contenus publies par les utilisateurs, secteurs sensibles : sante,
-  mineurs, finance ; politiques des stores si mobile).
-- `finops-analyst` : premiere enveloppe de cout (hebergement, services tiers, frais de stores, outils,
-  budget d'acquisition) en fourchettes sourcees.
-- Livrables : `docs/product/prd.md`, `docs/compliance/obligations.md`, `docs/finops/cost-envelope.md`.
-- **G2** : chaque exigence est testable et identifiee (`REQ-xxx`), aucune question bloquante ouverte, les
-  obligations reglementaires sont listees, l'enveloppe de cout est acceptee.
+- `product-manager`: `create-prd`, then `strategy-red-team` or `pre-mortem` on the PRD. Quantified
+  non-functional requirements: performance, availability, security, accessibility, languages, offline
+  (mobile), volumes. MVP scope, next versions, non-goals.
+- `compliance-officer`: initial regulatory scan (personal data, cookies, legal notices,
+  terms of use / terms of sale if selling, accessibility, AI, user-published content, sensitive sectors: health,
+  minors, finance; store policies if mobile).
+- `finops-analyst`: first cost envelope (hosting, third-party services, store fees, tools,
+  acquisition budget) in sourced ranges.
+- Deliverables: `docs/product/prd.md`, `docs/compliance/obligations.md`, `docs/finops/cost-envelope.md`.
+- **G2**: each requirement is testable and identified (`REQ-xxx`), no blocking question open, the
+  regulatory obligations are listed, the cost envelope is accepted.
 
-## P3 Conception
+## P3 Design
 
-Sequence : l'architecte d'abord (il fixe la stack et les frontieres), puis les autres en parallele.
+Sequence: the architect first (it sets the stack and the boundaries), then the others in parallel.
 
-- `software-architect` : stack via `stack-selection.md`, ADR (`documentation-and-adrs`), vue C4
-  contexte et conteneurs, contrats d'API (`api-and-interface-design`), environnements (dev, staging,
-  prod), integrations, strategie de test. Livrables : `docs/architecture/architecture.md`,
+- `software-architect`: stack via `stack-selection.md`, ADRs (`documentation-and-adrs`), C4 view
+  context and containers, API contracts (`api-and-interface-design`), environments (dev, staging,
+  prod), integrations, test strategy. Deliverables: `docs/architecture/architecture.md`,
   `docs/adr/NNNN-*.md`.
-- `data-architect` : modele de donnees, migrations, index, contraintes, droits, sauvegardes,
-  retention. Livrable : `docs/architecture/data-model.md`.
-- `ux-designer` : parcours, ecrans, etats (vide, chargement, erreur), design system et tokens,
-  accessibilite. Livrable : `docs/design/ux.md` (et maquettes si un outil est disponible).
-- `security-engineer` : modele de menace (`security-threat-model`), authentification, autorisation,
-  gestion des secrets, niveau ASVS ou MASVS vise. Livrable : `docs/security/threat-model.md`.
-- `finops-analyst` : enveloppe affinee, cout unitaire, budgets et alertes prevus.
-- `compliance-officer` : privacy by design (registre, bases legales, AIPD si requise, sous-traitants),
-  plan des pages legales et du consentement. Livrable : `docs/compliance/privacy-by-design.md`.
-- **G3** : chaque `REQ-xxx` est rattachee a un composant ; aucun ADR ouvert ; securite, conformite et
-  finops ont chacune signe ; les choix sont coherents entre documents (verification croisee).
+- `data-architect`: data model, migrations, indexes, constraints, permissions, backups,
+  retention. Deliverable: `docs/architecture/data-model.md`.
+- `ux-designer`: journeys, screens, states (empty, loading, error), design system and tokens,
+  accessibility. Deliverable: `docs/design/ux.md` (and mockups if a tool is available).
+- `security-engineer`: threat model (`security-threat-model`), authentication, authorization,
+  secrets management, targeted ASVS or MASVS level. Deliverable: `docs/security/threat-model.md`.
+- `finops-analyst`: refined envelope, unit cost, planned budgets and alerts.
+- `compliance-officer`: privacy by design (record of processing, legal bases, DPIA if required, processors),
+  plan of the legal pages and of consent. Deliverable: `docs/compliance/privacy-by-design.md`.
+- **G3**: each `REQ-xxx` is attached to a component; no open ADR; security, compliance and
+  finops have each signed off; the choices are consistent across documents (cross-check).
 
-## P4 Planification
+## P4 Planning
 
-- `project-manager` : `outcome-roadmap`, `user-stories` (criteres d'acceptation en Etant donne / Quand /
-  Alors), `test-scenarios`, `prioritization-frameworks`, `sprint-plan`.
-- Jalons : **M0 squelette** (depot, lint, tests, CI, environnements, deploiement en staging d'un premier
-  ecran, monitoring de base, migrations outillees), puis des tranches verticales de valeur, puis un jalon
-  de durcissement et de lancement.
-- Livrables : `docs/product/roadmap.md`, `docs/product/backlog.md` (stories `S-xxx` reliees aux
-  `REQ-xxx`), definition of done du projet (base : `quality-bar.md`).
-- Creation d'issues ou de milestones sur une forge : seulement si l'utilisateur le demande (action
-  visible de l'exterieur).
-- **G4** : tracabilite complete REQ vers stories, M0 en premier, stories INVEST, dependances et risques
-  identifies.
+- `project-manager`: `outcome-roadmap`, `user-stories` (acceptance criteria as Given / When /
+  Then), `test-scenarios`, `prioritization-frameworks`, `sprint-plan`.
+- Milestones: **M0 skeleton** (repository, lint, tests, CI, environments, staging deployment of a first
+  screen, basic monitoring, tooled migrations), then vertical slices of value, then a hardening
+  and launch milestone.
+- Deliverables: `docs/product/roadmap.md`, `docs/product/backlog.md` (stories `S-xxx` linked to the
+  `REQ-xxx`), project definition of done (base: `quality-bar.md`).
+- Creating issues or milestones on a forge: only if the user asks for it (externally
+  visible action).
+- **G4**: full traceability REQ to stories, M0 first, INVEST stories, dependencies and risks
+  identified.
 
-## P5 Construction (boucle par jalon)
+## P5 Build (loop per milestone)
 
-Jalon M0 : le `CLAUDE.md` du projet est ecrit depuis le modele le plus proche de
-`templates/claude-md/` (moins de 200 lignes, commandes reelles du projet, rien de generique), puis
-`ultime-profile` ecrit les regles par langage. `release-engineer` lance la skill `ci-forge` (pack ci-forge) des le squelette, sans attendre
-l'utilisateur : CI complete selon la stack, check requis `ci-ok`, hooks locaux, Dependabot. Les stories
-suivantes ne passent `done` qu'avec `ci-ok` vert.
+Milestone M0: the project's `CLAUDE.md` is written from the closest template in
+`templates/claude-md/` (under 200 lines, the project's real commands, nothing generic), then
+`ultime-profile` writes the per-language rules. `release-engineer` runs the `ci-forge` skill (ci-forge pack) from the skeleton on, without waiting for
+the user: full CI for the stack, required check `ci-ok`, local hooks, Dependabot. The following
+stories only move to `done` with `ci-ok` green.
 
-Pour chaque story prete, dans l'ordre des dependances :
-1. `implementer` : `test-driven-development`, `incremental-implementation`, commits petits sur une branche
-   dediee. UI : `frontend-ui-engineering` et les skills du pack ui-design.
-2. `code-reviewer` : `code-review-and-quality` sur le diff.
-3. `qa-engineer` : criteres d'acceptation verifies, tests de bout en bout des parcours touches.
-4. `security-engineer` : `security-review` sur le diff si la story touche
-   authentification, autorisation, donnees personnelles, paiement, upload ou entree externe.
-5. `ux-designer` : revue des ecrans touches (accessibilite, coherence avec le design system).
-6. Corrections par `implementer`, boucle bornee. La story passe `done` quand la definition of done est
-   remplie et verifiee par l'orchestrateur (tests relances).
+For each ready story, in dependency order:
+1. `implementer`: `test-driven-development`, `incremental-implementation`, small commits on a dedicated
+   branch. UI: `frontend-ui-engineering` and the skills of the ui-design pack.
+2. `code-reviewer`: `code-review-and-quality` on the diff.
+3. `qa-engineer`: acceptance criteria verified, end-to-end tests of the touched journeys.
+4. `security-engineer`: `security-review` on the diff if the story touches
+   authentication, authorization, personal data, payment, upload or external input.
+5. `ux-designer`: review of the touched screens (accessibility, consistency with the design system).
+6. Fixes by `implementer`, bounded loop. The story moves to `done` when the definition of done is
+   met and verified by the orchestrator (tests rerun).
 
-- **G5** (fin de jalon) : `gate-verifier` fait l'audit de jalon (stories acceptees, tests verts, revue
-  propre, migrations reversibles, pas de regression), demo a l'utilisateur (skill `run` pour lancer
-  l'app), `retro` courte, ajustement du backlog.
+- **G5** (end of milestone): `gate-verifier` does the milestone audit (stories accepted, tests green, clean
+  review, reversible migrations, no regression), demo to the user (`run` skill to launch
+  the app), short `retro`, backlog adjustment.
 
 ## P6 Pre-production
 
-- `release-engineer` : CD avec `ci-forge` (reference `cd.md`) puis pipeline (`ci-cd-and-automation`, `github-actions`,
-  `deployment-pipeline-design`), parite staging et prod, deploiement progressif et rollback teste
-  (`testing-in-production`), domaine et TLS, infrastructure as code (`terraform-skill`) si pertinent.
-- `sre` : `setting-up-monitoring`, SLO (`slo-implementation`), alertes, runbooks, `incident-response`,
-  sauvegardes et **restauration testee**.
-- `security-engineer` : audit final (`security-review`, `sast`, `auditing-supply-chain`, `owasp-security`, secrets,
-  en-tetes, limitation de debit).
-- `compliance-officer` : pages legales, politique de confidentialite, consentement, declaration
-  d'accessibilite, registre ; en mobile, labels de confidentialite des stores.
-- `finops-analyst` : budgets et alertes en place, prevision de cout au lancement.
-- `qa-engineer` : regression complete, tests de charge (`k6`), audit d'accessibilite.
-- Mobile : `release-engineer` avec `mobile-release` (signature, pistes de test, rollout),
-  `security-engineer` avec `mobile-security-masvs`, `compliance-officer` avec `store-listing` et
-  `play-data-safety` ; profil de packs ajuste (`ultime-profile` : app-stores, store-apple, store-google).
-- Livrable : `docs/ops/release-readiness.md`.
-- **G6** go / no-go : la liste des actions irreversibles a venir est presentee explicitement.
+- `release-engineer`: CD with `ci-forge` (reference `cd.md`) then pipeline (`ci-cd-and-automation`, `github-actions`,
+  `deployment-pipeline-design`), staging and prod parity, progressive deployment and tested rollback
+  (`testing-in-production`), domain and TLS, infrastructure as code (`terraform-skill`) if relevant.
+- `sre`: `setting-up-monitoring`, SLOs (`slo-implementation`), alerts, runbooks, `incident-response`,
+  backups and **tested restore**.
+- `security-engineer`: final audit (`security-review`, `sast`, `auditing-supply-chain`, `owasp-security`, secrets,
+  headers, rate limiting).
+- `compliance-officer`: legal pages, privacy policy, consent, accessibility
+  statement, record of processing; on mobile, store privacy labels.
+- `finops-analyst`: budgets and alerts in place, cost forecast at launch.
+- `qa-engineer`: full regression, load tests (`k6`), accessibility audit.
+- Mobile: `release-engineer` with `mobile-release` (signing, test tracks, rollout),
+  `security-engineer` with `mobile-security-masvs`, `compliance-officer` with `store-listing` and
+  `play-data-safety`; pack profile adjusted (`ultime-profile`: app-stores, store-apple, store-google).
+- Deliverable: `docs/ops/release-readiness.md`.
+- **G6** go / no-go: the list of upcoming irreversible actions is presented explicitly.
 
-## P7 Lancement et apprentissage
+## P7 Launch and learning
 
-- `release-engineer` : mise en production apres confirmation, smoke tests, deploiement progressif.
-- `growth-lead` : plan de lancement, SEO de base, fiches stores si mobile (pack store-aso, saisie via
-  `store-console-browser` ou les CLI), analytics conformes au
-  consentement, tableau de bord de la metrique nord, `release-notes`.
-- `project-manager` : `retro`, revue des metriques a J+7 et J+30, backlog de l'iteration suivante.
-- **G7** : revue post-lancement avec l'utilisateur ; l'iteration suivante repart en P4.
+- `release-engineer`: go to production after confirmation, smoke tests, progressive deployment.
+- `growth-lead`: launch plan, basic SEO, store listings if mobile (store-aso pack, entry via
+  `store-console-browser` or the CLIs), analytics compliant with
+  consent, north star metric dashboard, `release-notes`.
+- `project-manager`: `retro`, metrics review at D+7 and D+30, backlog of the next iteration.
+- **G7**: post-launch review with the user; the next iteration starts again at P4.

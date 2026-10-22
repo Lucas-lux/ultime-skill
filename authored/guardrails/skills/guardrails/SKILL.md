@@ -1,42 +1,41 @@
 ---
 name: guardrails
 description: >
-  Garde-fous imposes par hooks : pas d'em dash, pas d'emoji non demande, pas de push sur main, pas de
-  contournement des hooks git, pas de secret ni de .env dans git, Conventional Commits, marqueur IA,
-  regle d'or des identifiants de prod. A utiliser pour installer, configurer, assouplir ou expliquer un
-  blocage des garde-fous, ou "guardrails".
+  Guardrails enforced by hooks: no em dash, no unrequested emoji, no push to main, no bypassing git
+  hooks, no secret or .env in git, Conventional Commits, AI marker, golden rule of production
+  credentials. Use to install, configure, relax or explain a guardrails block, or "guardrails".
 ---
 
-# Garde-fous (guardrails)
+# Guardrails
 
-Les regles sont appliquees par des hooks : Claude ne peut pas les oublier. Un blocage arrive avec la
-regle (`[id]`) et la marche a suivre. Ne jamais chercher a contourner une regle (autre outil, autre
-formulation, script) : corriger le travail, ou dire a l'utilisateur ce qui bloque.
+The rules are enforced by hooks: Claude cannot forget them. A block comes with the rule (`[id]`) and
+the steps to follow. Never try to get around a rule (another tool, another wording, a script): fix the
+work, or tell the user what is blocking.
 
-## Regles et niveaux
+## Rules and levels
 
-| id | Ce qui est controle | Defaut |
+| id | What is checked | Default |
 |---|---|---|
-| `em-dash` | Em dash ajoute dans un fichier, un commit, une PR, une issue, un texte ecrit par commande ; lignes indexees au commit | block |
-| `emoji` | Emoji ajoute dans un fichier, un commit, une PR ou une issue ; `allow` (par defaut le marqueur IA et la ligne d'attribution) et `allow_paths` | block |
-| `protected-push` | Push vers `branches` (main, master) : refspec, branche courante, `HEAD`, checkout dans la meme commande, suppression, `--all`, `--mirror` | block |
+| `em-dash` | Em dash added in a file, a commit, a PR, an issue, a text written by command; staged lines at commit | block |
+| `emoji` | Emoji added in a file, a commit, a PR or an issue; `allow` (by default the AI marker and the attribution line) and `allow_paths` | block |
+| `protected-push` | Push to `branches` (main, master): refspec, current branch, `HEAD`, checkout in the same command, deletion, `--all`, `--mirror` | block |
 | `no-verify` | `--no-verify`, `commit -n`, `core.hooksPath`, `HUSKY=0`, `LEFTHOOK=0`, `SKIP=` | block |
-| `secrets` | Cles et tokens (AWS, GitHub, Anthropic, OpenAI, Stripe, Google, Slack, cle privee, mot de passe en URL ou en clair) dans un fichier, une commande ou les lignes indexees ; les `.env` sont exemptes | block |
-| `env-file` | `git add` ou commit d'un fichier `.env` (`patterns`) | block |
-| `conventional-commit` | `type(scope): description`, `types`, `max_subject` (72), minuscule, pas de point final | block |
-| `ai-marker` | Titre de PR ou d'issue (gh ou API REST) termine par `marker` | block |
-| `merge-approval` | Fusion ou approbation au nom de l'utilisateur : `gh pr merge`, `gh pr review --approve`, et par `gh api` la fusion d'une PR, une review `APPROVE`, l'approbation d'un deploiement ; en autopilot, GitHub fusionne seul et la production s'approuve dans l'environnement GitHub | ask |
-| `prod-credentials` | Secrets Kubernetes, coffres (Bitwarden, 1Password, Vault, AWS, GCP, Azure), historique du shell, `.env` d'un autre projet, tunnel vers la prod (`prod_patterns`) ; `allowed_files` | block |
-| `lint-config` | Configuration de lint, format ou typage modifiee, suppression d'avertissement ajoutee | warn |
-| `config-tamper` | Modification de la configuration ou du retrait des garde-fous | ask |
+| `secrets` | Keys and tokens (AWS, GitHub, Anthropic, OpenAI, Stripe, Google, Slack, private key, password in a URL or in clear) in a file, a command or the staged lines; `.env` files are exempt | block |
+| `env-file` | `git add` or commit of a `.env` file (`patterns`) | block |
+| `conventional-commit` | `type(scope): description`, `types`, `max_subject` (72), lowercase, no trailing period | block |
+| `ai-marker` | PR or issue title (gh or REST API) ending with `marker` | block |
+| `merge-approval` | Merge or approval on behalf of the user: `gh pr merge`, `gh pr review --approve`, and through `gh api` the merge of a PR, an `APPROVE` review, the approval of a deployment; in autopilot, GitHub merges on its own and production is approved in the GitHub environment | ask |
+| `prod-credentials` | Kubernetes secrets, vaults (Bitwarden, 1Password, Vault, AWS, GCP, Azure), shell history, `.env` of another project, tunnel to production (`prod_patterns`); `allowed_files` | block |
+| `lint-config` | Lint, format or typing configuration modified, warning suppression added | warn |
+| `config-tamper` | Modification of the guardrails configuration or removal of the guardrails | ask |
 
-Niveaux : `block` (refuse l'appel), `ask` (demande a l'utilisateur ; refuse quand personne ne peut
-repondre, en cloud), `warn` (laisse passer avec un avertissement), `off`.
+Levels: `block` (refuses the call), `ask` (asks the user; refuses when nobody can answer, in the
+cloud), `warn` (lets it through with a warning), `off`.
 
 ## Configuration
 
-Fusionnee dans cet ordre : valeurs par defaut, `~/.claude/guardrails.json` (toute la machine),
-`.claude/guardrails.json` du projet (partage, commite), `.claude/guardrails.local.json` (personnel).
+Merged in this order: defaults, `~/.claude/guardrails.json` (the whole machine),
+`.claude/guardrails.json` of the project (shared, committed), `.claude/guardrails.local.json` (personal).
 
 ```json
 {
@@ -50,26 +49,26 @@ Fusionnee dans cet ordre : valeurs par defaut, `~/.claude/guardrails.json` (tout
 }
 ```
 
-- Une regle peut s'ecrire `"id": "off"`. `"enabled": false` coupe tout.
-- Pour une session : variables `GUARDRAILS_DISABLED=1` ou `GUARDRAILS_DISABLED_RULES=emoji,ai-marker`
-  dans l'environnement de Claude Code (pas dans une commande).
-- **Changer la configuration demande l'accord de l'utilisateur** (regle `config-tamper`). Quand
-  l'utilisateur demande un emoji ou une exception, proposer la ligne exacte a ajouter, puis l'ecrire
-  apres son accord.
+- A rule can be written `"id": "off"`. `"enabled": false` turns everything off.
+- For one session: variables `GUARDRAILS_DISABLED=1` or `GUARDRAILS_DISABLED_RULES=emoji,ai-marker`
+  in the Claude Code environment (not in a command).
+- **Changing the configuration requires the user's consent** (`config-tamper` rule). When the user
+  asks for an emoji or an exception, propose the exact line to add, then write it after their consent.
 
 ## Installation
 
-- **Sur la machine** (tous les projets) : le plugin `guardrails`, installe par defaut par les scripts
-  `install.sh` et `install.ps1` d'ultime-skill (`--no-guardrails` pour s'en passer). Desactiver :
+- **On the machine** (all projects): the `guardrails` plugin, installed by default by the
+  `install.sh` and `install.ps1` scripts of ultime-skill (`--no-guardrails` to skip it). Disable:
   `claude plugin disable guardrails@ultime-skill`.
-- **Dans un projet** (equipe sans le plugin, sessions cloud, autopilot) :
-  `node <plugin guardrails>/runtime/setup.cjs install-project`, puis commiter `.claude/`. La copie du
-  projet repond seule dans ce projet, celle du plugin se tait. `status` et `uninstall-project` existent.
-  `export_to_repo.py` d'autopilot le fait quand le pack `guardrails` fait partie de l'export.
-- Necessite `node` (18 ou plus). Une erreur interne laisse passer l'appel et s'affiche, elle ne bloque
-  jamais le travail.
+- **In a project** (team without the plugin, cloud sessions, autopilot):
+  `node <plugin guardrails>/runtime/setup.cjs install-project`, then commit `.claude/`. The project's
+  copy answers on its own in that project, the plugin's copy stays silent. `status` and
+  `uninstall-project` exist. Autopilot's `export_to_repo.py` does it when the `guardrails` pack is part
+  of the export.
+- Requires `node` (18 or later). An internal error lets the call through and is displayed, it never
+  blocks the work.
 
-## Expliquer un blocage
+## Explaining a block
 
-Donner la regle, la raison et la correction. Si c'est un faux positif reel, proposer l'exception la plus
-etroite (un chemin dans `exclude_paths` ou `allow_paths`), jamais la desactivation de la regle entiere.
+Give the rule, the reason and the fix. If it is a real false positive, propose the narrowest exception
+(a path in `exclude_paths` or `allow_paths`), never disabling the whole rule.

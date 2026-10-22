@@ -6,8 +6,8 @@ paths:
 
 # Go
 
-- Erreurs enveloppees avec contexte (`fmt.Errorf("...: %w", err)`), jamais ignorees ; pas de `panic`
-  hors initialisation.
-- `context.Context` en premier parametre de tout appel bloquant ou reseau, propage jusqu'au bout.
-- Goroutines avec une fin garantie (contexte, `errgroup`) ; pas de fuite.
-- `gofmt`, `go vet` et `golangci-lint` du projet propres sur les paquets touches.
+- Errors wrapped with context (`fmt.Errorf("...: %w", err)`), never ignored; no `panic` outside
+  initialization.
+- `context.Context` as the first parameter of every blocking or network call, propagated all the way.
+- Goroutines with a guaranteed end (context, `errgroup`); no leak.
+- The project's `gofmt`, `go vet` and `golangci-lint` clean on the touched packages.

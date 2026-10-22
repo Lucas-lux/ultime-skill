@@ -23,7 +23,8 @@ SOFTWARE.
 ---
 
 This MIT license covers only the original work in this repository: the tooling
-in scripts/, the manifests, and the documentation. Each skill imported under
+in scripts/ and bin/, the manifests, the in-house skills, agents and hooks in
+authored/, and the documentation. Each skill imported under
 plugins/ keeps the license of its upstream project, provided in that skill's
 directory and recorded in THIRD_PARTY.md. See THIRD_PARTY.md for the per-skill
 origin, commit, and license.

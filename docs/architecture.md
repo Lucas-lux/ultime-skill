@@ -1,87 +1,97 @@
 # Architecture
 
-## Les briques de Claude Code utilisées
+## The Claude Code building blocks used
 
-| Brique | Rôle | Coût en contexte |
+| Building block | Role | Context cost |
 |---|---|---|
-| Skill (`SKILL.md`) | un savoir-faire chargé à la demande ; seule sa description est présente en permanence | la description, à chaque session |
-| Agent (`agents/*.md`) | un sous-agent spécialisé avec son propre contexte, ses outils et son modèle | sa description |
-| Hook | un script lancé par Claude Code sur un événement (avant un outil, au démarrage) ; il peut refuser une action | nul, sauf le texte qu'il injecte |
-| Règle (`.claude/rules/*.md`) | une consigne de projet ; avec `paths:`, chargée seulement quand Claude touche un fichier concerné | nul hors de ces fichiers |
-| Plugin | un paquet installable qui regroupe skills, agents et hooks | la somme de son contenu |
+| Skill (`SKILL.md`) | a piece of know-how loaded on demand; only its description is always present | the description, in every session |
+| Agent (`agents/*.md`) | a specialized subagent with its own context, tools and model | its description |
+| Hook | a script run by Claude Code on an event (before a tool, at startup); it can refuse an action | none, except the text it injects |
+| Rule (`.claude/rules/*.md`) | a project instruction; with `paths:`, loaded only when Claude touches a matching file | none outside those files |
+| Plugin | an installable package that groups skills, agents and hooks | the sum of its contents |
 
-## Packs, bundles, profils
+## Other coding agents
 
-- **Pack** : un plugin cohérent (`security`, `mobile-expo`, `ci-forge`...). 43 packs, chacun installable
-  seul.
-- **Bundle** : un plugin vide qui dépend de plusieurs packs (`ultime-starter`, `ultime-dev`,
-  `ultime-factory`, `ultime-all`...). Pratique, mais un bundle large actif partout coûte cher en contexte.
-- **Profil** : la sélection de packs d'un projet, calculée par `ultime-profile` à partir de signaux du
-  dépôt (`references/stack-map.json` : un `package.json` avec `next`, un `pyproject.toml` avec `fastapi`,
-  un `Dockerfile`, des `*.tf`...) et installée au niveau du projet.
+The Claude Code plugins are the single source. The build also writes a Cursor marketplace
+(`.cursor-plugin/`), and the universal installer (`bin/ultime-skill.cjs`) copies and converts, at install
+time, what each other agent reads: skills into the shared `.agents/skills` folder of the Agent Skills
+standard, subagents into each agent's format (TOML for Codex, Markdown elsewhere), commands, the
+guardrails hook in the agent's protocol, and the always-on rules in its instructions file. Nothing is
+copied into the repository for them. Details: [Coding agents](harnesses.md).
+
+## Packs, bundles, profiles
+
+- **Pack**: a coherent plugin (`security`, `mobile-expo`, `ci-forge`...). 43 packs, each installable on
+  its own.
+- **Bundle**: an empty plugin that depends on several packs (`ultime-starter`, `ultime-dev`,
+  `ultime-factory`, `ultime-all`...). Convenient, but a large bundle active everywhere is expensive in
+  context.
+- **Profile**: a project's selection of packs, computed by `ultime-profile` from repository signals
+  (`references/stack-map.json`: a `package.json` with `next`, a `pyproject.toml` with `fastapi`, a
+  `Dockerfile`, some `*.tf`...) and installed at project level.
 
 ```mermaid
 flowchart LR
-  A[Dépôt du projet] -->|signaux| B[suggest_profile.py]
-  B --> C[Packs utiles]
-  B --> D[Règles par langage]
+  A[Project repository] -->|signals| B[suggest_profile.py]
+  B --> C[Useful packs]
+  B --> D[Per-language rules]
   B --> E[Permissions]
-  C --> F[Session Claude Code du projet]
+  C --> F[Project Claude Code session]
   D --> F
   E --> F
-  G[ultime-starter : profile, guardrails, ponytail] --> F
+  G[ultime-starter: profile, guardrails, ponytail] --> F
 ```
 
-## Économie de contexte
+## Context economy
 
-Chaque description de skill active est envoyée à chaque tour. Le catalogue complet en représente environ
-182 000 caractères (de l'ordre de 45 000 tokens), bien au-delà de ce que Claude Code garde pour cet
-usage : il en écarte alors une partie et choisit moins bien. D'où trois mécanismes :
+Every active skill description is sent on every turn. The full catalog represents about 182,000
+characters of them (on the order of 45,000 tokens), far beyond what Claude Code keeps for this purpose:
+it then drops part of them and chooses less well. Hence three mechanisms:
 
-1. **Activation par projet** : un profil d'application web ou d'API pèse 13 à 15 % du catalogue.
-2. **Règles à portée de fichier** : les conventions par langage ne coûtent rien tant que Claude ne touche
-   pas un fichier concerné (vérifié en session réelle).
-3. **Descriptions maîtrisées** : `check.py` signale une description écrite maison de plus de 400
-   caractères ou un `SKILL.md` de plus de 500 lignes ; le détail va dans des références lues à la demande.
+1. **Per-project activation**: a web application or API profile weighs 13 to 15% of the catalog.
+2. **File-scoped rules**: per-language conventions cost nothing as long as Claude does not touch a
+   matching file (verified in a real session).
+3. **Controlled descriptions**: `check.py` flags an in-house description longer than 400 characters or a
+   `SKILL.md` longer than 500 lines; the detail goes into references read on demand.
 
-Les agents d'`app-factory` ont chacun un modèle adapté à leur rôle (un modèle léger pour l'inventaire, un
-modèle intermédiaire pour l'implémentation et la revue, celui de la session pour l'architecture, la
-sécurité et la vérification des portes), ce qui réduit le coût des tâches répétitives.
+The `app-factory` agents each have a model suited to their role (a light model for the inventory, an
+intermediate model for implementation and review, the session's model for architecture, security and
+gate verification), which reduces the cost of repetitive tasks.
 
-## Construction reproductible
+## Reproducible build
 
-Rien dans `plugins/` n'est édité à la main : tout est régénéré.
+Nothing in `plugins/` is edited by hand: everything is regenerated.
 
 ```mermaid
 flowchart LR
-  A[gen_vendor.py] --> B[vendor.json : sources épinglées à un commit]
-  B --> C[vendor.py : copie, nettoyage, licences, MODIFICATIONS.md]
-  D[authored/ : packs écrits maison] --> E[superposition]
+  A[gen_vendor.py] --> B[vendor.json: sources pinned to a commit]
+  B --> C[vendor.py: copy, cleanup, licenses, MODIFICATIONS.md]
+  D[authored/: in-house packs] --> E[overlay]
   C --> E
-  E --> F[gen_manifests.py : plugin.json, bundles, marketplace, catalogue]
-  F --> G[check.py : validation et tests]
+  E --> F[gen_manifests.py: plugin.json, bundles, marketplace, catalog]
+  F --> G[check.py: validation and tests]
 ```
 
-- `scripts/gen_vendor.py` décrit chaque source (dépôt, commit, licence) et chaque import ; il écrit
+- `scripts/gen_vendor.py` describes each source (repository, commit, license) and each import; it writes
   `vendor.json`.
-- `scripts/vendor.py` récupère chaque commit épinglé, copie les fichiers, remplace les em dash, retire les
-  caractères Unicode invisibles et l'autopromotion signalée, copie la licence et la notice d'origine, et
-  écrit `MODIFICATIONS.md` là où un fichier a changé. Il n'exécute jamais rien venant d'un dépôt amont.
-- `authored/` contient les packs écrits maison, superposés sur `plugins/`.
-- `scripts/gen_manifests.py` écrit les manifestes, les bundles, la place de marché et le catalogue des
-  coûts.
-- `scripts/check.py` valide les skills et les agents, refuse les em dash et l'Unicode invisible, signale
-  les motifs à risque, et lance les tests (`tests/`).
-- `scripts/build.py` enchaîne le tout.
+- `scripts/vendor.py` fetches each pinned commit, copies the files, replaces em dashes, removes invisible
+  Unicode characters and flagged self-promotion, copies the license and the original notice, and writes
+  `MODIFICATIONS.md` wherever a file changed. It never executes anything coming from an upstream
+  repository.
+- `authored/` contains the in-house packs, overlaid on `plugins/`.
+- `scripts/gen_manifests.py` writes the manifests, the bundles, the marketplace and the cost catalog.
+- `scripts/check.py` validates the skills and agents, refuses em dashes and invisible Unicode, flags risky
+  patterns, and runs the tests (`tests/`).
+- `scripts/build.py` chains it all.
 
-## Ce qui est écrit maison
+## What is written in-house
 
-| Pack | Contenu |
+| Pack | Contents |
 |---|---|
-| `app-factory` | orchestrateur, modes clone et reprise, autopilot, 18 agents |
-| `guardrails` | moteur de hooks et ses règles, installable aussi dans un projet |
-| `ci-forge` | détection de stack, épinglage des actions, références par stack |
-| `ultime-profile` | profils de projet, règles par langage, permissions |
-| `security` (en partie) | `security-review`, `sast` |
-| `ui-design` (en partie) | `ui-review` |
-| `mobile`, `app-stores`, `growth` (en partie), `compliance` (en partie), `monitoring`, `prod-testing`, `finops` (en partie), `team-conventions` | savoir-faire absents ou insuffisants dans les sources publiques |
+| `app-factory` | orchestrator, clone and takeover modes, autopilot, 18 agents |
+| `guardrails` | hook engine and its rules, also installable in a project |
+| `ci-forge` | stack detection, action pinning, per-stack references |
+| `ultime-profile` | project profiles, per-language rules, permissions |
+| `security` (in part) | `security-review`, `sast` |
+| `ui-design` (in part) | `ui-review` |
+| `mobile`, `app-stores`, `growth` (in part), `compliance` (in part), `monitoring`, `prod-testing`, `finops` (in part), `team-conventions` | know-how missing or insufficient in public sources |

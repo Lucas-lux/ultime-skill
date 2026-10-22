@@ -1,24 +1,24 @@
 # Infrastructure as code
 
-## Terraform et OpenTofu (fichiers `.tf` detectes)
+## Terraform and OpenTofu (`.tf` files detected)
 
-| Job | Commande | Niveau |
+| Job | Command | Level |
 |---|---|---|
-| format | `terraform fmt -check -recursive` (`hashicorp/setup-terraform@v4` ; OpenTofu : `opentofu/setup-opentofu` et `tofu`) | PR |
-| validate | par module racine : `terraform init -backend=false` puis `terraform validate` | PR |
-| lint | `terraform-linters/setup-tflint@v6` (tflint 0.64.0), `tflint --init` puis `tflint --recursive` avec le plugin du fournisseur | PR |
-| scan | `trivy config --severity HIGH,CRITICAL --exit-code 1 .` (ou checkov si deja utilise) | PR |
-| test | `terraform test` si des fichiers `.tftest.hcl` existent | PR |
-| plan | `terraform plan -lock=false` avec identifiants OIDC en lecture seule, plan publie en commentaire de PR | PR, seulement si l'OIDC est configure |
-| cost | Infracost (`infracost diff`) si `INFRACOST_API_KEY` existe, commentaire de PR | PR |
-| drift | `terraform plan -detailed-exitcode` sur chaque environnement, issue ouverte si derive | nuit, avec OIDC |
+| format | `terraform fmt -check -recursive` (`hashicorp/setup-terraform@v4`; OpenTofu: `opentofu/setup-opentofu` and `tofu`) | PR |
+| validate | per root module: `terraform init -backend=false` then `terraform validate` | PR |
+| lint | `terraform-linters/setup-tflint@v6` (tflint 0.64.0), `tflint --init` then `tflint --recursive` with the provider plugin | PR |
+| scan | `trivy config --severity HIGH,CRITICAL --exit-code 1 .` (or checkov if already used) | PR |
+| test | `terraform test` if `.tftest.hcl` files exist | PR |
+| plan | `terraform plan -lock=false` with read-only OIDC credentials, plan posted as a PR comment | PR, only if OIDC is configured |
+| cost | Infracost (`infracost diff`) if `INFRACOST_API_KEY` exists, PR comment | PR |
+| drift | `terraform plan -detailed-exitcode` on each environment, issue opened on drift | nightly, with OIDC |
 
-- `apply` n'est jamais dans la CI de PR : il passe par `cd.md` (environnement GitHub avec relecteur
-  pour la production).
-- Versions du fournisseur et de Terraform figees (`required_version`, `.terraform.lock.hcl` versionne).
+- `apply` is never in the PR CI: it goes through `cd.md` (GitHub environment with a reviewer for
+  production).
+- Provider and Terraform versions pinned (`required_version`, `.terraform.lock.hcl` versioned).
 
-## Autres
+## Others
 
-- Pulumi : `pulumi preview` avec OIDC, meme regles que `plan`.
-- Serverless, SAM, CDK : `cdk synth` puis `cdk-nag` ou `cfn-lint` sur le template, `trivy config`.
-- Ansible : `ansible-lint`, `molecule test` la nuit.
+- Pulumi: `pulumi preview` with OIDC, same rules as `plan`.
+- Serverless, SAM, CDK: `cdk synth` then `cdk-nag` or `cfn-lint` on the template, `trivy config`.
+- Ansible: `ansible-lint`, `molecule test` nightly.

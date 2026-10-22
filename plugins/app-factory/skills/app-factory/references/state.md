@@ -1,34 +1,34 @@
-# Etat sur disque et reprise
+# On-disk state and resume
 
-L'etat permet de reprendre un projet dans une nouvelle session, sur une autre machine ou apres une
-compaction de contexte. Il est versionne avec le projet (sauf `reports/`, voir plus bas).
+The state makes it possible to resume a project in a new session, on another machine or after a
+context compaction. It is versioned with the project (except `reports/`, see below).
 
-## Arborescence
+## Tree
 
 ```
 .app-factory/
-  state.json        # etat courant, source de verite de l'orchestration
-  decisions.md      # journal des decisions de l'utilisateur (date, porte, decision, raison)
-  gates/G0.md ...   # rapports de gate-verifier
-  reports/          # comptes rendus bruts des agents (a ignorer dans git s'ils contiennent des donnees sensibles)
-  reference/        # mode clone : captures et notes d'observation, usage interne uniquement, jamais livre
+  state.json        # current state, source of truth of the orchestration
+  decisions.md      # log of the user's decisions (date, gate, decision, reason)
+  gates/G0.md ...   # gate-verifier reports
+  reports/          # raw agent reports (to ignore in git if they contain sensitive data)
+  reference/        # clone mode: screenshots and observation notes, internal use only, never shipped
 ```
 
-Au niveau autopilot, `.app-factory/` ne vit plus sur la branche principale mais sur la branche
-`claude/autopilot-state` (sans code, sans CI), dont la racine porte le contenu de `.app-factory/` et qui
-se monte en worktree a la place de `.app-factory/` (ignore par git sur la branche principale) : les
-chemins restent les memes, les reveils ecrivent l'etat sans PR ni conflit avec le code, et le push sert
-de verrou. Un agent lance avec `isolation: "worktree"` ne voit pas ce dossier : lui passer des chemins
-absolus vers les fichiers d'etat qu'il doit lire, et ne lui faire ecrire l'etat que par l'orchestrateur. Une session
-interactive sur un projet autopilot monte ce worktree avant de lire l'etat (protocole de la skill
-`autopilot`, etape 1), puis pousse ses changements d'etat sur cette branche.
+At the autopilot level, `.app-factory/` no longer lives on the main branch but on the
+`claude/autopilot-state` branch (no code, no CI), whose root holds the content of `.app-factory/` and which
+is mounted as a worktree in place of `.app-factory/` (ignored by git on the main branch): the
+paths stay the same, the wake-ups write the state without a PR or conflict with the code, and the push serves
+as a lock. An agent launched with `isolation: "worktree"` does not see this folder: pass it absolute
+paths to the state files it must read, and only have the orchestrator write the state. An interactive
+session on an autopilot project mounts this worktree before reading the state (protocol of the
+`autopilot` skill, step 1), then pushes its state changes to this branch.
 
-## Schema de state.json
+## state.json schema
 
 ```json
 {
   "version": 1,
-  "project": "nom-du-projet",
+  "project": "project-name",
   "mode": "creation",
   "platforms": ["web", "ios", "android"],
   "market": {"countries": ["FR"], "languages": ["fr"]},
@@ -44,23 +44,23 @@ interactive sur un projet autopilot monte ce worktree avant de lire l'etat (prot
     "backlog": "docs/product/backlog.md"
   },
   "milestones": [
-    {"id": "M0", "title": "Squelette", "status": "done", "stories": ["S-001", "S-002"]}
+    {"id": "M0", "title": "Skeleton", "status": "done", "stories": ["S-001", "S-002"]}
   ],
   "stories": {
     "S-003": {"status": "review", "branch": "feat/s-003-signup", "attempts": 1, "reqs": ["REQ-004"]}
   },
   "open_questions": [],
   "risks": [],
-  "next_action": "Lancer code-reviewer sur S-003"
+  "next_action": "Run code-reviewer on S-003"
 }
 ```
 
-Au niveau `autopilot`, un bloc de plus (cree par `init_autopilot.py`, detail dans la skill `autopilot`,
-references `budget.md` et `decision-policy.md`) :
+At the `autopilot` level, one more block (created by `init_autopilot.py`, detail in the `autopilot` skill,
+references `budget.md` and `decision-policy.md`):
 
 ```json
 "autopilot": {
-  "repo": "owner/nom", "owner": "login-github", "base_branch": "main", "dashboard_issue": 1,
+  "repo": "owner/name", "owner": "github-login", "base_branch": "main", "dashboard_issue": 1,
   "paused": false, "allow_defaults": false, "default_after_hours": 72, "spend_free_threshold": 0,
   "lock": {"run_id": "2026-10-21T14:00Z", "started_at": "2026-10-21T14:00:12Z"},
   "last_run": "2026-10-21T14:00:12Z",
@@ -69,21 +69,21 @@ references `budget.md` et `decision-policy.md`) :
 }
 ```
 
-Valeurs : `status` du projet parmi `in_progress`, `awaiting_gate`, `blocked`, `done` ; `status` d'une
-story parmi `todo`, `in_progress`, `review`, `qa`, `done`, `blocked`.
+Values: project `status` among `in_progress`, `awaiting_gate`, `blocked`, `done`; story
+`status` among `todo`, `in_progress`, `review`, `qa`, `done`, `blocked`.
 
-## Ecriture
+## Writing
 
-- Mettre a jour `state.json` apres chaque etape significative (agent termine, porte passee, story
-  changee de statut), pas seulement en fin de session.
-- Reecrire le fichier entier, JSON valide, sans secret ni donnee personnelle.
-- Toute decision de l'utilisateur va aussi dans `decisions.md`, avec la date.
+- Update `state.json` after each significant step (agent finished, gate passed, story
+  changed status), not only at the end of the session.
+- Rewrite the whole file, valid JSON, with no secret or personal data.
+- Every user decision also goes into `decisions.md`, with the date.
 
-## Protocole de reprise
+## Resume protocol
 
-1. Lire `state.json`, `decisions.md` et le dernier rapport de porte.
-2. **Confronter a la realite** : les livrables references existent-ils ? Les branches des stories
-   existent-elles, sont-elles fusionnees ? Les tests passent-ils ? Le dernier commit correspond-il a ce
-   que l'etat decrit ? L'etat est une affirmation, le depot est la reference.
-3. Signaler a l'utilisateur chaque ecart et proposer la correction de l'etat avant de continuer.
-4. Resumer en quelques lignes ou en est le projet et reprendre a `next_action`.
+1. Read `state.json`, `decisions.md` and the latest gate report.
+2. **Check against reality**: do the referenced deliverables exist? Do the story branches
+   exist, are they merged? Do the tests pass? Does the last commit match what
+   the state describes? The state is a claim, the repository is the reference.
+3. Report each discrepancy to the user and propose the state correction before continuing.
+4. Summarize in a few lines where the project stands and resume at `next_action`.

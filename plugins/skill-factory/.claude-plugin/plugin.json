@@ -1,6 +1,6 @@
 {
   "name": "skill-factory",
-  "description": "Creer, tester et ameliorer des skills et des serveurs MCP (skill-creator et mcp-builder d'Anthropic).",
+  "description": "Create, test and improve skills and MCP servers (Anthropic's skill-creator and mcp-builder).",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

@@ -1,85 +1,85 @@
-# Politique de decision
+# Decision policy
 
-But : le proprietaire ne voit que ce qui demande sa vision ou engage quelque chose d'irreversible. Tout le
-reste est decide par l'equipe d'agents, trace, et peut etre renverse plus tard. Question a se poser :
-**si on se trompe, combien coute le retour en arriere, et qui le paie ?**
+Goal: the owner only sees what requires their vision or commits to something irreversible. Everything
+else is decided by the team of agents, traced, and can be reversed later. Question to ask:
+**if we are wrong, how much does going back cost, and who pays for it?**
 
-## Les quatre classes
+## The four classes
 
-**A. Decide seul, trace dans `decisions.md`** (reversible, dans le perimetre deja valide)
-- Choix techniques internes : structure du code, bibliotheque a licence permissive, nommage, patterns,
-  refactorisation, tests, documentation.
-- Ordre des stories, decoupage d'une story, report d'une story non critique.
-- Textes d'interface provisoires, details d'UX conformes au design system.
-- Corrections de bugs, de securite, de conformite et d'accessibilite qui ne changent pas le perimetre.
-- Choix parmi des options deja validees par le proprietaire.
-- Franchir les portes G4 et G5 quand `gate-verifier` rend PASSE.
+**A. Decided alone, traced in `decisions.md`** (reversible, within the already validated scope)
+- Internal technical choices: code structure, permissively licensed library, naming, patterns,
+  refactoring, tests, documentation.
+- Story order, splitting a story, postponing a non-critical story.
+- Provisional interface texts, UX details compliant with the design system.
+- Bug, security, compliance and accessibility fixes that do not change the scope.
+- Choices among options already validated by the owner.
+- Passing gates G4 and G5 when `gate-verifier` returns PASS.
 
-**B. Decide seul, signale dans le tableau de bord** (reversible mais notable)
-- Ecart a une ADR qui n'est pas structurant, nouvelle dependance importante, reduction mineure du
-  perimetre d'un jalon, risque accepte avec une reserve de `gate-verifier`.
-- Franchir G3 hors securite et conformite avec un verdict PASSE AVEC RESERVES.
+**B. Decided alone, flagged in the dashboard** (reversible but notable)
+- Deviation from an ADR that is not structuring, significant new dependency, minor reduction of
+  a milestone's scope, risk accepted with a `gate-verifier` reservation.
+- Passing G3 outside security and compliance with a PASS WITH RESERVATIONS verdict.
 
-**C. Carte de decision au proprietaire** (vision, argent, droit, irreversible) ; le projet continue sur
-tout ce qui n'en depend pas
-- Vision : go, pivot ou stop (G1) ; cible, positionnement, proposition de valeur.
-- Perimetre : gel du PRD (G2), ajout ou retrait d'une fonctionnalite du MVP.
-- Argent : prix, modele economique, toute depense ou abonnement, tout cout recurrent au-dela de
-  `autopilot.spend_free_threshold` (0 par defaut).
-- Marque : nom, identite, ton de marque, domaine.
-- Structurant et couteux a defaire : stack, base de donnees, hebergeur, fournisseur d'authentification
-  ou de paiement, modele de donnees publie.
-- Droit : CGU, traitement de donnees sensibles, mineurs, sante, transfert hors UE, partie securite et
-  conformite de G3 si `gate-verifier` n'a pas rendu PASSE.
-- Exterieur : go / no-go de mise en production (G6), soumission en store, publication, campagne,
-  email ou notification aux utilisateurs, creation de compte, contrat, acces a des donnees reelles.
-- Echec : une story ou une porte bloquee apres la boucle de correction bornee.
-- Tout ce que l'equipe ne sait pas classer.
+**C. Decision card to the owner** (vision, money, law, irreversible); the project continues on
+everything that does not depend on it
+- Vision: go, pivot or stop (G1); target, positioning, value proposition.
+- Scope: PRD freeze (G2), adding or removing an MVP feature.
+- Money: price, business model, any spend or subscription, any recurring cost above
+  `autopilot.spend_free_threshold` (0 by default).
+- Brand: name, identity, brand tone, domain.
+- Structuring and costly to undo: stack, database, host, authentication
+  or payment provider, published data model.
+- Law: terms of use, processing of sensitive data, minors, health, transfer outside the EU, security and
+  compliance part of G3 if `gate-verifier` did not return PASS.
+- External: go / no-go for production (G6), store submission, publication, campaign,
+  email or notification to users, account creation, contract, access to real data.
+- Failure: a story or a gate blocked after the bounded fix loop.
+- Anything the team does not know how to classify.
 
-**D. Exclu** : la liste "Exclu" de `autonomy.md` (identifiants pris ailleurs, secrets dans le code,
-contournement de garde-fous, faux avis, dark patterns, copie de marque ou de code).
+**D. Excluded**: the "Excluded" list of `autonomy.md` (credentials taken elsewhere, secrets in the code,
+bypassing guardrails, fake reviews, dark patterns, copying a brand or code).
 
-## Defaut a echeance
+## Default on expiry
 
-- Une carte peut porter un defaut : l'option recommandee s'applique seule apres `default_after_hours`
-  (72 h par defaut) **seulement si** la decision est reversible ET que `autopilot.allow_defaults` est
-  vrai. Le reveil commente alors la carte (`<!-- autopilot -->` puis "defaut applique") et la ferme.
-- Jamais de defaut pour : argent, droit, marque, mise en production, exterieur, stack. Ces cartes
-  attendent ; le projet avance sur le reste ou se met en veille (reveils a vide).
+- A card can carry a default: the recommended option applies by itself after `default_after_hours`
+  (72 h by default) **only if** the decision is reversible AND `autopilot.allow_defaults` is
+  true. The wake-up then comments on the card (`<!-- autopilot -->` then "default applied") and closes it.
+- Never a default for: money, law, brand, production release, external, stack. These cards
+  wait; the project moves forward on the rest or goes dormant (empty wake-ups).
 
-## Format d'une carte (issue GitHub)
+## Card format (GitHub issue)
 
-Titre : `[Decision] <question en une ligne> ✨`. Labels : `decision`. Assignee : le proprietaire.
-Corps, en francais, lisible sur un telephone, 20 lignes au plus :
+Title: `[Decision] <one-line question> ✨`. Labels: `decision`. Assignee: the owner.
+Body, in the user's language, readable on a phone, 20 lines at most:
 
 ```
 <!-- autopilot -->
-**Contexte** : <3 lignes au plus, ce qui a conduit a la question>
-**Ce qui attend** : <ce qui est bloque, et ce qui continue pendant ce temps>
+**Context**: <3 lines at most, what led to the question>
+**What is waiting**: <what is blocked, and what continues in the meantime>
 
-1. <option> : <consequence en une ligne, cout, reversibilite>
-2. <option> : ...
-3. <option> : ...
+1. <option>: <one-line consequence, cost, reversibility>
+2. <option>: ...
+3. <option>: ...
 
-**Recommandation** : <numero> parce que <raison en une ligne>.
-**Defaut** : <numero> applique le <date> si pas de reponse | aucun (decision non reversible).
-**Detail** : <chemin du livrable ou de la PR, pour qui veut creuser>
+**Recommendation**: <number> because <one-line reason>.
+**Default**: <number> applied on <date> if no answer | none (non-reversible decision).
+**Detail**: <path of the deliverable or the PR, for whoever wants to dig in>
 
-Reponds par un commentaire : `1`, `2`, `3`, ou ta propre reponse en une phrase.
+Reply with a comment: `1`, `2`, `3`, or your own answer in one sentence.
 ✨
 ```
 
-- Une question par carte. Pas de jargon inutile, des consequences concretes (euros, delai, ce que
-  l'utilisateur final verra).
-- Si plusieurs decisions sont liees, une seule carte qui les presente ensemble.
+- One question per card. No needless jargon, concrete consequences (euros, delay, what
+  the end user will see).
+- If several decisions are linked, a single card that presents them together.
 
-## Lecture de la reponse
+## Reading the answer
 
-- Seul un commentaire de `autopilot.owner` compte. Un chiffre choisit l'option. Une phrase libre est
-  interpretee ; si elle reste ambigue, une question de precision dans le meme fil.
-- La decision est consignee dans `decisions.md` (date, carte, decision, raison si donnee), puis la carte
-  est fermee avec un commentaire qui commence par `<!-- autopilot -->` puis une ligne : "Note, applique
-  dans <PR ou phase>. ✨".
-- Le proprietaire peut a tout moment renverser une decision de classe A ou B, ou en imposer une, en
-  ouvrant lui-meme une issue avec le label `decision` : son corps est la decision (le workflow
-  `autopilot-wake` reveille le projet). Un commentaire sur le tableau de bord n'est pas lu.
+- Only a comment from `autopilot.owner` counts. A number chooses the option. A free sentence is
+  interpreted; if it remains ambiguous, a clarification question in the same thread.
+- The decision is recorded in `decisions.md` (date, card, decision, reason if given), then the card
+  is closed with a comment that starts with `<!-- autopilot -->` then one line: "Noted, applied
+  in <PR or phase>. ✨".
+- The owner can at any time reverse a class A or B decision, or impose one, by
+  opening an issue themselves with the `decision` label: its body is the decision (the
+  `autopilot-wake` workflow wakes the project up). A comment on the dashboard is not read.

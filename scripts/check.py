@@ -23,6 +23,8 @@ MAX_DESCRIPTION_LENGTH = 1024
 # (keep SKILL.md under 500 lines) and from this library's own budget for hand-written skills.
 MAX_AUTHORED_DESCRIPTION = 400
 MAX_SKILL_LINES = 500
+SKILL_NAME = re.compile(r"(?=.{1,64}$)[a-z0-9]+(-[a-z0-9]+)*")
+MAX_COMPATIBILITY = 500
 # Built from code points so this checker source holds no literal forbidden character.
 EM_DASH = chr(0x2014)
 INVISIBLE_RANGES = [(0x200B, 0x200F), (0x202A, 0x202E), (0x2060, 0x2064), (0xFEFF, 0xFEFF)]
@@ -78,6 +80,17 @@ def main() -> int:
         if directory.is_dir() and directory.resolve() not in listed:
             errors.append(f"{directory.name}: plugin not listed in marketplace.json")
 
+    cursor = json.loads((ROOT / ".cursor-plugin" / "marketplace.json").read_text(encoding="utf-8"))
+    for entry in cursor["plugins"]:
+        manifest = ROOT / entry["source"] / ".cursor-plugin" / "plugin.json"
+        if not manifest.exists():
+            errors.append(f"{entry['name']}: missing {manifest.relative_to(ROOT).as_posix()}")
+            continue
+        fields = json.loads(manifest.read_text(encoding="utf-8"))
+        for key in ("skills", "agents", "commands", "hooks"):
+            if key in fields and not (manifest.parent.parent / fields[key]).exists():
+                errors.append(f"{entry['name']}: Cursor manifest {key} path {fields[key]} does not exist")
+
     owners: dict[str, list[str]] = {}
     authored = {path.parent.name for path in ROOT.glob("authored/*/skills/*/SKILL.md")}
     for skill in sorted(ROOT.glob("plugins/*/skills/*/SKILL.md")):
@@ -88,6 +101,11 @@ def main() -> int:
             continue
         if fields.get("name") != skill.parent.name:
             errors.append(f"{location}: name '{fields.get('name')}' differs from folder '{skill.parent.name}'")
+        # Agent Skills standard (agentskills.io), read by every other harness: name format and limits.
+        if not SKILL_NAME.fullmatch(fields.get("name", "")):
+            errors.append(f"{location}: name '{fields.get('name')}' is not 1-64 lowercase letters, digits and single hyphens")
+        if len(fields.get("compatibility", "")) > MAX_COMPATIBILITY:
+            errors.append(f"{location}: compatibility over {MAX_COMPATIBILITY} characters")
         description = fields.get("description", "")
         if not description:
             errors.append(f"{location}: empty description")

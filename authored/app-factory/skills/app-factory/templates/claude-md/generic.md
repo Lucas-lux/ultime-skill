@@ -1,34 +1,34 @@
-# {projet}
+# {project}
 
-{une phrase : ce que fait le produit, pour qui}. Brief : `docs/product/brief.md`, PRD : `docs/product/prd.md`,
-architecture : `docs/architecture/`. Etat app-factory : `.app-factory/state.json`.
+{one sentence: what the product does, for whom}. Brief: `docs/product/brief.md`, PRD: `docs/product/prd.md`,
+architecture: `docs/architecture/`. app-factory state: `.app-factory/state.json`.
 
 ## Stack
 
-{langages, frameworks, base de donnees, hebergement : versions reelles}.
+{languages, frameworks, database, hosting: real versions}.
 
-## Commandes
+## Commands
 
-| But | Commande |
+| Goal | Command |
 |---|---|
-| Installer | `{commande}` |
-| Lancer | `{commande}` |
-| Verifier tout | `make ci` |
-| Tests | `{commande}` |
+| Install | `{command}` |
+| Run | `{command}` |
+| Check everything | `make ci` |
+| Tests | `{command}` |
 
-## Carte
+## Map
 
-- `{dossier}/` : {role}.
+- `{folder}/`: {role}.
 
 ## Definition of done
 
-- La cible `make ci` (ou son equivalent) passe en local avant de rendre la main ; `ci-ok` vert sur la PR.
-- Un comportement nouveau a son test ; un bug corrige a un test qui le reproduisait.
-- Docs touchees mises a jour (README, `docs/ops/ci.md`, ADR si une decision change).
+- The `make ci` target (or its equivalent) passes locally before handing back; `ci-ok` green on the PR.
+- A new behaviour has its test; a fixed bug has a test that reproduced it.
+- Touched docs updated (README, `docs/ops/ci.md`, ADR if a decision changes).
 
-## Regles
+## Rules
 
-- Regles par langage : `.claude/rules/ultime/` (chargees selon les fichiers touches). Garde-fous par
-  hooks : `.claude/guardrails.json` (ne pas les contourner ; une regle qui gene se signale).
-- Branche et PR pour tout changement, jamais de push sur la branche principale.
-- Secrets dans `.env` (ignore par git), modele dans `.env.example`. Base locale pour le developpement.
+- Per-language rules: `.claude/rules/ultime/` (loaded according to the touched files). Guardrails through
+  hooks: `.claude/guardrails.json` (do not bypass them; a rule that gets in the way is reported).
+- Branch and PR for every change, never a push to the main branch.
+- Secrets in `.env` (ignored by git), template in `.env.example`. Local database for development.
