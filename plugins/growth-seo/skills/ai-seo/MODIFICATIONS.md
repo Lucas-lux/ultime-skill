@@ -1,18 +1,18 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/coreyhaines31/marketingskills (commit e85f3cbc2e4a)
+Origin: https://github.com/coreyhaines31/marketingskills (commit e85f3cbc2e4a)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `evals/evals.json` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/agent-readiness.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/citations-vs-recommendations.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/content-patterns.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/content-types.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/format-volatility.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/linkedin-ai-citations.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/okf.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/platform-ranking-factors.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/youtube-ai-citations.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `evals/evals.json`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/agent-readiness.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/citations-vs-recommendations.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/content-patterns.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/content-types.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/format-volatility.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/linkedin-ai-citations.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/okf.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/platform-ranking-factors.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/youtube-ai-citations.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

@@ -1,11 +1,11 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/callstack/react-native-testing-library (commit 0ecb9c9c0cef)
+Origin: https://github.com/callstack/react-native-testing-library (commit 0ecb9c9c0cef)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/anti-patterns.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/api-reference-v13.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/api-reference-v14.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/anti-patterns.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/api-reference-v13.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/api-reference-v14.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

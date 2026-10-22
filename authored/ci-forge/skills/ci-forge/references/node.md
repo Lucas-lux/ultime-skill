@@ -1,58 +1,59 @@
-# Node, TypeScript, Next.js et front
+# Node, TypeScript, Next.js and front
 
-## Installation (action composite)
+## Installation (composite action)
 
-- pnpm : `pnpm/action-setup@v6` puis `actions/setup-node@v7` avec `cache: pnpm` et
-  `node-version-file: .nvmrc` (sinon `engines.node`, sinon la LTS active), puis
-  `pnpm install --frozen-lockfile`. npm : `cache: npm`, `npm ci`. Yarn : `corepack enable`,
-  `yarn install --immutable`. Bun : `oven-sh/setup-bun@v2`, `bun install --frozen-lockfile`.
-- Monorepo (Turborepo, Nx, workspaces) : commandes par l'outil (`turbo run lint test build --affected`
-  en PR, cache distant seulement si configure), matrice par paquet sinon.
+- pnpm: `pnpm/action-setup@v6` then `actions/setup-node@v7` with `cache: pnpm` and
+  `node-version-file: .nvmrc` (otherwise `engines.node`, otherwise the active LTS), then
+  `pnpm install --frozen-lockfile`. npm: `cache: npm`, `npm ci`. Yarn: `corepack enable`,
+  `yarn install --immutable`. Bun: `oven-sh/setup-bun@v2`, `bun install --frozen-lockfile`.
+- Monorepo (Turborepo, Nx, workspaces): commands through the tool (`turbo run lint test build --affected`
+  on PR, remote cache only if configured), matrix per package otherwise.
 
 ## Jobs
 
-| Job | Commande | Notes |
+| Job | Command | Notes |
 |---|---|---|
-| format | `prettier --check .` ou `biome format` (via `biome ci`) | |
-| lint | `eslint . --max-warnings=0` ou `biome ci .` | `next lint` n'existe plus dans Next.js recent : ESLint direct avec `eslint-config-next` |
-| typecheck | `tsc --noEmit` (`vue-tsc --noEmit`, `astro check`, `svelte-check`) | `strict: true`, `noUncheckedIndexedAccess` pour un projet neuf |
-| unused | `knip` | fichiers, exports et dependances inutilises : la CI empeche le code mort de revenir |
-| test | `vitest run --coverage` (ou `jest --ci --coverage`) | seuils de couverture en cliquet dans la config |
-| build | `next build`, `vite build`, `tsc -b` | Next.js : cache `.next/cache` (cle lockfile + sources) ; le build doit passer sans variable secrete |
-| e2e | `playwright test` (Playwright 1.64) | voir plus bas |
-| deps | `pnpm audit --audit-level=high` ou `npm audit --audit-level=high` (en plus de osv-scanner) | |
+| format | `prettier --check .` or `biome format` (via `biome ci`) | |
+| lint | `eslint . --max-warnings=0` or `biome ci .` | `next lint` no longer exists in recent Next.js: ESLint directly with `eslint-config-next` |
+| typecheck | `tsc --noEmit` (`vue-tsc --noEmit`, `astro check`, `svelte-check`) | `strict: true`, `noUncheckedIndexedAccess` for a new project |
+| unused | `knip` | unused files, exports and dependencies: the CI prevents dead code from coming back |
+| test | `vitest run --coverage` (or `jest --ci --coverage`) | ratcheted coverage thresholds in the config |
+| build | `next build`, `vite build`, `tsc -b` | Next.js: `.next/cache` cache (key lockfile + sources); the build must pass without a secret variable |
+| e2e | `playwright test` (Playwright 1.64) | see below |
+| deps | `pnpm audit --audit-level=high` or `npm audit --audit-level=high` (in addition to osv-scanner) | |
 
-## End to end avec Playwright
+## End to end with Playwright
 
-- `npx playwright install --with-deps chromium` (cache de `~/.cache/ms-playwright` par version).
-- L'app demarree par `webServer` dans `playwright.config` (build de prod + `next start`), jamais `next dev`.
-- PR : parcours critiques sur Chromium. Principale et nuit : Chromium, Firefox, WebKit et un profil
-  mobile, en shards (`--shard=${{ matrix.shard }}/4`) avec fusion des rapports (`merge-reports`).
-- Accessibilite dans les memes tests : `@axe-core/playwright`, echec sur toute violation `serious` ou
-  `critical`.
-- Regression visuelle (`toHaveScreenshot`) seulement si les captures de reference sont versionnees et
-  generees dans le meme conteneur que la CI.
-- Rapport HTML et traces en artefact si echec.
+- `npx playwright install --with-deps chromium` (cache of `~/.cache/ms-playwright` per version).
+- The app started by `webServer` in `playwright.config` (prod build + `next start`), never `next dev`.
+- PR: critical journeys on Chromium. Main and nightly: Chromium, Firefox, WebKit and a mobile profile,
+  in shards (`--shard=${{ matrix.shard }}/4`) with report merging (`merge-reports`).
+- Accessibility in the same tests: `@axe-core/playwright`, failure on any `serious` or `critical`
+  violation.
+- Visual regression (`toHaveScreenshot`) only if the reference screenshots are versioned and generated
+  in the same container as the CI.
+- HTML report and traces as artifacts on failure.
 
-## Performance et qualite front
+## Front performance and quality
 
-- Lighthouse CI (`treosh/lighthouse-ci-action@12.6.2` ou `@lhci/cli autorun`) sur le build local en
-  principale, avec `budgets.json` (LCP, CLS, TBT, poids JS) ; sur l'URL de staging la nuit.
-- Taille des bundles : `size-limit` avec plafonds par point d'entree, ou l'analyse du build Next.js.
-- Storybook : `storybook build` puis tests d'interaction (`test-storybook`) si Storybook existe.
-- Liens et SEO de base pour un site : `next-sitemap` present, verification des metadonnees dans les e2e.
+- Lighthouse CI (`treosh/lighthouse-ci-action@12.6.2` or `@lhci/cli autorun`) on the local build on
+  main, with `budgets.json` (LCP, CLS, TBT, JS weight); on the staging URL nightly.
+- Bundle size: `size-limit` with caps per entry point, or the Next.js build analysis.
+- Storybook: `storybook build` then interaction tests (`test-storybook`) if Storybook exists.
+- Links and basic SEO for a site: `next-sitemap` present, metadata checked in the e2e tests.
 
-## Backend Node (NestJS, Express, Fastify, Hono, tRPC)
+## Node backend (NestJS, Express, Fastify, Hono, tRPC)
 
-- Tests d'integration contre `services:` (Postgres, Redis) ; migrations Prisma
-  (`prisma migrate deploy`, puis pour detecter un schema non migre, Prisma 7 :
+- Integration tests against `services:` (Postgres, Redis); Prisma migrations
+  (`prisma migrate deploy`, then to detect an unmigrated schema, Prisma 7:
   `prisma migrate diff --from-migrations prisma/migrations --to-schema prisma/schema.prisma --exit-code`,
-  base fantome declaree dans `prisma.config.ts` ; Prisma 6 : `--to-schema-datamodel prisma/schema.prisma
-  --shadow-database-url $SHADOW_DATABASE_URL` a la place ; code 2 = schema non migre) ou
+  shadow database declared in `prisma.config.ts`; Prisma 6: `--to-schema-datamodel prisma/schema.prisma
+  --shadow-database-url $SHADOW_DATABASE_URL` instead; code 2 = unmigrated schema) or
   Drizzle (`drizzle-kit check`).
-- Contrat d'API : schema OpenAPI genere compare a celui du depot ; `schemathesis` contre l'app demarree.
+- API contract: generated OpenAPI schema compared to the repository's; `schemathesis` against the
+  started app.
 
-## Niveau nuit
+## Nightly level
 
-- Mutation : Stryker (`@stryker-mutator/core`) sur les modules critiques.
-- Matrice de versions de Node (LTS actives) pour une bibliotheque.
+- Mutation: Stryker (`@stryker-mutator/core`) on critical modules.
+- Matrix of Node versions (active LTS) for a library.

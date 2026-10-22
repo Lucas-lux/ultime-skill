@@ -1,55 +1,55 @@
 ---
 name: app-takeover
 description: >
-  Mode reprise de app-factory : inventaire, retro-spec, audit qualite et plan pour terminer et ameliorer
-  une app existante, inachevee ou abandonnee. A utiliser pour reprendre, finir, terminer, sauver, auditer
-  ou ameliorer une app existante ou un projet laisse en plan, ou "app-takeover".
+  app-factory takeover mode: inventory, reverse spec, quality audit and plan to finish and improve
+  an existing, unfinished or abandoned app. Use to take over, finish, complete, rescue, audit
+  or improve an existing app or a project left hanging, or "app-takeover".
 ---
 
-# Reprendre une app existante
+# Taking over an existing app
 
-Objectif : savoir precisement ce qui existe, ce qui marche, ce qui manque et ce qui est dangereux, avant
-d'ecrire une ligne. Cette skill couvre la phase P0 du mode reprise ; `app-factory` reprend ensuite en P2
-(PRD a completer) ou directement en P4 si le perimetre est deja clair.
+Goal: know precisely what exists, what works, what is missing and what is dangerous, before
+writing a line. This skill covers phase P0 of takeover mode; `app-factory` then takes over at P2
+(PRD to complete) or directly at P4 if the scope is already clear.
 
-## Regle d'or : ne rien casser
+## Golden rule: break nothing
 
-- Travailler sur une branche ; aucune modification pendant l'inventaire et l'audit.
-- Si une production existe : aucun acces en ecriture, aucune migration, aucun deploiement a ce stade.
-  Les donnees de production ne sont lues qu'avec l'accord explicite de l'utilisateur, en lecture seule.
-- Un secret trouve dans le code ou l'historique git est signale (fichier, ligne, type) sans jamais
-  afficher sa valeur, avec la recommandation de le revoquer et de le sortir du code.
+- Work on a branch; no modification during the inventory and the audit.
+- If a production exists: no write access, no migration, no deployment at this stage.
+  Production data is only read with the user's explicit consent, read-only.
+- A secret found in the code or the git history is reported (file, line, type) without ever
+  displaying its value, with the recommendation to revoke it and move it out of the code.
 
-## Etapes
+## Steps
 
-1. **Inventaire** (agent `codebase-mapper`) : stack et versions reelles, structure, points d'entree,
-   comment lancer l'app en local (et si ca marche : skill `run`), etat des tests (ils passent ? que
-   couvrent-ils ?), CI, deploiement et infrastructure, environnements, schema de base et etat des
-   migrations, services tiers, gestion des secrets, dependances obsoletes ou vulnerables, licences.
-   Livrable : `docs/takeover/inventory.md`.
-2. **Retro-specification** (agent `reverse-spec-analyst`) : ce que l'app fait reellement, ecrit pour un
-   lecteur produit. Skills : `code-to-prd` (vue d'ensemble par page et par endpoint), `schematic` (pour
-   une branche en cours), `shipping-artifacts` (architecture, permissions, variables, couverture de
-   tests). Livrable : `docs/product/as-is-prd.md`.
-3. **Intention contre realite** : recueillir ce que l'app devait faire (utilisateur, anciennes specs,
-   tickets, maquettes), puis `intended-vs-implemented` pour lister fonctions inachevees, parcours casses,
-   regles documentees mais non appliquees.
-4. **Audit contre la barre de qualite** (agents en parallele : `security-engineer`, `data-architect`,
-   `compliance-officer`, `ux-designer`, `sre`, `finops-analyst`, et `code-reviewer` avec `ponytail-audit` puis
-   `ponytail-debt` pour le code : bugs, failles, tenue en charge, code a risque sans test, ce qui est a
-   supprimer ou fusionner), chacun sur son domaine de
-   `app-factory/references/quality-bar.md`. Chaque constat : preuve (fichier, ligne, commande), impact,
-   gravite (bloquant, majeur, mineur), correction proposee. Livrable : `docs/takeover/audit.md`.
-5. **Decision par module** : garder, corriger, finir ou refaire. Refaire seulement si c'est justifie
-   (defauts structurels, absence de tests sur une zone critique, dette qui coute plus que la reecriture)
-   et consigne dans un ADR. Pas de reecriture totale par defaut.
-6. **Plan de reprise** : un jalon **M0 stabilisation** passe en premier (tests sur les parcours
-   critiques, CI qui bloque (skill `ci-forge` : audit des ecarts puis CI complete, autonome), sauvegardes et restauration testees, monitoring de base, secrets sortis du
-   code, failles bloquantes corrigees), puis les fonctionnalites a finir, puis les ameliorations.
-   Livrable : backlog initial dans `docs/product/backlog.md`.
-7. **G0** : l'utilisateur valide l'inventaire, l'audit, les decisions par module et le plan.
+1. **Inventory** (agent `codebase-mapper`): stack and real versions, structure, entry points,
+   how to run the app locally (and whether it works: `run` skill), state of the tests (do they pass? what
+   do they cover?), CI, deployment and infrastructure, environments, database schema and state of the
+   migrations, third-party services, secrets management, outdated or vulnerable dependencies, licenses.
+   Deliverable: `docs/takeover/inventory.md`.
+2. **Reverse specification** (agent `reverse-spec-analyst`): what the app really does, written for a
+   product reader. Skills: `code-to-prd` (overview per page and per endpoint), `schematic` (for
+   a branch in progress), `shipping-artifacts` (architecture, permissions, variables, test
+   coverage). Deliverable: `docs/product/as-is-prd.md`.
+3. **Intent versus reality**: gather what the app was supposed to do (user, old specs,
+   tickets, mockups), then `intended-vs-implemented` to list unfinished features, broken journeys,
+   documented but unenforced rules.
+4. **Audit against the quality bar** (agents in parallel: `security-engineer`, `data-architect`,
+   `compliance-officer`, `ux-designer`, `sre`, `finops-analyst`, and `code-reviewer` with `ponytail-audit` then
+   `ponytail-debt` for the code: bugs, vulnerabilities, load handling, risky code without tests, what is to be
+   deleted or merged), each on its domain of
+   `app-factory/references/quality-bar.md`. Each finding: evidence (file, line, command), impact,
+   severity (blocking, major, minor), proposed fix. Deliverable: `docs/takeover/audit.md`.
+5. **Decision per module**: keep, fix, finish or redo. Redo only if it is justified
+   (structural defects, lack of tests on a critical area, debt that costs more than the rewrite)
+   and recorded in an ADR. No full rewrite by default.
+6. **Takeover plan**: an **M0 stabilization** milestone comes first (tests on the critical
+   journeys, a CI that blocks (`ci-forge` skill: gap audit then full CI, autonomous), tested backups and restore, basic monitoring, secrets moved out of the
+   code, blocking vulnerabilities fixed), then the features to finish, then the improvements.
+   Deliverable: initial backlog in `docs/product/backlog.md`.
+7. **G0**: the user validates the inventory, the audit, the decisions per module and the plan.
 
-## Livrables
+## Deliverables
 
-`docs/takeover/inventory.md`, `docs/product/as-is-prd.md`, `docs/takeover/audit.md`, ADR des decisions
-structurantes, `docs/product/backlog.md`, puis la suite du cycle `app-factory`.
+`docs/takeover/inventory.md`, `docs/product/as-is-prd.md`, `docs/takeover/audit.md`, ADRs of the structuring
+decisions, `docs/product/backlog.md`, then the rest of the `app-factory` cycle.

@@ -1,109 +1,120 @@
 ---
 name: ultime-profile
 description: >
-  Installe et gere pour un projet les skills ultime-skill (ultime-factory) dont il a besoin, et seulement
-  celles-la : detection du projet, installation des packs au niveau du projet, desactivation du reste,
-  ajustement quand la tache change. A utiliser pour installer, configurer, mettre a jour ou alleger les
-  skills d'un projet, ou "ultime-factory", "ultime-skill", "ultime-profile".
+  Installs and manages for a project the ultime-skill (ultime-factory) skills it needs, and only those:
+  project detection, installation of packs at project level, disabling the rest, adjustment when the
+  task changes. Use to install, configure, update or slim down a project's skills, or
+  "ultime-factory", "ultime-skill", "ultime-profile".
 ---
 
-# Installer et gerer les skills d'un projet
+# Installing and managing a project's skills
 
-Chaque skill d'un plugin actif ajoute sa description au contexte **a chaque tour**, et Claude Code n'en
-garde qu'un budget limite (environ 1 % de la fenetre) : installer tout le catalogue degrade le
-declenchement des skills. Cette skill installe donc, projet par projet, les seuls packs utiles.
-`ultime-factory` designe le catalogue complet dans lequel elle choisit, pas un bundle a installer tel quel.
+Each skill of an active plugin adds its description to the context **on every turn**, and Claude Code
+only keeps a limited budget of them (about 1 % of the window): installing the whole catalog degrades
+skill triggering. This skill therefore installs, project by project, only the useful packs.
+`ultime-factory` designates the full catalog it chooses from, not a bundle to install as is.
 
-Catalogue des packs, de leur role et de leur cout : [references/catalog.md](references/catalog.md).
+Catalog of packs, their role and their cost: [references/catalog.md](references/catalog.md).
 
-## 1. Prerequis
+## 1. Prerequisites
 
-- La CLI : `claude` ; si elle n'est pas dans le PATH, `~/.local/bin/claude` (Windows :
+- The CLI: `claude`; if it is not in the PATH, `~/.local/bin/claude` (Windows:
   `%USERPROFILE%\.local\bin\claude.exe`).
-- Le marketplace : `claude plugin marketplace list`. S'il manque `ultime-skill` :
-  `claude plugin marketplace add Lucas-lux/ultime-skill`. Depot prive : il faut un acces git ; sans cle
-  SSH, `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` avec des identifiants git configures (`gh auth setup-git`).
-- Catalogue a jour : `claude plugin marketplace update ultime-skill`.
+- The marketplace: `claude plugin marketplace list`. If `ultime-skill` is missing:
+  `claude plugin marketplace add Lucas-lux/ultime-skill`. If the repository is private, git access is
+  required; without an SSH key, `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` with git credentials configured
+  (`gh auth setup-git`).
+- Up-to-date catalog: `claude plugin marketplace update ultime-skill`.
 
-## 2. Comprendre le besoin
+## 2. Understand the need
 
-- Lire le projet : dependances et manifestes (`package.json`, `app.json`, `pubspec.yaml`, projet Xcode,
+- Read the project: dependencies and manifests (`package.json`, `app.json`, `pubspec.yaml`, Xcode project,
   `build.gradle`, `pyproject.toml`, `Dockerfile`, Terraform, dbt...), structure, `CLAUDE.md`.
-- Ecouter la demande : un projet a mener de A a Z, a cloner ou a reprendre ajoute `app-factory` et
-  `product-management` ; une app mobile ajoute le pack de sa technologie ; un lancement ajoute stores et
-  growth.
-- `python <skill>/scripts/suggest_profile.py .` : packs justifies par les signaux du
-  depot (table `references/stack-map.json`), packs deja au niveau utilisateur (`user_level`), regles
-  par langage (choisies d'apres le frontmatter `paths:` de chaque regle), permissions. C'est la base de
-  la proposition ; le tableau des profils ci-dessous la complete selon la demande.
-- Proposer la liste par question a choix multiples (plusieurs reponses), avec le cout de chaque pack.
-  Projet vide : demander ce qui va etre construit.
+- Listen to the request: a project to carry from A to Z, to clone or to take over adds `app-factory` and
+  `product-management`; a mobile app adds the pack of its technology; a launch adds stores and growth.
+- `python <skill>/scripts/suggest_profile.py .`: packs justified by the repository's signals (table
+  `references/stack-map.json`), packs already at user level (`user_level`), per-language rules (chosen
+  from the `paths:` frontmatter of each rule), permissions. It is the basis of the proposal; the profiles
+  table below completes it according to the request.
+- Propose the list through a multiple-choice question (several answers), with the cost of each pack.
+  Empty project: ask what is going to be built.
 
-## 3. Installer
+## 3. Install
 
-- **Scope** : `project` si le profil doit etre partage avec l'equipe (ecrit dans `.claude/settings.json`,
-  a committer) ; `local` pour un usage personnel (`.claude/settings.local.json`, hors git). Demander.
-- En scope `project`, declarer aussi le marketplace pour l'equipe :
+- **Scope**: `project` if the profile must be shared with the team (written to `.claude/settings.json`,
+  to commit); `local` for personal use (`.claude/settings.local.json`, outside git). Ask.
+- In `project` scope, also declare the marketplace for the team:
   `claude plugin marketplace add Lucas-lux/ultime-skill --scope project`.
-- Installer chaque pack retenu **individuellement** :
-  `claude plugin install <pack>@ultime-skill --scope <scope>`. Jamais un bundle `ultime-*` : il tire tous
-  ses packs.
-- Si des packs ou bundles ultime-skill sont deja actifs au niveau utilisateur sans etre utiles ici :
-  `claude plugin disable <nom>@ultime-skill --scope <scope>` (un bundle dont une dependance est
-  desactivee echoue au chargement, donc le desactiver aussi).
-- Ne jamais toucher aux plugins d'autres marketplaces.
-- **Regles par langage** : `suggest_profile.py . --write-rules` copie dans `.claude/rules/ultime/` les
-  regles des langages presents (frontmatter `paths:`, chargees seulement quand Claude touche ces
-  fichiers : cout nul ailleurs). Dossier entierement regenere a chaque passage, a committer en scope
-  projet.
-- **Permissions** (avec accord, scope choisi) : `--write-permissions project|local` ajoute les commandes
-  de verification du projet en `allow` (tests, lint, typage, build) et met en `ask` la publication et le
-  deploiement (npm publish, terraform apply, kubectl apply, docker push...). Les regles existantes sont
-  gardees.
-- Faire recharger : l'utilisateur lance `/reload-plugins` (ou redemarre la session). Verifier ensuite avec
-  `claude plugin list` et resumer ce qui est actif et son cout.
+- Install each chosen pack **individually**:
+  `claude plugin install <pack>@ultime-skill --scope <scope>`. Never an `ultime-*` bundle: it pulls in
+  all its packs.
+- If ultime-skill packs or bundles are already active at user level without being useful here:
+  `claude plugin disable <name>@ultime-skill --scope <scope>` (a bundle with a disabled dependency fails
+  to load, so disable it too).
+- Never touch plugins from other marketplaces.
+- **Per-language rules**: `suggest_profile.py . --write-rules` copies into `.claude/rules/ultime/` the
+  rules of the languages present (`paths:` frontmatter, loaded only when Claude touches those files: zero
+  cost elsewhere). Folder fully regenerated on each run, to commit in project scope.
+- **Permissions** (with consent, chosen scope): `--write-permissions project|local` adds the project's
+  verification commands to `allow` (tests, lint, typing, build) and puts publishing and deployment in
+  `ask` (npm publish, terraform apply, kubectl apply, docker push...). Existing rules are kept.
+- Reload: the user runs `/reload-plugins` (or restarts the session). Then check with
+  `claude plugin list` and summarize what is active and its cost.
 
-## 4. Ajuster en cours de route
+## 4. Adjust along the way
 
-Quand la tache change de domaine, installer ou activer le pack necessaire (passer du code a la fiche
-store, du build au lancement), recharger, et le desactiver apres si l'usage etait ponctuel.
-`app-factory` le fait a ses etapes cles (cadrage, choix de stack, pre-production, lancement).
+When the task changes domain, install or enable the needed pack (moving from code to the store listing,
+from build to launch), reload, and disable it afterwards if the use was one-off.
+`app-factory` does it at its key steps (framing, stack choice, pre-production, launch).
 
-## Profils types
+## Typical profiles
 
-La source de verite des packs tires des signaux du depot est `references/stack-map.json` (lu par
-`suggest_profile.py`) ; les lignes "signal" ci-dessous la resument, les lignes "demande" ajoutent ce que
-le depot ne revele pas. Tout projet de code recoit en plus `agent-skills`, `ci-forge` et `security`
-(`always_for_code`). En cas d'ecart, stack-map.json fait foi : corriger ce tableau.
+The source of truth for the packs pulled from the repository's signals is `references/stack-map.json`
+(read by `suggest_profile.py`); the "signal" rows below summarize it, the "request" rows add what the
+repository does not reveal. Every code project also gets `agent-skills`, `ci-forge` and `security`
+(`always_for_code`). In case of discrepancy, stack-map.json prevails: fix this table.
 
-| Projet ou tache | Source | Packs |
+| Project or task | Source | Packs |
 |---|---|---|
-| Projet mene par app-factory (creation, clone, reprise) | signal `app-factory` | app-factory, product-management, puis les packs de la stack ; greenfield seulement pour reconstruire un code dont on a les droits |
-| App web (React, Next.js, Vue, Svelte...) | signal `web-front` | fullstack, ui-design, compliance, monitoring, prod-testing |
-| API ou backend | signal `api` | devops, monitoring, prod-testing ; data-engineering si base de donnees (signal `database`) |
-| Mobile Expo ou React Native | signal `expo` | mobile, mobile-expo, ui-design, compliance |
-| Mobile iOS natif | signal `ios` | mobile, mobile-ios, ui-design, compliance |
-| Mobile Android natif | signal `android` | mobile, mobile-android, ui-design, compliance |
-| Mobile Flutter | signal `flutter` | mobile, mobile-flutter, ui-design, compliance |
+| Project run by app-factory (creation, clone, takeover) | signal `app-factory` | app-factory, product-management, then the packs of the stack; greenfield only to rebuild code you have the rights to |
+| Web app (React, Next.js, Vue, Svelte...) | signal `web-front` | fullstack, ui-design, compliance, monitoring, prod-testing |
+| API or backend | signal `api` | devops, monitoring, prod-testing; data-engineering if a database (signal `database`) |
+| Mobile Expo or React Native | signal `expo` | mobile, mobile-expo, ui-design, compliance |
+| Native iOS mobile | signal `ios` | mobile, mobile-ios, ui-design, compliance |
+| Native Android mobile | signal `android` | mobile, mobile-android, ui-design, compliance |
+| Flutter mobile | signal `flutter` | mobile, mobile-flutter, ui-design, compliance |
 | Data | signal `data` | data-engineering, dataviz |
-| ML ou LLM | signal `ml` | ml-engineering, monitoring |
-| Conteneurs, Kubernetes, Terraform | signaux `containers`, `kubernetes`, `terraform` | devops, monitoring, finops |
-| Infrastructure et exploitation (en plus) | demande | prod-testing |
-| Publication et fiche store (au lancement) | demande | app-stores, puis store-apple et/ou store-google selon les stores vises, store-aso |
-| Marketing et acquisition | demande | growth (toujours : contexte produit partage), puis selon la tache growth-seo, growth-ads, growth-social, growth-analytics, growth-cro ; video-editing et motion-design pour produire des videos |
-| Audit de securite | demande | sec-audit, sec-defense |
-| Contenu, motion, video | demande | ui-design, motion-design, video-editing |
+| ML or LLM | signal `ml` | ml-engineering, monitoring |
+| Containers, Kubernetes, Terraform | signals `containers`, `kubernetes`, `terraform` | devops, monitoring, finops |
+| Infrastructure and operations (in addition) | request | prod-testing |
+| Publishing and store listing (at launch) | request | app-stores, then store-apple and/or store-google depending on the targeted stores, store-aso |
+| Marketing and acquisition | request | growth (always: shared product context), then depending on the task growth-seo, growth-ads, growth-social, growth-analytics, growth-cro; video-editing and motion-design to produce videos |
+| Security audit | request | sec-audit, sec-defense |
+| Content, motion, video | request | ui-design, motion-design, video-editing |
 
-`guardrails` et `ponytail` ne font pas partie de la liste a installer par projet : les scripts
-d'installation les mettent au niveau utilisateur, et `suggest_profile.py` les rapporte a part
-(`user_level` : deja au niveau utilisateur, copie dans le projet optionnelle pour une equipe ou le
-cloud). Ne les proposer au niveau projet que pour un projet partage en equipe ou pilote en cloud
-(autopilot) :
+`guardrails` and `ponytail` are not part of the per-project install list: the install scripts put them
+at user level, and `suggest_profile.py` reports them separately (`user_level`: already at user level,
+project copy optional for a team or the cloud). Only propose them at project level for a project shared
+in a team or run in the cloud (autopilot):
 
-- `guardrails` (garde-fous par hooks) : `node <plugin guardrails>/runtime/setup.cjs install-project`, a
-  committer avec `.claude/`.
-- `ponytail` : `claude plugin install ponytail@ultime-skill --scope project`. Il injecte sa regle (plus
-  petit changement complet) dans chaque session et chaque sous-agent (environ 2 900 caracteres) ; ne
-  jamais le desactiver dans un projet sauf demande. `superpowers` ajoute aussi un hook de
-session : le proposer seulement si sa methode est voulue. `sec-offense` ne s'installe que sur demande explicite,
-pour des tests autorises.
+- `guardrails` (guardrails through hooks): `node <plugin guardrails>/runtime/setup.cjs install-project`,
+  to commit with `.claude/`.
+- `ponytail`: `claude plugin install ponytail@ultime-skill --scope project`. It injects its rule (smallest
+  complete change) into every session and every subagent (about 2,900 characters); never disable it in a
+  project unless asked. `superpowers` also adds a session hook: propose it only if its method is wanted.
+  `sec-offense` is installed only on explicit request, for authorized testing.
+
+## Other coding agents (Codex, Gemini CLI, Cursor, Copilot, OpenCode...)
+
+Outside Claude Code there is no `claude plugin`: the same packs install through the universal
+installer, the same choices apply (only the useful packs, project scope for a team).
+
+- Install: `npx github:Lucas-lux/ultime-skill install <pack...> --agent <id> --scope project --dir .`
+  (`--agent` among codex, gemini, qwen, antigravity, cursor, copilot, windsurf, devin, junie, droid,
+  opencode, kilo, cline, kiro, amp, goose, zed; `auto` detects them). Add `--dry-run` to show the plan.
+- Remove or slim down: `npx github:Lucas-lux/ultime-skill uninstall <pack...> --agent <id> --scope project --dir .`.
+- Skills land in `.agents/skills/` (read by most agents), subagents and commands in the agent's own
+  folder, guardrails as a hook in its format, always-on rules in `AGENTS.md` (or its equivalent). Commit
+  them in project scope.
+- `suggest_profile.py` works the same; `--write-rules` and `--write-permissions` are Claude Code only.
+- Have the user restart the agent afterwards.

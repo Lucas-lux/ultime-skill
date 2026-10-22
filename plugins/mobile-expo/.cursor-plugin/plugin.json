@@ -1,0 +1,10 @@
+{
+  "name": "mobile-expo",
+  "description": "Expo and React Native: official Expo skills (router, native UI, design system, modules, upgrade, EAS Build/Submit/Update/Workflows, web to native migration), React Native performance and upgrade and React Navigation (Callstack), React Native Testing Library tests.",
+  "author": {
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
+  },
+  "skills": "./skills/",
+  "hooks": "./.cursor-plugin/hooks.json"
+}

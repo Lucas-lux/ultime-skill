@@ -1,70 +1,69 @@
-# Application RAG ou LLM (LLMOps)
+# RAG or LLM application (LLMOps)
 
-Un RAG ou une application LLM se monitore sur deux plans : la couche application (c'est aussi une API ou
-une app web : appliquer `api-service.md` ou `web-app.md` et la base) et la couche LLMOps ci-dessous. Tout
-doit etre monitore : une reponse qui part vite mais qui est fausse est une panne que les signaux
-classiques ne voient pas.
+A RAG or an LLM application is monitored on two planes: the application layer (it is also an API or a
+web app: apply `api-service.md` or `web-app.md` and the base) and the LLMOps layer below. Everything
+must be monitored: an answer that goes out fast but is wrong is an outage that classic signals do not
+see.
 
-## Tracer la chaine de bout en bout
+## Trace the chain end to end
 
-Instrumenter chaque etape comme un span (OpenTelemetry ; conventions GenAI d'OTel, ou un outil de tracing
-LLM comme MLflow Tracing, Langfuse, Phoenix, LangSmith selon la stack) :
+Instrument each step as a span (OpenTelemetry; OTel GenAI conventions, or an LLM tracing tool such as
+MLflow Tracing, Langfuse, Phoenix, LangSmith depending on the stack):
 
-- requete utilisateur -> reformulation -> embedding -> recuperation -> re-ranking -> construction du
-  prompt -> appel au modele -> post-traitement et garde-fous -> reponse.
-- Pour chaque span : duree, et pour l'appel modele le nom du modele, le nombre de tokens entree/sortie, le
-  cout. Garder le trace id pour relier la reponse a toute la chaine.
+- user request -> rewriting -> embedding -> retrieval -> re-ranking -> prompt construction -> model
+  call -> post-processing and guardrails -> answer.
+- For each span: duration, and for the model call the model name, the number of input/output tokens, the
+  cost. Keep the trace id to link the answer to the whole chain.
 
-## Cout et tokens
+## Cost and tokens
 
-- Tokens entree et sortie par requete, par modele, par fonctionnalite. Cout derive (prix par token du
-  modele). Suivre le cout par requete et le cout agrege par jour et par fonctionnalite.
-- Alerter sur une derive du cout par requete (changement de prompt qui gonfle le contexte, boucle d'agent
-  qui part en vrille) et sur un budget quotidien.
-- Suivre le taux de hit du cache (prompt caching, cache semantique) : c'est le principal levier de cout et
-  de latence.
+- Input and output tokens per request, per model, per feature. Derived cost (model price per token).
+  Track the cost per request and the aggregated cost per day and per feature.
+- Alert on a drift of the cost per request (prompt change that inflates the context, agent loop that
+  spins out of control) and on a daily budget.
+- Track the cache hit rate (prompt caching, semantic cache): it is the main lever for cost and latency.
 
-## Latence par etape
+## Latency per step
 
-- Latence de bout en bout et par etape (recuperation, appel modele, re-ranking). Le temps au premier token
-  (TTFT) et le debit de tokens (tokens/s) pour une reponse en streaming.
-- Separer la latence du fournisseur de modele de la latence propre a l'application.
+- End-to-end and per-step latency (retrieval, model call, re-ranking). Time to first token (TTFT) and
+  token throughput (tokens/s) for a streamed answer.
+- Separate the model provider's latency from the application's own latency.
 
-## Qualite de la recuperation (le R de RAG)
+## Retrieval quality (the R in RAG)
 
-- Recall@k et precision@k sur un jeu de questions de reference avec leurs passages attendus.
-- Pertinence du contexte recupere (context relevance) et taux de passages reellement utilises dans la
-  reponse.
-- Taux de "rien trouve" et distribution des scores de similarite : un decrochage signale un probleme
-  d'index, d'embedding ou de donnee.
+- Recall@k and precision@k on a set of reference questions with their expected passages.
+- Relevance of the retrieved context (context relevance) and rate of passages actually used in the
+  answer.
+- Rate of "nothing found" and distribution of similarity scores: a drop signals an index, embedding or
+  data problem.
 
-## Qualite des reponses (eval en ligne et hors ligne)
+## Answer quality (online and offline eval)
 
-- **Hors ligne** : un jeu doré (golden set) rejoue a chaque changement de prompt, de modele ou d'index.
-  Metriques : groundedness ou faithfulness (la reponse s'appuie-t-elle sur le contexte), pertinence,
-  exactitude, completude. Juges automatiques (LLM-as-judge) calibres contre des annotations humaines, plus
-  des metriques deterministes quand elles existent.
-- **En ligne** : echantillonner les echanges de production et les scorer en continu avec les memes juges.
-  Suivre le taux d'hallucination estime, le taux de refus, la part de reponses hors sujet.
-- Tracer la derive : la distribution des questions reelles s'eloigne du golden set -> l'eval n'est plus
-  representative, il faut enrichir le jeu.
+- **Offline**: a golden set replayed on every change of prompt, model or index. Metrics: groundedness or
+  faithfulness (does the answer rely on the context), relevance, accuracy, completeness. Automatic
+  judges (LLM-as-judge) calibrated against human annotations, plus deterministic metrics when they
+  exist.
+- **Online**: sample production exchanges and score them continuously with the same judges. Track the
+  estimated hallucination rate, the refusal rate, the share of off-topic answers.
+- Track drift: the distribution of real questions moves away from the golden set -> the eval is no
+  longer representative, the set must be enriched.
 
-## Garde-fous et securite
+## Guardrails and security
 
-- Taux de declenchement des garde-fous : injection de prompt detectee, contenu toxique, fuite de donnee
-  personnelle ou de secret, sortie hors schema.
-- Surface de securite specifique LLM : voir la skill `sec-audit` (`securing-ai-systems`) pour ce qu'il faut
-  tester. Monitorer les tentatives d'injection et les depassements d'outils (excessive agency) cote agent.
+- Guardrail trigger rate: prompt injection detected, toxic content, leak of personal data or a secret,
+  output out of schema.
+- LLM-specific security surface: see the `sec-audit` skill (`securing-ai-systems`) for what to test.
+  Monitor injection attempts and tool overreach (excessive agency) on the agent side.
 
-## Feedback et signaux produit
+## Feedback and product signals
 
-- Feedback explicite (pouce haut/bas, note) et implicite (reformulation, abandon, copie de la reponse,
-  clic sur une source). Les relier au trace id pour remonter a la chaine complete d'un mauvais retour.
-- Boucle : les mauvais retours alimentent le golden set et la detection de regressions.
+- Explicit feedback (thumbs up/down, rating) and implicit feedback (rephrasing, abandonment, copying the
+  answer, click on a source). Link them to the trace id to go back up the full chain of a bad feedback.
+- Loop: bad feedback feeds the golden set and regression detection.
 
-## Dashboards LLMOps
+## LLMOps dashboards
 
-- Vue cout (tokens, cout par requete et par fonctionnalite, hit de cache).
-- Vue latence (bout en bout, TTFT, par etape, part fournisseur).
-- Vue qualite (groundedness, recall de recuperation, taux d'hallucination, feedback).
-- Vue garde-fous (declenchements par type).
+- Cost view (tokens, cost per request and per feature, cache hits).
+- Latency view (end to end, TTFT, per step, provider share).
+- Quality view (groundedness, retrieval recall, hallucination rate, feedback).
+- Guardrails view (triggers per type).

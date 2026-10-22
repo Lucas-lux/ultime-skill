@@ -1,10 +1,10 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/mlflow/skills (commit 51a42ea2b07f)
+Origin: https://github.com/mlflow/skills (commit 51a42ea2b07f)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/databricks.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/python.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/databricks.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/python.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

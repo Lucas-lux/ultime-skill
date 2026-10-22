@@ -1,65 +1,65 @@
-# Pieges de conception (APIs et configurations dangereuses)
+# Design footguns (dangerous APIs and configurations)
 
-A passer sur le code et la configuration touches. Un piege n'est pas forcement une faille : c'est un
-endroit ou une erreur ordinaire en devient une. Signaler en `mineur` s'il n'est pas exploitable, en
-`majeur` ou `bloquant` si un chemin d'attaque existe.
+To run over the code and configuration touched. A footgun is not necessarily a vulnerability: it is a
+place where an ordinary mistake becomes one. Report it as `minor` if it is not exploitable, as
+`major` or `blocking` if an attack path exists.
 
-## Valeurs par defaut et configuration
+## Defaults and configuration
 
-- Mode debug, pages d'erreur detaillees ou console d'administration actives hors developpement.
-- CORS avec origine reflechie ou `*` combine aux identifiants (cookies, `Authorization`).
-- Cookies de session sans `Secure`, `HttpOnly`, `SameSite` ; duree de session sans limite.
-- Comparaison de configuration permissive par defaut : une variable absente qui desactive une
-  verification (`if not CHECK_ENABLED`), un `ALLOWED_HOSTS` vide qui accepte tout.
-- Secrets par defaut dans le code (`SECRET_KEY = "change-me"`) utilises si la variable manque.
-- Chemins de webhooks ou d'API internes exposes sans signature ni authentification.
+- Debug mode, detailed error pages or administration console active outside development.
+- CORS with reflected origin or `*` combined with credentials (cookies, `Authorization`).
+- Session cookies without `Secure`, `HttpOnly`, `SameSite`; session duration without a limit.
+- Configuration comparison permissive by default: a missing variable that disables a check
+  (`if not CHECK_ENABLED`), an empty `ALLOWED_HOSTS` that accepts everything.
+- Default secrets in the code (`SECRET_KEY = "change-me"`) used if the variable is missing.
+- Webhook or internal API paths exposed without signature or authentication.
 
-## Entrees et interpretation
+## Inputs and interpretation
 
-- Deserialisation de donnees externes avec un format qui execute du code (pickle, YAML non sur,
+- Deserialization of external data with a format that executes code (pickle, unsafe YAML,
   `unserialize`, `ObjectInputStream`, `eval`, `Function`).
-- Construction de requetes, commandes, chemins, URL ou expressions de template par concatenation.
-- Parsers XML avec entites externes actives ; decompression sans limite de taille (bombe zip).
-- Expressions regulieres a retour arriere exponentiel sur une entree utilisateur.
-- Validation par liste noire, ou validation faite apres une normalisation qui change la valeur.
-- Redirections vers une URL fournie par l'utilisateur ; requetes serveur vers une URL fournie (SSRF),
-  y compris via un apercu de lien, un import par URL ou un webhook.
+- Building queries, commands, paths, URLs or template expressions by concatenation.
+- XML parsers with external entities enabled; decompression without a size limit (zip bomb).
+- Regular expressions with exponential backtracking on user input.
+- Validation by denylist, or validation done after a normalization that changes the value.
+- Redirects to a user-supplied URL; server requests to a supplied URL (SSRF), including through a link
+  preview, an import by URL or a webhook.
 
-## Identite et autorisation
+## Identity and authorization
 
-- Identifiant d'objet pris dans la requete sans verifier qu'il appartient a l'appelant (IDOR), surtout
-  sur les routes de lecture, d'export et de suppression.
-- Verification d'autorisation dans l'interface seulement, ou seulement sur certaines methodes HTTP.
-- Assignation de masse : objet construit directement depuis le corps de la requete (`role`, `is_admin`,
-  `tenant_id` modifiables).
-- Jetons : algorithme accepte depuis l'en-tete (`alg: none`), signature non verifiee, audience ou
-  expiration ignorees, secret partage entre environnements.
-- Reinitialisation de mot de passe ou lien magique sans expiration, reutilisable, ou previsible.
-- Comparaison de secrets par egalite simple au lieu d'une comparaison a temps constant.
+- Object identifier taken from the request without checking that it belongs to the caller (IDOR),
+  especially on read, export and delete routes.
+- Authorization check in the interface only, or only on some HTTP methods.
+- Mass assignment: object built directly from the request body (`role`, `is_admin`, `tenant_id`
+  modifiable).
+- Tokens: algorithm accepted from the header (`alg: none`), signature not verified, audience or
+  expiration ignored, secret shared between environments.
+- Password reset or magic link without expiration, reusable, or predictable.
+- Comparison of secrets by plain equality instead of a constant-time comparison.
 
-## Concurrence et etat
+## Concurrency and state
 
-- Verification puis action non atomiques (TOCTOU) : solde, stock, quota, usage unique d'un code.
-- Absence d'idempotence sur paiements et webhooks rejoues.
-- Limitation de debit absente sur connexion, inscription, envoi d'email ou de SMS, endpoints couteux.
+- Non-atomic check then act (TOCTOU): balance, stock, quota, single use of a code.
+- No idempotency on payments and replayed webhooks.
+- No rate limiting on login, sign-up, email or SMS sending, expensive endpoints.
 
-## Cryptographie et aleatoire
+## Cryptography and randomness
 
-- Aleatoire non cryptographique pour des jetons, identifiants de session ou codes.
-- Chiffrement sans authentification (mode sans integrite), IV ou nonce reutilise, cle derivee d'un mot
-  de passe sans fonction lente.
-- Hachage de mot de passe rapide (MD5, SHA-x simple) au lieu d'Argon2id, scrypt ou bcrypt.
-- Verification TLS desactivee (`verify=False`, `rejectUnauthorized: false`) laissee en place.
+- Non-cryptographic randomness for tokens, session identifiers or codes.
+- Encryption without authentication (mode without integrity), reused IV or nonce, key derived from a
+  password without a slow function.
+- Fast password hashing (MD5, plain SHA-x) instead of Argon2id, scrypt or bcrypt.
+- TLS verification disabled (`verify=False`, `rejectUnauthorized: false`) left in place.
 
-## Donnees et journaux
+## Data and logs
 
-- Donnees personnelles, jetons ou secrets dans les logs, les messages d'erreur, les URL ou l'analytics.
-- Fichiers televerses servis depuis le meme domaine que l'application, sans controle du type reel, ou
-  stockes avec le nom fourni par l'utilisateur.
-- Exports et sauvegardes accessibles par URL devinable.
+- Personal data, tokens or secrets in logs, error messages, URLs or analytics.
+- Uploaded files served from the same domain as the application, without checking the real type, or
+  stored with the user-supplied name.
+- Exports and backups reachable by a guessable URL.
 
-## Agents et LLM
+## Agents and LLMs
 
-- Sortie d'un modele utilisee comme commande, requete, chemin ou HTML sans validation.
-- Contenu externe (page, document, issue) traite comme instruction par un agent outille.
-- Outils d'agent avec plus de droits que la tache (ecriture, reseau, secrets) sans confirmation.
+- Model output used as a command, query, path or HTML without validation.
+- External content (page, document, issue) treated as an instruction by a tooled agent.
+- Agent tools with more rights than the task needs (write, network, secrets) without confirmation.

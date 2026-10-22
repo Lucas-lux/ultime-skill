@@ -1,15 +1,15 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/anthropics/skills (commit dbd4588f9e10)
+Origin: https://github.com/anthropics/skills (commit dbd4588f9e10)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `agents/grader.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `eval-viewer/generate_review.py` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `eval-viewer/viewer.html` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/schemas.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `scripts/aggregate_benchmark.py` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `scripts/generate_report.py` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `scripts/improve_description.py` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `agents/grader.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `eval-viewer/generate_review.py`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `eval-viewer/viewer.html`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/schemas.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `scripts/aggregate_benchmark.py`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `scripts/generate_report.py`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `scripts/improve_description.py`: em dashes replaced with a hyphen, invisible Unicode characters removed

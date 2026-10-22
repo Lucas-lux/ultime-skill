@@ -1,6 +1,6 @@
 {
   "name": "guardrails",
-  "description": "Garde-fous imposes par hooks, configurables regle par regle : pas d'em dash ni d'emoji non demande, pas de push sur main ni de contournement des hooks git, pas de secret ni de .env dans git, Conventional Commits, marqueur IA, regle d'or des identifiants de prod. Installable aussi dans un projet pour le cloud et l'equipe.",
+  "description": "Guardrails enforced by hooks, configurable rule by rule: no em dash or unrequested emoji, no push to main or git hook bypass, no secret or .env in git, Conventional Commits, AI marker, production credentials golden rule. Also installable in a project for the cloud, the team and other coding agents.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

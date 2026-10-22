@@ -1,22 +1,22 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/aws/agent-toolkit-for-aws (commit fea6667159ec)
+Origin: https://github.com/aws/agent-toolkit-for-aws (commit fea6667159ec)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/budgets.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/cost-audit.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/cost-explorer.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/cost-optimization-hub.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/cur-athena.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/deterministic-calculations.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/ebs-optimization.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/ec2-rightsizing.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/free-tier.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/lambda-optimization.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/pricing-lookup.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/reserved-instances.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/savings-plans.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/service-optimization.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/budgets.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/cost-audit.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/cost-explorer.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/cost-optimization-hub.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/cur-athena.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/deterministic-calculations.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/ebs-optimization.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/ec2-rightsizing.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/free-tier.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/lambda-optimization.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/pricing-lookup.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/reserved-instances.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/savings-plans.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/service-optimization.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

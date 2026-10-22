@@ -1,21 +1,21 @@
-# Securite dans la CI (tout projet)
+# Security in the CI (every project)
 
-| Job | Outil | Niveau | Notes |
+| Job | Tool | Level | Notes |
 |---|---|---|---|
-| secrets | gitleaks 8.30.1 en CLI (binaire fige et verifie, ou image `zricethezav/gitleaks:v8.30.1`) : `gitleaks git --redact --exit-code 1` sur l'historique de la PR | PR | l'action officielle demande une licence pour les comptes d'organisation : utiliser le CLI |
-| deps | `google/osv-scanner-action` (workflow reutilisable `osv-scanner-reusable-pr.yml`, v2.7.0) : nouvelles vulnerabilites introduites par la PR | PR | gratuit, tous ecosystemes |
-| deps-review | `actions/dependency-review-action@v5` : licences interdites, vulnerabilites | PR | depot public, ou prive avec GitHub Advanced Security |
-| sast | `github/codeql-action@v4` (init, autobuild, analyze), requetes `security-extended` | PR + nuit | public, ou prive avec Advanced Security |
-| sast (sans GHAS) | Semgrep CE 1.182 : `semgrep scan --config p/default --config p/<langage> --metrics=off --error` | PR | remplace CodeQL sur un depot prive sans licence |
-| workflows | `zizmor .github/workflows` (1.31.1) et `actionlint` (1.7.12) | PR | |
-| iac et images | Trivy (`config`, `image`), voir `containers-k8s.md` et `iac.md` | PR | |
-| sbom et provenance | SBOM SPDX, `actions/attest-build-provenance@v4` | principale, release | |
-| scorecard | `ossf/scorecard-action@v2.5.0` | nuit | depot public seulement |
-| dast | OWASP ZAP baseline (`zaproxy/action-baseline`) contre staging | nuit | jamais contre la production sans accord |
+| secrets | gitleaks 8.30.1 as a CLI (pinned and verified binary, or the `zricethezav/gitleaks:v8.30.1` image): `gitleaks git --redact --exit-code 1` on the PR history | PR | the official action requires a license for organization accounts: use the CLI |
+| deps | `google/osv-scanner-action` (reusable workflow `osv-scanner-reusable-pr.yml`, v2.7.0): new vulnerabilities introduced by the PR | PR | free, all ecosystems |
+| deps-review | `actions/dependency-review-action@v5`: forbidden licenses, vulnerabilities | PR | public repository, or private with GitHub Advanced Security |
+| sast | `github/codeql-action@v4` (init, autobuild, analyze), `security-extended` queries | PR + nightly | public, or private with Advanced Security |
+| sast (without GHAS) | Semgrep CE 1.182: `semgrep scan --config p/default --config p/<language> --metrics=off --error` | PR | replaces CodeQL on a private repository without a license |
+| workflows | `zizmor .github/workflows` (1.31.1) and `actionlint` (1.7.12) | PR | |
+| iac and images | Trivy (`config`, `image`), see `containers-k8s.md` and `iac.md` | PR | |
+| sbom and provenance | SPDX SBOM, `actions/attest-build-provenance@v4` | main, release | |
+| scorecard | `ossf/scorecard-action@v2.5.0` | nightly | public repository only |
+| dast | OWASP ZAP baseline (`zaproxy/action-baseline`) against staging | nightly | never against production without consent |
 
-- Resultats SARIF publies dans l'onglet securite si Advanced Security est disponible
-  (`security-events: write`), sinon en artefact et en echec du job.
-- Les exceptions (faux positifs) sont dans le fichier de l'outil (`.gitleaks.toml`, `.trivyignore`,
-  `.semgrepignore`), une ligne par exception, avec la raison et une date de revue.
-- Le pack `security` (skills `security-review`, `sast`, `auditing-supply-chain`, `gha-security-review`) sert a
-  analyser les resultats ; ci-forge installe les controles.
+- SARIF results published in the security tab if Advanced Security is available
+  (`security-events: write`), otherwise as an artifact and as a job failure.
+- Exceptions (false positives) are in the tool's file (`.gitleaks.toml`, `.trivyignore`,
+  `.semgrepignore`), one line per exception, with the reason and a review date.
+- The `security` pack (skills `security-review`, `sast`, `auditing-supply-chain`, `gha-security-review`) is
+  used to analyze the results; ci-forge installs the checks.

@@ -1,40 +1,40 @@
-# Service API ou backend
+# API or backend service
 
-Couche de base (RED, USE, logs, traces, SLO) plus les points suivants.
+Base layer (RED, USE, logs, traces, SLO) plus the following points.
 
-## Par endpoint
+## Per endpoint
 
-- RED par route logique (`GET /users/:id`, pas l'URL avec l'id) et par classe de statut. Latence en
-  histogramme pour p95/p99 par route.
-- Taille des requetes et des reponses si elle varie fortement (upload, export).
+- RED per logical route (`GET /users/:id`, not the URL with the id) and per status class. Latency as a
+  histogram for p95/p99 per route.
+- Request and response size if it varies strongly (upload, export).
 
-## Dependances sortantes
+## Outgoing dependencies
 
-- Pour chaque dependance (base de donnees, cache, file, service tiers, http externe) : latence, taux
-  d'erreur, timeouts, et etat du circuit breaker s'il y en a un. Une trace relie l'appel sortant a la
-  requete entrante.
-- SLO par dependance critique, et un budget de latence reparti entre les dependances.
+- For each dependency (database, cache, queue, third-party service, external http): latency, error
+  rate, timeouts, and circuit breaker state if there is one. A trace links the outgoing call to the
+  incoming request.
+- SLO per critical dependency, and a latency budget split between dependencies.
 
-## Ressources d'infrastructure
+## Infrastructure resources
 
-- **Pool de connexions** base de donnees : connexions actives, en attente, saturation, temps d'acquisition.
-  C'est une cause frequente de latence invisible cote CPU.
-- **Files de messages** : profondeur, age du plus vieux message, taux de consommation vs production,
-  messages en dead letter.
-- **Cache** : hit ratio, evictions, latence.
+- Database **connection pool**: active connections, waiting, saturation, acquisition time. It is a
+  frequent cause of latency invisible on the CPU side.
+- **Message queues**: depth, age of the oldest message, consumption vs production rate, messages in
+  dead letter.
+- **Cache**: hit ratio, evictions, latency.
 
 ## Resilience
 
-- Taux de retry, de rate limiting (429), de rejet par le circuit breaker. Suivre les erreurs client (4xx)
-  separement des erreurs serveur (5xx) : seules les 5xx consomment le budget d'erreur en general.
+- Rate of retries, of rate limiting (429), of rejection by the circuit breaker. Track client errors (4xx)
+  separately from server errors (5xx): only 5xx errors consume the error budget in general.
 
-## Securite applicative
+## Application security
 
-- Taux d'authentification en echec, d'autorisation refusee, de rate limit atteint. Un pic est un signal
-  d'abus. Voir la skill `security` pour la revue.
+- Rate of failed authentication, denied authorization, rate limit reached. A spike is a signal of
+  abuse. See the `security` skill for the review.
 
 ## Dashboards
 
-- Vue endpoints (RED par route, top des routes lentes et en erreur).
-- Vue dependances (latence et erreurs par dependance, pools, files, cache).
-- Vue SLO et budget d'erreur.
+- Endpoints view (RED per route, top slow and failing routes).
+- Dependencies view (latency and errors per dependency, pools, queues, cache).
+- SLO and error budget view.

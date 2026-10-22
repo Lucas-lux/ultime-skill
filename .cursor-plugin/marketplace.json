@@ -1,0 +1,225 @@
+{
+  "name": "ultime-skill",
+  "description": "Production-ready skills, subagents and guardrails for AI coding agents: end-to-end project orchestration, product management, mobile and stores, growth and marketing, security, devops, finops, data, ML, full stack, design, compliance, motion and video.",
+  "owner": {
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
+  },
+  "plugins": [
+    {
+      "name": "ponytail",
+      "source": "./plugins/ponytail",
+      "description": "Lazy senior developer mode: the smallest complete change, reuse before writing, YAGNI. Activation hooks (/ponytail lite|full|ultra) and review and audit commands."
+    },
+    {
+      "name": "superpowers",
+      "source": "./plugins/superpowers",
+      "description": "obra's working method: brainstorming, writing plans, TDD, systematic debugging, subagents, verification before concluding. Loads its method at session start."
+    },
+    {
+      "name": "agent-skills",
+      "source": "./plugins/agent-skills",
+      "description": "Full software lifecycle (Addy Osmani): spec, plan, build, test, review, security, performance, CI/CD, observability, release. Cross-cutting base for full stack and devops."
+    },
+    {
+      "name": "skill-factory",
+      "source": "./plugins/skill-factory",
+      "description": "Create, test and improve skills and MCP servers (Anthropic's skill-creator and mcp-builder)."
+    },
+    {
+      "name": "rea",
+      "source": "./plugins/rea",
+      "description": "Reverse Engineer Anything: binaries, Electron/JS apps, Android, firmware, browser. Drives the rea-agents MCP server (installed separately)."
+    },
+    {
+      "name": "security",
+      "source": "./plugins/security",
+      "description": "Application audit and security review: in-house method (evidence, severity, design pitfalls), OWASP Top 10 and ASVS, code audit and diff review, Semgrep and CodeQL, variant analysis, supply chain, threat model, risky APIs, skill scanning."
+    },
+    {
+      "name": "sec-audit",
+      "source": "./plugins/sec-audit",
+      "description": "Code audit and vulnerability research (trilwu secskills-core): taint analysis of source, reversing binaries and apps, crypto, supply chain, security of AI systems and MCP servers. Authorized use only."
+    },
+    {
+      "name": "sec-defense",
+      "source": "./plugins/sec-defense",
+      "description": "Defense and incident response (trilwu secskills-defense): disk/memory/network DFIR, malware and phishing analysis, Sigma and Yara detections, cloud hardening and investigation (AWS, Azure, GCP, M365), threat hunting."
+    },
+    {
+      "name": "sec-offense",
+      "source": "./plugins/sec-offense",
+      "description": "Pentest for authorized testing only (trilwu secskills-offense): web/API/JWT/SSRF/XXE exploitation, Active Directory and Entra, cloud and containers, privilege escalation, reconnaissance. Reserved for authorized engagements, CTFs and research."
+    },
+    {
+      "name": "team-conventions",
+      "source": "./plugins/team-conventions",
+      "description": "Cross-cutting team working conventions: verify rather than trust, ask before a large batch, multiple-choice questions, languages, no em dash, AI marker, technical terms in full, main/replica, secrets out of the code."
+    },
+    {
+      "name": "monitoring",
+      "source": "./plugins/monitoring",
+      "description": "The most complete monitoring for the project type (web app, API, RAG/LLM, data pipeline, cron, ML training and serving, mobile): metrics, logs, traces, SLOs, alerts, dashboards, cost, and domain signals (LLMOps, MLOps, data). Vendor-neutral (OpenTelemetry, Prometheus, Grafana)."
+    },
+    {
+      "name": "prod-testing",
+      "source": "./plugins/prod-testing",
+      "description": "End-to-end test strategy and production validation, vendor-neutral: CI/CD pyramid and stages (unit, contract, integration, end to end, smoke, canary), post-deploy smoke tests, progressive delivery with automatic rollback, feature flags (OpenFeature), synthetic monitoring, flaky tests."
+    },
+    {
+      "name": "devops",
+      "source": "./plugins/devops",
+      "description": "DevOps and SRE: Terraform/OpenTofu, Docker, Kubernetes, GitOps, CI/CD pipelines and GitHub Actions, SLOs and error budgets, PromQL, k6, synthetic monitoring, incident response and postmortems."
+    },
+    {
+      "name": "finops",
+      "source": "./plugins/finops",
+      "description": "Multi-cloud FinOps: AWS cost analysis and optimization (Cost Explorer, SP/RI), GKE/Google Cloud, Azure, and shift-left cost scanning of infrastructure as code (Infracost)."
+    },
+    {
+      "name": "data-engineering",
+      "source": "./plugins/data-engineering",
+      "description": "Data engineering: dbt models and tests, Airflow DAGs (writing, testing, debugging, 2 to 3 migration), multi-dialect SQL, data exploration, PySpark, Postgres, data quality."
+    },
+    {
+      "name": "dataviz",
+      "source": "./plugins/dataviz",
+      "description": "Data visualization: choosing the chart type, matplotlib/seaborn/plotly, self-contained HTML dashboards, accessible scientific figures, Grafana dashboards."
+    },
+    {
+      "name": "ml-engineering",
+      "source": "./plugins/ml-engineering",
+      "description": "ML engineering: choosing a fine-tuning method, LoRA/QLoRA recipes, evaluation harnesses and LLM judge calibration, TRL, RAG, vLLM serving, lm-eval benchmarks, scikit-learn, MLflow tracing, Hugging Face Hub."
+    },
+    {
+      "name": "fullstack",
+      "source": "./plugins/fullstack",
+      "description": "Production full stack web: 70 React and Next.js performance rules, React 19 composition patterns. Combines with the agent-skills pack (APIs, security, performance, delivery)."
+    },
+    {
+      "name": "ui-design",
+      "source": "./plugins/ui-design",
+      "description": "Design that does not look vibe-coded: anti AI-slop system (impeccable), art direction and the list of AI tells (frontend-design), Vercel's Web Interface Guidelines, deslop constraints, UI stress tests, redesign of generic sites."
+    },
+    {
+      "name": "compliance",
+      "source": "./plugins/compliance",
+      "description": "Regulation and compliance: RGAA audit (French accessibility standard), GDPR rules for engineering, WCAG advice and legal mapping (EAA), feature compliance check, secure development (ANSSI), code-level accessibility fixes. French law: CNIL, cookies, legal notices and terms."
+    },
+    {
+      "name": "motion-design",
+      "source": "./plugins/motion-design",
+      "description": "Motion design: GSAP (core, timeline, ScrollTrigger, plugins, performance, frameworks), framework-agnostic motion principles (LottieFiles), Manim mathematical animations (ManimCE and scene planning)."
+    },
+    {
+      "name": "video-editing",
+      "source": "./plugins/video-editing",
+      "description": "Complete video editing: conversational editing with EDL and subtitles (video-use), building FFmpeg commands (cut, concat, transitions, loudness, social media presets), local faster-whisper transcription, Manim rendering."
+    },
+    {
+      "name": "app-factory",
+      "source": "./plugins/app-factory",
+      "description": "End-to-end project orchestrator: from an idea, an app to clone and personalize, or an existing app to finish, to the finished product in production. 18 subagents (product, project management, architecture, data, design, security, compliance, finops, dev, review, QA, release, SRE, growth, verifier), phases and validation gates, state on disk and resume, autopilot mode (scheduled wakeups, only vision decisions raised as GitHub issues)."
+    },
+    {
+      "name": "product-management",
+      "source": "./plugins/product-management",
+      "description": "Product management: discovery (assumptions, opportunity solution tree, interviews), strategy (vision, positioning, business model, pricing), market (competition, personas, segments), execution (PRD, user stories, roadmap, pre-mortem, sprint, retro, release notes), reverse specification of existing code (code-to-prd, schematic, intended-vs-implemented)."
+    },
+    {
+      "name": "mobile",
+      "source": "./plugins/mobile",
+      "description": "Cross-platform mobile, written in-house: iOS and Android release (signing, versions, TestFlight, Play tracks, fastlane, EAS), OWASP MASVS security, push notifications, deep links, end-to-end tests (Maestro, Detox), mobile accessibility, in-app purchases without a third-party service."
+    },
+    {
+      "name": "mobile-expo",
+      "source": "./plugins/mobile-expo",
+      "description": "Expo and React Native: official Expo skills (router, native UI, design system, modules, upgrade, EAS Build/Submit/Update/Workflows, web to native migration), React Native performance and upgrade and React Navigation (Callstack), React Native Testing Library tests."
+    },
+    {
+      "name": "mobile-ios",
+      "source": "./plugins/mobile-ios",
+      "description": "Native iOS: SwiftUI, Swift concurrency, Swift Testing, SwiftData (Paul Hudson), iOS accessibility (VoiceOver, Dynamic Type)."
+    },
+    {
+      "name": "mobile-android",
+      "source": "./plugins/mobile-android",
+      "description": "Native Android: official Google skills (Compose performance and adaptive layouts, XML to Compose migration, Navigation 3, edge-to-edge, AGP 9, R8, ANR, testing, intent and permission security, Play policies) and Google Play Billing (RevenueCat, independent of their service)."
+    },
+    {
+      "name": "mobile-flutter",
+      "source": "./plugins/mobile-flutter",
+      "description": "Flutter and Dart: official skills (architecture, responsive layout, declarative routing, localization, JSON serialization, HTTP, widget and integration tests, static analysis, runtime errors)."
+    },
+    {
+      "name": "app-stores",
+      "source": "./plugins/app-stores",
+      "description": "Stores, written in-house: App Store and Google Play listing kit within each store's limits, Data safety form from the code and SDKs, driving the consoles in the browser for what the APIs do not cover."
+    },
+    {
+      "name": "store-apple",
+      "source": "./plugins/store-apple",
+      "description": "App Store Connect through the asc CLI (signing, build, TestFlight, release, metadata, screenshots, pricing, crashes), App Review rejection prevention (preflight per app type), privacy policy and Apple privacy labels."
+    },
+    {
+      "name": "store-google",
+      "source": "./plugins/store-google",
+      "description": "Google Play through the gplay CLI (Gradle build, release, staged rollout, testers, metadata, screenshots, pre-submission checks, purchases, pricing, vitals) and Google Play policy audit from the code."
+    },
+    {
+      "name": "store-aso",
+      "source": "./plugins/store-aso",
+      "description": "App Store Optimization for both stores: audit, keywords, metadata, screenshots (Next.js generator included), preview video, icon, custom product pages, events, listing A/B tests, localization, reviews and ratings, handling rejections."
+    },
+    {
+      "name": "growth",
+      "source": "./plugins/growth",
+      "description": "Growth base: product context shared by every marketing skill, marketing plan, launch, press relations; written in-house: app install campaigns, creative and video production, social media publishing, marketing compliance for France and the EU."
+    },
+    {
+      "name": "growth-seo",
+      "source": "./plugins/growth-seo",
+      "description": "Site SEO: technical and on-page audit, AI search (GEO), structured data, programmatic SEO, site architecture, content strategy, link building."
+    },
+    {
+      "name": "growth-ads",
+      "source": "./plugins/growth-ads",
+      "description": "Paid advertising: Google, Meta, TikTok, LinkedIn strategy, ad creatives, copywriting and editing, psychology, marketing images and videos, Apple Ads, app acquisition campaigns."
+    },
+    {
+      "name": "growth-social",
+      "source": "./plugins/growth-social",
+      "description": "Social media: strategy and content per platform, influencer and creator marketing, community management."
+    },
+    {
+      "name": "growth-analytics",
+      "source": "./plugins/growth-analytics",
+      "description": "Marketing measurement: tracking plan and GA4, UTMs, attribution, conversion tracking (GTM, conversion APIs), A/B tests, mobile attribution (MMP, SKAdNetwork)."
+    },
+    {
+      "name": "growth-cro",
+      "source": "./plugins/growth-cro",
+      "description": "Conversion and retention: page CRO, signup, onboarding, paywalls, popups, lifecycle emails and SMS, churn, referral, lead magnets, web to app funnel."
+    },
+    {
+      "name": "ci-forge",
+      "source": "./plugins/ci-forge",
+      "description": "CI/CD generated for the stack and target architecture: lint, format, typing, tests and coverage, Playwright end to end, build, containers (hadolint, Trivy), Kubernetes (kubeconform, kind), IaC, security (gitleaks, osv-scanner, CodeQL or Semgrep), SBOM and provenance, staging and prod, actions pinned by SHA, required check ci-ok."
+    },
+    {
+      "name": "guardrails",
+      "source": "./plugins/guardrails",
+      "description": "Guardrails enforced by hooks, configurable rule by rule: no em dash or unrequested emoji, no push to main or git hook bypass, no secret or .env in git, Conventional Commits, AI marker, production credentials golden rule. Also installable in a project for the cloud, the team and other coding agents."
+    },
+    {
+      "name": "ultime-profile",
+      "source": "./plugins/ultime-profile",
+      "description": "Entry point: installs and manages, for each project, only the useful ultime-skill packs (project detection, project-level install, disabling the rest, adjusting when the task changes). Catalog of packs with their context cost."
+    },
+    {
+      "name": "greenfield",
+      "source": "./plugins/greenfield",
+      "description": "Clean-room reverse engineering: extracts behavioral specs, test vectors and acceptance criteria from existing code without inheriting its implementation (/greenfield:analyze command). Heavy agent pipeline, for code you own the rights to."
+    }
+  ]
+}

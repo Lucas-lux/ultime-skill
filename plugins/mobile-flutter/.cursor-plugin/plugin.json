@@ -1,0 +1,10 @@
+{
+  "name": "mobile-flutter",
+  "description": "Flutter and Dart: official skills (architecture, responsive layout, declarative routing, localization, JSON serialization, HTTP, widget and integration tests, static analysis, runtime errors).",
+  "author": {
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
+  },
+  "skills": "./skills/",
+  "hooks": "./.cursor-plugin/hooks.json"
+}

@@ -1,48 +1,48 @@
 ---
 name: store-console-browser
 description: >
-  Pilote la Play Console et App Store Connect dans le navigateur de l'utilisateur pour ce que les API et
-  CLI ne couvrent pas (creation de l'app, questionnaires, Data safety, confidentialite, declarations), a
-  partir d'un dossier prepare, avec relecture avant chaque envoi. A utiliser pour remplir la Play Console
-  ou App Store Connect via le navigateur, ou creer une fiche store dans la console.
+  Drives the Play Console and App Store Connect in the user's browser for what the APIs and CLIs do not
+  cover (app creation, questionnaires, Data safety, privacy, declarations), from a prepared file set,
+  with review before each submission. Use to fill in the Play Console or App Store Connect through the
+  browser, or create a store listing in the console.
 ---
 
-# Consoles des stores dans le navigateur
+# Store consoles in the browser
 
-Ordre de preference : API et CLI d'abord (`asc-*`, `gplay-*`, fastlane), navigateur seulement pour ce
-qu'elles ne couvrent pas. Ce qui releve souvent de l'interface (a reverifier, les API evoluent) :
-creation de l'app dans la Play Console, questionnaire de classification, formulaire Data safety, public
-cible et contenu, declarations (publicite, applications gouvernementales, fonctionnalites financieres ou
-de sante), et chez Apple certaines sections comme la confidentialite de l'app.
+Order of preference: APIs and CLIs first (`asc-*`, `gplay-*`, fastlane), browser only for what they do
+not cover. What often belongs to the interface (to recheck, the APIs evolve): app creation in the Play
+Console, rating questionnaire, Data safety form, target audience and content, declarations
+(advertising, government apps, financial or health features), and at Apple some sections such as app
+privacy.
 
-L'outil `asc web` du CLI asc automatise aussi une partie de ces ecrans via une session web non officielle
-d'Apple : le proposer comme alternative, a la discretion de l'utilisateur.
+The `asc web` tool of the asc CLI also automates part of these screens through an unofficial Apple web
+session: offer it as an alternative, at the user's discretion.
 
-## Avant de commencer
+## Before starting
 
-- Charger la skill du navigateur utilise (`chrome-browser` pour Claude in Chrome) et suivre ses regles.
-- Avoir le dossier pret : `store/listing.md`, `store/data-safety.md`, visuels, reponses aux
-  questionnaires (skills `store-listing`, `play-data-safety`).
-- Travailler dans un nouvel onglet, sur le compte developpeur de l'utilisateur.
+- Load the skill for the browser in use (`chrome-browser` for Claude in Chrome) and follow its rules.
+- Have the file set ready: `store/listing.md`, `store/data-safety.md`, visuals, questionnaire answers
+  (skills `store-listing`, `play-data-safety`).
+- Work in a new tab, on the user's developer account.
 
-## Ce que l'utilisateur fait lui-meme
+## What the user does themselves
 
-- Se connecter, la double authentification, les CAPTCHA, la verification d'identite.
-- Creer le compte developpeur, payer les frais, accepter les contrats et accords (y compris les accords
-  de paiement et fiscaux pour vendre).
-- Cliquer sur les boutons qui engagent : envoyer en revue, publier, lancer un deploiement en production.
+- Signing in, two-factor authentication, CAPTCHAs, identity verification.
+- Creating the developer account, paying the fees, accepting contracts and agreements (including the
+  payment and tax agreements needed to sell).
+- Clicking the buttons that commit: submit for review, publish, start a production rollout.
 
-## Deroulement
+## Procedure
 
-1. Ouvrir la section a remplir, lire l'etat actuel avant toute modification.
-2. Remplir champ par champ depuis le dossier, sans improviser une reponse absente du dossier : demander.
-3. Avant chaque enregistrement : resumer ce qui va etre enregistre et attendre l'accord.
-4. Apres chaque section : verifier que la console n'affiche ni erreur ni avertissement, et noter l'etat
-   dans `store/console-log.md` (section, date, valeur saisie, statut).
-5. Ne jamais saisir un secret visible a l'ecran dans un fichier ou un log ; le compte de demonstration
-   pour les reviewers est tape par l'utilisateur ou colle depuis son gestionnaire de mots de passe.
+1. Open the section to fill in, read the current state before any change.
+2. Fill in field by field from the file set, without improvising an answer missing from it: ask.
+3. Before each save: summarize what is going to be saved and wait for approval.
+4. After each section: check that the console shows no error or warning, and record the state in
+   `store/console-log.md` (section, date, value entered, status).
+5. Never write a secret visible on screen into a file or a log; the demo account for reviewers is
+   typed by the user or pasted from their password manager.
 
-## En cas de blocage
+## When blocked
 
-Interface changee, element introuvable, message inattendu : s'arreter, decrire l'ecran, et demander a
-l'utilisateur plutot que de cliquer au hasard.
+Changed interface, element not found, unexpected message: stop, describe the screen, and ask the user
+rather than clicking at random.

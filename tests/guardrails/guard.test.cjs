@@ -283,7 +283,7 @@ test('bypass: each heredoc belongs to the command that opens it', () => {
   ].join('\n');
   const result = hook(env, bash(command));
   assert.equal(result.permissionDecision, 'deny');
-  assert.match(result.permissionDecisionReason, /em dash dans le corps \(gh pr\)/);
+  assert.match(result.permissionDecisionReason, /em dash in the body \(gh pr\)/);
   assert.doesNotMatch(result.permissionDecisionReason, /message de commit/);
   assert.equal(decision(env, bash("cat <<'EOF' > notes.txt\nUpdate stuff\nEOF\ngit commit -F - <<'EOF'\nfeat: ok\nEOF")), 'allow');
   assert.equal(decision(env, bash("cat <<'EOF' | git commit -F -\nUpdate stuff\nEOF")), 'deny');
@@ -384,7 +384,7 @@ test('configuration: a malformed rule value blocks instead of crashing', () => {
   }
   fs.writeFileSync(path.join(env.repo, '.claude', 'guardrails.json'), JSON.stringify({ rules: { emoji: true } }));
   const result = hook(env, write(path.join(env.repo, 'a.md'), 'plain'));
-  assert.match(result.additionalContext, /regle emoji invalide/);
+  assert.match(result.additionalContext, /invalid rule emoji/);
   for (const content of ['null', '5', '{"rules": 7}']) {
     fs.writeFileSync(path.join(env.repo, '.claude', 'guardrails.json'), content);
     assert.equal(decision(env, write(path.join(env.repo, 'a.md'), `a ${EM_DASH} b`)), 'deny', content);
@@ -408,5 +408,5 @@ test('merge and approval need the user', () => {
     encoding: 'utf8',
     env: { ...process.env, HOME: env.home, USERPROFILE: env.home, CLAUDE_PROJECT_DIR: '' },
   });
-  assert.match(JSON.parse(output).hookSpecificOutput.additionalContext, /fusion et approbation/);
+  assert.match(JSON.parse(output).hookSpecificOutput.additionalContext, /merge and approval/);
 });

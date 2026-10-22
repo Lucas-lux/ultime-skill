@@ -1,20 +1,20 @@
-# Documentation d'ultime-skill
+# ultime-skill documentation
 
-ultime-skill est une bibliothèque de skills, d'agents et de hooks pour Claude Code. Elle transforme un
-assistant de code généraliste en une équipe outillée qui sait mener un projet logiciel de l'idée à la
-production, avec ses garde-fous, sa CI, ses revues et sa méthode, en n'activant pour chaque projet que ce
-qui lui sert.
+ultime-skill is a library of skills, agents and hooks for AI coding agents: Claude Code natively, and Codex, Gemini CLI, Cursor, GitHub Copilot, OpenCode and a dozen others through its installer. It turns a general-purpose coding
+assistant into an equipped team that knows how to take a software project from idea to production, with
+its guardrails, its CI, its reviews and its method, while enabling for each project only what it needs.
 
-| Document | Pour qui | Contenu |
+| Document | For whom | Contents |
 |---|---|---|
-| [Pourquoi et ce que ça apporte](pourquoi-et-gains.md) | tout le monde | le problème, le gain concret sur un projet, les limites |
-| [Démarrer](demarrer.md) | utilisateurs | installation en une commande, mise en place d'un projet, questions fréquentes |
-| [Architecture](architecture.md) | curieux, mainteneurs | packs, bundles, profils, économie de contexte, construction reproductible |
-| [App factory et autopilot](app-factory-et-autopilot.md) | chefs de projet, développeurs | l'orchestrateur de bout en bout, les phases, le mode autonome |
-| [Qualité et sécurité](qualite-et-securite.md) | développeurs, responsables techniques | garde-fous, CI générée, revues, règles par langage |
-| [Licences](licences.md) | tout le monde | ce qu'on a le droit de faire, politique d'import, audit |
-| [Maintenance](maintenance.md) | mainteneurs | ajouter une skill ou une source, construire, tester |
-| [Benchmark graphify](../benchmarks/graphify/README.md) | curieux, mainteneurs | pourquoi graphify a été retiré : coût de construction du graphe et effet mesuré sur 112 exécutions de Claude Code, jugées à l'aveugle |
+| [Why, and what it brings](why.md) | everyone | the problem, the concrete gain on a project, the limits |
+| [Getting started](getting-started.md) | users | one-command install, setting up a project, frequently asked questions |
+| [Coding agents](harnesses.md) | users | Codex, Gemini CLI, Cursor, Copilot, OpenCode and others: install, what each one gets, differences |
+| [Architecture](architecture.md) | the curious, maintainers | packs, bundles, profiles, context economy, reproducible build |
+| [App factory and autopilot](app-factory-and-autopilot.md) | project managers, developers | the end-to-end orchestrator, the phases, the autonomous mode |
+| [Quality and security](quality-and-security.md) | developers, technical leads | guardrails, generated CI, reviews, per-language rules |
+| [Licenses](licenses.md) | everyone | what you are allowed to do, import policy, audit |
+| [Maintenance](maintenance.md) | maintainers | adding a skill or a source, building, testing |
+| [graphify benchmark](../benchmarks/graphify/README.md) | the curious, maintainers | why graphify was removed: graph build cost and measured effect over 112 Claude Code runs, judged blind |
 
-Les chiffres cités dans ces documents viennent du dépôt lui-même (catalogue généré, tests, essais réels
-décrits dans l'historique des PR) ; aucun n'est une estimation marketing.
+The figures quoted in these documents come from the repository itself (generated catalog, tests, real
+trials described in the PR history); none of them is a marketing estimate.

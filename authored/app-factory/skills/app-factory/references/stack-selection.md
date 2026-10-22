@@ -1,36 +1,36 @@
-# Choisir la stack
+# Choosing the stack
 
-Le choix est fait par `software-architect` en P3 et consigne dans un ADR avec les alternatives ecartees.
-Il n'y a pas de stack universelle : ces reperes servent de point de depart, pas de regle.
+The choice is made by `software-architect` in P3 and recorded in an ADR with the discarded alternatives.
+There is no universal stack: these landmarks are a starting point, not a rule.
 
-## Principes
+## Principles
 
-- **Technologie eprouvee** plutot que nouvelle, sauf besoin precis. Chaque composant exotique est une
-  dette de recrutement et de maintenance.
-- **Competences de l'equipe** qui maintiendra le produit avant les preferences de l'agent.
-- **Services manages d'abord** pour une petite equipe (base, authentification, files, stockage) ;
-  auto-heberger quand le cout, la souverainete ou le controle le justifient.
-- **Donnees en UE** par defaut pour un marche europeen (region d'hebergement, sous-traitants).
-- **Versions concretes** : prendre la derniere version stable au moment du scaffold et ecrire la version
-  exacte dans l'ADR et le README, jamais "latest".
-- **Verifier la documentation a jour** (Context7 ou la documentation officielle) avant d'ecrire du code
-  sur une bibliotheque, plutot que de se fier a la memoire.
+- **Proven technology** rather than new, unless there is a precise need. Each exotic component is a
+  hiring and maintenance debt.
+- **Skills of the team** that will maintain the product before the agent's preferences.
+- **Managed services first** for a small team (database, authentication, queues, storage);
+  self-host when cost, sovereignty or control justify it.
+- **Data in the EU** by default for a European market (hosting region, processors).
+- **Concrete versions**: take the latest stable version at scaffold time and write the exact
+  version in the ADR and the README, never "latest".
+- **Check up-to-date documentation** (Context7 or the official documentation) before writing code
+  against a library, rather than relying on memory.
 
-## Reperes par besoin
+## Landmarks per need
 
-| Besoin | Point de depart courant | Alternatives a considerer |
+| Need | Common starting point | Alternatives to consider |
 |---|---|---|
-| Web avec SEO et pages publiques | React avec un framework SSR (Next.js) | Nuxt, SvelteKit, Astro pour du contenu |
-| Back-office ou app web privee | SPA ou SSR selon l'equipe | Framework full stack de l'equipe (Rails, Django, Laravel) |
-| API | TypeScript (Node) ou Python (FastAPI) | Go pour la performance, le langage de l'equipe |
-| Base de donnees | PostgreSQL | SQLite pour un outil local, base documentaire si le modele l'exige vraiment |
-| Mobile iOS et Android, equipe web | Expo / React Native | Flutter (equipe Dart), Kotlin Multiplatform |
-| Mobile tres lie a la plateforme | Natif Swift / SwiftUI et Kotlin / Compose | Hybride avec modules natifs |
-| Hebergement d'un MVP | PaaS ou serverless manage, region UE | Conteneurs manages ; Kubernetes seulement si la charge et l'equipe le justifient |
-| Observabilite | OpenTelemetry vers une stack au choix | Service manage equivalent |
+| Web with SEO and public pages | React with an SSR framework (Next.js) | Nuxt, SvelteKit, Astro for content |
+| Back office or private web app | SPA or SSR depending on the team | The team's full stack framework (Rails, Django, Laravel) |
+| API | TypeScript (Node) or Python (FastAPI) | Go for performance, the team's language |
+| Database | PostgreSQL | SQLite for a local tool, document database if the model truly requires it |
+| Mobile iOS and Android, web team | Expo / React Native | Flutter (Dart team), Kotlin Multiplatform |
+| Mobile tightly bound to the platform | Native Swift / SwiftUI and Kotlin / Compose | Hybrid with native modules |
+| Hosting an MVP | Managed PaaS or serverless, EU region | Managed containers; Kubernetes only if the load and the team justify it |
+| Observability | OpenTelemetry to a stack of choice | Equivalent managed service |
 
-## Selon le mode
+## Depending on the mode
 
-- **Clone** : ne pas recopier la stack de l'app de reference par principe ; repartir des besoins du PRD.
-- **Reprise** : garder la stack existante par defaut. Une migration se justifie par un ADR (cout,
-  risque, gain) et se fait progressivement, jamais en big bang sans filet.
+- **Clone**: do not copy the reference app's stack on principle; start again from the PRD needs.
+- **Takeover**: keep the existing stack by default. A migration is justified by an ADR (cost,
+  risk, gain) and is done progressively, never as a big bang without a safety net.

@@ -11,17 +11,17 @@ const { isProgram, programName, resolvePath } = require('./lib/shell.cjs');
 const { emojis, emDashes, introduced, matchesAny, EM_DASH } = require('./lib/text.cjs');
 
 const SECRET_PATTERNS = [
-  ['cle AWS', /\b(?:AKIA|ASIA)[0-9A-Z]{16}\b/],
-  ['token GitHub', /\b(?:gh[pousr]_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{60,})\b/],
-  ['cle Anthropic', /\bsk-ant-[A-Za-z0-9_-]{20,}/],
-  ['cle OpenAI', /\bsk-(?:proj-)?[A-Za-z0-9_-]{32,}/],
-  ['cle Stripe', /\b(?:sk|rk)_live_[A-Za-z0-9]{20,}/],
-  ['cle Google', /\bAIza[0-9A-Za-z_-]{35}\b/],
-  ['token Slack', /\bxox[abposr]-[A-Za-z0-9-]{10,}/],
-  ['cle privee', /-----BEGIN (?:RSA |EC |DSA |OPENSSH |PGP |ENCRYPTED )?PRIVATE KEY( BLOCK)?-----/],
+  ['AWS key', /\b(?:AKIA|ASIA)[0-9A-Z]{16}\b/],
+  ['GitHub token', /\b(?:gh[pousr]_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{60,})\b/],
+  ['Anthropic key', /\bsk-ant-[A-Za-z0-9_-]{20,}/],
+  ['OpenAI key', /\bsk-(?:proj-)?[A-Za-z0-9_-]{32,}/],
+  ['Stripe key', /\b(?:sk|rk)_live_[A-Za-z0-9]{20,}/],
+  ['Google key', /\bAIza[0-9A-Za-z_-]{35}\b/],
+  ['Slack token', /\bxox[abposr]-[A-Za-z0-9-]{10,}/],
+  ['private key', /-----BEGIN (?:RSA |EC |DSA |OPENSSH |PGP |ENCRYPTED )?PRIVATE KEY( BLOCK)?-----/],
   // The scheme is bounded: an unbounded one backtracks quadratically on long dotted lines.
-  ['mot de passe dans une URL', /\b[a-z][a-z0-9+.-]{0,20}:\/\/[^\s:/@'"]+:[^\s@'"$<{]{6,}@[^\s'"]+/i, localUrl],
-  ['secret en clair', /\b(?:password|passwd|secret|api[_-]?key|access[_-]?token|auth[_-]?token|client[_-]?secret)\b["']?\s*[:=]\s*["']([^"'\s]{12,})["']/i],
+  ['password in a URL', /\b[a-z][a-z0-9+.-]{0,20}:\/\/[^\s:/@'"]+:[^\s@'"$<{]{6,}@[^\s'"]+/i, localUrl],
+  ['plaintext secret', /\b(?:password|passwd|secret|api[_-]?key|access[_-]?token|auth[_-]?token|client[_-]?secret)\b["']?\s*[:=]\s*["']([^"'\s]{12,})["']/i],
 ];
 // Hosts of a local or compose development setup: a password in their URL is a dev default, not a secret.
 const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '0.0.0.0', '::1', 'host.docker.internal']);
@@ -37,22 +37,24 @@ const SUPPRESSIONS = /eslint-disable|@ts-ignore|@ts-nocheck|@ts-expect-error|bio
 const TAMPER_FILES = [
   '.claude/guardrails.json', '.claude/guardrails.local.json', '.claude/hooks/guardrails/**',
   '.claude/settings.json', '.claude/settings.local.json',
+  // Guardrails wiring for other coding agents, written by setup.cjs or the ultime-skill installer.
+  '.github/hooks/guardrails.json', '.opencode/plugins/guardrails.js', '.kilo/plugins/guardrails.js', '.kiro/hooks/guardrails.json',
 ];
 const SECRET_STORES = [
-  [/\bkubectl\b.*\bget\s+secrets?\b.*(?:-o|--output)[=\s]*['"]?(?:yaml|json|jsonpath|go-template|template|custom-columns)/, 'lecture d un secret Kubernetes'],
-  [/\bkubectl\b.*\b(?:view-secret|ksd)\b/, 'lecture d un secret Kubernetes'],
-  [/\/proc\/\S*\/environ/, 'lecture de l environnement d un pod', { raw: true }],
-  [/(?:^|[\s(])bws?\s+(?:get|list|export|unlock|serve|secret|run)\b/, 'coffre Bitwarden'],
-  [/(?:^|[\s(])op\s+(?:read|inject|run|item\s+get|document\s+get)\b/, 'coffre 1Password'],
-  [/(?:^|[\s(])(?:lpass|pass)\s+show\b/, 'gestionnaire de mots de passe'],
-  [/\bsecurity\s+find-(?:generic|internet)-password\b/, 'trousseau macOS'],
-  [/\bvault\s+(?:kv\s+get|read)\b/, 'coffre Vault'],
-  [/\baws\s+secretsmanager\s+get-secret-value\b|\baws\s+ssm\s+get-parameters?\b.*--with-decryption/, 'secrets AWS'],
-  [/\bgcloud\s+secrets\s+versions\s+access\b/, 'secrets Google Cloud'],
+  [/\bkubectl\b.*\bget\s+secrets?\b.*(?:-o|--output)[=\s]*['"]?(?:yaml|json|jsonpath|go-template|template|custom-columns)/, 'reading a Kubernetes secret'],
+  [/\bkubectl\b.*\b(?:view-secret|ksd)\b/, 'reading a Kubernetes secret'],
+  [/\/proc\/\S*\/environ/, 'reading a pod environment', { raw: true }],
+  [/(?:^|[\s(])bws?\s+(?:get|list|export|unlock|serve|secret|run)\b/, 'Bitwarden vault'],
+  [/(?:^|[\s(])op\s+(?:read|inject|run|item\s+get|document\s+get)\b/, '1Password vault'],
+  [/(?:^|[\s(])(?:lpass|pass)\s+show\b/, 'password manager'],
+  [/\bsecurity\s+find-(?:generic|internet)-password\b/, 'macOS keychain'],
+  [/\bvault\s+(?:kv\s+get|read)\b/, 'Vault secrets'],
+  [/\baws\s+secretsmanager\s+get-secret-value\b|\baws\s+ssm\s+get-parameters?\b.*--with-decryption/, 'AWS secrets'],
+  [/\bgcloud\s+secrets\s+versions\s+access\b/, 'Google Cloud secrets'],
   [/\baz\s+keyvault\s+secret\s+(?:show|download)\b/, 'Azure Key Vault'],
-  [/\b(?:doppler\s+secrets|infisical\s+(?:export|secrets))\b/, 'gestionnaire de secrets'],
-  [/\.(?:bash|zsh|sh)_history\b|\.zsh_sessions\b|\$\{?HISTFILE\b|ConsoleHost_history\.txt/i, 'historique du shell', { raw: true }],
-  [/^\s*history(?:\s|$)|\bGet-History\b/, 'historique du shell'],
+  [/\b(?:doppler\s+secrets|infisical\s+(?:export|secrets))\b/, 'secrets manager'],
+  [/\.(?:bash|zsh|sh)_history\b|\.zsh_sessions\b|\$\{?HISTFILE\b|ConsoleHost_history\.txt/i, 'shell history', { raw: true }],
+  [/^\s*history(?:\s|$)|\bGet-History\b/, 'shell history'],
 ];
 // Shells whose -c script may print the environment inside a pod.
 const SHELLS = /^(sh|bash|zsh|ash|dash|ksh)$/;
@@ -83,12 +85,12 @@ function excluded(ctx, rel, extra = []) {
 /** Every text a shell command writes for humans, with a label. */
 function shellTexts(ctx) {
   const texts = [];
-  for (const { message } of ctx.shell.commits) if (message) texts.push(['message de commit', message]);
+  for (const { message } of ctx.shell.commits) if (message) texts.push(['commit message', message]);
   for (const text of ctx.shell.ghTexts) {
-    if (text.title) texts.push([`titre (gh ${text.kind})`, text.title]);
-    if (text.body) texts.push([`corps (gh ${text.kind})`, text.body]);
+    if (text.title) texts.push([`title (gh ${text.kind})`, text.title]);
+    if (text.body) texts.push([`body (gh ${text.kind})`, text.body]);
   }
-  if (ctx.shell.writes) texts.push(['contenu ecrit par la commande', ctx.shell.written]);
+  if (ctx.shell.writes) texts.push(['content written by the command', ctx.shell.written]);
   return texts;
 }
 
@@ -168,19 +170,19 @@ const RULES = {
       const findings = [];
       if (ctx.file) {
         if (!excluded(ctx, ctx.file.rel, rule.exclude_paths) && emDashes(ctx.file.after) > emDashes(ctx.file.before)) {
-          findings.push(`em dash ajoute dans ${ctx.file.rel}`);
+          findings.push(`em dash added in ${ctx.file.rel}`);
         }
       }
       if (ctx.shell) {
-        for (const [label, text] of shellTexts(ctx)) if (text.includes(EM_DASH)) findings.push(`em dash dans le ${label}`);
+        for (const [label, text] of shellTexts(ctx)) if (text.includes(EM_DASH)) findings.push(`em dash in the ${label}`);
         if (ctx.shell.commits.length) {
           const files = new Set(ctx.staged().added.filter(({ file, line }) => line.includes(EM_DASH) && !excluded(ctx, file, rule.exclude_paths)).map(({ file }) => file));
-          if (files.size) findings.push(`em dash dans les lignes ajoutees de ${[...files].slice(0, 5).join(', ')}`);
+          if (files.size) findings.push(`em dash in the added lines of ${[...files].slice(0, 5).join(', ')}`);
         }
       }
       return [...new Set(findings)];
     },
-    advice: "Remplacer l'em dash par un tiret simple, deux-points, des parentheses ou une coupure de phrase.",
+    advice: 'Replace the em dash with a hyphen, a colon, parentheses or a sentence break.',
   },
 
   emoji: {
@@ -190,17 +192,17 @@ const RULES = {
       const findings = [];
       if (ctx.file && !excluded(ctx, ctx.file.rel, rule.allow_paths)) {
         const added = introduced(emojis(ctx.file.before, allowed), emojis(ctx.file.after, allowed));
-        if (added.length) findings.push(`emoji ajoute dans ${ctx.file.rel} : ${[...new Set(added)].join(' ')}`);
+        if (added.length) findings.push(`emoji added in ${ctx.file.rel}: ${[...new Set(added)].join(' ')}`);
       }
       if (ctx.shell) {
         for (const [label, text] of shellTexts(ctx)) {
           const found = emojis(text, allowed);
-          if (found.length) findings.push(`emoji dans le ${label} : ${[...new Set(found)].join(' ')}`);
+          if (found.length) findings.push(`emoji in the ${label}: ${[...new Set(found)].join(' ')}`);
         }
       }
       return findings;
     },
-    advice: "Pas d'emoji sauf demande explicite de l'utilisateur. S'il en veut, c'est lui qui l'autorise dans .claude/guardrails.json (rules.emoji.allow ou allow_paths).",
+    advice: 'No emoji unless the user explicitly asks. If they want some, they allow them in .claude/guardrails.json (rules.emoji.allow or allow_paths).',
   },
 
   'protected-push': {
@@ -224,7 +226,7 @@ const RULES = {
         const options = call.args.filter((arg) => arg.startsWith('-'));
         if (options.some((o) => o === '--dry-run' || o === '-n')) continue;
         if (options.some((o) => o === '--mirror' || o === '--all')) {
-          findings.push(`git push ${options.includes('--mirror') ? '--mirror' : '--all'} pousse aussi ${branches.join(', ')}`);
+          findings.push(`git push ${options.includes('--mirror') ? '--mirror' : '--all'} also pushes ${branches.join(', ')}`);
           continue;
         }
         const deleting = options.some((o) => o === '--delete' || o === '-d');
@@ -244,13 +246,13 @@ const RULES = {
         }
         for (const target of targets) {
           if (target && branches.includes(target)) {
-            findings.push(`${deleting ? 'suppression de' : 'push vers'} la branche protegee ${target}`);
+            findings.push(`${deleting ? 'deletion of' : 'push to'} the protected branch ${target}`);
           }
         }
       }
       return findings;
     },
-    advice: 'Travailler sur une branche dediee et passer par une PR. Seul l utilisateur pousse sur une branche protegee.',
+    advice: 'Work on a dedicated branch and go through a PR. Only the user pushes to a protected branch.',
   },
 
   'no-verify': {
@@ -266,15 +268,15 @@ const RULES = {
             if (/^(-m|-F|-C|-c|--message|--file|--author|--date|--trailer|--fixup|--squash)$/.test(arg)) index++;
             else if (/^-[A-Za-z]+$/.test(arg)) flags.push(arg);
           }
-          if (flags.some((flag) => flag.includes('n'))) findings.push('git commit -n (saute les hooks)');
+          if (flags.some((flag) => flag.includes('n'))) findings.push('git commit -n (skips the hooks)');
         }
         if (call.config.some((setting) => /^core\.hookspath=/i.test(setting))) findings.push('git -c core.hooksPath');
         if (call.subcommand === 'config' && configSets(call.args, /^core\.hookspath$/i)) findings.push('git config core.hooksPath');
-        if ((call.assignments || []).some((a) => /^(HUSKY=0|LEFTHOOK=0|SKIP=)/.test(a))) findings.push('variable qui desactive les hooks git');
+        if ((call.assignments || []).some((a) => /^(HUSKY=0|LEFTHOOK=0|SKIP=)/.test(a))) findings.push('variable that disables the git hooks');
       }
       return findings;
     },
-    advice: 'Ne jamais contourner les hooks git : corriger ce qu ils signalent.',
+    advice: 'Never bypass the git hooks: fix what they report.',
   },
 
   secrets: {
@@ -283,20 +285,20 @@ const RULES = {
       const findings = [];
       if (ctx.file && !isEnvFile(ctx.file.rel) && !excluded(ctx, ctx.file.rel, rule.exclude_paths)) {
         const before = new Set(secretsIn(ctx.file.before));
-        for (const label of secretsIn(ctx.file.after)) if (!before.has(label)) findings.push(`${label} dans ${ctx.file.rel}`);
+        for (const label of secretsIn(ctx.file.after)) if (!before.has(label)) findings.push(`${label} in ${ctx.file.rel}`);
       }
       if (ctx.shell) {
-        for (const label of secretsIn([ctx.shell.text, ...ctx.shell.heredocs.map((h) => h.body)].join('\n'))) findings.push(`${label} en clair dans la commande`);
+        for (const label of secretsIn([ctx.shell.text, ...ctx.shell.heredocs.map((h) => h.body)].join('\n'))) findings.push(`${label} in plain text in the command`);
         if (ctx.shell.commits.length) {
           for (const { file, line } of ctx.staged().added) {
             if (isEnvFile(file) || excluded(ctx, file, rule.exclude_paths)) continue;
-            for (const label of secretsIn(line)) findings.push(`${label} dans les lignes ajoutees de ${file}`);
+            for (const label of secretsIn(line)) findings.push(`${label} in the added lines of ${file}`);
           }
         }
       }
       return [...new Set(findings)];
     },
-    advice: 'Les secrets vont dans le .env du projet (ignore par git) et se lisent par variable d environnement. Si c est un faux positif, l utilisateur ajoute le chemin a rules.secrets.exclude_paths.',
+    advice: 'Secrets go in the project .env (ignored by git) and are read from environment variables. If this is a false positive, the user adds the path to rules.secrets.exclude_paths.',
   },
 
   'env-file': {
@@ -308,11 +310,11 @@ const RULES = {
         for (const arg of call.args.filter((a) => !a.startsWith('-'))) if (matchesAny(arg, patterns)) findings.push(`git add ${arg}`);
       }
       if (ctx.shell.commits.length) {
-        for (const file of ctx.staged().files) if (matchesAny(file, patterns)) findings.push(`${file} est dans le commit`);
+        for (const file of ctx.staged().files) if (matchesAny(file, patterns)) findings.push(`${file} is in the commit`);
       }
       return findings;
     },
-    advice: 'Un fichier .env ne se commite jamais : le retirer de l index (git restore --staged) et l ajouter au .gitignore.',
+    advice: 'A .env file is never committed: unstage it (git restore --staged) and add it to .gitignore.',
   },
 
   'conventional-commit': {
@@ -328,17 +330,17 @@ const RULES = {
         const subject = message.split('\n').find((line) => line.trim()) || '';
         const match = subject.match(subjectFormat);
         if (!match) {
-          findings.push(`message hors format "type(scope): description" (types : ${types.join(', ')})`);
+          findings.push(`message not in the "type(scope): description" format (types: ${types.join(', ')})`);
           continue;
         }
         const length = [...subject].length;
-        if (length > max) findings.push(`premiere ligne trop longue (${length} caracteres, ${max} au plus)`);
-        if (/^\p{Lu}\p{Ll}/u.test(match[1])) findings.push('description en minuscule apres le type ("feat: add x")');
-        if (subject.endsWith('.')) findings.push('pas de point final sur la premiere ligne');
+        if (length > max) findings.push(`first line too long (${length} characters, ${max} at most)`);
+        if (/^\p{Lu}\p{Ll}/u.test(match[1])) findings.push('lowercase description after the type ("feat: add x")');
+        if (subject.endsWith('.')) findings.push('no trailing period on the first line');
       }
       return findings;
     },
-    advice: 'Format Conventional Commits, en anglais : "feat(scope): add the thing", 72 caracteres au plus.',
+    advice: 'Conventional Commits format, in English: "feat(scope): add the thing", 72 characters at most.',
   },
 
   'ai-marker': {
@@ -350,26 +352,26 @@ const RULES = {
         const creates = (text.kind === 'pr' || text.kind === 'issue') && (text.action === 'create' || text.action === 'edit');
         const apiCreates = text.kind === 'api' && /\/(pulls|issues)(\/\d+)?$/.test(text.endpoint);
         if ((creates || apiCreates) && text.title !== null && !text.title.trimEnd().endsWith(marker)) {
-          findings.push(`titre sans ${marker} a la fin : "${text.title.slice(0, 60)}"`);
+          findings.push(`title without ${marker} at the end: "${text.title.slice(0, 60)}"`);
         }
       }
       return findings;
     },
-    advice: 'Un titre de PR ou d issue redige par l IA se termine par le marqueur IA, ainsi que son texte.',
+    advice: 'A PR or issue title written by the AI ends with the AI marker, and so does its body.',
   },
 
   'merge-approval': {
     check(ctx) {
       if (!ctx.shell) return [];
       const findings = [];
-      const reason = "fusion ou approbation au nom de l'utilisateur, a confirmer par lui";
+      const reason = 'merge or approval on behalf of the user, to be confirmed by them';
       for (const segment of ctx.shell.segments) {
         const list = segment.words;
         if (!isProgram(list[0], 'gh')) continue;
         const [, group, action] = list;
-        if (group === 'pr' && action === 'merge') findings.push(`gh pr merge : ${reason}`);
+        if (group === 'pr' && action === 'merge') findings.push(`gh pr merge: ${reason}`);
         if (group === 'pr' && action === 'review' && list.slice(3).some((word) => word === '--approve' || word === '-a')) {
-          findings.push(`gh pr review --approve : ${reason}`);
+          findings.push(`gh pr review --approve: ${reason}`);
         }
         if (group !== 'api') continue;
         const args = list.slice(2);
@@ -378,17 +380,17 @@ const RULES = {
         // gh api sends GET, or POST as soon as it has fields or an input body.
         const sends = Object.keys(fields).length > 0 || args.some((arg) => arg === '--input' || arg.startsWith('--input='));
         const method = (optionValues(args, ['--method'], ['X'])[0] || (sends ? 'POST' : 'GET')).toUpperCase();
-        if (method === 'PUT' && /\/pulls\/[^/]+\/merge\/?$/.test(endpoint)) findings.push(`fusion par l api (${endpoint}) : ${reason}`);
+        if (method === 'PUT' && /\/pulls\/[^/]+\/merge\/?$/.test(endpoint)) findings.push(`merge through the api (${endpoint}): ${reason}`);
         if (method === 'POST' && /\/pulls\/[^/]+\/reviews\/?$/.test(endpoint) && /^approve$/i.test(fields.event || '')) {
-          findings.push(`approbation de PR par l api (${endpoint}) : ${reason}`);
+          findings.push(`PR approval through the api (${endpoint}): ${reason}`);
         }
         if (method === 'POST' && /\/actions\/runs\/[^/]+\/(?:pending_deployments|deployments|deployment_protection_rule)\/?$/.test(endpoint)) {
-          findings.push(`approbation de deploiement par l api (${endpoint}) : ${reason}`);
+          findings.push(`deployment approval through the api (${endpoint}): ${reason}`);
         }
       }
       return findings;
     },
-    advice: "En autopilot, GitHub fusionne seul (auto-merge) et la production s'approuve dans l'environnement GitHub : ne pas fusionner ni approuver a la place de l'utilisateur.",
+    advice: 'In autopilot, GitHub merges by itself (auto-merge) and production is approved in the GitHub environment: never merge or approve in place of the user.',
   },
 
   'prod-credentials': {
@@ -404,7 +406,7 @@ const RULES = {
       const findings = [];
       if (ctx.tool === 'Read' && ctx.input.file_path) {
         const file = ctx.input.file_path;
-        if (outsideEnv(file, ctx.cwd)) findings.push(`lecture d un .env hors du projet : ${file}`);
+        if (outsideEnv(file, ctx.cwd)) findings.push(`reading a .env outside the project: ${file}`);
         for (const [pattern, label] of SECRET_STORES) if (pattern.test(file)) findings.push(label);
       }
       if (ctx.shell) {
@@ -413,32 +415,32 @@ const RULES = {
           // Path patterns (history files) still read the raw text, a quoted path is still that file.
           const bare = unquoted(segment.text);
           for (const [pattern, label, options] of SECRET_STORES) if (pattern.test(options && options.raw ? segment.text : bare)) findings.push(label);
-          if (podEnvironment(segment.words)) findings.push('lecture de l environnement d un pod');
+          if (podEnvironment(segment.words)) findings.push('reading a pod environment');
           const program = (segment.words[0] || '').toLowerCase();
           const sources = segment.redirections.filter((r) => /^\d*<$/.test(r.op)).map((r) => r.target);
           if (/^(cat|less|more|head|tail|source|\.|grep|rg|sed|awk|type|get-content|gc|cp|scp)$/.test(program)) sources.push(...segment.words.slice(1));
-          for (const word of sources) if (!word.startsWith('-') && outsideEnv(word, segment.cwd)) findings.push(`lecture d un .env hors du projet : ${word}`);
+          for (const word of sources) if (!word.startsWith('-') && outsideEnv(word, segment.cwd)) findings.push(`reading a .env outside the project: ${word}`);
           const tunnel = /^(ssh|autossh)$/.test(program) && segment.words.some((w) => /^-[A-Za-z]*[LDRW]/.test(w));
           const forward = /\bkubectl\b.*\bport-forward\b/.test(segment.text) || /^sshuttle$/.test(program);
-          if ((tunnel || forward) && prod.some((p) => p.test(segment.text))) findings.push('tunnel vers la production');
+          if ((tunnel || forward) && prod.some((p) => p.test(segment.text))) findings.push('tunnel to production');
         }
       }
       return [...new Set(findings)];
     },
-    advice: 'Regle d or : n utiliser que les identifiants configures par l utilisateur pour ce projet (son .env). Ne jamais aller les chercher ailleurs, meme sur demande : s arreter et le dire.',
+    advice: 'Golden rule: only use the credentials the user configured for this project (its .env). Never fetch them from anywhere else, even when asked: stop and say so.',
   },
 
   'lint-config': {
     check(ctx) {
       if (!ctx.file) return [];
       const findings = [];
-      if (matchesAny(ctx.file.rel, LINT_CONFIG)) findings.push(`configuration de qualite modifiee : ${ctx.file.rel}`);
+      if (matchesAny(ctx.file.rel, LINT_CONFIG)) findings.push(`quality configuration changed: ${ctx.file.rel}`);
       const before = (ctx.file.before.match(new RegExp(SUPPRESSIONS.source, 'g')) || []).length;
       const after = (ctx.file.after.match(new RegExp(SUPPRESSIONS.source, 'g')) || []).length;
-      if (after > before) findings.push(`suppression d avertissement ajoutee dans ${ctx.file.rel}`);
+      if (after > before) findings.push(`warning suppression added in ${ctx.file.rel}`);
       return findings;
     },
-    advice: 'Si c est pour faire taire une erreur, annuler et corriger le code. Renforcer la configuration ou la creer est normal ; une exception justifiee porte sa raison en commentaire.',
+    advice: 'If it is to silence an error, revert and fix the code. Tightening or creating the configuration is fine; a justified exception carries its reason in a comment.',
   },
 
   'config-tamper': {
@@ -454,7 +456,7 @@ const RULES = {
         const rel = ctx.root ? path.relative(ctx.root, absolute).replace(/\\/g, '/') : normalized;
         return matchesAny(rel, TAMPER_FILES);
       };
-      if (ctx.file && touches(ctx.file.path)) findings.push(`modification de ${ctx.file.rel}`);
+      if (ctx.file && touches(ctx.file.path)) findings.push(`change to ${ctx.file.rel}`);
       if (ctx.shell) {
         for (const segment of ctx.shell.segments) {
           const program = (segment.words[0] || '').toLowerCase().replace(/\.exe$/, '');
@@ -464,14 +466,14 @@ const RULES = {
           const scripted = !readOnly && /guardrails(\.local)?\.json|hooks[\\/]guardrails/.test(segment.text);
           const outputs = segment.redirections.filter((r) => /^[\d&*]?>/.test(r.op)).map((r) => r.target);
           const targets = [...segment.words.slice(1), ...outputs];
-          if (scripted || (mutating && targets.some((target) => touches(target, segment.cwd)))) findings.push(`modification de la configuration des garde-fous : ${segment.text.slice(0, 80)}`);
-          if (/\bclaude\s+plugin\s+(?:disable|uninstall|remove)\b.*\bguardrails\b/.test(segment.text)) findings.push('desactivation du plugin guardrails');
-          if (/\bsetup\.cjs\s+uninstall-project\b/.test(segment.text)) findings.push('retrait des garde-fous du projet');
+          if (scripted || (mutating && targets.some((target) => touches(target, segment.cwd)))) findings.push(`change to the guardrails configuration: ${segment.text.slice(0, 80)}`);
+          if (/\bclaude\s+plugin\s+(?:disable|uninstall|remove)\b.*\bguardrails\b/.test(segment.text)) findings.push('disabling the guardrails plugin');
+          if (/\bsetup\.cjs\s+uninstall-project\b/.test(segment.text)) findings.push('removing the project guardrails');
         }
       }
       return [...new Set(findings)];
     },
-    advice: 'Les garde-fous ne se modifient qu avec l accord explicite de l utilisateur.',
+    advice: 'The guardrails only change with the explicit approval of the user.',
   },
 };
 

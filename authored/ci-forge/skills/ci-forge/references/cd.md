@@ -1,17 +1,17 @@
-# Deploiement continu
+# Continuous deployment
 
-Principe : le meme artefact (image par digest, build signe) passe de staging a la production ; la
-production attend toujours l'approbation de l'utilisateur via l'environnement GitHub `production`.
+Principle: the same artifact (image by digest, signed build) goes from staging to production; production
+always waits for the user's approval through the GitHub `production` environment.
 
-## Environnements GitHub
+## GitHub environments
 
-- `staging` : pas de relecteur, deploiement automatique a chaque fusion sur la branche principale.
-- `production` : relecteur obligatoire (l'utilisateur), branches autorisees : principale et tags `v*`.
-- Les secrets de deploiement vivent dans l'environnement, jamais au niveau du depot ni dans le code.
-- Cloud : OIDC (`id-token: write`) vers AWS (`aws-actions/configure-aws-credentials`), GCP
-  (`google-github-actions/auth`, Workload Identity Federation), Azure (`azure/login`) ; aucune cle longue.
+- `staging`: no reviewer, automatic deployment on each merge to the main branch.
+- `production`: mandatory reviewer (the user), allowed branches: main and `v*` tags.
+- Deployment secrets live in the environment, never at the repository level or in the code.
+- Cloud: OIDC (`id-token: write`) to AWS (`aws-actions/configure-aws-credentials`), GCP
+  (`google-github-actions/auth`, Workload Identity Federation), Azure (`azure/login`); no long-lived key.
 
-## Workflow deploy.yml
+## deploy.yml workflow
 
 ```yaml
 on:
@@ -29,24 +29,24 @@ jobs:
     concurrency: { group: deploy-production, cancel-in-progress: false }
 ```
 
-Apres chaque deploiement : smoke tests sur l'URL deployee (sante, parcours critique), puis rollback
-automatique si echec (version precedente, ou revert du deploiement de la plateforme). Le rollback se
-teste au moins une fois en staging (pack `prod-testing`, skill `testing-in-production`).
+After each deployment: smoke tests on the deployed URL (health, critical journey), then automatic
+rollback on failure (previous version, or revert of the platform deployment). The rollback is tested at
+least once in staging (`prod-testing` pack, `testing-in-production` skill).
 
-## Par plateforme
+## Per platform
 
-| Cible | Deploiement | Notes |
+| Target | Deployment | Notes |
 |---|---|---|
-| Vercel | integration Git de Vercel (apercus de PR) ; ou `vercel deploy --prebuilt` avec `VERCEL_TOKEN` | e2e et Lighthouse contre l'URL d'apercu |
-| Netlify, Cloudflare Pages ou Workers | CLI (`netlify deploy`, `wrangler deploy`) avec token d'environnement | |
-| Fly.io, Render, Railway | `flyctl deploy --image <digest>` ou hook de deploiement | |
-| Kubernetes | GitOps (Argo CD, Flux) : la CI met a jour le tag d'image dans le depot de config ; sinon `helm upgrade --install --atomic` | `--atomic` annule seul un echec |
-| AWS ECS, Cloud Run, App Service | action officielle de la plateforme avec OIDC | |
-| Mobile | EAS Submit, fastlane, `asc`, `gplay` (pack `mobile`, `app-stores`) | soumission en store toujours confirmee |
+| Vercel | Vercel Git integration (PR previews); or `vercel deploy --prebuilt` with `VERCEL_TOKEN` | e2e and Lighthouse against the preview URL |
+| Netlify, Cloudflare Pages or Workers | CLI (`netlify deploy`, `wrangler deploy`) with an environment token | |
+| Fly.io, Render, Railway | `flyctl deploy --image <digest>` or deploy hook | |
+| Kubernetes | GitOps (Argo CD, Flux): the CI updates the image tag in the config repository; otherwise `helm upgrade --install --atomic` | `--atomic` rolls back a failure on its own |
+| AWS ECS, Cloud Run, App Service | official platform action with OIDC | |
+| Mobile | EAS Submit, fastlane, `asc`, `gplay` (`mobile` pack, `app-stores`) | store submission always confirmed |
 
 ## Autopilot
 
-- Le check requis de la branche principale est `ci-ok` ; il est note dans `state.json`.
-- Le deploiement de staging part du push sur la branche principale fait par la fusion automatique
-  (`autopilot-merge`, token dedie : les pushes du `GITHUB_TOKEN` ne declenchent pas d'autre workflow).
-- La production reste une carte de decision (G6) puis l'approbation de l'environnement.
+- The required check of the main branch is `ci-ok`; it is noted in `state.json`.
+- The staging deployment starts from the push to the main branch made by the automatic merge
+  (`autopilot-merge`, dedicated token: pushes by `GITHUB_TOKEN` do not trigger other workflows).
+- Production remains a decision card (G6) then the environment approval.

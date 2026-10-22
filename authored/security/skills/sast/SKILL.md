@@ -1,63 +1,63 @@
 ---
 name: sast
 description: >
-  Analyse statique de securite outillee en local avec Semgrep et CodeQL : choix des regles selon la stack,
-  execution, tri des resultats en vrais et faux positifs, corrections et regles maison. A utiliser pour
-  "semgrep", "codeql", "SAST", "analyse statique", ou pour completer une revue de securite.
+  Tooled local static security analysis with Semgrep and CodeQL: rule selection by stack, execution,
+  triage of results into true and false positives, fixes and custom rules. Use for "semgrep", "codeql",
+  "SAST", "static analysis", or to complement a security review.
 ---
 
-# Analyse statique (Semgrep, CodeQL)
+# Static analysis (Semgrep, CodeQL)
 
-L'outil trouve des candidats ; la preuve vient du tri. Un resultat non trie n'est ni un constat ni un
-faux positif. Pour l'integration en CI, voir la skill `ci-forge` (reference `security.md`) ; cette
-skill sert aux analyses en local, plus profondes, et au tri.
+The tool finds candidates; the proof comes from triage. An untriaged result is neither a finding nor a
+false positive. For CI integration, see the `ci-forge` skill (reference `security.md`); this skill is
+for local analyses, deeper ones, and for triage.
 
-## Choisir l'outil
+## Choose the tool
 
-- **Semgrep** (CE, `--metrics=off`) : rapide, toutes stacks, regles lisibles ; premier passage par defaut.
-- **CodeQL** : flux de donnees inter-procedural, plus lent ; pour les langages compiles et quand
-  Semgrep laisse des doutes sur un chemin source vers puits. Gratuit pour l'analyse locale et les depots
-  publics ; dans la CI d'un depot prive, il faut GitHub Advanced Security.
-- Outils natifs en complement quand la stack les a : bandit (deja couvert par les regles `S` de ruff),
-  gosec, Brakeman, PHPStan avec extensions de securite.
+- **Semgrep** (CE, `--metrics=off`): fast, every stack, readable rules; default first pass.
+- **CodeQL**: inter-procedural data flow, slower; for compiled languages and when Semgrep leaves doubts
+  about a source-to-sink path. Free for local analysis and public repositories; in the CI of a private
+  repository, GitHub Advanced Security is required.
+- Native tools as a complement when the stack has them: bandit (already covered by ruff's `S` rules),
+  gosec, Brakeman, PHPStan with security extensions.
 
 ## Semgrep
 
-1. Installation isolee : `uvx semgrep` (ou l'image `semgrep/semgrep` dans Docker) ; version notee dans
-   le rapport.
-2. Regles selon la stack detectee : `p/default` plus `p/<langage>` (`p/python`, `p/javascript`,
-   `p/typescript`, `p/golang`, `p/java`, `p/php`), et `p/secrets`, `p/dockerfile`, `p/terraform`,
-   `p/kubernetes` si ces fichiers existent.
-3. `semgrep scan --metrics=off --config <regles> --sarif --output semgrep.sarif --error .` en excluant
-   les dossiers generes et les dependances (`.semgrepignore`).
-4. Regle maison quand un motif propre au projet revient (fonction interne dangereuse, appel sans
-   verification d'autorisation) : `.semgrep/<nom>.yml` avec un test (`semgrep --test`), puis ajout a la CI.
+1. Isolated install: `uvx semgrep` (or the `semgrep/semgrep` image in Docker); version noted in the
+   report.
+2. Rules by detected stack: `p/default` plus `p/<language>` (`p/python`, `p/javascript`,
+   `p/typescript`, `p/golang`, `p/java`, `p/php`), and `p/secrets`, `p/dockerfile`, `p/terraform`,
+   `p/kubernetes` if those files exist.
+3. `semgrep scan --metrics=off --config <rules> --sarif --output semgrep.sarif --error .` excluding
+   generated folders and dependencies (`.semgrepignore`).
+4. Custom rule when a project-specific pattern recurs (dangerous internal function, call without an
+   authorization check): `.semgrep/<name>.yml` with a test (`semgrep --test`), then add it to the CI.
 
 ## CodeQL
 
-1. CLI CodeQL (bundle officiel, version notee), base par langage :
-   `codeql database create db-<lang> --language=<lang> --source-root . [--command "<build>"]` (langages
-   compiles : la commande de build du projet).
+1. CodeQL CLI (official bundle, version noted), one database per language:
+   `codeql database create db-<lang> --language=<lang> --source-root . [--command "<build>"]` (compiled
+   languages: the project's build command).
 2. `codeql database analyze db-<lang> codeql/<lang>-queries:codeql-suites/<lang>-security-extended.qls
    --format=sarif-latest --output codeql-<lang>.sarif`.
-3. Bases et SARIF hors du depot (ou ignores par git) : ils sont gros et regenerables.
+3. Databases and SARIF outside the repository (or ignored by git): they are large and regenerable.
 
-## Trier
+## Triage
 
-Pour chaque resultat, dans l'ordre :
-1. Le code est-il atteignable en production (pas un test, un exemple, du code mort) ?
-2. La source est-elle controlee par un attaquant (requete, fichier, webhook, variable externe) ?
-3. Une protection sur le chemin l'annule-t-elle (validation, echappement par le framework, requete
-   parametree, type qui contraint) ? La citer avec `fichier:ligne`.
-4. Verdict : **vrai positif** (passe dans la revue `security-review` avec sa gravite), **faux positif**
-   (raison en une ligne, puis exception etroite : commentaire `nosemgrep: <regle>` avec la raison, ou
-   `.semgrepignore` pour un dossier), **a verifier** (piste nommee).
-- Grouper les resultats d'une meme regle : trier un representant a fond, puis verifier que les autres
-  suivent le meme chemin avant de leur appliquer le verdict.
-- Jamais desactiver une regle entiere pour faire taire un resultat.
+For each result, in order:
+1. Is the code reachable in production (not a test, an example, dead code)?
+2. Is the source controlled by an attacker (request, file, webhook, external variable)?
+3. Does a protection on the path cancel it (validation, escaping by the framework, parameterized
+   query, constraining type)? Cite it with `file:line`.
+4. Verdict: **true positive** (goes into the `security-review` review with its severity), **false
+   positive** (reason in one line, then a narrow exception: `nosemgrep: <rule>` comment with the reason,
+   or `.semgrepignore` for a folder), **to verify** (named lead).
+- Group results of the same rule: triage one representative thoroughly, then check that the others
+  follow the same path before applying the verdict to them.
+- Never disable a whole rule to silence a result.
 
-## Rendre
+## Deliver
 
-Dans le rapport de `security-review` (ou `docs/security/sast-<date>.md` si lance seul) : outils et
-versions, regles utilisees, nombre de resultats par verdict, tableau des vrais positifs, liste des
-exceptions ajoutees avec leur raison. Les SARIF restent en artefact, pas dans le depot.
+In the `security-review` report (or `docs/security/sast-<date>.md` if run alone): tools and versions,
+rules used, number of results per verdict, table of true positives, list of exceptions added with their
+reason. SARIF files stay as artifacts, not in the repository.

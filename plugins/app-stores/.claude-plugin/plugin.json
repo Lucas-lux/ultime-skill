@@ -1,6 +1,6 @@
 {
   "name": "app-stores",
-  "description": "Stores, ecrit maison : dossier de fiche App Store et Google Play dans les limites de chaque store, formulaire Data safety depuis le code et les SDK, pilotage des consoles dans le navigateur pour ce que les API ne couvrent pas.",
+  "description": "Stores, written in-house: App Store and Google Play listing kit within each store's limits, Data safety form from the code and SDKs, driving the consoles in the browser for what the APIs do not cover.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

@@ -144,7 +144,7 @@ class SuggestProfileTest(unittest.TestCase):
     def test_skill_table_matches_stack_map(self):
         stack_map = json.loads((SKILL_DIR / "references" / "stack-map.json").read_text(encoding="utf-8"))
         signals = {s["id"]: set(s["packs"]) for s in stack_map["signals"]}
-        rows = [line for line in (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8").splitlines() if re.search(r"\| signa(l|ux) `", line)]
+        rows = [line for line in (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8").splitlines() if re.search(r"\| signals? `", line)]
         covered = set()
         for row in rows:
             _, _, source, packs, _ = row.split("|")

@@ -1,12 +1,12 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/vercel-labs/agent-skills (commit 063bee94c3f4)
+Origin: https://github.com/vercel-labs/agent-skills (commit 063bee94c3f4)
 
-- `AGENTS.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `README.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `rules/state-context-interface.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `rules/state-decouple-implementation.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `rules/state-lift-state.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `AGENTS.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `README.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `rules/state-context-interface.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `rules/state-decouple-implementation.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `rules/state-lift-state.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

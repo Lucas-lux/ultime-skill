@@ -1,87 +1,86 @@
 ---
 name: setting-up-monitoring
 description: >
-  Monitoring complet adapte au type de projet (web, API, RAG/LLM, data, cron, ML, mobile) : metriques,
-  logs, traces, SLO, alertes, dashboards, cout ; vendor-neutral (OpenTelemetry, Prometheus, Grafana). A
-  utiliser pour monitorer, observer, instrumenter, suivre en production, mettre en place observabilite,
-  SLO, alertes ou dashboards, ou "monitoring", "observability", "LLMOps", "MLOps".
+  Full monitoring adapted to the project type (web, API, RAG/LLM, data, cron, ML, mobile): metrics,
+  logs, traces, SLOs, alerts, dashboards, cost; vendor-neutral (OpenTelemetry, Prometheus, Grafana). Use
+  to monitor, observe, instrument, track in production, set up observability, SLOs, alerts or
+  dashboards, or "monitoring", "observability", "LLMOps", "MLOps".
 ---
 
-# Mise en place du monitoring complet
+# Setting up full monitoring
 
-Objectif : qu'un projet soit observable a fond, c'est-a-dire qu'on puisse repondre a "est-ce que ca
-marche", "est-ce que c'est lent", "pourquoi ca casse" et "combien ca coute" sans ajouter d'instrumentation
-dans l'urgence d'un incident. Un projet composite (exemple : un RAG = une partie application + une partie
-LLM) recoit la couche de base **et** chaque couche de domaine qui le concerne.
+Goal: a project fully observable, meaning you can answer "does it work", "is it slow", "why does it
+break" and "how much does it cost" without adding instrumentation in the rush of an incident. A
+composite project (example: a RAG = an application part + an LLM part) gets the base layer **and** each
+domain layer that applies to it.
 
-## Methode
+## Method
 
-1. **Identifier le ou les types de projet.** Lire le code et l'infra, ne pas supposer. Un projet peut
-   cumuler plusieurs types (une API qui sert un modele et lit une base, un RAG qui expose une API web).
-2. **Poser la couche de base** (section suivante) : elle vaut pour tout projet qui tourne.
-3. **Ajouter chaque couche de domaine** via les references ci-dessous, une par type identifie.
-4. **Definir les SLO avant les alertes.** On alerte sur les symptomes vus par l'utilisateur (le budget
-   d'erreur qui brule), pas sur chaque cause possible.
-5. **Verifier l'instrumentation elle-meme.** Un dashboard vide ou une alerte qui ne se declenche jamais
-   est une panne silencieuse : declencher chaque alerte une fois (en recette ou via un test), confirmer
-   que la donnee arrive.
-6. **Livrer un etat lisible** : ce qui est monitore, les SLO retenus, les alertes et leurs seuils, les
-   dashboards, le cout de la stack d'observabilite elle-meme, et ce qui reste a faire.
+1. **Identify the project type or types.** Read the code and the infra, do not assume. A project can
+   combine several types (an API that serves a model and reads a database, a RAG that exposes a web API).
+2. **Lay down the base layer** (next section): it applies to every project that runs.
+3. **Add each domain layer** through the references below, one per identified type.
+4. **Define SLOs before alerts.** Alert on the symptoms seen by the user (the error budget that burns),
+   not on every possible cause.
+5. **Verify the instrumentation itself.** An empty dashboard or an alert that never fires is a silent
+   outage: fire each alert once (in staging or through a test), confirm that the data arrives.
+6. **Deliver a readable status**: what is monitored, the chosen SLOs, the alerts and their thresholds,
+   the dashboards, the cost of the observability stack itself, and what remains to do.
 
-Ne jamais mettre de donnee personnelle dans un log, une metrique (labels compris) ou une trace. Pas de
-secret, pas de token, pas de contenu utilisateur en clair la ou ce n'est pas indispensable.
+Never put personal data in a log, a metric (labels included) or a trace. No secret, no token, no user
+content in clear where it is not essential.
 
-## Couche de base (tout projet)
+## Base layer (every project)
 
-Detail et exemples de configuration : [references/baseline.md](references/baseline.md).
+Detail and configuration examples: [references/baseline.md](references/baseline.md).
 
-- **Les quatre signaux.** Pour un service en ligne : latence, trafic, taux d'erreur, saturation (methode
-  RED cote requetes, USE cote ressources). Les exposer en metriques.
-- **Logs structures** en JSON, avec un niveau, un horodatage, un identifiant de correlation (trace id) et
-  des cles stables (pas de chaines a parser). Jamais de donnee personnelle.
-- **Traces distribuees** via OpenTelemetry : un trace id qui traverse les services, propage aussi dans les
-  logs. C'est le standard a poser par defaut, quel que soit le backend.
-- **SLI/SLO** : definir ce que "ca marche" veut dire (disponibilite, latence p95/p99), fixer un objectif
-  et un budget d'erreur, alerter sur la vitesse de consommation du budget (multi-window multi-burn-rate).
-- **Alertes** routees (Alertmanager, PagerDuty, incident.io ou equivalent) avec severite, runbook lie, et
-  pas de bruit : chaque alerte doit etre actionnable.
-- **Dashboards** : une vue sante (les SLO et les quatre signaux), une vue ressources, une vue metier.
-- **Cout** : suivre le cout de l'infra et de la stack d'observabilite (volume de logs, cardinalite des
-  metriques, echantillonnage des traces). Une cardinalite non maitrisee fait exploser la facture.
+- **The four signals.** For an online service: latency, traffic, error rate, saturation (RED method on
+  the request side, USE on the resource side). Expose them as metrics.
+- **Structured logs** in JSON, with a level, a timestamp, a correlation identifier (trace id) and
+  stable keys (no strings to parse). Never personal data.
+- **Distributed traces** via OpenTelemetry: a trace id that crosses services, also propagated into the
+  logs. It is the standard to set by default, whatever the backend.
+- **SLI/SLO**: define what "it works" means (availability, p95/p99 latency), set a target and an error
+  budget, alert on the budget burn rate (multi-window multi-burn-rate).
+- **Alerts** routed (Alertmanager, PagerDuty, incident.io or equivalent) with severity, linked runbook,
+  and no noise: every alert must be actionable.
+- **Dashboards**: a health view (the SLOs and the four signals), a resources view, a business view.
+- **Cost**: track the cost of the infra and of the observability stack (log volume, metric cardinality,
+  trace sampling). Uncontrolled cardinality makes the bill explode.
 
-## Couches de domaine
+## Domain layers
 
-Appliquer la ou les references correspondant au projet.
+Apply the reference or references matching the project.
 
-| Type de projet | Reference | Signaux clefs en plus de la base |
+| Project type | Reference | Key signals on top of the base |
 |---|---|---|
-| Application web (front) | [references/web-app.md](references/web-app.md) | Core Web Vitals, erreurs JS, sessions, parcours |
-| Service API ou backend | [references/api-service.md](references/api-service.md) | RED par endpoint, dependances, files, pool de connexions |
-| Application RAG ou LLM | [references/rag-llm.md](references/rag-llm.md) | Cout et tokens, latence par etape, qualite de recuperation, groundedness, garde-fous, feedback |
-| Entrainement et serving ML | [references/ml-training-serving.md](references/ml-training-serving.md) | Derive des donnees et des predictions, fraicheur des features, decroissance de performance |
-| Pipeline de donnees | [references/data-pipeline.md](references/data-pipeline.md) | Fraicheur, volume, schema, taux de nuls, succes et duree des jobs, lineage |
-| Cron ou batch | [references/cron-batch.md](references/cron-batch.md) | Dead man's switch, duree, chevauchement, idempotence |
-| Application mobile | [references/mobile.md](references/mobile.md) | Crash-free rate, demarrage a froid, ANR, reseau, adoption des versions |
+| Web application (front) | [references/web-app.md](references/web-app.md) | Core Web Vitals, JS errors, sessions, user journeys |
+| API or backend service | [references/api-service.md](references/api-service.md) | RED per endpoint, dependencies, queues, connection pool |
+| RAG or LLM application | [references/rag-llm.md](references/rag-llm.md) | Cost and tokens, latency per step, retrieval quality, groundedness, guardrails, feedback |
+| ML training and serving | [references/ml-training-serving.md](references/ml-training-serving.md) | Data and prediction drift, feature freshness, performance decay |
+| Data pipeline | [references/data-pipeline.md](references/data-pipeline.md) | Freshness, volume, schema, null rate, job success and duration, lineage |
+| Cron or batch | [references/cron-batch.md](references/cron-batch.md) | Dead man's switch, duration, overlap, idempotency |
+| Mobile application | [references/mobile.md](references/mobile.md) | Crash-free rate, cold start, ANR, network, version adoption |
 
-## Choix de la stack
+## Choosing the stack
 
-Vendor-neutral par defaut, pour ne pas s'enfermer :
+Vendor-neutral by default, to avoid lock-in:
 
-- **Collecte** : OpenTelemetry (SDK + Collector) pour metriques, logs et traces.
-- **Stockage et visualisation open source** : Prometheus (metriques), Loki (logs), Tempo (traces),
-  Grafana (dashboards et alertes), Alertmanager (routage).
-- **Equivalents manages** si l'equipe les utilise deja : Datadog, Grafana Cloud, Honeycomb, New Relic,
-  Elastic. Garder l'instrumentation en OpenTelemetry pour pouvoir changer de backend sans retoucher le
+- **Collection**: OpenTelemetry (SDK + Collector) for metrics, logs and traces.
+- **Open source storage and visualization**: Prometheus (metrics), Loki (logs), Tempo (traces),
+  Grafana (dashboards and alerts), Alertmanager (routing).
+- **Managed equivalents** if the team already uses them: Datadog, Grafana Cloud, Honeycomb, New Relic,
+  Elastic. Keep the instrumentation in OpenTelemetry so the backend can change without touching the
   code.
 
-Choisir ce que le projet utilise deja plutot que d'introduire une stack de plus. Le signaler si le projet
-n'a aucun backend d'observabilite et en proposer un.
+Choose what the project already uses rather than introducing one more stack. Flag it if the project has
+no observability backend and propose one.
 
-## Definition of done du monitoring
+## Monitoring definition of done
 
-- Les quatre signaux et les SLO sont visibles sur un dashboard sante.
-- Chaque couche de domaine du projet a ses signaux specifiques instrumentes.
-- Les alertes sont actionnables, routees, liees a un runbook, et testees au moins une fois.
-- Les logs sont structures, correles aux traces, sans donnee personnelle.
-- Le cout de la stack (cardinalite, volume de logs, echantillonnage) est sous controle et suivi.
-- Un document liste ce qui est monitore, les SLO, les alertes et ce qui reste ouvert.
+- The four signals and the SLOs are visible on a health dashboard.
+- Each domain layer of the project has its specific signals instrumented.
+- Alerts are actionable, routed, linked to a runbook, and tested at least once.
+- Logs are structured, correlated with traces, without personal data.
+- The cost of the stack (cardinality, log volume, sampling) is under control and tracked.
+- A document lists what is monitored, the SLOs, the alerts and what remains open.

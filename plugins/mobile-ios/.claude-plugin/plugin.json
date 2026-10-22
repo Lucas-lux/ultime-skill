@@ -1,6 +1,6 @@
 {
   "name": "mobile-ios",
-  "description": "iOS natif : SwiftUI, concurrence Swift, Swift Testing, SwiftData (Paul Hudson), accessibilite iOS (VoiceOver, Dynamic Type).",
+  "description": "Native iOS: SwiftUI, Swift concurrency, Swift Testing, SwiftData (Paul Hudson), iOS accessibility (VoiceOver, Dynamic Type).",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

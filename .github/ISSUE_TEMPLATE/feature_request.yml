@@ -1,0 +1,21 @@
+name: Skill or feature request
+description: Propose a skill, a source to import, a new coding agent to support, or an improvement.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: The need
+      description: What you want the agent to know or do, and in which situation.
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Existing source, if any
+      description: Repository and license. Only MIT, Apache-2.0 or BSD content can be imported.
+  - type: textarea
+    id: overlap
+    attributes:
+      label: Overlap with existing packs
+      description: Which current skills come close, and why they are not enough.

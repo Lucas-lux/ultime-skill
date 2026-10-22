@@ -1,51 +1,51 @@
 ---
 name: ui-review
 description: >
-  Revue d'une interface web dans le code et a l'ecran : accessibilite, interactions, formulaires, etats,
-  performance percue, contenu, coherence avec le design system, avec preuves et corrections. A utiliser
-  pour "revue UI", "review my UI", "audit design", "check accessibility", "UX review".
+  Review of a web interface in the code and on screen: accessibility, interactions, forms, states,
+  perceived performance, content, consistency with the design system, with evidence and fixes. Use
+  for "UI review", "review my UI", "audit design", "check accessibility", "UX review".
 ---
 
-# Revue d'interface
+# Interface review
 
-Regle d'or : regarder l'interface rendue, pas seulement le code. Chaque constat a une preuve : capture,
-`fichier:ligne`, ou mesure (contraste, taille de cible, temps).
+Golden rule: look at the rendered interface, not only the code. Every finding has evidence: screenshot,
+`file:line`, or measurement (contrast, target size, time).
 
-## 1. Preparer
+## 1. Prepare
 
-- Pages et parcours a revoir (sans precision : les parcours critiques du PRD, sinon la page d'accueil, la
-  connexion et le parcours principal).
-- Lancer l'app en local (skill `run`) et ouvrir chaque page en largeur bureau (1440 px) et mobile
-  (375 px), en theme clair et sombre si le site en a deux.
-- Charger le design system du projet (tokens, composants) : il est la reference avant tout gout.
+- Pages and flows to review (without detail: the critical flows of the PRD, otherwise the home page,
+  login and the main flow).
+- Run the app locally (`run` skill) and open each page at desktop width (1440 px) and mobile
+  (375 px), in light and dark theme if the site has both.
+- Load the project's design system (tokens, components): it is the reference before any taste.
 
-## 2. Passer la grille
+## 2. Run the checklist
 
-Grille detaillee : [references/web-interface-guidelines.md](references/web-interface-guidelines.md)
-(Web Interface Guidelines de Vercel, licence MIT jointe). Ordre de passage, du plus grave au plus fin :
+Detailed checklist: [references/web-interface-guidelines.md](references/web-interface-guidelines.md)
+(Vercel's Web Interface Guidelines, MIT license attached). Order, from most severe to finest:
 
-1. **Accessibilite** : navigation complete au clavier, focus visible, ordre logique, roles et noms
-   accessibles, contraste (4.5:1 pour le texte, 3:1 pour les grands textes et composants), textes
-   alternatifs, `prefers-reduced-motion` respecte. Mesurer avec `@axe-core/playwright` ou Lighthouse.
-2. **Formulaires** : labels associes, types et `autocomplete` corrects, erreurs pres du champ et
-   annoncees, valeur conservee apres erreur, soumission desactivee seulement pendant l'envoi.
-3. **Etats** : chargement, vide, erreur, succes, hors ligne ; aucun ecran blanc ni saut de mise en page.
-4. **Interactions** : cibles d'au moins 44 px en tactile, survol non requis, retour immediat a chaque
-   action, actions destructives confirmees ou annulables.
-5. **Mise en page** : pas de debordement horizontal en 375 px, zones sures sur mobile, longueur de ligne
-   lisible, alignements et espacements sur la grille des tokens.
-6. **Performance percue** : images dimensionnees et paresseuses hors ecran, polices sans saut de texte,
-   pas de blocage au clic (mesures LCP, CLS, INP).
-7. **Contenu** : textes clairs et coherents, nombres et dates au format de la langue, aucun texte de
-   remplissage, ton conforme a la marque.
-8. **Coherence** : composants du design system plutot que des variantes locales, aucun motif generique
-   d'interface generee (voir les skills `impeccable` et `frontend-design` du pack ui-design).
+1. **Accessibility**: full keyboard navigation, visible focus, logical order, accessible roles and
+   names, contrast (4.5:1 for text, 3:1 for large text and components), alternative text,
+   `prefers-reduced-motion` respected. Measure with `@axe-core/playwright` or Lighthouse.
+2. **Forms**: associated labels, correct types and `autocomplete`, errors near the field and
+   announced, value kept after an error, submit disabled only while sending.
+3. **States**: loading, empty, error, success, offline; no blank screen or layout shift.
+4. **Interactions**: targets of at least 44 px on touch, hover not required, immediate feedback on every
+   action, destructive actions confirmed or undoable.
+5. **Layout**: no horizontal overflow at 375 px, safe areas on mobile, readable line length, alignments
+   and spacing on the token grid.
+6. **Perceived performance**: images sized and lazy off screen, fonts without text shift, no blocking
+   on click (LCP, CLS, INP measurements).
+7. **Content**: clear and consistent text, numbers and dates in the language's format, no placeholder
+   text, tone consistent with the brand.
+8. **Consistency**: design system components rather than local variants, no generic pattern of
+   generated interfaces (see the `impeccable` and `frontend-design` skills of the ui-design pack).
 
-## 3. Corriger et rendre
+## 3. Fix and deliver
 
-- Corriger directement ce qui releve du code (accessibilite, etats, formulaires) avec la plus petite
-  modification, et un test end to end ou un controle axe qui empeche le retour.
-- Ce qui change le design (couleur de marque, mise en page d'un ecran, ton) est propose avec une capture
-  avant et apres, pas impose.
-- Rapport en francais (`docs/design/ui-review-<date>.md`) : tableau gravite (bloquant, majeur, mineur) /
-  page / constat / preuve / correction / etat, puis ce qui n'a pas ete revu.
+- Fix directly what belongs to the code (accessibility, states, forms) with the smallest change, and an
+  end to end test or an axe check that prevents regression.
+- What changes the design (brand color, layout of a screen, tone) is proposed with a before and after
+  screenshot, not imposed.
+- Report in the user's language (`docs/design/ui-review-<date>.md`): table severity (blocking, major, minor) / page /
+  finding / evidence / fix / status, then what was not reviewed.

@@ -42,7 +42,7 @@ jobs:
           set -euo pipefail
           already=$(gh api "repos/$GITHUB_REPOSITORY/issues/$ISSUE/comments" --jq '[.[] | select(.user.login == "github-actions[bot]")] | length')
           [ "$already" = "0" ] || exit 0
-          echo "@$OWNER une decision t attend : reponds par un commentaire (1, 2, 3 ou ta reponse)." > body.md
+          echo "@$OWNER a decision is waiting for you: reply with a comment (1, 2, 3 or your answer)." > body.md
           gh api "repos/$GITHUB_REPOSITORY/issues/$ISSUE/comments" -F body=@body.md > /dev/null
 
   wake:

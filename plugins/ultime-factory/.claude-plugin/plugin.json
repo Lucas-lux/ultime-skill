@@ -1,6 +1,6 @@
 {
   "name": "ultime-factory",
-  "description": "Usine a produit : l'orchestrateur app-factory et tout ce qu'il pilote (gestion de produit, retro-specification, cycle de vie logiciel, full stack, mobile et stores, growth, design, conformite, securite, devops, donnees, monitoring, tests en production, finops). A combiner avec ultime-profile pour n'activer que l'utile par projet.",
+  "description": "Product factory: the app-factory orchestrator and everything it drives (product management, reverse specification, software lifecycle, full stack, mobile and stores, growth, design, compliance, security, devops, data, monitoring, testing in production, finops). Combine with ultime-profile to enable only what each project needs.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

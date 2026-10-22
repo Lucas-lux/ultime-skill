@@ -1,6 +1,6 @@
 {
   "name": "app-factory",
-  "description": "Orchestrateur de projet de A a Z : de l'idee, d'une app a cloner en la personnalisant, ou d'une app existante a terminer, jusqu'au produit fini en production. 18 sous-agents (produit, gestion de projet, architecture, donnees, design, securite, conformite, finops, dev, revue, QA, release, SRE, growth, verificateur), phases et portes de validation, etat sur disque et reprise, mode autopilot (reveils planifies, decisions de vision seules remontees par issue GitHub).",
+  "description": "End-to-end project orchestrator: from an idea, an app to clone and personalize, or an existing app to finish, to the finished product in production. 18 subagents (product, project management, architecture, data, design, security, compliance, finops, dev, review, QA, release, SRE, growth, verifier), phases and validation gates, state on disk and resume, autopilot mode (scheduled wakeups, only vision decisions raised as GitHub issues).",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

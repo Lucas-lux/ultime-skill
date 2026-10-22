@@ -1,10 +1,10 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/github/awesome-copilot (commit f25421d3f1b8)
+Origin: https://github.com/github/awesome-copilot (commit f25421d3f1b8)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/Security.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/data-rights.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/Security.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/data-rights.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

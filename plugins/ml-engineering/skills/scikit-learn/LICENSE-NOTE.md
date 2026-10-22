@@ -1,6 +1,6 @@
-# Note de licence
+# License note
 
-Le depot K-Dense-AI/claude-scientific-skills est sous licence MIT (LICENSE ci-joint). Cette skill declare dans son frontmatter la licence BSD-3-Clause, celle de scikit-learn dont elle decrit la documentation (Copyright (c) The scikit-learn developers). Les deux licences sont permissives ; conserver les deux notices en cas de redistribution. Texte de la licence BSD-3-Clause :
+The K-Dense-AI/claude-scientific-skills repository is under the MIT license (LICENSE attached). This skill declares in its frontmatter the BSD-3-Clause license, the license of scikit-learn, whose documentation it describes (Copyright (c) The scikit-learn developers). Both licenses are permissive; keep both notices when redistributing. Text of the BSD-3-Clause license:
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided
 that the following conditions are met:

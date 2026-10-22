@@ -1,0 +1,10 @@
+{
+  "name": "mobile",
+  "description": "Cross-platform mobile, written in-house: iOS and Android release (signing, versions, TestFlight, Play tracks, fastlane, EAS), OWASP MASVS security, push notifications, deep links, end-to-end tests (Maestro, Detox), mobile accessibility, in-app purchases without a third-party service.",
+  "author": {
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
+  },
+  "skills": "./skills/",
+  "hooks": "./.cursor-plugin/hooks.json"
+}

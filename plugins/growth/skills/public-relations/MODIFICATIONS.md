@@ -1,15 +1,15 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/coreyhaines31/marketingskills (commit e85f3cbc2e4a)
+Origin: https://github.com/coreyhaines31/marketingskills (commit e85f3cbc2e4a)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `evals/evals.json` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/journalist-pitching.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/media-outlets.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/newsjacking.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/podcast-guest-prep.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/press-platforms.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/story-angles.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `evals/evals.json`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/journalist-pitching.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/media-outlets.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/newsjacking.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/podcast-guest-prep.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/press-platforms.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/story-angles.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

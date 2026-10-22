@@ -43,7 +43,7 @@ function readJson(file, problems) {
   try {
     return JSON.parse(fs.readFileSync(file, 'utf8'));
   } catch (error) {
-    if (error.code !== 'ENOENT') problems.push(`${file} illisible (${error.message}) : ignore`);
+    if (error.code !== 'ENOENT') problems.push(`${file} unreadable (${error.message}): ignored`);
     return undefined;
   }
 }
@@ -67,11 +67,11 @@ function loadConfig(projectRoot) {
     const raw = readJson(source, problems);
     if (raw === undefined) continue;
     if (!isPlainObject(raw)) {
-      problems.push(`${source} n est pas un objet JSON : ignore`);
+      problems.push(`${source} is not a JSON object: ignored`);
       continue;
     }
     if (raw.rules !== undefined && !isPlainObject(raw.rules)) {
-      problems.push(`${source} : "rules" n est pas un objet : ignore`);
+      problems.push(`${source}: "rules" is not an object: ignored`);
       delete raw.rules;
     }
     for (const [id, value] of Object.entries(raw.rules || {})) {
@@ -79,7 +79,7 @@ function loadConfig(projectRoot) {
         raw.rules[id] = { level: value };
       } else if (!isPlainObject(value)) {
         // A rule must never be switched off by a typo: anything else than an object or a level blocks.
-        problems.push(`${source} : regle ${id} invalide (${JSON.stringify(value)}) : bloque par defaut`);
+        problems.push(`${source}: invalid rule ${id} (${JSON.stringify(value)}): blocks by default`);
         raw.rules[id] = { level: 'block' };
       }
     }
@@ -91,7 +91,7 @@ function loadConfig(projectRoot) {
   }
   for (const [id, rule] of Object.entries(config.rules)) {
     if (!LEVELS.has(rule.level)) {
-      problems.push(`niveau "${rule.level}" inconnu pour la regle ${id} : bloque par defaut`);
+      problems.push(`unknown level "${rule.level}" for rule ${id}: blocks by default`);
       rule.level = 'block';
     }
   }

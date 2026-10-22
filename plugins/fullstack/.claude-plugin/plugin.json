@@ -1,6 +1,6 @@
 {
   "name": "fullstack",
-  "description": "Full stack web en production : 70 regles de performance React et Next.js, patterns de composition React 19. Se combine avec le pack agent-skills (APIs, securite, perf, livraison).",
+  "description": "Production full stack web: 70 React and Next.js performance rules, React 19 composition patterns. Combines with the agent-skills pack (APIs, security, performance, delivery).",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

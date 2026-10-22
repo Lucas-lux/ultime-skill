@@ -1,40 +1,40 @@
-# {projet}
+# {project}
 
-{une phrase : ce que fait le produit, pour qui}. Brief : `docs/product/brief.md`, PRD : `docs/product/prd.md`,
-architecture : `docs/architecture/`. Etat app-factory : `.app-factory/state.json`.
+{one sentence: what the product does, for whom}. Brief: `docs/product/brief.md`, PRD: `docs/product/prd.md`,
+architecture: `docs/architecture/`. app-factory state: `.app-factory/state.json`.
 
 ## Stack
 
-Next.js {version} (App Router), React {version}, TypeScript strict, {gestionnaire : pnpm}, {style : Tailwind},
-{donnees : Prisma + Postgres}, {auth}, deploiement {Vercel | conteneur}.
+Next.js {version} (App Router), React {version}, strict TypeScript, {package manager: pnpm}, {style: Tailwind},
+{data: Prisma + Postgres}, {auth}, deployment {Vercel | container}.
 
-## Commandes
+## Commands
 
-| But | Commande |
+| Goal | Command |
 |---|---|
-| Installer | `pnpm install --frozen-lockfile` |
+| Install | `pnpm install --frozen-lockfile` |
 | Dev | `pnpm dev` (http://localhost:3000) |
-| Verifier tout | `make ci` (lint, typage, tests, build) |
-| Tests unitaires | `pnpm test` |
+| Check everything | `make ci` (lint, typing, tests, build) |
+| Unit tests | `pnpm test` |
 | End to end | `pnpm exec playwright test` |
-| Base locale | `docker compose up -d db` puis `pnpm prisma migrate dev` |
+| Local database | `docker compose up -d db` then `pnpm prisma migrate dev` |
 
-## Carte
+## Map
 
-- `app/` : routes (composants serveur par defaut), `app/api/` : routes d'API.
-- `components/` : UI partagee (design system dans `components/ui/`).
-- `lib/` : logique metier et acces aux donnees (jamais importee par un composant client si elle lit un secret).
-- `e2e/` : parcours Playwright.
+- `app/`: routes (server components by default), `app/api/`: API routes.
+- `components/`: shared UI (design system in `components/ui/`).
+- `lib/`: business logic and data access (never imported by a client component if it reads a secret).
+- `e2e/`: Playwright journeys.
 
 ## Definition of done
 
-- La cible `make ci` (ou son equivalent) passe en local avant de rendre la main ; `ci-ok` vert sur la PR.
-- Un comportement nouveau a son test ; un bug corrige a un test qui le reproduisait.
-- Docs touchees mises a jour (README, `docs/ops/ci.md`, ADR si une decision change).
+- The `make ci` target (or its equivalent) passes locally before handing back; `ci-ok` green on the PR.
+- A new behaviour has its test; a fixed bug has a test that reproduced it.
+- Touched docs updated (README, `docs/ops/ci.md`, ADR if a decision changes).
 
-## Regles
+## Rules
 
-- Regles par langage : `.claude/rules/ultime/` (chargees selon les fichiers touches). Garde-fous par
-  hooks : `.claude/guardrails.json` (ne pas les contourner ; une regle qui gene se signale).
-- Branche et PR pour tout changement, jamais de push sur la branche principale.
-- Secrets dans `.env` (ignore par git), modele dans `.env.example`. Base locale pour le developpement.
+- Per-language rules: `.claude/rules/ultime/` (loaded according to the touched files). Guardrails through
+  hooks: `.claude/guardrails.json` (do not bypass them; a rule that gets in the way is reported).
+- Branch and PR for every change, never a push to the main branch.
+- Secrets in `.env` (ignored by git), template in `.env.example`. Local database for development.

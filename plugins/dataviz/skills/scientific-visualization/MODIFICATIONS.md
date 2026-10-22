@@ -1,9 +1,9 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/K-Dense-AI/claude-scientific-skills (commit a1043ef544e3)
+Origin: https://github.com/K-Dense-AI/claude-scientific-skills (commit a1043ef544e3)
 
-- `SKILL.md` : pied de page d'autopromotion retire
-- `references/sources.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: self-promotion footer removed
+- `references/sources.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

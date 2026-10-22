@@ -1,0 +1,10 @@
+{
+  "name": "team-conventions",
+  "description": "Cross-cutting team working conventions: verify rather than trust, ask before a large batch, multiple-choice questions, languages, no em dash, AI marker, technical terms in full, main/replica, secrets out of the code.",
+  "author": {
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
+  },
+  "skills": "./skills/",
+  "hooks": "./.cursor-plugin/hooks.json"
+}

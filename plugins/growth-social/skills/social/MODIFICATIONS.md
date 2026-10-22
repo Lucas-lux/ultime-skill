@@ -1,17 +1,17 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/coreyhaines31/marketingskills (commit e85f3cbc2e4a)
+Origin: https://github.com/coreyhaines31/marketingskills (commit e85f3cbc2e4a)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `evals/evals.json` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/carousel-frameworks.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/listening-sources-template.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/listening.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/platform-limits.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/platforms.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/reverse-engineering.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/short-form-video.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/x-algorithm.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `evals/evals.json`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/carousel-frameworks.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/listening-sources-template.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/listening.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/platform-limits.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/platforms.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/reverse-engineering.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/short-form-video.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/x-algorithm.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

@@ -1,12 +1,12 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/LottieFiles/motion-design-skill (commit f9a8a041b851)
+Origin: https://github.com/LottieFiles/motion-design-skill (commit f9a8a041b851)
 
-- `SKILL.md` : champ name du frontmatter aligne sur le nom du dossier; em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `director/disney-principles.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `patterns/ambient-continuous.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `patterns/multi-element.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `reference/property-selection.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed; frontmatter name field aligned with the folder name
+- `director/disney-principles.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `patterns/ambient-continuous.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `patterns/multi-element.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `reference/property-selection.md`: em dashes replaced with a hyphen, invisible Unicode characters removed

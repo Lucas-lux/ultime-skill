@@ -1,50 +1,63 @@
 # Maintenance
 
-## Construire et vérifier
+## Build and check
 
 ```bash
-python scripts/build.py                          # régénère vendor.json, plugins/, manifestes, puis vérifie
-python scripts/build.py --cache .cache/vendor    # réutilise les clones amont déjà téléchargés
-python scripts/check.py                          # vérification seule (frontmatter, em dash, Unicode, tests)
-node --test tests/guardrails/guard.test.cjs      # tests du moteur de garde-fous
+python scripts/build.py                          # regenerates vendor.json, plugins/, manifests, then checks
+python scripts/build.py --cache .cache/vendor    # reuses the upstream clones already downloaded
+python scripts/check.py                          # check only (frontmatter, em dash, Unicode, tests)
+node --test tests/guardrails/guard.test.cjs tests/guardrails/harness.test.cjs tests/installer/installer.test.cjs
 python -m unittest discover -s tests -p "test_*.py"
 ```
 
-`build.py` efface `plugins/` avant de le reconstruire : aucun shell ni éditeur ne doit avoir son dossier
-courant à l'intérieur (sous Windows, un dossier occupé bloque la suppression ; le script réessaie
-quelques secondes puis s'arrête avec un message).
+`build.py` deletes `plugins/` before rebuilding it: no shell or editor may have its current directory
+inside it (on Windows, a busy folder blocks the deletion; the script retries for a few seconds, then stops
+with a message).
 
-## Ajouter une skill importée
+Executable scripts: `plugins/` keeps the executable bit of each upstream file, which Linux and macOS
+need (hook scripts above all). Git on Windows does not see file modes and keeps the mode recorded in the
+index, so a new upstream executable committed from Windows lands as 644: the CI rebuild check then shows a
+mode change, fixed with `git update-index --chmod=+x <file>`.
 
-1. Vérifier la licence de la source au commit visé (voir [Licences](licences.md)) : seules les licences
-   permissives sont acceptées, et la licence propre de la skill compte.
-2. Ajouter la source (dépôt, commit complet, licence) dans `SOURCES` de `scripts/gen_vendor.py`, puis
-   l'import (`pack_skill` ou `add`) dans le pack voulu. Options : `exclude`, `strip_tail` (couper un pied
-   de page promotionnel), `drop_lines` (retirer des lignes), `replace` (adapter un passage),
-   `license_note` (expliquer un cas de licence particulier).
-3. `python scripts/build.py`, puis relire le diff de `plugins/`, `THIRD_PARTY.md` et les
-   `MODIFICATIONS.md` générés.
-4. Vérifier qu'aucune skill existante ne fait déjà le même travail : un doublon coûte du contexte et
-   brouille le choix de Claude.
+## Add an imported skill
 
-## Écrire une skill maison
+1. Check the source's license at the target commit (see [Licenses](licenses.md)): only permissive
+   licenses are accepted, and the skill's own license counts.
+2. Add the source (repository, full commit, license) to `SOURCES` in `scripts/gen_vendor.py`, then the
+   import (`pack_skill` or `add`) into the desired pack. Options: `exclude`, `strip_tail` (cut a
+   promotional footer), `drop_lines` (remove lines), `replace` (adapt a passage), `license_note` (explain
+   a special license case).
+3. `python scripts/build.py`, then review the diff of `plugins/`, `THIRD_PARTY.md` and the generated
+   `MODIFICATIONS.md` files.
+4. Check that no existing skill already does the same job: a duplicate costs context and muddles
+   the agent's choice.
 
-- Dans `authored/<pack>/skills/<nom>/SKILL.md`, superposé sur `plugins/<pack>/` à la construction.
-- Français sans accents dans les skills (le texte est consommé par Claude), puces denses, description
-  de 400 caractères au plus qui dit quoi et quand l'utiliser, `SKILL.md` de moins de 500 lignes, le
-  détail dans `references/` lu à la demande.
-- Une nouvelle skill qui pilote un comportement vérifiable s'accompagne d'un script et de tests dans
-  `tests/`.
-- Déclarer un nouveau pack dans `PLUGINS` de `scripts/gen_manifests.py`, et l'ajouter aux bundles
-  concernés.
+## Write an in-house skill
 
-## Mettre à jour une source
+- In `authored/<pack>/skills/<name>/SKILL.md`, overlaid on `plugins/<pack>/` at build time.
+- English, plain ASCII, dense bullet points, a
+  description of at most 400 characters that says what it does and when to use it, a `SKILL.md` under
+  500 lines, the detail in `references/` read on demand.
+- A new skill that drives a verifiable behavior comes with a script and tests in `tests/`.
+- Declare a new pack in `PLUGINS` in `scripts/gen_manifests.py`, and add it to the relevant bundles.
 
-Changer son commit dans `scripts/gen_vendor.py`, reconstruire, relire le diff. Si sa licence a changé,
-refaire le contrôle de licence avant de garder la mise à jour.
+## Support another coding agent
 
-## Versions citées dans les skills
+- Skills, subagents, commands and instructions files: one entry in `bin/lib/harnesses.cjs` (paths at user
+  and project scope, agent and command formats). Conversions live in `bin/lib/convert.cjs`.
+- Guardrails: the hook file and its format in `authored/guardrails/runtime/lib/wiring.cjs`, the tool
+  names and payload fields in `authored/guardrails/runtime/lib/harness.cjs`, and a test replaying the
+  documented payload in `tests/guardrails/harness.test.cjs`.
+- Claude Code never goes through these adapters: its plugins, hooks and agents are the source, unchanged.
+- Update the matrix in [Coding agents](harnesses.md), with the source of each path.
 
-Les skills écrites maison citent des versions concrètes (actions GitHub, outils de CI), vérifiées à une
-date donnée. Les revoir à chaque trimestre : `git ls-remote --tags https://github.com/<dépôt>` donne la
-dernière version publiée, et `pin_actions.py --latest` met à jour les workflows générés.
+## Update a source
+
+Change its commit in `scripts/gen_vendor.py`, rebuild, review the diff. If its license has changed, redo
+the license check before keeping the update.
+
+## Versions cited in the skills
+
+The in-house skills cite concrete versions (GitHub actions, CI tools), verified at a given date. Review
+them every quarter: `git ls-remote --tags https://github.com/<repository>` gives the latest published
+version, and `pin_actions.py --latest` updates the generated workflows.

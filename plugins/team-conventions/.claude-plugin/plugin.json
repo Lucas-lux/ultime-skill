@@ -1,6 +1,6 @@
 {
   "name": "team-conventions",
-  "description": "Conventions de travail d'equipe transverses : verifier plutot que croire, demander avant un gros lot, questions a choix multiples, langues, pas d'em dash, marquage IA, termes techniques en entier, main/replica, secrets hors du code.",
+  "description": "Cross-cutting team working conventions: verify rather than trust, ask before a large batch, multiple-choice questions, languages, no em dash, AI marker, technical terms in full, main/replica, secrets out of the code.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

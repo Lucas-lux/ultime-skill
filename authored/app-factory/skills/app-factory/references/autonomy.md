@@ -1,61 +1,61 @@
-# Autonomie et garde-fous
+# Autonomy and guardrails
 
-Le niveau d'autonomie se choisit en P0 et se note dans `state.json`. Quel que soit le niveau, certaines
-actions demandent toujours une confirmation au moment de les faire, et d'autres sont exclues.
+The autonomy level is chosen in P0 and recorded in `state.json`. Whatever the level, some
+actions always require a confirmation at the moment they are done, and others are excluded.
 
-## Niveaux
+## Levels
 
-- **Prudent** : validation a chaque porte et avant chaque story.
-- **Standard** (par defaut) : validation a chaque porte ; entre deux portes, l'orchestrateur enchaine
-  les stories seul.
-- **Etendu** : validation aux portes G2, G3, G6 et G7 seulement ; les autres portes produisent leur
-  rapport et continuent si `gate-verifier` ne trouve aucun bloquant.
-- **Autopilot** : le projet avance par reveils planifies, sans session ouverte (skill `autopilot`).
-  L'utilisateur ne tranche que les decisions de vision, d'argent, de droit et d'irreversible, par issue
-  GitHub ; le reste suit la politique de decision de `autopilot`. Choisi apres G0, qui reste interactive.
-  Ce niveau autorise en plus, sans confirmation au moment de le faire : pousser des branches `claude/*`,
-  ouvrir des PR et des issues, laisser GitHub fusionner une PR `autopilot` quand les checks requis sont
-  verts, deployer en staging par la CI. La production reste approuvee par l'utilisateur via
-  l'environnement GitHub `production`.
+- **Cautious**: validation at each gate and before each story.
+- **Standard** (default): validation at each gate; between two gates, the orchestrator chains
+  the stories alone.
+- **Extended**: validation at gates G2, G3, G6 and G7 only; the other gates produce their
+  report and continue if `gate-verifier` finds no blocker.
+- **Autopilot**: the project moves forward through scheduled wake-ups, with no open session (`autopilot` skill).
+  The user only settles decisions of vision, money, law and irreversibility, through a GitHub
+  issue; the rest follows the decision policy of `autopilot`. Chosen after G0, which stays interactive.
+  This level additionally allows, without confirmation at the moment it is done: pushing `claude/*` branches,
+  opening PRs and issues, letting GitHub merge an `autopilot` PR when the required checks are
+  green, deploying to staging through the CI. Production stays approved by the user via
+  the GitHub `production` environment.
 
-## Fait seul, a tout niveau
+## Done alone, at any level
 
-Lire et ecrire le code et la documentation du projet, creer des branches et des commits locaux, lancer
-les tests, la base locale et l'app en local, installer des dependances de developpement, lancer des
-audits en lecture seule.
+Reading and writing the project's code and documentation, creating branches and local commits, running
+the tests, the local database and the app locally, installing development dependencies, running
+read-only audits.
 
-## Toujours confirme au moment de le faire
+## Always confirmed at the moment it is done
 
-Au niveau autopilot, le push de branches `claude/*`, les PR, les issues et le deploiement en staging par
-la CI ne sont plus confirmes un par un (limites decrites plus haut) ; tout le reste de cette liste,
-production comprise, l'est toujours.
+At the autopilot level, pushing `claude/*` branches, PRs, issues and staging deployment through
+the CI are no longer confirmed one by one (limits described above); everything else on this list,
+production included, still is.
 
-- Pousser vers un depot distant, ouvrir une PR ou des issues.
-- Deployer, en staging la premiere fois, en production a chaque fois.
-- Executer une migration ou un script sur des donnees reelles ; acceder a des donnees de production.
-- Creer un compte (cloud, store, regie publicitaire, reseau social), accepter des conditions ou un
-  contrat, saisir ou utiliser un moyen de paiement, souscrire un abonnement.
-- Soumettre une app en revue sur un store, publier une fiche, lancer une campagne qui depense de
-  l'argent, publier sur un reseau social, envoyer un email ou une notification a des utilisateurs.
-- Modifier un DNS, supprimer une ressource, un environnement, une base ou un bucket.
+- Pushing to a remote repository, opening a PR or issues.
+- Deploying, to staging the first time, to production every time.
+- Running a migration or a script on real data; accessing production data.
+- Creating an account (cloud, store, ad network, social network), accepting terms or a
+  contract, entering or using a payment method, subscribing to a plan.
+- Submitting an app for review on a store, publishing a listing, launching a campaign that spends
+  money, posting on a social network, sending an email or a notification to users.
+- Changing a DNS record, deleting a resource, an environment, a database or a bucket.
 
-Pour ces actions, l'agent prepare tout (configuration, contenus, commande exacte, cout estime) et
-l'utilisateur declenche ou confirme.
+For these actions, the agent prepares everything (configuration, contents, exact command, estimated cost) and
+the user triggers or confirms.
 
-## Pilotage du navigateur
+## Browser control
 
-- API et CLI officielles d'abord ; le navigateur (Claude in Chrome, avec les sessions de l'utilisateur)
-  seulement pour ce que les API ne couvrent pas.
-- S'arreter et rendre la main pour toute connexion, double authentification, CAPTCHA, verification
-  d'identite ou saisie de paiement : c'est a l'utilisateur de le faire.
-- Remplir les formulaires, puis faire relire avant tout bouton qui soumet, publie ou paie.
+- Official APIs and CLIs first; the browser (Claude in Chrome, with the user's sessions)
+  only for what the APIs do not cover.
+- Stop and hand back control for any login, two-factor authentication, CAPTCHA, identity
+  verification or payment entry: it is up to the user to do it.
+- Fill in the forms, then have them reviewed before any button that submits, publishes or pays.
 
-## Exclu
+## Excluded
 
-- Aller chercher des identifiants ailleurs que dans la configuration prevue pour le projet (autre depot,
-  coffre-fort, historique du shell, fichiers d'un autre projet), meme si on le demande.
-- Mettre un secret dans le code, un commit, un log ou un prompt d'agent.
-- Contourner un hook, une verification de securite ou une protection de branche.
-- Faux avis, fausses notes, faux comptes, usurpation d'une marque ou d'une personne, dark patterns,
-  collecte de donnees personnelles sans base legale.
-- Copier la marque, les assets, les textes ou le code d'une app tierce (mode clone).
+- Fetching credentials from anywhere other than the configuration set up for the project (another repository,
+  vault, shell history, files of another project), even if asked.
+- Putting a secret in the code, a commit, a log or an agent prompt.
+- Bypassing a hook, a security check or a branch protection.
+- Fake reviews, fake ratings, fake accounts, impersonation of a brand or a person, dark patterns,
+  collection of personal data without a legal basis.
+- Copying the brand, assets, texts or code of a third-party app (clone mode).

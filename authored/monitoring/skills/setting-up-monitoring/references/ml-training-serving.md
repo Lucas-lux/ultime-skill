@@ -1,40 +1,38 @@
-# Entrainement et serving de modele ML (MLOps)
+# ML model training and serving (MLOps)
 
-Deux phases distinctes. L'entrainement produit un modele versionne ; le serving l'expose. Monitorer les
-deux, et le lien entre les deux (quel modele, entraine sur quelles donnees, sert en production).
+Two distinct phases. Training produces a versioned model; serving exposes it. Monitor both, and the link
+between them (which model, trained on which data, serves in production).
 
-## Entrainement
+## Training
 
-- **Suivi d'experiences** : parametres, metriques (loss, accuracy, F1, AUC selon la tache), artefacts,
-  version du jeu de donnees et du code. MLflow ou Weights & Biases. Chaque run reproductible.
-- **Courbes** : loss entrainement et validation, pour voir sur/sous-apprentissage. Alerter sur une
-  divergence (NaN, loss qui remonte).
-- **Donnees d'entrainement** : taille, distribution des classes, taux de nuls, fuite de donnee (leakage)
-  verifiee. Versionner le jeu (DVC, Delta, snapshot) et lier au run.
-- **Ressources** : utilisation GPU/CPU, memoire, duree, cout du run. Un GPU a 20 % signale un goulet
-  d'etranglement cote donnees.
-- **Registre de modeles** : versions, alias (par exemple `champion`, `challenger`) plutot que des stages
-  deprecies, et la trace de promotion (qui, quand, sur quelles metriques).
+- **Experiment tracking**: parameters, metrics (loss, accuracy, F1, AUC depending on the task),
+  artifacts, version of the dataset and of the code. MLflow or Weights & Biases. Every run reproducible.
+- **Curves**: training and validation loss, to see over/underfitting. Alert on a divergence (NaN, loss
+  going back up).
+- **Training data**: size, class distribution, null rate, data leakage checked. Version the dataset
+  (DVC, Delta, snapshot) and link it to the run.
+- **Resources**: GPU/CPU usage, memory, duration, cost of the run. A GPU at 20 % signals a bottleneck
+  on the data side.
+- **Model registry**: versions, aliases (for example `champion`, `challenger`) rather than deprecated
+  stages, and the promotion trail (who, when, on which metrics).
 
 ## Serving
 
-- **Signaux service** (couche de base + `api-service.md`) : latence p95/p99 de l'inference, debit, taux
-  d'erreur, saturation GPU. Pour un LLM servi (vLLM, TGI) : TTFT, tokens/s, taille des batchs, requetes en
-  file. Voir `ml-engineering` (`serving-llms-vllm`).
-- **Derive des donnees d'entree (data drift)** : comparer la distribution des features en production a
-  celle de l'entrainement (PSI, KS, distance de population). Alerter au-dela d'un seuil.
-- **Derive des predictions (prediction drift)** : la distribution des sorties change meme si l'entree
-  semble stable.
-- **Decroissance de performance** : quand le vrai label arrive (parfois avec delai), recalculer la
-  metrique metier (accuracy, precision) sur la fenetre recente et alerter sur une baisse.
-- **Fraicheur des features** : age de chaque feature servie (surtout avec un feature store). Une feature
-  perimee donne des predictions silencieusement fausses.
-- **Boucle de retour** : taux de prediction corrigee ou rejetee par l'utilisateur, pour declencher un
-  reentrainement.
+- **Service signals** (base layer + `api-service.md`): p95/p99 inference latency, throughput, error
+  rate, GPU saturation. For a served LLM (vLLM, TGI): TTFT, tokens/s, batch size, queued requests. See
+  `ml-engineering` (`serving-llms-vllm`).
+- **Input data drift**: compare the distribution of features in production with the training one (PSI,
+  KS, population distance). Alert beyond a threshold.
+- **Prediction drift**: the distribution of outputs changes even if the input looks stable.
+- **Performance decay**: when the true label arrives (sometimes with a delay), recompute the business
+  metric (accuracy, precision) on the recent window and alert on a drop.
+- **Feature freshness**: age of each served feature (especially with a feature store). A stale feature
+  gives silently wrong predictions.
+- **Feedback loop**: rate of predictions corrected or rejected by the user, to trigger a retraining.
 
-## Dashboards MLOps
+## MLOps dashboards
 
-- Vue serving (latence, debit, erreurs, saturation).
-- Vue qualite modele (derive entree, derive sortie, performance quand le label est disponible).
-- Vue donnees (fraicheur des features, volume, nuls).
-- Vue lineage : version du modele en production, jeu d'entrainement, date de promotion.
+- Serving view (latency, throughput, errors, saturation).
+- Model quality view (input drift, output drift, performance when the label is available).
+- Data view (feature freshness, volume, nulls).
+- Lineage view: model version in production, training dataset, promotion date.

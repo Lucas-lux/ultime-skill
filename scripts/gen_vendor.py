@@ -200,16 +200,16 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGE."""
 pack_skill("kdense", "skills/scikit-learn", "ml-engineering", strip_tail="## Citing Scientific Agent Skills",
-           license_note="Le depot K-Dense-AI/claude-scientific-skills est sous licence MIT (LICENSE ci-joint). Cette "
-                        "skill declare dans son frontmatter la licence BSD-3-Clause, celle de scikit-learn dont elle "
-                        "decrit la documentation (Copyright (c) The scikit-learn developers). Les deux licences sont "
-                        "permissives ; conserver les deux notices en cas de redistribution. Texte de la licence "
-                        "BSD-3-Clause :\n\n" + BSD3_TEXT)
+           license_note="The K-Dense-AI/claude-scientific-skills repository is under the MIT license (LICENSE "
+                        "attached). This skill declares in its frontmatter the BSD-3-Clause license, the license of "
+                        "scikit-learn, whose documentation it describes (Copyright (c) The scikit-learn developers). "
+                        "Both licenses are permissive; keep both notices when redistributing. Text of the "
+                        "BSD-3-Clause license:\n\n" + BSD3_TEXT)
 pack_skill("mlflow", "instrumenting-with-mlflow-tracing", "ml-engineering")
 
 # ---- Full stack ----
-VERCEL_NOTE = ("Licence MIT declaree par l'auteur (Vercel) dans le frontmatter de la skill ; le depot "
-               "vercel-labs/agent-skills ne contient pas de fichier de licence au commit importe.")
+VERCEL_NOTE = ("MIT license declared by the author (Vercel) in the skill frontmatter; the "
+               "vercel-labs/agent-skills repository has no license file at the imported commit.")
 pack_skill("vercel-labs", "skills/react-best-practices", "fullstack", folder="vercel-react-best-practices",
            license_note=VERCEL_NOTE)
 pack_skill("vercel-labs", "skills/composition-patterns", "fullstack", folder="vercel-composition-patterns",

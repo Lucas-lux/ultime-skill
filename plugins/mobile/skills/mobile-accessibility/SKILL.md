@@ -1,44 +1,43 @@
 ---
 name: mobile-accessibility
 description: >
-  Accessibilite des apps mobiles Android (Compose, vues), React Native et Flutter : lecteurs d'ecran
-  TalkBack et VoiceOver, libelles, roles, tailles de cible, texte agrandi, contrastes, mouvement reduit,
-  tests. A utiliser pour rendre accessible ou auditer une app mobile, TalkBack, VoiceOver, accessibilite
-  mobile ou EN 301 549.
+  Accessibility of Android (Compose, views), React Native and Flutter mobile apps: TalkBack and
+  VoiceOver screen readers, labels, roles, target sizes, enlarged text, contrast, reduced motion,
+  testing. Use to make a mobile app accessible or audit it, TalkBack, VoiceOver, mobile accessibility
+  or EN 301 549.
 ---
 
-# Accessibilite mobile
+# Mobile accessibility
 
-Pour iOS natif en profondeur : skill `ios-accessibility` (pack mobile-ios). Le referentiel europeen EN
-301 549 couvre aussi les applications mobiles ; il sert de base au European Accessibility Act.
+For native iOS in depth: skill `ios-accessibility` (mobile-ios pack). The European standard EN
+301 549 also covers mobile applications; it is the basis for the European Accessibility Act.
 
-## Exigences communes
+## Common requirements
 
-- Chaque element interactif a un libelle comprehensible, un role et un etat annonces par le lecteur
-  d'ecran ; les images decoratives sont ignorees.
-- Tailles de cible : au moins 44 x 44 points (iOS) et 48 x 48 dp (Android).
-- Texte qui suit le reglage de taille du systeme sans etre tronque ni chevauche ; mises en page qui
-  s'adaptent.
-- Contrastes suffisants (4,5:1 pour le texte courant) ; l'information ne passe jamais par la couleur
-  seule.
-- Ordre de focus logique ; regroupement des elements lies ; annonces des changements dynamiques.
-- Respect du mouvement reduit ; pas de contenu qui clignote.
+- Every interactive element has an understandable label, a role and a state announced by the screen
+  reader; decorative images are ignored.
+- Target sizes: at least 44 x 44 points (iOS) and 48 x 48 dp (Android).
+- Text that follows the system size setting without being truncated or overlapping; layouts that
+  adapt.
+- Sufficient contrast (4.5:1 for body text); information never relies on color alone.
+- Logical focus order; grouping of related elements; announcements of dynamic changes.
+- Respect reduced motion; no flashing content.
 
-## Par technologie
+## By technology
 
-- **React Native** : `accessible`, `accessibilityLabel`, `accessibilityRole`, `accessibilityHint`,
-  `accessibilityState` ; ne pas desactiver `allowFontScaling` ; `AccessibilityInfo` pour le lecteur d'ecran
-  et le mouvement reduit.
-- **Jetpack Compose** : `contentDescription`, `Modifier.semantics` (role, etat),
-  `semantics(mergeDescendants = true)` pour regrouper, `clearAndSetSemantics` pour remplacer.
-- **Vues Android** : `contentDescription`, `importantForAccessibility`, `labelFor`.
-- **Flutter** : widget `Semantics`, `semanticsLabel`, `ExcludeSemantics`, `MergeSemantics` ; tester avec
-  `MediaQuery.textScaler` agrandi.
+- **React Native**: `accessible`, `accessibilityLabel`, `accessibilityRole`, `accessibilityHint`,
+  `accessibilityState`; do not disable `allowFontScaling`; `AccessibilityInfo` for the screen reader
+  and reduced motion.
+- **Jetpack Compose**: `contentDescription`, `Modifier.semantics` (role, state),
+  `semantics(mergeDescendants = true)` to group, `clearAndSetSemantics` to replace.
+- **Android views**: `contentDescription`, `importantForAccessibility`, `labelFor`.
+- **Flutter**: `Semantics` widget, `semanticsLabel`, `ExcludeSemantics`, `MergeSemantics`; test with
+  an enlarged `MediaQuery.textScaler`.
 
-## Tester
+## Testing
 
-- A la main : parcours critiques avec TalkBack et VoiceOver actives, texte au maximum, mode sombre,
-  contraste eleve.
-- Outils : Accessibility Scanner (Android), Accessibility Inspector (Xcode), verifications automatiques
-  dans les tests UI quand le framework le permet.
-- Consigner les ecarts et le niveau atteint (declaration d'accessibilite si l'app y est soumise).
+- Manually: critical flows with TalkBack and VoiceOver on, text at maximum, dark mode, high
+  contrast.
+- Tools: Accessibility Scanner (Android), Accessibility Inspector (Xcode), automatic checks in UI
+  tests when the framework allows it.
+- Record the gaps and the level reached (accessibility statement if the app is subject to one).

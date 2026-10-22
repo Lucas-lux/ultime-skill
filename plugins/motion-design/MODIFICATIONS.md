@@ -1,16 +1,16 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/greensock/gsap-skills (commit aed9cfd32777)
+Origin: https://github.com/greensock/gsap-skills (commit aed9cfd32777)
 
-- `skills/gsap-core/SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `skills/gsap-frameworks/SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `skills/gsap-performance/SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `skills/gsap-plugins/SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `skills/gsap-react/SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `skills/gsap-scrolltrigger/SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `skills/gsap-timeline/SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `skills/gsap-utils/SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `skills/llms.txt` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `skills/gsap-core/SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `skills/gsap-frameworks/SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `skills/gsap-performance/SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `skills/gsap-plugins/SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `skills/gsap-react/SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `skills/gsap-scrolltrigger/SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `skills/gsap-timeline/SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `skills/gsap-utils/SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `skills/llms.txt`: em dashes replaced with a hyphen, invisible Unicode characters removed

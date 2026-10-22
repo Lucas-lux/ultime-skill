@@ -6,7 +6,7 @@ paths:
 
 # Rust
 
-- Pas de `unwrap()` ni `expect()` hors tests et invariants documentes ; erreurs typees (`thiserror`
-  pour une bibliotheque, `anyhow` pour un binaire).
-- `unsafe` seulement avec un commentaire `SAFETY:` qui justifie l'invariant.
-- `cargo fmt` et `cargo clippy -- -D warnings` propres.
+- No `unwrap()` or `expect()` outside tests and documented invariants; typed errors (`thiserror`
+  for a library, `anyhow` for a binary).
+- `unsafe` only with a `SAFETY:` comment that justifies the invariant.
+- `cargo fmt` and `cargo clippy -- -D warnings` clean.

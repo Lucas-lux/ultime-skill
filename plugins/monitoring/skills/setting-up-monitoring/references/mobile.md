@@ -1,40 +1,40 @@
-# Application mobile
+# Mobile application
 
-Le monitoring mobile est contraint par la distribution (on ne deploie pas un correctif a chaud, les
-utilisateurs restent sur d'anciennes versions) et par le terrain (reseaux variables, appareils varies).
+Mobile monitoring is constrained by distribution (you cannot hotfix, users stay on old versions) and by
+the field (variable networks, varied devices).
 
-## Stabilite
+## Stability
 
-- **Crash-free rate** (sessions et utilisateurs sans crash), par version et par OS. C'est la metrique de
-  sante numero un. Alerter sur une chute apres une sortie.
-- **ANR** (Android) et freezes/hangs (iOS) : l'application ne repond plus sans crasher.
-- Symbolication des stacks (dSYM iOS, mapping Android) pour exploiter les rapports.
+- **Crash-free rate** (sessions and users without a crash), per version and per OS. It is the number one
+  health metric. Alert on a drop after a release.
+- **ANR** (Android) and freezes/hangs (iOS): the application stops responding without crashing.
+- Stack symbolication (iOS dSYM, Android mapping) to make use of the reports.
 
-## Performance percue
+## Perceived performance
 
-- Demarrage a froid et a chaud (cold/warm start), temps de rendu du premier ecran, images par seconde et
-  frames gelees sur les ecrans critiques.
-- Consommation : batterie, memoire, donnees reseau.
+- Cold and warm start, render time of the first screen, frames per second and frozen frames on critical
+  screens.
+- Consumption: battery, memory, network data.
 
-## Reseau
+## Network
 
-- Latence et taux d'erreur des appels API vus du mobile (souvent pires que cote serveur : radio, perte,
-  timeouts). Comportement hors ligne et reprise.
+- Latency and error rate of API calls seen from the mobile (often worse than on the server side: radio,
+  loss, timeouts). Offline behavior and recovery.
 
-## Adoption et diffusion
+## Adoption and rollout
 
-- Repartition des versions installees et vitesse d'adoption d'une nouvelle version. Indispensable pour
-  interpreter une regression (elle ne touche qu'une version) et pour savoir quand une version buggee a
-  disparu du parc.
+- Distribution of installed versions and adoption speed of a new version. Essential to interpret a
+  regression (it only affects one version) and to know when a buggy version has disappeared from the
+  installed base.
 
-## Mise en place
+## Setup
 
-- SDK mobile (Firebase Crashlytics, Sentry, Datadog, Embrace) ou OpenTelemetry mobile selon la stack.
-  Garder le crash reporting meme si on reste minimaliste.
-- Pas de donnee personnelle dans les evenements. Respecter le consentement (voir la skill `compliance`).
+- Mobile SDK (Firebase Crashlytics, Sentry, Datadog, Embrace) or mobile OpenTelemetry depending on the
+  stack. Keep crash reporting even when staying minimalist.
+- No personal data in events. Respect consent (see the `compliance` skill).
 
 ## Dashboards
 
-- Vue stabilite (crash-free par version et OS, ANR, tendance post-release).
-- Vue performance (demarrage, rendu, consommation).
-- Vue adoption (repartition des versions).
+- Stability view (crash-free per version and OS, ANR, post-release trend).
+- Performance view (startup, rendering, consumption).
+- Adoption view (version distribution).

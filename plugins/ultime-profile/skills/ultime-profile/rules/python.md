@@ -6,11 +6,11 @@ paths:
 
 # Python
 
-- Typage complet des fonctions publiques ; `from __future__ import annotations` inutile en 3.13+.
-- Outils du projet d'abord (ruff, mypy ou pyright, pytest) : lancer `ruff check --fix` et `ruff format`
-  sur les fichiers touches avant de rendre la main.
-- Pas de `except Exception: pass` ; capturer l'exception precise, journaliser avec contexte.
-- Chemins avec `pathlib`, dates avec fuseau (`datetime.now(tz=...)`), pas d'etat global mutable.
-- Dependances declarees dans `pyproject.toml` avec le gestionnaire du projet (`uv add`, `poetry add`),
-  jamais `pip install` a la main dans le projet.
-- SQL : requetes parametrees uniquement ; migrations par l'outil du projet (Alembic, Django).
+- Full typing of public functions; `from __future__ import annotations` unnecessary in 3.13+.
+- The project's tools first (ruff, mypy or pyright, pytest): run `ruff check --fix` and `ruff format`
+  on the touched files before handing back.
+- No `except Exception: pass`; catch the precise exception, log with context.
+- Paths with `pathlib`, dates with a time zone (`datetime.now(tz=...)`), no mutable global state.
+- Dependencies declared in `pyproject.toml` with the project's manager (`uv add`, `poetry add`),
+  never `pip install` by hand in the project.
+- SQL: parameterized queries only; migrations through the project's tool (Alembic, Django).

@@ -1,6 +1,6 @@
 {
   "name": "sec-offense",
-  "description": "Pentest pour tests autorises uniquement (trilwu secskills-offense) : exploitation web/API/JWT/SSRF/XXE, Active Directory et Entra, cloud et conteneurs, escalade de privileges, reconnaissance. Reserve aux engagements autorises, CTF et recherche.",
+  "description": "Pentest for authorized testing only (trilwu secskills-offense): web/API/JWT/SSRF/XXE exploitation, Active Directory and Entra, cloud and containers, privilege escalation, reconnaissance. Reserved for authorized engagements, CTFs and research.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

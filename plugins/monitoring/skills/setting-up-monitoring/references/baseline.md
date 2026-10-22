@@ -1,67 +1,66 @@
-# Couche de base : instrumentation de tout projet
+# Base layer: instrumentation of every project
 
-A poser avant toute couche de domaine. Vendor-neutral : on instrumente en OpenTelemetry, on branche le
-backend ensuite.
+To set before any domain layer. Vendor-neutral: instrument with OpenTelemetry, plug the backend in
+afterwards.
 
-## Metriques : RED et USE
+## Metrics: RED and USE
 
-- **RED** (services qui traitent des requetes) : Rate (requetes/s), Errors (part en echec), Duration
-  (distribution de latence). Une serie par endpoint et par code de statut de classe (`2xx`, `4xx`, `5xx`),
-  jamais une serie par identifiant utilisateur ou par URL complete (cardinalite).
-- **USE** (ressources : CPU, memoire, disque, reseau, pool, file) : Utilization, Saturation, Errors.
-- Exposer en Prometheus (ou OTLP vers un collecteur). Histogrammes pour la latence, pour calculer les
-  quantiles p50/p95/p99 cote backend.
+- **RED** (services that handle requests): Rate (requests/s), Errors (failing share), Duration
+  (latency distribution). One series per endpoint and per status code class (`2xx`, `4xx`, `5xx`),
+  never one series per user identifier or per full URL (cardinality).
+- **USE** (resources: CPU, memory, disk, network, pool, queue): Utilization, Saturation, Errors.
+- Expose in Prometheus (or OTLP to a collector). Histograms for latency, to compute the p50/p95/p99
+  quantiles on the backend side.
 
-Regle de cardinalite : un label ne prend qu'un petit ensemble borne de valeurs. Interdits comme labels :
-identifiant utilisateur, email, URL complete, identifiant de requete. Ils vont dans les traces ou les
-logs, pas dans les metriques.
+Cardinality rule: a label takes only a small bounded set of values. Forbidden as labels: user
+identifier, email, full URL, request identifier. They go in traces or logs, not in metrics.
 
-## Logs structures
+## Structured logs
 
-- Format JSON, une ligne par evenement. Cles stables : `timestamp`, `level`, `message` (ou un nom
-  d'evenement en dotted, par exemple `payment.declined`), `service`, `trace_id`, `span_id`.
-- Correler aux traces : injecter `trace_id` dans chaque log emis pendant une requete.
-- Niveaux utilises avec discipline : `error` pour ce qui reveille quelqu'un, `warn` pour l'anormal non
-  bloquant, `info` pour les evenements metier, `debug` hors production.
-- Jamais de donnee personnelle, de secret ni de contenu utilisateur en clair. Masquer ou hacher si un
-  identifiant est indispensable au debug.
+- JSON format, one line per event. Stable keys: `timestamp`, `level`, `message` (or a dotted event
+  name, for example `payment.declined`), `service`, `trace_id`, `span_id`.
+- Correlate with traces: inject `trace_id` into every log emitted during a request.
+- Levels used with discipline: `error` for what wakes someone up, `warn` for the non-blocking abnormal,
+  `info` for business events, `debug` outside production.
+- Never personal data, secrets or user content in clear. Mask or hash if an identifier is essential for
+  debugging.
 
-## Traces distribuees
+## Distributed traces
 
-- OpenTelemetry SDK dans chaque service, Collector en sortie. Propagation du contexte (`traceparent`
-  W3C) entre services, dans les messages de file et les jobs.
-- Un span par operation significative : requete entrante, appel sortant (base, cache, http), traitement
-  couteux. Attributs utiles (methode, route, statut, taille), sans donnee personnelle.
-- Echantillonnage : garder 100 % des traces en erreur et lentes, echantillonner le reste (par exemple
-  tail-based sampling au niveau du Collector) pour maitriser le cout.
+- OpenTelemetry SDK in each service, Collector on the way out. Context propagation (W3C `traceparent`)
+  between services, in queue messages and jobs.
+- One span per significant operation: incoming request, outgoing call (database, cache, http), expensive
+  processing. Useful attributes (method, route, status, size), without personal data.
+- Sampling: keep 100 % of error and slow traces, sample the rest (for example tail-based sampling at the
+  Collector level) to control cost.
 
-## SLI, SLO et budget d'erreur
+## SLI, SLO and error budget
 
-1. Definir les SLI vus par l'utilisateur : disponibilite (part de requetes reussies), latence (part de
-   requetes sous un seuil, par exemple p95 < 300 ms).
-2. Fixer un SLO (par exemple 99,9 % sur 30 jours glissants) et en deduire le budget d'erreur.
-3. Alerter sur la vitesse de consommation du budget (multi-window multi-burn-rate : par exemple fenetres
-   court terme 5 min et long terme 1 h, seuils de burn rate 14,4x et 6x). Voir la skill `devops`
-   (`slo-implementation`) pour les expressions Prometheus exactes.
+1. Define the SLIs seen by the user: availability (share of successful requests), latency (share of
+   requests under a threshold, for example p95 < 300 ms).
+2. Set an SLO (for example 99.9 % over a rolling 30 days) and derive the error budget from it.
+3. Alert on the budget burn rate (multi-window multi-burn-rate: for example short-term 5 min and
+   long-term 1 h windows, burn rate thresholds 14.4x and 6x). See the `devops` skill
+   (`slo-implementation`) for the exact Prometheus expressions.
 
-## Alertes
+## Alerts
 
-- Sur les symptomes (SLO qui brule, file qui diverge, saturation), pas sur chaque cause.
-- Chaque alerte : une severite, un runbook, un routage (Alertmanager vers PagerDuty, incident.io,
-  Opsgenie ou Slack selon l'equipe). Une alerte non actionnable est a supprimer.
-- Tester chaque alerte au moins une fois (declenchement reel en recette ou regle de test) pour verifier
-  qu'elle part et qu'elle arrive au bon endroit.
+- On symptoms (SLO burning, diverging queue, saturation), not on every cause.
+- Each alert: a severity, a runbook, a route (Alertmanager to PagerDuty, incident.io, Opsgenie or Slack
+  depending on the team). A non-actionable alert should be deleted.
+- Test each alert at least once (real firing in staging or a test rule) to verify that it goes out and
+  arrives at the right place.
 
 ## Dashboards
 
-- **Sante** : les SLO, les quatre signaux, l'etat des dependances.
-- **Ressources** : CPU, memoire, disque, reseau, pools, files.
-- **Metier** : les evenements qui comptent pour le produit (commandes, inscriptions, lectures selon le
-  domaine).
+- **Health**: the SLOs, the four signals, the state of dependencies.
+- **Resources**: CPU, memory, disk, network, pools, queues.
+- **Business**: the events that matter for the product (orders, sign-ups, reads depending on the
+  domain).
 
-## Cout de l'observabilite
+## Cost of observability
 
-- Suivre le volume de logs, la cardinalite des metriques et le taux d'echantillonnage des traces : ce sont
-  les trois postes qui font deraper la facture.
-- Mettre une retention adaptee par type de donnee (traces courtes, metriques agregees sur le long terme,
-  logs selon le besoin legal et de debug).
+- Track log volume, metric cardinality and trace sampling rate: these are the three items that make the
+  bill go off the rails.
+- Set a retention adapted to each data type (short traces, metrics aggregated over the long term, logs
+  according to legal and debugging needs).

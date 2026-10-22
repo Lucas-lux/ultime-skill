@@ -1,0 +1,10 @@
+{
+  "name": "growth-cro",
+  "description": "Conversion and retention: page CRO, signup, onboarding, paywalls, popups, lifecycle emails and SMS, churn, referral, lead magnets, web to app funnel.",
+  "author": {
+    "name": "Lucas-lux",
+    "url": "https://github.com/Lucas-lux"
+  },
+  "skills": "./skills/",
+  "hooks": "./.cursor-plugin/hooks.json"
+}

@@ -1,16 +1,16 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/bryanwhl/ffmpeg-video-editor (commit d5c3ee6e9896)
+Origin: https://github.com/bryanwhl/ffmpeg-video-editor (commit d5c3ee6e9896)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `assets/preset-profiles.json` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/CODECS.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/FILTERS.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/HARDWARE-ACCEL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `references/TRANSITIONS.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `scripts/concat.sh` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `scripts/normalize-audio.sh` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `scripts/probe.sh` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `assets/preset-profiles.json`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/CODECS.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/FILTERS.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/HARDWARE-ACCEL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `references/TRANSITIONS.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `scripts/concat.sh`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `scripts/normalize-audio.sh`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `scripts/probe.sh`: em dashes replaced with a hyphen, invisible Unicode characters removed

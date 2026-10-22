@@ -1,6 +1,6 @@
 {
   "name": "video-editing",
-  "description": "Montage video complet : edition par conversation avec EDL et sous-titres (video-use), construction de commandes FFmpeg (coupe, concat, transitions, loudness, presets reseaux sociaux), transcription locale faster-whisper, rendu Manim.",
+  "description": "Complete video editing: conversational editing with EDL and subtitles (video-use), building FFmpeg commands (cut, concat, transitions, loudness, social media presets), local faster-whisper transcription, Manim rendering.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

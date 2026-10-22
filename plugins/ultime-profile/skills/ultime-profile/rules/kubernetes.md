@@ -9,10 +9,10 @@ paths:
   - "**/Chart.yaml"
 ---
 
-# Kubernetes et Helm
+# Kubernetes and Helm
 
-- Chaque conteneur : requests et limits, probes (readiness, liveness), `runAsNonRoot`,
-  `readOnlyRootFilesystem`, image epinglee (jamais `latest`).
-- Secrets par l'outil du cluster (External Secrets, Sealed Secrets), jamais en clair dans le depot.
-- Valider le rendu (`helm template`, `kustomize build`) avec kubeconform avant de rendre la main.
-- Jamais `kubectl apply`, `delete` ou `helm upgrade` sur un cluster reel sans confirmation.
+- Each container: requests and limits, probes (readiness, liveness), `runAsNonRoot`,
+  `readOnlyRootFilesystem`, pinned image (never `latest`).
+- Secrets through the cluster's tool (External Secrets, Sealed Secrets), never in clear in the repository.
+- Validate the render (`helm template`, `kustomize build`) with kubeconform before handing back.
+- Never `kubectl apply`, `delete` or `helm upgrade` on a real cluster without confirmation.

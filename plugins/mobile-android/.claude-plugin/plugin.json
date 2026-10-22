@@ -1,6 +1,6 @@
 {
   "name": "mobile-android",
-  "description": "Android natif : skills officielles Google (Compose performance et adaptatif, migration XML vers Compose, Navigation 3, edge-to-edge, AGP 9, R8, ANR, tests, securite des intents et permissions, politiques Play) et Google Play Billing (RevenueCat, independant de leur service).",
+  "description": "Native Android: official Google skills (Compose performance and adaptive layouts, XML to Compose migration, Navigation 3, edge-to-edge, AGP 9, R8, ANR, testing, intent and permission security, Play policies) and Google Play Billing (RevenueCat, independent of their service).",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

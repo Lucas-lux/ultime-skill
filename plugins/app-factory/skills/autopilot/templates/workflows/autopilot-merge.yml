@@ -57,10 +57,10 @@ jobs:
               reason="protected paths"
               # The code fence goes through an argument: backticks inside single quotes look like a substitution.
               fence='```'
-              printf '<!-- autopilot -->\nFusion automatique refusee : la PR touche des chemins proteges.\n\n%s\n%s\n%s\n\nA relire et fusionner a la main. ✨\n' "$fence" "$hits" "$fence" > body.md
+              printf '<!-- autopilot -->\nAutomatic merge refused: the PR touches protected paths.\n\n%s\n%s\n%s\n\nTo review and merge by hand. ✨\n' "$fence" "$hits" "$fence" > body.md
             elif [ "$count" -gt "$MAX_FILES" ]; then
               reason="too many files"
-              printf '<!-- autopilot -->\nFusion automatique refusee : %s fichiers modifies (plafond %s). A relire et fusionner a la main. ✨\n' "$count" "$MAX_FILES" > body.md
+              printf '<!-- autopilot -->\nAutomatic merge refused: %s files changed (cap %s). To review and merge by hand. ✨\n' "$count" "$MAX_FILES" > body.md
             fi
             if [ -f body.md ]; then
               gh api "repos/$GITHUB_REPOSITORY/issues/$PR/labels" -f "labels[]=needs-human" > /dev/null

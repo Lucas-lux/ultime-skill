@@ -1,86 +1,87 @@
 ---
 name: security-review
 description: >
-  Revue de securite d'un projet, d'une branche ou d'une PR avec la methode maison : perimetre, choix de la
-  bonne revue, preuves, gravite, correction minimale testee, rapport. A utiliser pour "revue de securite",
-  "security review", "audit de securite", "trouve les failles", avant une fusion ou une mise en prod.
+  Security review of a project, a branch or a PR with the house method: scope, choice of the right
+  review, evidence, severity, minimal tested fix, report. Use for "security review",
+  "security audit", "find the vulnerabilities", before a merge or a production release.
 ---
 
-# Revue de securite
+# Security review
 
-Point d'entree unique : cette skill fixe la methode et le livrable, et delegue l'analyse de fond a la
-skill specialisee qui convient. Une revue sans preuve n'est pas une revue : chaque constat se demontre.
+Single entry point: this skill sets the method and the deliverable, and delegates the in-depth analysis
+to the specialized skill that fits. A review without evidence is not a review: every finding is
+demonstrated.
 
-## 1. Cadrer
+## 1. Frame
 
-- **Perimetre** : un diff (PR, branche, commit), un module, ou tout le depot. Sans precision : le diff de
-  la branche courante par rapport a la branche principale s'il existe, sinon tout le depot.
-- **Contexte** : modele de menace existant (`docs/security/`), donnees manipulees (personnelles, paiement,
-  sante), surfaces exposees (API publique, upload, webhooks, auth), environnement cible.
-- **Charge** : un diff de moins de 400 lignes se lit en entier ; au-dela, trier d'abord (fichiers qui
-  touchent auth, autorisation, entrees externes, requetes, crypto, configuration, CI).
+- **Scope**: a diff (PR, branch, commit), a module, or the whole repository. Without detail: the diff of
+  the current branch against the main branch if there is one, otherwise the whole repository.
+- **Context**: existing threat model (`docs/security/`), data handled (personal, payment, health),
+  exposed surfaces (public API, upload, webhooks, auth), target environment.
+- **Load**: a diff under 400 lines is read in full; beyond that, triage first (files that touch auth,
+  authorization, external inputs, queries, crypto, configuration, CI).
 
-## 2. Choisir la revue
+## 2. Choose the review
 
-| Besoin | Skill | Pack |
+| Need | Skill | Pack |
 |---|---|---|
-| Diff, PR, branche | `reviewing-code-changes` | security |
-| Depot ou module complet | `auditing-code-for-vulnerabilities` (passes, variantes, elimination des faux positifs) | security |
-| Pas de modele de menace | `security-threat-model` d'abord | security |
-| Categories OWASP et ASVS | `owasp-security` | security |
-| Analyse statique outillee | `sast` (Semgrep, CodeQL) | security |
-| Dependances et chaine d'approvisionnement | `auditing-supply-chain` | security |
-| Workflows GitHub Actions | `gha-security-review` | security |
-| Cryptographie | `reviewing-cryptography` | sec-audit |
+| Diff, PR, branch | `reviewing-code-changes` | security |
+| Full repository or module | `auditing-code-for-vulnerabilities` (passes, variants, false positive elimination) | security |
+| No threat model | `security-threat-model` first | security |
+| OWASP and ASVS categories | `owasp-security` | security |
+| Tooled static analysis | `sast` (Semgrep, CodeQL) | security |
+| Dependencies and supply chain | `auditing-supply-chain` | security |
+| GitHub Actions workflows | `gha-security-review` | security |
+| Cryptography | `reviewing-cryptography` | sec-audit |
 | LLM, agents, MCP | `securing-ai-systems`, `auditing-mcp-servers` | sec-audit |
 | Mobile | `mobile-security-masvs` | mobile |
 
-Toujours, en plus : la liste des pieges de conception de [references/footguns.md](references/footguns.md)
-sur le code et la configuration touches.
+Always, in addition: the list of design footguns in [references/footguns.md](references/footguns.md)
+over the code and configuration touched.
 
-## 3. Prouver chaque constat
+## 3. Prove each finding
 
-- Un constat = un chemin concret : source controlee par un attaquant, transformations, puits dangereux,
-  avec `fichier:ligne` a chaque etape. Pas de chemin, pas de constat.
-- **Confiance** : `certain` (chemin complet verifie, idealement reproduit par un test ou une requete en
-  local), `probable` (chemin verifie, une condition non prouvee, dite explicitement), `a verifier` (piste).
-  Seuls `certain` et `probable` sont des constats ; les pistes vont dans une section a part.
-- Avant de garder un constat : chercher la protection qui l'annulerait (validation en amont, middleware,
-  ORM qui parametre, configuration du framework). La trouver = faux positif, le noter en une ligne.
-- Un constat confirme : chercher ses **variantes** (meme motif ailleurs dans le depot) avant de le
-  rapporter ; une correction qui laisse une variante ne ferme rien.
-- Secret trouve : type, fichier, ligne, depuis quand (historique git), jamais la valeur, ni dans le
-  rapport ni dans une commande.
+- A finding = a concrete path: attacker-controlled source, transformations, dangerous sink, with
+  `file:line` at each step. No path, no finding.
+- **Confidence**: `certain` (full path verified, ideally reproduced by a test or a request locally),
+  `probable` (path verified, one condition not proven, stated explicitly), `to verify` (lead). Only
+  `certain` and `probable` are findings; leads go in a separate section.
+- Before keeping a finding: look for the protection that would cancel it (upstream validation,
+  middleware, ORM that parameterizes, framework configuration). Finding it = false positive, note it in
+  one line.
+- A confirmed finding: look for its **variants** (same pattern elsewhere in the repository) before
+  reporting it; a fix that leaves a variant closes nothing.
+- Secret found: type, file, line, since when (git history), never the value, neither in the report nor
+  in a command.
 
-## 4. Graduer
+## 4. Grade
 
-- **Bloquant** : exploitable sans authentification ou par tout utilisateur, impact sur des donnees
-  d'autrui, de l'argent, l'execution de code ou un secret expose. Rien ne fusionne ni ne part en prod.
-- **Majeur** : exploitable sous condition realiste (role, configuration, interaction), ou affaiblissement
-  net d'un controle existant.
-- **Mineur** : defense en profondeur, durcissement, hygiene.
+- **Blocking**: exploitable without authentication or by any user, impact on other people's data,
+  money, code execution or an exposed secret. Nothing merges or ships to production.
+- **Major**: exploitable under a realistic condition (role, configuration, interaction), or a clear
+  weakening of an existing control.
+- **Minor**: defense in depth, hardening, hygiene.
 
-## 5. Corriger
+## 5. Fix
 
-- Correction la plus petite qui ferme la cause et ses variantes (methode ponytail), avec un test qui
-  echoue avant et passe apres. Jamais affaiblir un autre controle pour faire passer la correction.
-- Ce que la revue corrige seule : le code et la configuration du depot, sur une branche, avec PR.
-- Ce qui revient a l'utilisateur (carte de decision en autopilot) : rotation d'un secret expose, purge de
-  l'historique git, notification de violation de donnees (pack `compliance`), correctif en production,
-  acceptation d'un risque.
+- The smallest fix that closes the cause and its variants (ponytail method), with a test that fails
+  before and passes after. Never weaken another control to make the fix pass.
+- What the review fixes on its own: the repository's code and configuration, on a branch, with a PR.
+- What belongs to the user (decision card in autopilot): rotation of an exposed secret, purge of the git
+  history, data breach notification (`compliance` pack), production hotfix, acceptance of a risk.
 
-## 6. Rendre
+## 6. Deliver
 
-Rapport en francais dans `docs/security/review-<date>-<perimetre>.md` :
+Report in the user's language in `docs/security/review-<date>-<scope>.md`:
 
 ```
-# Revue de securite : <perimetre> (<date>)
-Perimetre et methode : <diff ou depot, skills utilisees, outils lances avec leur version>
-| # | Gravite | Confiance | Constat | Preuve (fichier:ligne, chemin) | Correction | Etat |
-Faux positifs ecartes : <une ligne chacun, avec la protection trouvee>
-Pistes a verifier : <...>
-Non couvert : <ce qui n'a pas ete regarde et pourquoi>
+# Security review: <scope> (<date>)
+Scope and method: <diff or repository, skills used, tools run with their version>
+| # | Severity | Confidence | Finding | Evidence (file:line, path) | Fix | Status |
+False positives ruled out: <one line each, with the protection found>
+Leads to verify: <...>
+Not covered: <what was not looked at and why>
 ```
 
-Dans la PR ou la porte app-factory : le tableau et le verdict (bloquants restants ou non), le detail
-reste dans le fichier.
+In the PR or the app-factory gate: the table and the verdict (blocking findings remaining or not), the
+detail stays in the file.

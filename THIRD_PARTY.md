@@ -1,13 +1,13 @@
-# Composants tiers
+# Third-party components
 
-Contenu importé depuis des dépôts publics, aux commits indiqués, par `scripts/vendor.py`.
-Modifications à l'import : les em dash sont remplacés par un tiret simple, les caractères Unicode
-invisibles sont retirés, et les blocs ou liens d'autopromotion signalés (par exemple un footer de
-citation imposé, un lien vers une newsletter) sont retirés. Quelques fichiers sont adaptés pour
-réduire le contexte chargé ou retirer une télémétrie (option `replace` dans `scripts/gen_vendor.py`).
-La licence d'origine est copiée dans chaque dossier importé.
+Content imported from public repositories, at the commits shown, by `scripts/vendor.py`.
+Changes at import: em dashes are replaced with a hyphen, invisible Unicode characters are
+removed, and flagged self-promotion blocks or links (for example a mandatory citation footer, a
+link to a newsletter) are removed. A few files are adapted to reduce the loaded context or
+remove telemetry (`replace` option in `scripts/gen_vendor.py`).
+The original license is copied into each imported folder.
 
-| Chemin dans la bibliothèque | Dépôt d'origine | Chemin d'origine | Commit | Licence |
+| Path in the library | Source repository | Source path | Commit | License |
 |---|---|---|---|---|
 | `plugins/agent-skills/agents` | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | `agents` | `aeac41d4d005` | MIT |
 | `plugins/agent-skills/commands` | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | `.claude/commands` | `aeac41d4d005` | MIT |
@@ -57,8 +57,8 @@ La licence d'origine est copiée dans chaque dossier importé.
 | `plugins/finops/skills/gke-cost-analysis` | [google/skills](https://github.com/google/skills) | `skills/cloud/gke-cost-analysis` | `e569129c25c9` | Apache-2.0 |
 | `plugins/finops/skills/gke-cost-optimization` | [google/skills](https://github.com/google/skills) | `skills/cloud/gke-cost-optimization` | `e569129c25c9` | Apache-2.0 |
 | `plugins/finops/skills/infracost-scan` | [infracost/agent-skills](https://github.com/infracost/agent-skills) | `plugins/infracost/skills/scan` | `b4104c3a605e` | Apache-2.0 |
-| `plugins/fullstack/skills/vercel-composition-patterns` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/composition-patterns` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) (Licence MIT declaree par l'auteur (Vercel) dans le frontmatter de la skill ; le depot vercel-labs/agent-skills ne contient pas de fichier de licence au commit importe) |
-| `plugins/fullstack/skills/vercel-react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/react-best-practices` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) (Licence MIT declaree par l'auteur (Vercel) dans le frontmatter de la skill ; le depot vercel-labs/agent-skills ne contient pas de fichier de licence au commit importe) |
+| `plugins/fullstack/skills/vercel-composition-patterns` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/composition-patterns` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) (MIT license declared by the author (Vercel) in the skill frontmatter; the vercel-labs/agent-skills repository has no license file at the imported commit) |
+| `plugins/fullstack/skills/vercel-react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `skills/react-best-practices` | `063bee94c3f4` | MIT (declared in frontmatter, no LICENSE file) (MIT license declared by the author (Vercel) in the skill frontmatter; the vercel-labs/agent-skills repository has no license file at the imported commit) |
 | `plugins/greenfield/agents` | [prime-radiant-inc/greenfield](https://github.com/prime-radiant-inc/greenfield) | `agents` | `6e6d4b425fe9` | Apache-2.0 |
 | `plugins/greenfield/commands` | [prime-radiant-inc/greenfield](https://github.com/prime-radiant-inc/greenfield) | `commands` | `6e6d4b425fe9` | Apache-2.0 |
 | `plugins/greenfield/skills` | [prime-radiant-inc/greenfield](https://github.com/prime-radiant-inc/greenfield) | `skills` | `6e6d4b425fe9` | Apache-2.0 |
@@ -108,7 +108,7 @@ La licence d'origine est copiée dans chaque dossier importé.
 | `plugins/ml-engineering/skills/instrumenting-with-mlflow-tracing` | [mlflow/skills](https://github.com/mlflow/skills) | `instrumenting-with-mlflow-tracing` | `51a42ea2b07f` | Apache-2.0 |
 | `plugins/ml-engineering/skills/lora-qlora-recipes` | [wshobson/agents](https://github.com/wshobson/agents) | `plugins/llm-finetuning/skills/lora-qlora-recipes` | `46891e7e60da` | MIT |
 | `plugins/ml-engineering/skills/rag-implementation` | [wshobson/agents](https://github.com/wshobson/agents) | `plugins/llm-application-dev/skills/rag-implementation` | `46891e7e60da` | MIT |
-| `plugins/ml-engineering/skills/scikit-learn` | [K-Dense-AI/claude-scientific-skills](https://github.com/K-Dense-AI/claude-scientific-skills) | `skills/scikit-learn` | `a1043ef544e3` | MIT (Le depot K-Dense-AI/claude-scientific-skills est sous licence MIT (LICENSE ci-joint)) |
+| `plugins/ml-engineering/skills/scikit-learn` | [K-Dense-AI/claude-scientific-skills](https://github.com/K-Dense-AI/claude-scientific-skills) | `skills/scikit-learn` | `a1043ef544e3` | MIT (The K-Dense-AI/claude-scientific-skills repository is under the MIT license (LICENSE attached)) |
 | `plugins/ml-engineering/skills/serving-llms-vllm` | [Orchestra-Research/AI-Research-SKILLs](https://github.com/Orchestra-Research/AI-Research-SKILLs) | `12-inference-serving/vllm` | `773a52944ba4` | MIT |
 | `plugins/ml-engineering/skills/trl-training` | [huggingface/skills](https://github.com/huggingface/skills) | `skills/trl-training` | `c3ff942be3e0` | Apache-2.0 |
 | `plugins/mobile-android/skills/adaptive` | [android/skills](https://github.com/android/skills) | `jetpack-compose/adaptive` | `95ea931a1ad8` | Apache-2.0 |

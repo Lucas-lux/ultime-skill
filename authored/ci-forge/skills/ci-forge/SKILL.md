@@ -1,110 +1,110 @@
 ---
 name: ci-forge
 description: >
-  Genere seul la CI/CD la plus complete pour un projet selon sa stack et son architecture cible :
-  lint, format, typage, tests et couverture, end to end, build, conteneurs, Kubernetes, IaC, securite,
-  SBOM, deploiement staging et prod, hooks locaux, mises a jour. A utiliser pour creer, completer,
-  auditer ou durcir une CI, une pipeline, des GitHub Actions, ou "ci-forge".
+  Generates on its own the most complete CI/CD for a project from its stack and target architecture:
+  lint, format, typing, tests and coverage, end to end, build, containers, Kubernetes, IaC, security,
+  SBOM, staging and prod deployment, local hooks, updates. Use to create, complete, audit or harden a
+  CI, a pipeline, GitHub Actions, or "ci-forge".
 ---
 
-# CI/CD sur mesure, sans intervention
+# Tailored CI/CD, hands-off
 
-Mission autonome : aucune question a l'utilisateur sauf un secret a fournir ou un reglage de depot
-qu'il est seul a pouvoir faire. Le resultat est une PR qui rend la CI verte sur le code actuel, ou qui
-corrige le code pour qu'elle le devienne. Une CI qui passe en affaiblissant les controles est un echec.
+Autonomous mission: no question to the user except a secret to provide or a repository setting that only
+they can make. The result is a PR that makes the CI green on the current code, or that fixes the code so
+it becomes green. A CI that passes by weakening the checks is a failure.
 
-References (lire seulement celles de la stack detectee) :
-- [references/workflow-rules.md](references/workflow-rules.md) : structure, niveaux, securite des workflows. Toujours.
+References (read only those of the detected stack):
+- [references/workflow-rules.md](references/workflow-rules.md): structure, levels, workflow security. Always.
 - [references/python.md](references/python.md), [references/node.md](references/node.md) (Next.js, React, Expo
   web), [references/containers-k8s.md](references/containers-k8s.md), [references/iac.md](references/iac.md),
   [references/mobile.md](references/mobile.md), [references/other-languages.md](references/other-languages.md)
-  (Go, Rust, JVM, PHP, Ruby, scripts shell et PowerShell).
-- [references/security.md](references/security.md) : secrets, dependances, SAST, SBOM, provenance. Toujours.
-- [references/cd.md](references/cd.md) : staging, production, environnements, OIDC, autopilot.
+  (Go, Rust, JVM, PHP, Ruby, shell and PowerShell scripts).
+- [references/security.md](references/security.md): secrets, dependencies, SAST, SBOM, provenance. Always.
+- [references/cd.md](references/cd.md): staging, production, environments, OIDC, autopilot.
 
-## 1. Comprendre le projet
+## 1. Understand the project
 
-1. `python <skill>/scripts/detect_stack.py .` (Python 3.11 ou plus, pour `tomllib` ; sinon
-   `uv run --python 3.13 <skill>/scripts/detect_stack.py .`) : composants (langage, gestionnaire de
-   paquets, frameworks, outils deja configures), conteneurs, Kubernetes, IaC, CI existante, task runner,
-   hooks locaux.
-2. Architecture cible et hebergement : ADR et `docs/architecture/`, `.app-factory/state.json` (stack, P3),
-   README, fichiers de plateforme (`vercel.json`, `fly.toml`, `render.yaml`, `app.json`, `eas.json`,
-   `wrangler.toml`, charts Helm). Sans cible connue : CI complete, CD limite au build d'artefact, et le
-   noter dans le compte rendu.
-3. CI existante : la garder si elle est saine, la completer et la durcir ; faire la liste des ecarts avec
-   les references (job manquant, action non epinglee, permissions larges, controle desactive).
+1. `python <skill>/scripts/detect_stack.py .` (Python 3.11 or later, for `tomllib`; otherwise
+   `uv run --python 3.13 <skill>/scripts/detect_stack.py .`): components (language, package manager,
+   frameworks, tools already configured), containers, Kubernetes, IaC, existing CI, task runner, local
+   hooks.
+2. Target architecture and hosting: ADRs and `docs/architecture/`, `.app-factory/state.json` (stack, P3),
+   README, platform files (`vercel.json`, `fly.toml`, `render.yaml`, `app.json`, `eas.json`,
+   `wrangler.toml`, Helm charts). Without a known target: full CI, CD limited to the artifact build, and
+   note it in the report.
+3. Existing CI: keep it if it is sound, complete and harden it; list the gaps against the references
+   (missing job, unpinned action, broad permissions, disabled check).
 
-## 2. Concevoir
+## 2. Design
 
-- Une table : composant x niveau (PR, branche principale, nuit, release) x job, avec la commande exacte.
-  Tout ce qui s'applique a la stack detectee est inclus ; ce qui exige un secret absent est prepare mais
-  conditionne (voir 5).
-- **Une seule source pour les commandes** : chaque controle est une cible du task runner du projet
-  (`Makefile`, `justfile`, scripts `package.json`, `noxfile.py`) que la CI appelle ; en local, la meme
-  commande donne le meme resultat. Cible agregee `ci` qui enchaine les controles rapides.
-- Seuils : couverture fixee au niveau actuel arrondi a l'inferieur (cliquet, elle ne peut que monter),
-  jamais un chiffre arbitraire qui casse ou qui ne protege rien.
-- Check requis unique `ci-ok` (job final qui depend de tous les autres) : c'est lui que la protection de
-  branche et l'autopilot exigent, les jobs peuvent changer sans toucher aux reglages GitHub.
+- A table: component x level (PR, main branch, nightly, release) x job, with the exact command.
+  Everything that applies to the detected stack is included; what requires a missing secret is prepared
+  but conditional (see 5).
+- **A single source for commands**: each check is a target of the project's task runner
+  (`Makefile`, `justfile`, `package.json` scripts, `noxfile.py`) that the CI calls; locally, the same
+  command gives the same result. Aggregate `ci` target that chains the fast checks.
+- Thresholds: coverage set at the current level rounded down (ratchet, it can only go up), never an
+  arbitrary number that breaks or protects nothing.
+- Single required check `ci-ok` (final job that depends on all the others): it is the one branch
+  protection and autopilot require, jobs can change without touching the GitHub settings.
 
-## 3. Generer
+## 3. Generate
 
-- `.github/workflows/ci.yml` (PR et branche principale), `nightly.yml` (controles longs, planifies),
-  `release.yml` ou `deploy.yml` (voir `cd.md`) ; actions composites locales pour l'installation repetee.
-- `.github/dependabot.yml` : chaque ecosysteme detecte plus `github-actions`, regroupement des mises a
-  jour mineures, cadence hebdomadaire.
-- Hooks locaux rapides : `lefthook.yml` (projet Node ou polyglotte) ou `.pre-commit-config.yaml`
-  (Python) : format, lint des fichiers modifies, recherche de secrets. Jamais de tests longs.
-- Configuration des outils absents mais attendus (ruff, ESLint ou Biome, tsconfig strict, Playwright,
-  hadolint, kubeconform...) : creer avec des regles strictes ; si le code existant les viole, corriger le
-  code, ou pour une dette trop large, une liste d'exceptions par fichier datee et tracee dans
-  `docs/ops/ci.md`, jamais une regle coupee globalement.
-- `docs/ops/ci.md` : chaque job, ce qu'il garantit, la commande locale, les secrets attendus.
+- `.github/workflows/ci.yml` (PR and main branch), `nightly.yml` (long checks, scheduled),
+  `release.yml` or `deploy.yml` (see `cd.md`); local composite actions for the repeated installation.
+- `.github/dependabot.yml`: each detected ecosystem plus `github-actions`, grouping of minor updates,
+  weekly cadence.
+- Fast local hooks: `lefthook.yml` (Node or polyglot project) or `.pre-commit-config.yaml`
+  (Python): format, lint of modified files, secret scanning. Never long tests.
+- Configuration of tools missing but expected (ruff, ESLint or Biome, strict tsconfig, Playwright,
+  hadolint, kubeconform...): create with strict rules; if the existing code violates them, fix the code,
+  or for debt that is too large, a per-file list of exceptions, dated and tracked in `docs/ops/ci.md`,
+  never a rule turned off globally.
+- `docs/ops/ci.md`: each job, what it guarantees, the local command, the expected secrets.
 
-## 4. Epingler et valider
+## 4. Pin and validate
 
-1. `python <skill>/scripts/pin_actions.py --latest .github/workflows` : chaque action epinglee par SHA,
-   version en commentaire. Une action qui change de version majeure : lire son `action.yml` a la
-   version epinglee (`gh api repos/<owner>/<repo>/contents/action.yml?ref=<tag>`) et ajuster les inputs.
-   Toute action des references doit passer par ce script avant usage : un `@vN` sans tag majeur mobile
-   (ex. `astral-sh/setup-uv`) ne se resout pas tel quel. Le script echoue sur une reference qu'il ne sait
-   pas resoudre (SHA court, majeur sans version x.y.z) et signale les lignes `uses:` qu'il ne comprend pas
-   (`warning`) : les corriger a la main.
-2. `actionlint` puis `zizmor` (audit de securite des workflows) : `uvx zizmor .github/workflows` ou
-   `docker run --rm -v "$PWD:/repo" -w /repo ghcr.io/zizmorcore/zizmor:1.31.1 .github/workflows` ; pour
-   actionlint, le binaire s'il est installe, sinon
-   `docker run --rm -v "$PWD:/repo" -w /repo rhysd/actionlint:1.7.12 -color` (version verifiee le 2026-10-21, a re-verifier).
-   Aucune erreur restante.
-3. **Lancer chaque cible du task runner en local, sans exception** : c'est la seule preuve que la CI
-   sera verte (un fichier ecrit par la mission elle-meme peut casser le lint). Outil absent : l'executer
-   dans l'image officielle (`ghcr.io/astral-sh/uv:python<version>-bookworm-slim`, `node:<lts>`,
-   `golang:<version>`...), jamais l'installer globalement ni sauter l'etape. Sous Windows avec Git Bash,
-   prefixer `docker run` de `MSYS_NO_PATHCONV=1` et monter un chemin absolu (`-v "C:/chemin:/repo"`).
-   Un echec est un vrai probleme : corriger le code (ou la config de l'outil si elle est fausse), pas le
-   controle. Seuls les jobs qui exigent l'infra de CI (kind, matrice d'OS, macOS) se valident sur la PR.
-4. Seuil de couverture **mesure** par l'execution locale, jamais estime a la lecture du code.
+1. `python <skill>/scripts/pin_actions.py --latest .github/workflows`: each action pinned by SHA,
+   version in a comment. An action that changes major version: read its `action.yml` at the pinned
+   version (`gh api repos/<owner>/<repo>/contents/action.yml?ref=<tag>`) and adjust the inputs.
+   Every action from the references must go through this script before use: a `@vN` without a moving
+   major tag (e.g. `astral-sh/setup-uv`) does not resolve as is. The script fails on a reference it
+   cannot resolve (short SHA, major without an x.y.z version) and reports the `uses:` lines it does not
+   understand (`warning`): fix them by hand.
+2. `actionlint` then `zizmor` (workflow security audit): `uvx zizmor .github/workflows` or
+   `docker run --rm -v "$PWD:/repo" -w /repo ghcr.io/zizmorcore/zizmor:1.31.1 .github/workflows`; for
+   actionlint, the binary if installed, otherwise
+   `docker run --rm -v "$PWD:/repo" -w /repo rhysd/actionlint:1.7.12 -color` (version verified on 2026-10-21, to re-verify).
+   No error left.
+3. **Run every task runner target locally, without exception**: it is the only proof that the CI will
+   be green (a file written by the mission itself can break the lint). Missing tool: run it in the
+   official image (`ghcr.io/astral-sh/uv:python<version>-bookworm-slim`, `node:<lts>`,
+   `golang:<version>`...), never install it globally or skip the step. On Windows with Git Bash,
+   prefix `docker run` with `MSYS_NO_PATHCONV=1` and mount an absolute path (`-v "C:/path:/repo"`).
+   A failure is a real problem: fix the code (or the tool's config if it is wrong), not the check. Only
+   jobs that require CI infrastructure (kind, OS matrix, macOS) are validated on the PR.
+4. Coverage threshold **measured** by the local run, never estimated by reading the code.
 
-## 5. Livrer
+## 5. Deliver
 
-- Branche `ci/forge-<date>` (`claude/ci-forge-<date>` en autopilot), commits par sujet. Le push et la PR
-  suivent le niveau d'autonomie du projet : seuls en autopilot, sinon apres l'accord de l'utilisateur
-  (tout le reste de la mission se fait sans lui). PR en francais avec la table des jobs, les ecarts corriges,
-  les verifications faites et ce qui reste conditionne. Attendre la CI de la PR et corriger jusqu'au vert.
-- Secrets absents (deploiement, registre prive, `EXPO_TOKEN`, `CODECOV_TOKEN`...) : le job existe et
-  se saute proprement. `secrets` est interdit dans un `if:` d'etape : copier le secret dans `env:` au
-  niveau du job (`X: ${{ secrets.X }}`) et tester `if: env.X != ''` ; ou porter le job par
-  l'environnement GitHub. La liste des secrets a creer va dans la PR.
-- Fichier dont l'ecriture est refusee (hook, fichier protege comme une config de hooks) : ne pas
-  contourner ; mettre son contenu exact dans la PR et le signaler comme etape a valider. En autopilot : une carte de decision unique qui les regroupe.
-- Reglages que seul l'utilisateur fait : protection de la branche principale avec `ci-ok` requis,
-  environnements `staging` et `production` (relecteur obligatoire), GitHub Advanced Security si le depot
-  est prive et que CodeQL ou dependency-review sont voulus. Les lister, avec les commandes `gh` exactes.
-- En app-factory : etat mis a jour, `ci-ok` note comme check requis dans `state.json` (bloc autopilot).
+- Branch `ci/forge-<date>` (`claude/ci-forge-<date>` in autopilot), commits per topic. The push and the PR
+  follow the project's autonomy level: on their own in autopilot, otherwise after the user's consent
+  (the rest of the mission is done without them). PR in the user's language with the jobs table, the gaps fixed, the
+  checks done and what remains conditional. Wait for the PR's CI and fix until green.
+- Missing secrets (deployment, private registry, `EXPO_TOKEN`, `CODECOV_TOKEN`...): the job exists and
+  skips cleanly. `secrets` is forbidden in a step `if:`: copy the secret into `env:` at the job level
+  (`X: ${{ secrets.X }}`) and test `if: env.X != ''`; or carry the job through the GitHub environment.
+  The list of secrets to create goes in the PR.
+- File whose write is refused (hook, protected file such as a hooks config): do not get around it; put
+  its exact content in the PR and flag it as a step to validate. In autopilot: a single decision card that groups them.
+- Settings only the user makes: protection of the main branch with `ci-ok` required, `staging` and
+  `production` environments (mandatory reviewer), GitHub Advanced Security if the repository is private
+  and CodeQL or dependency-review are wanted. List them, with the exact `gh` commands.
+- In app-factory: state updated, `ci-ok` noted as a required check in `state.json` (autopilot block).
 
-## Quand l'appeler
+## When to call it
 
-- app-factory : jalon M0 (squelette) pour la CI, P6 pour le CD ; mode reprise apres l'audit.
-- Projet existant : a la demande, ou des que la stack change (nouveau composant, Dockerfile, chart).
-- Revue periodique (nuit ou mensuelle en autopilot) : `pin_actions.py` sans `--latest` et Dependabot
-  gardent les versions a jour ; relancer l'audit des ecarts une fois par trimestre.
+- app-factory: milestone M0 (skeleton) for the CI, P6 for the CD; resume mode after the audit.
+- Existing project: on request, or as soon as the stack changes (new component, Dockerfile, chart).
+- Periodic review (nightly or monthly in autopilot): `pin_actions.py` without `--latest` and Dependabot
+  keep versions up to date; rerun the gap audit once per quarter.

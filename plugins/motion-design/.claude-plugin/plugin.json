@@ -1,6 +1,6 @@
 {
   "name": "motion-design",
-  "description": "Motion design : GSAP (core, timeline, ScrollTrigger, plugins, performance, frameworks), principes de motion agnostiques (LottieFiles), animations mathematiques Manim (ManimCE et planification de scenes).",
+  "description": "Motion design: GSAP (core, timeline, ScrollTrigger, plugins, performance, frameworks), framework-agnostic motion principles (LottieFiles), Manim mathematical animations (ManimCE and scene planning).",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

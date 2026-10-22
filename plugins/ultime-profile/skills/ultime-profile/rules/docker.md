@@ -9,7 +9,7 @@ paths:
 
 # Docker
 
-- Build multi-etapes, image de base epinglee (version et idealement digest), utilisateur non root.
-- Aucun secret en `ARG`, `ENV` ou fichier copie ; secrets de build par `--mount=type=secret`.
-- `.dockerignore` a jour ; une couche de dependances avant le code pour le cache.
-- `HEALTHCHECK` ou probe de la plateforme ; compose avec healthchecks et `depends_on: condition`.
+- Multi-stage build, pinned base image (version and ideally digest), non-root user.
+- No secret in `ARG`, `ENV` or a copied file; build secrets through `--mount=type=secret`.
+- `.dockerignore` up to date; a dependencies layer before the code for the cache.
+- `HEALTHCHECK` or the platform's probe; compose with healthchecks and `depends_on: condition`.

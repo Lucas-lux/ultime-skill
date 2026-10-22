@@ -1,10 +1,10 @@
 # Modifications
 
-Fichiers de ce dossier modifies par ultime-skill a l'import (scripts/vendor.py), par rapport a
-leur version d'origine. Le reste du contenu est inchange.
+Files in this folder modified by ultime-skill at import (scripts/vendor.py), compared with
+their original version. The rest of the content is unchanged.
 
-Origine : https://github.com/ThePlasmak/faster-whisper (commit 1c8d6a682c56)
+Origin: https://github.com/ThePlasmak/faster-whisper (commit 1c8d6a682c56)
 
-- `SKILL.md` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `requirements.txt` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
-- `scripts/transcribe.py` : em dash remplaces par un tiret simple, caracteres Unicode invisibles retires
+- `SKILL.md`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `requirements.txt`: em dashes replaced with a hyphen, invisible Unicode characters removed
+- `scripts/transcribe.py`: em dashes replaced with a hyphen, invisible Unicode characters removed

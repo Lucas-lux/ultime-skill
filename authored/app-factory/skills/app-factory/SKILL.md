@@ -1,118 +1,122 @@
 ---
 name: app-factory
 description: >
-  Orchestrateur de projet de A a Z : d'une idee, d'une app a cloner en la personnalisant ou d'une app
-  existante a terminer jusqu'au produit fini en production, avec sous-agents, phases et portes de
-  validation. A utiliser pour creer une app complete ("de A a Z"), cloner ou reproduire une app,
-  reprendre, finir ou ameliorer une app existante, piloter tout un projet, ou "app-factory".
+  End-to-end project orchestrator: from an idea, an app to clone and customize, or an existing
+  app to finish, up to the finished product in production, with subagents, phases and validation
+  gates. Use to build a complete app ("from A to Z"), clone or reproduce an app, take over, finish
+  or improve an existing app, drive a whole project, or "app-factory".
 ---
 
-# App factory : du projet au produit fini
+# App factory: from project to finished product
 
-Cette skill fait de la session principale le **chef d'orchestre**. Elle ne fait pas tout elle-meme :
-elle decoupe, delegue aux sous-agents `app-factory:*` via l'outil Agent, tient l'etat du projet, et fait
-valider chaque phase par l'utilisateur. Les sous-agents ne lancent pas d'autres agents : seul
-l'orchestrateur dispatche, ce qui garde le deroulement lisible et reproductible.
+This skill makes the main session the **conductor**. It does not do everything itself:
+it breaks down the work, delegates to the `app-factory:*` subagents via the Agent tool, keeps the project state, and has
+each phase validated by the user. Subagents do not launch other agents: only
+the orchestrator dispatches, which keeps the flow readable and reproducible.
 
-References a charger au besoin :
-- [references/phases.md](references/phases.md) : detail des phases, agents, skills, livrables, portes.
-- [references/state.md](references/state.md) : etat sur disque et protocole de reprise.
-- [references/quality-bar.md](references/quality-bar.md) : ce que "produit fini" veut dire, par domaine.
-- [references/stack-selection.md](references/stack-selection.md) : choisir la stack sans dogme.
-- [references/autonomy.md](references/autonomy.md) : ce que l'orchestrateur fait seul, ce qu'il fait valider.
+Outside Claude Code (installed with the universal installer): the subagent `app-factory:<role>` is
+`app-factory-<role>`; if the agent cannot run subagents, play each role yourself, one at a time, from
+`roles/<role>.md` next to this skill, and keep the same gates.
 
-Mode autonome : apres G0, le niveau `autopilot` fait avancer le projet par reveils planifies, sans
-session ouverte ; l'utilisateur ne tranche que les decisions de vision par issue GitHub. Proposer ce
-niveau en fin de G0 et, s'il est choisi, passer la main a la skill `autopilot` (sa reference `setup.md`
-decrit la mise en place, faite par l'utilisateur).
+References to load as needed:
+- [references/phases.md](references/phases.md): detail of phases, agents, skills, deliverables, gates.
+- [references/state.md](references/state.md): on-disk state and resume protocol.
+- [references/quality-bar.md](references/quality-bar.md): what "finished product" means, per domain.
+- [references/stack-selection.md](references/stack-selection.md): choosing the stack without dogma.
+- [references/autonomy.md](references/autonomy.md): what the orchestrator does alone, what it gets validated.
 
-## Demarrage (a chaque invocation)
+Autonomous mode: after G0, the `autopilot` level moves the project forward through scheduled wake-ups, with no
+open session; the user only settles vision decisions through a GitHub issue. Offer this
+level at the end of G0 and, if it is chosen, hand over to the `autopilot` skill (its `setup.md` reference
+describes the setup, done by the user).
 
-1. **Reprendre si un projet existe.** Si la branche `claude/autopilot-state` existe sur `origin`, le projet
-   est en autopilot : monter d'abord l'etat (skill `autopilot`, etape 1). Puis, si `.app-factory/state.json`
-   existe, suivre le protocole de reprise
-   de `state.md` : relire l'etat, le confronter au depot reel (fichiers, git, tests), signaler les
-   ecarts, puis continuer a `next_action`.
-2. **Sinon, choisir le mode** par une question a choix multiples :
-   - **Creation** : partir d'une idee.
-   - **Clone** : reproduire la valeur d'une app de reference en la personnalisant. Charger la skill
-     `app-clone` pour la phase P0.
-   - **Reprise** : terminer et ameliorer une app existante ou inachevee. Charger la skill `app-takeover`
-     pour la phase P0.
-3. **Recueillir le brief minimal** (questions a choix multiples, pas de suppositions) : plateformes (web,
-   iOS, Android, API), utilisateurs cibles, marche et langues, contraintes (budget, delai, stack imposee,
-   hebergement, donnees sensibles), niveau d'autonomie (voir `autonomy.md`).
-4. **N'activer que les packs utiles.** Avec la skill `ultime-profile`, proposer le profil du projet
-   (packs actives pour ce depot seulement), puis l'ajuster quand le travail change de domaine : apres le
-   choix de stack en P3, et en P6-P7 pour les packs de lancement (stores, growth). Un pack absent n'est
-   pas bloquant : l'agent applique les principes de son prompt et l'orchestrateur signale le manque.
+## Startup (on every invocation)
 
-## Phases et portes
+1. **Resume if a project exists.** If the `claude/autopilot-state` branch exists on `origin`, the project
+   is in autopilot: first mount the state (`autopilot` skill, step 1). Then, if `.app-factory/state.json`
+   exists, follow the resume protocol
+   of `state.md`: reread the state, check it against the real repository (files, git, tests), report the
+   discrepancies, then continue at `next_action`.
+2. **Otherwise, choose the mode** with a multiple-choice question:
+   - **Creation**: start from an idea.
+   - **Clone**: reproduce the value of a reference app while customizing it. Load the
+     `app-clone` skill for phase P0.
+   - **Takeover**: finish and improve an existing or unfinished app. Load the `app-takeover` skill
+     for phase P0.
+3. **Collect the minimal brief** (multiple-choice questions, no assumptions): platforms (web,
+   iOS, Android, API), target users, market and languages, constraints (budget, deadline, imposed stack,
+   hosting, sensitive data), autonomy level (see `autonomy.md`).
+4. **Enable only the useful packs.** With the `ultime-profile` skill, propose the project profile
+   (packs enabled for this repository only), then adjust it when the work changes domain: after the
+   stack choice in P3, and in P6-P7 for the launch packs (stores, growth). A missing pack is
+   not blocking: the agent applies the principles of its prompt and the orchestrator reports the gap.
 
-| Phase | Objet | Agents principaux | Porte |
+## Phases and gates
+
+| Phase | Purpose | Main agents | Gate |
 |---|---|---|---|
-| P0 Cadrage | Mode, brief, inventaire (clone ou reprise) | product-manager, reverse-spec-analyst, codebase-mapper | G0 brief valide |
-| P1 Decouverte | Probleme, cibles, concurrence, hypotheses risquees, modele economique | product-strategist | G1 go, pivot ou stop |
-| P2 Specification | PRD, exigences non fonctionnelles, perimetre, obligations, enveloppe de cout | product-manager, compliance-officer, finops-analyst | G2 PRD gele |
-| P3 Conception | Architecture et ADR, modele de donnees, UX et design system, modele de menace, couts | software-architect, puis data-architect, ux-designer, security-engineer, finops-analyst, compliance-officer | G3 conception validee |
-| P4 Planification | Roadmap, jalons, backlog, criteres d'acceptation, definition of done | project-manager | G4 backlog pret |
-| P5 Construction | Par jalon : squelette (M0) puis stories, chacune implementee, revue, testee | implementer, code-reviewer, qa-engineer, security-engineer, ux-designer | G5 par jalon |
-| P6 Pre-production | CI/CD, deploiement reversible, monitoring, sauvegardes, audits finaux | release-engineer, sre, security-engineer, compliance-officer, finops-analyst, qa-engineer | G6 go / no-go |
-| P7 Lancement | Mise en prod, lancement, mesure, retro, iteration suivante | release-engineer, growth-lead, project-manager | G7 revue post-lancement |
+| P0 Framing | Mode, brief, inventory (clone or takeover) | product-manager, reverse-spec-analyst, codebase-mapper | G0 brief validated |
+| P1 Discovery | Problem, targets, competition, risky assumptions, business model | product-strategist | G1 go, pivot or stop |
+| P2 Specification | PRD, non-functional requirements, scope, obligations, cost envelope | product-manager, compliance-officer, finops-analyst | G2 PRD frozen |
+| P3 Design | Architecture and ADRs, data model, UX and design system, threat model, costs | software-architect, then data-architect, ux-designer, security-engineer, finops-analyst, compliance-officer | G3 design validated |
+| P4 Planning | Roadmap, milestones, backlog, acceptance criteria, definition of done | project-manager | G4 backlog ready |
+| P5 Build | Per milestone: skeleton (M0) then stories, each implemented, reviewed, tested | implementer, code-reviewer, qa-engineer, security-engineer, ux-designer | G5 per milestone |
+| P6 Pre-production | CI/CD, reversible deployment, monitoring, backups, final audits | release-engineer, sre, security-engineer, compliance-officer, finops-analyst, qa-engineer | G6 go / no-go |
+| P7 Launch | Go to production, launch, measurement, retro, next iteration | release-engineer, growth-lead, project-manager | G7 post-launch review |
 
-Un petit projet peut fusionner P1 et P2, ou P3 et P4. On ne saute jamais G2, la partie securite et
-conformite de G3, ni G6.
+A small project can merge P1 and P2, or P3 and P4. G2, the security and
+compliance part of G3, and G6 are never skipped.
 
-## Regles de dispatch
+## Dispatch rules
 
-- **Une tache bornee par agent.** Chaque prompt d'agent donne : le role attendu, les entrees (chemins de
-  fichiers, pas leur contenu recopie), le livrable et son chemin exact, la definition of done, les skills
-  a charger. Gabarit dans `phases.md`.
-- **Paralleliser ce qui est independant** en envoyant plusieurs appels Agent dans le meme message (par
-  exemple en P3, apres l'architecte : donnees, UX, securite, finops, conformite en parallele).
-- **Construction parallele** seulement entre stories qui touchent des fichiers disjoints, chacune avec
-  `isolation: "worktree"`, puis integration sequentielle et tests apres chaque fusion.
-- **Verifier plutot que croire.** Le compte rendu d'un agent est une affirmation, pas un fait. Controler
-  le livrable (il existe, il repond a la definition of done), relancer les tests soi-meme, et confier la
-  verification de fond a `gate-verifier`.
-- **Pas de secret dans un prompt d'agent.** Les secrets restent dans le `.env` du projet, ignore par git.
-- **Boucle de correction bornee** : deux allers-retours maximum sur un meme echec, puis escalade a
-  l'utilisateur avec le diagnostic.
+- **One bounded task per agent.** Each agent prompt gives: the expected role, the inputs (file
+  paths, not their copied content), the deliverable and its exact path, the definition of done, the skills
+  to load. Template in `phases.md`.
+- **Parallelize what is independent** by sending several Agent calls in the same message (for
+  example in P3, after the architect: data, UX, security, finops, compliance in parallel).
+- **Parallel build** only between stories that touch disjoint files, each with
+  `isolation: "worktree"`, then sequential integration and tests after each merge.
+- **Verify rather than believe.** An agent's report is a claim, not a fact. Check
+  the deliverable (it exists, it meets the definition of done), rerun the tests yourself, and hand the
+  in-depth verification to `gate-verifier`.
+- **No secret in an agent prompt.** Secrets stay in the project's `.env`, ignored by git.
+- **Bounded fix loop**: two round trips at most on the same failure, then escalate to
+  the user with the diagnosis.
 
-## Sobriete en tokens
+## Token economy
 
-- **Lire au besoin** : une reference seulement quand la phase l'exige, et seulement sa section (chercher
-  le titre de la phase dans `phases.md` puis lire cet extrait).
-- **Prompts d'agents minces** : chemins et decisions, jamais de contenu recopie ni l'historique.
-- **Comptes rendus courts** : 15 lignes au plus, le detail reste dans les livrables ; ne pas relire un
-  livrable entier pour le resumer.
-- **Le bon modele** : chaque agent a un modele adapte a son role ; passer `model: "opus"` seulement pour
-  une story qui a echoue deux fois ou une decision structurante, `model: "haiku"` pour un inventaire,
-  un reformatage ou une recherche simple.
-- **Pas d'agent pour une commande** : ce qui tient en une lecture ou une commande se fait directement.
-- **Paralleliser sans speculer** : grouper les taches independantes, pas de fan-out "au cas ou".
-- **L'etat sur disque fait foi** : apres une compaction, relire `state.json`, pas la conversation.
+- **Read as needed**: a reference only when the phase requires it, and only its section (search
+  for the phase title in `phases.md` then read that excerpt).
+- **Thin agent prompts**: paths and decisions, never copied content or the history.
+- **Short reports**: 15 lines at most, the detail stays in the deliverables; do not reread an
+  entire deliverable to summarize it.
+- **The right model**: each agent has a model suited to its role; pass `model: "opus"` only for
+  a story that failed twice or a structuring decision, `model: "haiku"` for an inventory,
+  a reformatting or a simple search.
+- **No agent for a command**: what fits in one read or one command is done directly.
+- **Parallelize without speculating**: group independent tasks, no "just in case" fan-out.
+- **The on-disk state is authoritative**: after a compaction, reread `state.json`, not the conversation.
 
-## Deroulement d'une porte
+## Running a gate
 
-1. Lancer `gate-verifier` avec la checklist de la porte (`phases.md`) ; il ecrit
+1. Launch `gate-verifier` with the gate checklist (`phases.md`); it writes
    `.app-factory/gates/Gn.md`.
-2. Corriger les points bloquants (boucle bornee), relancer la verification si besoin.
-3. Presenter a l'utilisateur un resume court (livrables, decisions prises, risques, ce qui reste) et
-   demander par question a choix multiples : valider, corriger tel point, revenir a une phase, arreter.
-4. Consigner la decision dans `.app-factory/decisions.md` et mettre a jour `state.json`.
+2. Fix the blocking points (bounded loop), rerun the verification if needed.
+3. Present the user with a short summary (deliverables, decisions made, risks, what remains) and
+   ask with a multiple-choice question: validate, fix a given point, go back to a phase, stop.
+4. Record the decision in `.app-factory/decisions.md` and update `state.json`.
 
-## Garde-fous permanents
+## Permanent guardrails
 
-- Les actions irreversibles ou visibles de l'exterieur sont toujours confirmees au moment de les faire :
-  paiement, creation de compte, acceptation de contrat, soumission en store, depense publicitaire,
-  publication, deploiement en production, migration sur des donnees reelles, suppression de ressources.
-  Detail dans `autonomy.md`.
-- Mode clone : on reproduit la valeur, jamais la marque, les assets, les textes ni le code d'autrui.
-- Donnees : base locale d'abord, jamais de donnees de production en developpement sans accord explicite.
-- Les regles du depot cible (son `CLAUDE.md`, ses conventions) priment ; signaler les contradictions.
+- Irreversible or externally visible actions are always confirmed at the moment they are done:
+  payment, account creation, contract acceptance, store submission, ad spend,
+  publication, production deployment, migration on real data, resource deletion.
+  Detail in `autonomy.md`.
+- Clone mode: we reproduce the value, never someone else's brand, assets, texts or code.
+- Data: local database first, never production data in development without explicit consent.
+- The target repository's rules (its `CLAUDE.md`, its conventions) take precedence; report contradictions.
 
-## Fin de chaque session de travail
+## End of each work session
 
-Mettre a jour `state.json` (phase, statut, `next_action`), puis rendre a l'utilisateur : ce qui a ete fait,
-ce qui a ete verifie et comment, ce qui reste bloque, et la prochaine etape.
+Update `state.json` (phase, status, `next_action`), then report to the user: what was done,
+what was verified and how, what remains blocked, and the next step.

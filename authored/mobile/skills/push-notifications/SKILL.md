@@ -1,55 +1,53 @@
 ---
 name: push-notifications
 description: >
-  Notifications push iOS et Android (APNs, FCM) en natif, React Native, Expo et Flutter : permissions,
-  jetons, envoi serveur, canaux, ouverture vers un ecran, consentement. A utiliser pour ajouter, deboguer
-  ou concevoir des notifications push, APNs, FCM, expo-notifications, firebase_messaging, ou
-  notifications marketing.
+  iOS and Android push notifications (APNs, FCM) in native, React Native, Expo and Flutter:
+  permissions, tokens, server sending, channels, opening a screen, consent. Use to add, debug or
+  design push notifications, APNs, FCM, expo-notifications, firebase_messaging, or marketing
+  notifications.
 ---
 
-# Notifications push
+# Push notifications
 
 ## Architecture
 
-- **iOS** : APNs. Authentification par cle (.p8, recommandee, ne expire pas) plutot que par certificat.
-  Environnements sandbox et production distincts.
-- **Android** : Firebase Cloud Messaging, API HTTP v1 avec un compte de service (les anciennes API FCM
-  ont ete retirees). FCM peut aussi relayer vers APNs pour une app iOS.
-- **Expo** : `expo-notifications`, envoi via le service de push d'Expo ou directement APNs/FCM.
-- **Flutter** : `firebase_messaging` (et `flutter_local_notifications` pour l'affichage local).
-- **Serveur** : stocker un jeton par appareil et par utilisateur ; les jetons changent (reinstallation,
-  restauration, rotation) : mettre a jour a chaque lancement et supprimer ceux que le service declare
-  invalides. Envoi asynchrone par file, avec reessais et limitation de debit.
+- **iOS**: APNs. Key-based authentication (.p8, recommended, does not expire) rather than
+  certificate. Separate sandbox and production environments.
+- **Android**: Firebase Cloud Messaging, HTTP v1 API with a service account (the legacy FCM APIs have
+  been removed). FCM can also relay to APNs for an iOS app.
+- **Expo**: `expo-notifications`, sending through Expo's push service or directly APNs/FCM.
+- **Flutter**: `firebase_messaging` (and `flutter_local_notifications` for local display).
+- **Server**: store one token per device and per user; tokens change (reinstall, restore,
+  rotation): update on every launch and delete those the service reports as invalid. Asynchronous
+  sending through a queue, with retries and rate limiting.
 
 ## Permissions
 
-- iOS : demander l'autorisation au bon moment (apres avoir explique la valeur), pas au premier
-  lancement ; l'autorisation provisoire permet d'envoyer silencieusement dans le centre de
-  notifications.
-- Android 13 et plus : permission d'execution `POST_NOTIFICATIONS`. Canaux de notification par type
-  (l'utilisateur les regle un par un), crees au demarrage.
-- Gerer le refus : l'app fonctionne sans, et propose de reactiver depuis les reglages.
+- iOS: ask for authorization at the right moment (after explaining the value), not on first launch;
+  provisional authorization allows sending quietly to the notification center.
+- Android 13 and later: `POST_NOTIFICATIONS` runtime permission. Notification channels by type (the
+  user configures them one by one), created at startup.
+- Handle refusal: the app works without, and offers to re-enable from the settings.
 
-## Contenu et comportement
+## Content and behavior
 
-- Charge utile : titre, texte, et des donnees pour ouvrir le bon ecran (lien interne, voir `deep-links`).
-- Gerer les trois cas : app au premier plan, en arriere-plan, fermee (ouverture depuis la notification).
-- Notifications silencieuses (mise a jour en arriere-plan) : limitees et non garanties par les OS, ne pas
-  en dependre pour une logique critique.
-- Pas de donnee sensible dans le texte d'une notification (visible sur l'ecran verrouille).
+- Payload: title, body, and data to open the right screen (internal link, see `deep-links`).
+- Handle the three cases: app in the foreground, in the background, closed (opened from the
+  notification).
+- Silent notifications (background update): limited and not guaranteed by the OSes, do not depend on
+  them for critical logic.
+- No sensitive data in a notification's text (visible on the lock screen).
 
-## Consentement et vie privee
+## Consent and privacy
 
-- Distinguer notifications de service (liees a l'usage) et notifications marketing ; pour la
-  prospection, recueillir un consentement explicite et permettre la desactivation par categorie dans
-  l'app (skill `rgpd-cnil`).
-- Le jeton de push est une donnee liee a l'appareil : la declarer dans les labels Apple et le formulaire
-  Data safety.
+- Distinguish service notifications (related to usage) from marketing notifications; for
+  prospecting, collect explicit consent and allow opting out by category in the app (skill
+  `rgpd-cnil`).
+- The push token is device-related data: declare it in the Apple labels and the Data safety form.
 
 ## Tests
 
-- iOS : simulateur (envoi de charge utile locale) et appareil reel pour APNs ; Android : emulateur avec
-  services Google.
-- Tester les trois etats de l'app, le refus de permission, le jeton invalide, et l'ouverture vers l'ecran
-  cible.
-- Mesurer : taux d'opt-in, de livraison, d'ouverture ; desabonnements par categorie.
+- iOS: simulator (local payload sending) and real device for APNs; Android: emulator with Google
+  services.
+- Test the three app states, permission refusal, invalid token, and opening the target screen.
+- Measure: opt-in, delivery and open rates; unsubscribes by category.

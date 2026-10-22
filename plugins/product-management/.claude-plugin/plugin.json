@@ -1,6 +1,6 @@
 {
   "name": "product-management",
-  "description": "Gestion de produit : decouverte (hypotheses, opportunity solution tree, entretiens), strategie (vision, positionnement, modele economique, prix), marche (concurrence, personas, segments), execution (PRD, user stories, roadmap, pre-mortem, sprint, retro, notes de version), retro-specification d'un code existant (code-to-prd, schematic, intended-vs-implemented).",
+  "description": "Product management: discovery (assumptions, opportunity solution tree, interviews), strategy (vision, positioning, business model, pricing), market (competition, personas, segments), execution (PRD, user stories, roadmap, pre-mortem, sprint, retro, release notes), reverse specification of existing code (code-to-prd, schematic, intended-vs-implemented).",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"

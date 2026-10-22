@@ -1,6 +1,6 @@
 {
   "name": "ml-engineering",
-  "description": "ML engineering : choix de methode de fine-tuning, recettes LoRA/QLoRA, harnais d'evaluation et calibration de juge LLM, TRL, RAG, serving vLLM, benchmarks lm-eval, scikit-learn, tracing MLflow, Hugging Face Hub.",
+  "description": "ML engineering: choosing a fine-tuning method, LoRA/QLoRA recipes, evaluation harnesses and LLM judge calibration, TRL, RAG, vLLM serving, lm-eval benchmarks, scikit-learn, MLflow tracing, Hugging Face Hub.",
   "author": {
     "name": "Lucas-lux",
     "url": "https://github.com/Lucas-lux"
